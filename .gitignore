@@ -1,0 +1,15 @@
+data/
+.env
+*.env
+__pycache__/
+.venv/
+app/spike/.daytona_signal_sandbox
+# organiser deck (large binary; source is the hackathon Drive)
+*.pptx
+# browser/network captures can contain session tokens
+*.network-response
+*.network-request
+# local runtime state and audio
+app/spike/.daytona_signal_sandbox
+outputs/voice_override/*.wav
+calls.jsonl

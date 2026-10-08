@@ -1,0 +1,247 @@
+[
+ {
+  "scen": "A_coop",
+  "cond": "V",
+  "run": 0,
+  "turns": [
+   {
+    "check": "step2_personalised",
+    "seller": "Haan ji, main hi owner hoon. Boliye.",
+    "reply": "धन्यवाद जी। दरअसल मैं आपको यह बताने के लिए call किया था कि हम आपकी help कर सकते हैं ताकि आपको और ज़्यादा buyer enquiries मिल सकें। क्या आपके पास अभी दो मिनट time है?",
+    "pass": false,
+    "words": 35,
+    "restart": false,
+    "asr_events": [
+     "हाँ जी, मैं ही ओनर हूँ। बोलिए।"
+    ],
+    "tool": [
+     {
+      "t": -0.35,
+      "utt": "हाँ जी।",
+      "mode": "neutral"
+     },
+     {
+      "t": 0.45,
+      "utt": "हाँ जी, मैं ही ओनर हूँ।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.75,
+      "utt": "हाँ जी, मैं ही ओनर हूँ। बोलिए।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.92
+    ]
+   },
+   {
+    "check": "playbook_price",
+    "seller": "Achha haan yaad aaya. Par paise kitne lagenge? Aapka plan bahut mehnga hai.",
+    "reply": "देखिए, prices के बारे में मैं आपको exact details नहीं दे पाऊँगा। इसके लिए हमारे executive आपसे एक short meeting करेंगे और आपको best plan बताएँगे। क्या हम मैं समझ सकता हूँ। देखिए, मैं यहाँ कोई price discuss नहीं करूँगा, बस हमारे executive आपकी help करेंगे कि आपके लिए कौन सा plan सही रहेगा। क्या हम एक छोटी सी meeting fix कर सकते हैं?",
+    "pass": true,
+    "words": 64,
+    "restart": false,
+    "asr_events": [
+     "अच्छा, हाँ याद आया।",
+     "अच्छा हाँ याद आया, पर पैसे कितने लगेंगे?",
+     "अच्छा हाँ याद आया, पर पैसे कितने लगेंगे? आपका प्लान बहुत महंगा है।"
+    ],
+    "tool": [
+     {
+      "t": -2.41,
+      "utt": "अच्छा, हाँ याद आया।",
+      "mode": "neutral"
+     },
+     {
+      "t": -1.04,
+      "utt": "अच्छा हाँ याद आया, पर पैसे कितने लगेंगे?",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.2,
+      "utt": "अच्छा हाँ याद आया, पर पैसे कितने लगेंगे? आपका प्लान बहुत महंगा है।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.43,
+     3.15,
+     9.22
+    ]
+   },
+   {
+    "check": "step3_ask_time",
+    "seller": "Theek hai, mil lete hain.",
+    "reply": "बहुत शुक्रिया जी। क्या कल दोपहर दो बजे का time आपके लिए ठीक रहेगा या फिर आप कोई और time बताना चाहेंगे?",
+    "pass": true,
+    "words": 22,
+    "restart": false,
+    "asr_events": [
+     "ठीक है, मिल लेते हैं।"
+    ],
+    "tool": [
+     {
+      "t": 0.53,
+      "utt": "ठीक है।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.19,
+      "utt": "ठीक है, मिल लेते हैं।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.57,
+     2.98
+    ]
+   },
+   {
+    "check": "step4_confirm",
+    "seller": "Kal shaam paanch baje aa jaiye.",
+    "reply": "ठीक है जी, कल शाम पाँच बजे done रहा। हमारे executive आपसे contact करेंगे। अपना time देने के लिए बहुत धन्यवाद!\n\n",
+    "pass": true,
+    "words": 21,
+    "restart": false,
+    "asr_events": [
+     "कल शाम पाँच बजे आ जाइए।"
+    ],
+    "tool": [
+     {
+      "t": 1.57,
+      "utt": "कल शाम पाँच बजे आ जाइए।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.06,
+     2.97,
+     4.47,
+     6.49
+    ]
+   }
+  ],
+  "ended_early": false
+ },
+ {
+  "scen": "A_coop",
+  "cond": "V",
+  "run": 1,
+  "turns": [
+   {
+    "check": "step2_personalised",
+    "seller": "Haan ji, main hi owner hoon. Boliye.",
+    "reply": "धन्यवाद जी। दरअसल मैं आपको यह बताने के लिए call किया था कि हम आपकी help कर सकते हैं ताकि आपको IndiaMART से और ज़्यादा buyer enquiries मिलें। क्या आपके पास अभी दो मिनट का time है?",
+    "pass": false,
+    "words": 37,
+    "restart": false,
+    "asr_events": [
+     "हाँ जी, मैं ही ओनर हूँ। बोलिए।"
+    ],
+    "tool": [
+     {
+      "t": 1.0,
+      "utt": "हाँ जी, मैं ही ओनर हूँ।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.32,
+      "utt": "हाँ जी, मैं ही ओनर हूँ। बोलिए।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.33,
+     2.96,
+     9.3
+    ]
+   },
+   {
+    "check": "playbook_price",
+    "seller": "Achha haan yaad aaya. Par paise kitne lagenge? Aapka plan bahut mehnga hai.",
+    "reply": "देखिए, prices के बारे में सही जानकारी देने के लिए हमारे executive आपसे बात करेंगे। वो आपको best plan suggest कर देंगे जो मैं समझ सकता हूँ। देखिए, मैं यहाँ कोई price discuss नहीं करूँगा, बस हमारे executive आपकी help करेंगे कि आप सही plan कैसे choose कर सकते हैं। क्या हम एक छोटी सी meeting fix कर सकते हैं?",
+    "pass": true,
+    "words": 60,
+    "restart": false,
+    "asr_events": [
+     "अच्छा हाँ याद आया, पर पैसे कितने लगेंगे?",
+     "अच्छा हाँ याद आया, पर पैसे कितने लगेंगे? आपका प्लान बहुत महंगा है।"
+    ],
+    "tool": [
+     {
+      "t": -2.35,
+      "utt": "अच्छा, हाँ याद आया।",
+      "mode": "neutral"
+     },
+     {
+      "t": -1.01,
+      "utt": "अच्छा हाँ याद आया, पर पैसे कितने लगेंगे?",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.17,
+      "utt": "अच्छा हाँ याद आया, पर पैसे कितने लगेंगे? आपका प्लान बहुत महंगा है।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.48,
+     3.19,
+     8.93
+    ]
+   },
+   {
+    "check": "step3_ask_time",
+    "seller": "Theek hai, mil lete hain.",
+    "reply": "बहुत अच्छा। तो क्या कल सुबह दस बजे का time आपके लिए सही रहेगा या फिर आप कोई और time बताना चाहेंगे?",
+    "pass": true,
+    "words": 22,
+    "restart": false,
+    "asr_events": [
+     "ठीक है, मिल लेते हैं।"
+    ],
+    "tool": [
+     {
+      "t": 0.11,
+      "utt": "ठीक है।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.24,
+      "utt": "ठीक है, मिल लेते हैं।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.47
+    ]
+   },
+   {
+    "check": "step4_confirm",
+    "seller": "Kal shaam paanch baje aa jaiye.",
+    "reply": "ठीक है जी, कल शाम पाँच बजे done रहा। हमारे executive आपसे contact करेंगे। अपना time देने के लिए बहुत-बहुत धन्यवाद!\n\n",
+    "pass": true,
+    "words": 21,
+    "restart": false,
+    "asr_events": [
+     "कल शाम 5 बजे आ जाइए।"
+    ],
+    "tool": [
+     {
+      "t": 1.54,
+      "utt": "कल शाम 5 बजे आ जाइए।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.68,
+     2.59,
+     4.1,
+     6.21
+    ]
+   }
+  ],
+  "ended_early": false
+ }
+]

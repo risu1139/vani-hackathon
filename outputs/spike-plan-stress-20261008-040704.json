@@ -1,0 +1,1060 @@
+[
+ {
+  "scen": "A_hostile",
+  "cond": "P",
+  "run": 0,
+  "turns": [
+   {
+    "check": "offplan_answer_and_return",
+    "seller": "Pehle yeh batao aap kaun ho aur kahan se bol rahe ho?",
+    "reply": "जी, मैं IndiaMART से बोल रहा हूँ। क्या मेरी बात Shree Ganesh Pipes के owner से हो रही है?",
+    "pass": true,
+    "words": 19,
+    "restart": false,
+    "asr_events": [
+     "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+    ],
+    "tool": [
+     {
+      "t": 0.37,
+      "utt": "पहले ये बताओ आप कौन हो?",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.95,
+      "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.39,
+     3.1,
+     4.4
+    ]
+   },
+   {
+    "check": "not_owner_adapts",
+    "seller": "Main owner nahi hoon, manager hoon. Owner bahar gaye hain.",
+    "reply": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि owner साहब कब तक वापस आएंगे?",
+    "pass": true,
+    "words": 16,
+    "restart": false,
+    "asr_events": [
+     "मैं ओनर नहीं हूँ, मैनेजर हूँ।",
+     "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+    ],
+    "tool": [
+     {
+      "t": -0.9,
+      "utt": "मैं ओनर नहीं हूँ।",
+      "mode": "neutral"
+     },
+     {
+      "t": 0.22,
+      "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.18,
+      "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.6
+    ]
+   },
+   {
+    "check": "price_no_amount",
+    "seller": "Achha theek hai, par exact price batao, kitne ka plan hai?",
+    "reply": "देखिए, price देखिए, हमारे executive मीटिंग में आपको सारे options विस्तार से समझा देंगे। क्या आप उनके लिए पंद्रह मिनट का time निकाल सकते हैं?",
+    "pass": true,
+    "words": 25,
+    "restart": true,
+    "asr_events": [
+     "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ।",
+     "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ, कितने का प्लान है?"
+    ],
+    "tool": [
+     {
+      "t": -0.26,
+      "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.73,
+      "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ, कितने का प्लान है?",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.26,
+     6.39
+    ]
+   },
+   {
+    "check": "price_again_no_amount",
+    "seller": "Phir se pooch raha hoon, price batao warna phone rakh do.",
+    "reply": "मैं समझ सकता हूँ, पर actually price executive ही बता पाएंगे। वो आपसे मिलकर सारे options समझा देंगे, क्या यह ठीक रहेगा?",
+    "pass": true,
+    "words": 22,
+    "restart": false,
+    "asr_events": [
+     "फिर से पूछ रहा हूं।",
+     "फिर से पूछ रहा हूं प्राइस बताओ वरना फोन रख दो।"
+    ],
+    "tool": [
+     {
+      "t": -1.07,
+      "utt": "फिर से पूछ रहा हूं।",
+      "mode": "confused"
+     },
+     {
+      "t": 1.15,
+      "utt": "फिर से पूछ रहा हूं प्राइस बताओ वरना फोन रख दो।",
+      "mode": "confused"
+     }
+    ],
+    "speech_onsets": [
+     1.58,
+     4.51,
+     6.72
+    ]
+   },
+   {
+    "check": "rush_short_callback",
+    "seller": "Abhi busy hoon yaar, baad mein baat karte hain.",
+    "reply": "कोई बात नहीं, मैं आपको किस time दोबारा call करूँ कोई बात नहीं, मैं आपको किस time दोबारा call करूँ?",
+    "pass": true,
+    "words": 20,
+    "restart": false,
+    "asr_events": [
+     "अभी बिजी हूँ यार।",
+     "अभी बिजी हूँ यार, बाद में बात करते हैं।"
+    ],
+    "tool": [
+     {
+      "t": -0.7,
+      "utt": "अभी बिजी हूँ यार।",
+      "mode": "rushed"
+     },
+     {
+      "t": 1.65,
+      "utt": "अभी बिजी हूँ यार, बाद में बात करते हैं।",
+      "mode": "rushed"
+     }
+    ],
+    "speech_onsets": [
+     2.32
+    ]
+   }
+  ],
+  "ended_early": false
+ },
+ {
+  "scen": "A_hostile",
+  "cond": "P",
+  "run": 1,
+  "turns": [
+   {
+    "check": "offplan_answer_and_return",
+    "seller": "Pehle yeh batao aap kaun ho aur kahan se bol rahe ho?",
+    "reply": "जी, मैं IndiaMART से बोल रहा हूँ। क्या मेरी बात Shree Ganesh Pipes के owner से हो रही है?",
+    "pass": true,
+    "words": 19,
+    "restart": false,
+    "asr_events": [
+     "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+    ],
+    "tool": [
+     {
+      "t": 1.79,
+      "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.98,
+     4.0
+    ]
+   },
+   {
+    "check": "not_owner_adapts",
+    "seller": "Main owner nahi hoon, manager hoon. Owner bahar gaye hain.",
+    "reply": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि owner जी कब तक वापस आएंगे?",
+    "pass": true,
+    "words": 16,
+    "restart": false,
+    "asr_events": [
+     "मैं ओनर नहीं हूँ।",
+     "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+    ],
+    "tool": [
+     {
+      "t": -0.9,
+      "utt": "मैं ओनर नहीं हूँ।",
+      "mode": "neutral"
+     },
+     {
+      "t": -0.14,
+      "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.23,
+      "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.54
+    ]
+   },
+   {
+    "check": "price_no_amount",
+    "seller": "Achha theek hai, par exact price batao, kitne ka plan hai?",
+    "reply": "देखिए, price के बारे में हमारे executive मीटिंग में आपको सब अच्छे से समझा देंगे। क्या आप उनके लिए पंद्रह मिनट का time निकाल सकते हैं?",
+    "pass": true,
+    "words": 26,
+    "restart": false,
+    "asr_events": [
+     "अच्छा ठीक है, पर एग्ज़ैक्ट प्राइस बताओ।",
+     "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ, कितने का प्लान है?"
+    ],
+    "tool": [
+     {
+      "t": -2.01,
+      "utt": "अच्छा ठीक है।",
+      "mode": "neutral"
+     },
+     {
+      "t": 0.08,
+      "utt": "अच्छा ठीक है, पर एग्ज़ैक्ट प्राइस बताओ।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.33,
+      "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ, कितने का प्लान है?",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.75
+    ]
+   },
+   {
+    "check": "price_again_no_amount",
+    "seller": "Phir se pooch raha hoon, price batao warna phone rakh do.",
+    "reply": "मैं समझ सकता हूँ, पर मैं यहाँ price नहीं बता पाऊँगा। बस हमारे executive आपसे मिलकर सारे options समझा देंगे। क्या यह clear है?",
+    "pass": true,
+    "words": 24,
+    "restart": false,
+    "asr_events": [
+     "फिर से पूछ रहा हूं प्राइस बताओ वरना फोन रख दो।"
+    ],
+    "tool": [
+     {
+      "t": -0.6,
+      "utt": "फिर से पूछ रहा हूं।",
+      "mode": "confused"
+     },
+     {
+      "t": 1.13,
+      "utt": "फिर से पूछ रहा हूं प्राइस बताओ वरना फोन रख दो।",
+      "mode": "confused"
+     }
+    ],
+    "speech_onsets": [
+     1.58,
+     4.2,
+     7.11
+    ]
+   },
+   {
+    "check": "rush_short_callback",
+    "seller": "Abhi busy hoon yaar, baad mein baat karte hain.",
+    "reply": "कोई बात नहीं, मैं आपको किस time दोबारा call करूँ?",
+    "pass": true,
+    "words": 10,
+    "restart": false,
+    "asr_events": [
+     "अभी बिजी हूँ यार।",
+     "अभी बिज़ी हूँ यार, बाद में बात करते हैं।"
+    ],
+    "tool": [
+     {
+      "t": -0.23,
+      "utt": "अभी बिजी हूँ यार।",
+      "mode": "rushed"
+     },
+     {
+      "t": 1.67,
+      "utt": "अभी बिज़ी हूँ यार, बाद में बात करते हैं।",
+      "mode": "rushed"
+     }
+    ],
+    "speech_onsets": [
+     1.96
+    ]
+   }
+  ],
+  "ended_early": false
+ },
+ {
+  "scen": "A_hostile",
+  "cond": "V",
+  "run": 0,
+  "turns": [
+   {
+    "check": "offplan_answer_and_return",
+    "seller": "Pehle yeh batao aap kaun ho aur kahan se bol rahe ho?",
+    "reply": "जी, मैं IndiaMART से बोल रहा हूँ। मैं आपकी help करने के लिए call किया है ताकि आपको और ज़्यादा buyer enquiries मिल सकें।",
+    "pass": true,
+    "words": 24,
+    "restart": false,
+    "asr_events": [
+     "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+    ],
+    "tool": [
+     {
+      "t": 0.36,
+      "utt": "पहले ये बताओ आप कौन हो?",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.3,
+      "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.53,
+     3.55
+    ]
+   },
+   {
+    "check": "not_owner_adapts",
+    "seller": "Main owner nahi hoon, manager hoon. Owner bahar gaye hain.",
+    "reply": "ओ अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे?",
+    "pass": true,
+    "words": 17,
+    "restart": false,
+    "asr_events": [
+     "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+    ],
+    "tool": [
+     {
+      "t": -1.32,
+      "utt": "मैं ओनर नहीं हूँ।",
+      "mode": "neutral"
+     },
+     {
+      "t": 0.14,
+      "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.19,
+      "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.4
+    ]
+   },
+   {
+    "check": "price_no_amount",
+    "seller": "Achha theek hai, par exact price batao, kitne ka plan hai?",
+    "reply": "देखिए, plans अलग-अलग होते हैं और वो आपकी ज़रूरत पर depend करते हैं। इसीलिए मैं चाहता हूँ कि हमारे executive आपसे एक छोटी सी meeting करें और आपको सही plan बता सकें।",
+    "pass": true,
+    "words": 32,
+    "restart": false,
+    "asr_events": [
+     "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ।",
+     "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ, कितने का प्लान है?"
+    ],
+    "tool": [
+     {
+      "t": -1.88,
+      "utt": "अच्छा ठीक है।",
+      "mode": "neutral"
+     },
+     {
+      "t": 0.06,
+      "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.6,
+      "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ, कितने का प्लान है?",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.06,
+     5.58
+    ]
+   },
+   {
+    "check": "price_again_no_amount",
+    "seller": "Phir se pooch raha hoon, price batao warna phone rakh do.",
+    "reply": "मैं समझ सकता हूँ, पर दरअसल मैं सिर्फ एक AI assistant हूँ और मुझे exact prices नहीं पता। हमारे executive ही आपको सही price बता पाएंगे, क्या आप उनसे बात करना चाहेंगे?",
+    "pass": true,
+    "words": 32,
+    "restart": false,
+    "asr_events": [
+     "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो।"
+    ],
+    "tool": [
+     {
+      "t": -0.5,
+      "utt": "फिर से पूछ रहा हूं।",
+      "mode": "confused"
+     },
+     {
+      "t": 1.15,
+      "utt": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो।",
+      "mode": "confused"
+     }
+    ],
+    "speech_onsets": [
+     1.59,
+     6.52,
+     9.34
+    ]
+   },
+   {
+    "check": "rush_short_callback",
+    "seller": "Abhi busy hoon yaar, baad mein baat karte hain.",
+    "reply": "कोई बात नहीं, मैं आपको फिर कब call कोई बात नहीं, मैं आपको फिर से call कर लूँ? आप time बता दीजिए।",
+    "pass": true,
+    "words": 22,
+    "restart": true,
+    "asr_events": [
+     "अभी बिजी हूँ यार।",
+     "अभी बिजी हूँ यार बाद में बात करते हैं।"
+    ],
+    "tool": [
+     {
+      "t": -0.71,
+      "utt": "अभी बिजी हूँ यार।",
+      "mode": "rushed"
+     },
+     {
+      "t": 1.37,
+      "utt": "अभी बिजी हूँ यार बाद में बात करते हैं।",
+      "mode": "rushed"
+     }
+    ],
+    "speech_onsets": [
+     2.03,
+     4.35
+    ]
+   }
+  ],
+  "ended_early": false
+ },
+ {
+  "scen": "A_hostile",
+  "cond": "V",
+  "run": 1,
+  "turns": [
+   {
+    "check": "offplan_answer_and_return",
+    "seller": "Pehle yeh batao aap kaun ho aur kahan se bol rahe ho?",
+    "reply": "जी, मैं IndiaMART से बोल रहा हूँ। मैं आपका sales assistant हूँ और आपकी help करने के लिए call किया है।",
+    "pass": true,
+    "words": 21,
+    "restart": false,
+    "asr_events": [
+     "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+    ],
+    "tool": [
+     {
+      "t": 1.38,
+      "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.68,
+     2.39,
+     3.7
+    ]
+   },
+   {
+    "check": "not_owner_adapts",
+    "seller": "Main owner nahi hoon, manager hoon. Owner bahar gaye hain.",
+    "reply": "अच्छा, कोई बात नहीं। क्या आप मुझे बता सकते हैं कि owner जी से बात करने का सही time क्या अच्छा, कोई बात नहीं। क्या आप मुझे बता सकते हैं कि owner जी कब तक वापस आएंगे?",
+    "pass": true,
+    "words": 37,
+    "restart": false,
+    "asr_events": [
+     "मैं ओनर नहीं हूँ, मैनेजर हूँ।",
+     "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+    ],
+    "tool": [
+     {
+      "t": -0.82,
+      "utt": "मैं ओनर नहीं हूँ।",
+      "mode": "neutral"
+     },
+     {
+      "t": -0.25,
+      "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.6,
+      "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.05
+    ]
+   },
+   {
+    "check": "price_no_amount",
+    "seller": "Achha theek hai, par exact price batao, kitne ka plan hai?",
+    "reply": "देखिए, plans अलग-अलग होते हैं और वो आपकी needs पर depend करते हैं। इसीलिए मैं चाहता हूँ कि हमारे executive आपसे एक short meeting करें और आपको सही plan बता सकें।",
+    "pass": true,
+    "words": 31,
+    "restart": false,
+    "asr_events": [
+     "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ।",
+     "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ, कितने का प्लान है?"
+    ],
+    "tool": [
+     {
+      "t": -1.46,
+      "utt": "अच्छा ठीक है।",
+      "mode": "neutral"
+     },
+     {
+      "t": 0.21,
+      "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.24,
+      "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ, कितने का प्लान है?",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.67,
+     4.89
+    ]
+   },
+   {
+    "check": "price_again_no_amount",
+    "seller": "Phir se pooch raha hoon, price batao warna phone rakh do.",
+    "reply": "मैं माफी चाहता हूँ, पर मैं यहाँ prices नहीं बता सकता। बस एक छोटी सी meeting fix करनी है ताकि executive आपको सही price बता सकें। क्या आप समझ रहे हैं कि मैं क्या कह रहा हूँ?",
+    "pass": true,
+    "words": 37,
+    "restart": false,
+    "asr_events": [
+     "फिर से पूछ रहा हूं।",
+     "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो।"
+    ],
+    "tool": [
+     {
+      "t": -0.99,
+      "utt": "फिर से पूछ रहा हूं।",
+      "mode": "confused"
+     },
+     {
+      "t": 1.18,
+      "utt": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो।",
+      "mode": "confused"
+     }
+    ],
+    "speech_onsets": [
+     1.62,
+     4.44,
+     8.16
+    ]
+   },
+   {
+    "check": "rush_short_callback",
+    "seller": "Abhi busy hoon yaar, baad mein baat karte hain.",
+    "reply": "कोई बात नहीं, मैं आपको फिर कब call करूँ?",
+    "pass": true,
+    "words": 9,
+    "restart": false,
+    "asr_events": [
+     "अभी बिजी हूँ यार बाद में बात करते हैं।"
+    ],
+    "tool": [
+     {
+      "t": -0.59,
+      "utt": "अभी बिजी हूँ यार।",
+      "mode": "rushed"
+     },
+     {
+      "t": 1.24,
+      "utt": "अभी बिजी हूँ यार बाद में बात करते हैं।",
+      "mode": "rushed"
+     }
+    ],
+    "speech_onsets": [
+     1.69
+    ]
+   }
+  ],
+  "ended_early": false
+ },
+ {
+  "scen": "B_gujarati",
+  "cond": "P",
+  "run": 0,
+  "turns": [
+   {
+    "check": "early_objection_playbook",
+    "seller": "Leads ki zarurat nahi hai, pehle se bahut aa rahi hain.",
+    "reply": "हाँ जी, मैं समझ सकता हूँ। वैसे आप किस तरह के buyers ज़्यादा चाहते हैं, bulk वाले या retail?",
+    "pass": true,
+    "words": 19,
+    "restart": false,
+    "asr_events": [
+     "लीड्स की जरूरत नहीं है, पहले से बहुत आ रही हैं।"
+    ],
+    "tool": [
+     {
+      "t": 1.69,
+      "utt": "लीड्स की जरूरत नहीं है, पहले से बहुत आ रही हैं।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.32,
+     4.23
+    ]
+   },
+   {
+    "check": "price_no_amount",
+    "seller": "Aur aapka plan mehnga bhi hai.",
+    "reply": "देखिए, इसके options के बारे में हमारे executive meeting में आपको अच्छे से समझा देंगे। क्या हम एक छोटी सी meeting fix कर सकते हैं?",
+    "pass": true,
+    "words": 25,
+    "restart": false,
+    "asr_events": [
+     "और आपका प्लान महंगा भी है।"
+    ],
+    "tool": [
+     {
+      "t": 1.56,
+      "utt": "और आपका प्लान महंगा भी है।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.0
+    ]
+   },
+   {
+    "check": "switch_to_gujarati",
+    "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+    "reply": "હા જી, હું ગુજરાતીમાં જ વાત કરી રહ્યો છું. તો આપણે meeting માટે કયો time fix કરીએ હા જી, હવે આપણે ગુજરાતીમાં જ વાત કરીશું. તો હું કહેતો હતો કે, options વિશે અમારા executive meeting માં તમને બધું સમજાવી દેશે. શું આપણે એક નાની meeting fix કરી શકીએ?",
+    "pass": true,
+    "words": 48,
+    "restart": false,
+    "asr_events": [
+     "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+    ],
+    "tool": [],
+    "speech_onsets": [
+     1.77
+    ]
+   },
+   {
+    "check": "meeting_time_in_gujarati",
+    "seller": "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?",
+    "reply": "બરાબર, તો bulk buyers કેવી રીતે મેળવવા એ માટે હું meeting fix કરી દઉં. તમારા માટે કયો દિવસ અને સમય ફાવશે?",
+    "pass": true,
+    "words": 21,
+    "restart": false,
+    "asr_events": [
+     "સારું.",
+     "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?"
+    ],
+    "tool": [
+     {
+      "t": 1.68,
+      "utt": "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.19,
+     7.22
+    ]
+   },
+   {
+    "check": "confirm_in_gujarati",
+    "seller": "કાલે સવારે દસ વાગ્યે.",
+    "reply": "ચોક્કસ, કાલે સવારે ૧૦ વાગ્યે meeting fix કરી દઉં છું. તમારો ખૂબ ખૂબ આભાર.\n\n",
+    "pass": true,
+    "words": 14,
+    "restart": false,
+    "asr_events": [
+     "કાલે સવારે 10 વાગ્યે."
+    ],
+    "tool": [
+     {
+      "t": 1.52,
+      "utt": "કાલે સવારે 10 વાગ્યે.",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.3
+    ]
+   }
+  ],
+  "ended_early": false
+ },
+ {
+  "scen": "B_gujarati",
+  "cond": "P",
+  "run": 1,
+  "turns": [
+   {
+    "check": "early_objection_playbook",
+    "seller": "Leads ki zarurat nahi hai, pehle se bahut aa rahi hain.",
+    "reply": "हाँ जी, मैं समझ सकता हूँ। वैसे आप किस तरह के buyers ज़्यादा चाहते हैं, bulk वाले या retail?",
+    "pass": true,
+    "words": 19,
+    "restart": false,
+    "asr_events": [
+     "लीड्स की जरूरत नहीं है, पहले से बहुत आ रही हैं।"
+    ],
+    "tool": [
+     {
+      "t": 0.05,
+      "utt": "लीड्स की ज़रूरत नहीं है।",
+      "mode": "neutral"
+     },
+     {
+      "t": 1.23,
+      "utt": "लीड्स की जरूरत नहीं है, पहले से बहुत आ रही हैं।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.55,
+     3.47
+    ]
+   },
+   {
+    "check": "price_no_amount",
+    "seller": "Aur aapka plan mehnga bhi hai.",
+    "reply": "देखिए, options के बारे में हमारे executive मीटिंग में आपको सब अच्छे से समझा देंगे। क्या हम एक छोटी सी meeting fix कर सकते हैं?",
+    "pass": true,
+    "words": 25,
+    "restart": false,
+    "asr_events": [
+     "और आपका प्लान महंगा भी है।"
+    ],
+    "tool": [
+     {
+      "t": 1.64,
+      "utt": "और आपका प्लान महंगा भी है।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.82,
+     5.95
+    ]
+   },
+   {
+    "check": "switch_to_gujarati",
+    "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+    "reply": "અરે, સોરી જી. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. તો હું કહેતો હતો કે options વિશે અમારા executive તમને meeting માં બધું બરાબર સમજાવી દેશે. શું આપણે એક નાની meeting fix કરી શકીએ?",
+    "pass": true,
+    "words": 33,
+    "restart": false,
+    "asr_events": [
+     "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+    ],
+    "tool": [],
+    "speech_onsets": [
+     1.71,
+     2.51
+    ]
+   },
+   {
+    "check": "meeting_time_in_gujarati",
+    "seller": "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?",
+    "reply": "બરાબર, તો bulk buyers કેવી રીતે વધારવા એ માટે હું meeting fix કરી દઉં. તમારા માટે કયો દિવસ અને સમય ફાવશે?",
+    "pass": true,
+    "words": 21,
+    "restart": false,
+    "asr_events": [
+     "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?"
+    ],
+    "tool": [
+     {
+      "t": 1.79,
+      "utt": "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.39,
+     3.3,
+     7.22
+    ]
+   },
+   {
+    "check": "confirm_in_gujarati",
+    "seller": "કાલે સવારે દસ વાગ્યે.",
+    "reply": "ચોક્કસ, કાલે સવારે ૧૦ વાગ્યે meeting fix કરી દઉં છું. તમારો ખૂબ ખૂબ આભાર.\n\n",
+    "pass": true,
+    "words": 14,
+    "restart": false,
+    "asr_events": [
+     "કાલે સવારે 10 વાગ્યે."
+    ],
+    "tool": [
+     {
+      "t": 1.55,
+      "utt": "કાલે સવારે 10 વાગ્યે.",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.08
+    ]
+   }
+  ],
+  "ended_early": false
+ },
+ {
+  "scen": "B_gujarati",
+  "cond": "V",
+  "run": 0,
+  "turns": [
+   {
+    "check": "early_objection_playbook",
+    "seller": "Leads ki zarurat nahi hai, pehle se bahut aa rahi hain.",
+    "reply": "अरे वाह, यह तो बहुत अच्छी बात है। वैसे, हमारे executive आपको यह बता सकते हैं कि आप इन leads को और better तरीके से कैसे convert कर सकते हैं। क्या आप एक छोटी सी meeting के लिए time निकाल पाएंगे?",
+    "pass": false,
+    "words": 41,
+    "restart": false,
+    "asr_events": [
+     "लीड्स की जरूरत नहीं है, पहले से बहुत आ रही हैं।"
+    ],
+    "tool": [
+     {
+      "t": 1.73,
+      "utt": "लीड्स की जरूरत नहीं है, पहले से बहुत आ रही हैं।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.87,
+     3.98
+    ]
+   },
+   {
+    "check": "price_no_amount",
+    "seller": "Aur aapka plan mehnga bhi hai.",
+    "reply": "मैं समझ सकता हूँ। दरअसल, हमारे executive आपको ऐसे options बता सकते हैं जो आपके budget में fit हों और business भी बढ़ाएं। क्या हम कल एक short call schedule कर सकते हैं?",
+    "pass": true,
+    "words": 33,
+    "restart": true,
+    "asr_events": [
+     "और आपका प्लान महंगा भी है।"
+    ],
+    "tool": [
+     {
+      "t": 1.63,
+      "utt": "और आपका प्लान महंगा भी है।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.77,
+     3.48,
+     9.02
+    ]
+   },
+   {
+    "check": "switch_to_gujarati",
+    "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+    "reply": "હા જી, હું ગુજરાતીમાં જ વાત કરી રહ્યો છું. તો આપણે વાત કરતા હતા કે અમારા executive તમને budget મુજબના સાર હા જી, બરાબર. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. તો હું કહેતો હતો કે અમારા executive તમને એવા options બતાવી શકે છે જે તમારા budget માં fit થાય અને business પણ વધે. શું આપણે કાલે એક short call schedule કરી શકીએ?",
+    "pass": true,
+    "words": 62,
+    "restart": false,
+    "asr_events": [
+     "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+    ],
+    "tool": [],
+    "speech_onsets": [
+     1.88,
+     5.59
+    ]
+   },
+   {
+    "check": "meeting_time_in_gujarati",
+    "seller": "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?",
+    "reply": "અચ્છા, બલ્ક buyers માટે તો અમારા executive તમને ચોક્કસ help કરી શકશે. કાલે બપોરે ૩ વાગ્યે કે સાંજે ૫ વાગ્યે, તમારા માટે કયો time slot book કરું?",
+    "pass": true,
+    "words": 27,
+    "restart": false,
+    "asr_events": [
+     "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?"
+    ],
+    "tool": [
+     {
+      "t": 1.94,
+      "utt": "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.51,
+     9.16
+    ]
+   },
+   {
+    "check": "confirm_in_gujarati",
+    "seller": "કાલે સવારે દસ વાગ્યે.",
+    "reply": "બરાબર, કાલે સવારે ૧૦ વાગ્યે done. અમારા executive તમને call કરશે. તમારો ખૂબ ખૂબ આભાર!\n\n",
+    "pass": true,
+    "words": 15,
+    "restart": false,
+    "asr_events": [
+     "કાલે સવારે 10 વાગ્યે."
+    ],
+    "tool": [
+     {
+      "t": 1.55,
+      "utt": "કાલે સવારે 10 વાગ્યે.",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.23,
+     3.14
+    ]
+   }
+  ],
+  "ended_early": false
+ },
+ {
+  "scen": "B_gujarati",
+  "cond": "V",
+  "run": 1,
+  "turns": [
+   {
+    "check": "early_objection_playbook",
+    "seller": "Leads ki zarurat nahi hai, pehle se bahut aa rahi hain.",
+    "reply": "अरे वाह, यह तो बहुत अच्छी बात है। वैसे, हमारे executive आपको यह बता सकते हैं कि आप इन leads को और better तरीके से कैसे convert कर सकते हैं। क्या आप एक छोटी सी meeting के लिए time निकाल पाएंगे?",
+    "pass": false,
+    "words": 41,
+    "restart": false,
+    "asr_events": [
+     "लीड्स की जरूरत नहीं है, पहले से बहुत आ रही हैं।"
+    ],
+    "tool": [
+     {
+      "t": 1.75,
+      "utt": "लीड्स की जरूरत नहीं है, पहले से बहुत आ रही हैं।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.95,
+     4.06
+    ]
+   },
+   {
+    "check": "price_no_amount",
+    "seller": "Aur aapka plan mehnga bhi hai.",
+    "reply": "मैं समझ सकता हूँ। दरअसल, हमारे executive आपको आपके business के हिसाब से best plan suggest कर सकते हैं जिससे आपको ज़्यादा value मिले। क्या हम कल एक छोटी सी meeting fix कर सकते हैं?",
+    "pass": true,
+    "words": 35,
+    "restart": false,
+    "asr_events": [
+     "और आपका प्लान महंगा भी है।"
+    ],
+    "tool": [
+     {
+      "t": 1.54,
+      "utt": "और आपका प्लान महंगा भी है।",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     1.71,
+     3.42,
+     7.75
+    ]
+   },
+   {
+    "check": "switch_to_gujarati",
+    "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+    "reply": "હા જી, હું ગુજરાતીમાં જ વાત કરી રહ્યો છું. તો આપણે વાત કરતા હતા કે અમારા executive તમને તમારા business માટે best plan suggest કરી શકે છે. શું તમે કાલે એક નાની meeting માટે time કાઢી શકશો? હા જી, બરાબર છે. હવે આપણે ગુજરાતીમાં જ વાત કરીશું.\n\nતો હું એમ કહેતો હતો કે, અમારા executive તમને તમારા business માટે સૌથી best plan suggest કરી શકશે. શું તમે કાલે એક નાની meeting માટે થોડો time કાઢી શકશો?",
+    "pass": true,
+    "words": 76,
+    "restart": false,
+    "asr_events": [
+     "ગુજરાતીમાં વાત કરોને.",
+     "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+    ],
+    "tool": [],
+    "speech_onsets": [
+     1.75,
+     3.56,
+     6.07,
+     13.12
+    ]
+   },
+   {
+    "check": "meeting_time_in_gujarati",
+    "seller": "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?",
+    "reply": "અચ્છા, બલ્ક buyers મેળવવામાં અમારા executive તમને ચોક્કસ help કરશે.\n\nતમારા માટે કાલે કયો time slot convenient રહેશે, સવારે કે સાંજે?",
+    "pass": false,
+    "words": 21,
+    "restart": false,
+    "asr_events": [
+     "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?"
+    ],
+    "tool": [
+     {
+      "t": 1.78,
+      "utt": "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?",
+      "mode": "neutral"
+     }
+    ],
+    "speech_onsets": [
+     2.56,
+     6.99
+    ]
+   },
+   {
+    "check": "confirm_in_gujarati",
+    "seller": "કાલે સવારે દસ વાગ્યે.",
+    "reply": "બરાબર છે, કાલે સવારે ૧૦ વાગ્યે fix કરી દઉં છું.\n\nઅમારા executive તમને call કરશે. તમારો ખૂબ ખૂબ આભાર!\n\n",
+    "pass": true,
+    "words": 19,
+    "restart": false,
+    "asr_events": [
+     "કાલે સવારે 10 વાગ્યે."
+    ],
+    "tool": [],
+    "speech_onsets": [
+     1.64,
+     2.85,
+     5.27
+    ]
+   }
+  ],
+  "ended_early": false
+ }
+]

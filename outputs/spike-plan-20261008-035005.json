@@ -1,0 +1,134 @@
+[
+ {
+  "seller": "A",
+  "run": 0,
+  "opening_said": "",
+  "opening_exact": false,
+  "turns": [
+   {
+    "check": "step2_personalised",
+    "seller": "Haan ji, main hi owner hoon. Boliye.",
+    "reply": "धन्यवाद जी। दरअसल, पिछले हफ्ते आपने हमसे बात की थी कि इंदौर में PVC pipes के लिए और ज्यादा buyers चाहिए, तो उसी सिलसिले में मैंने call किया है।",
+    "pass": true
+   },
+   {
+    "check": "playbook_price",
+    "seller": "Achha haan yaad aaya. Par paise kitne lagenge? Aapka plan bahut mehnga hai.",
+    "reply": "देखिए, इसके सारे options के देखिए, हमारे executive आपसे मिलकर सारे options अच्छे से समझा देंगे। क्या आप उनके लिए सिर्फ पंद्रह मिनट का time निकाल सकते हैं?",
+    "pass": true
+   },
+   {
+    "check": "step3_ask_time",
+    "seller": "Theek hai, mil lete hain.",
+    "reply": "ठीक है जी। तो क्या हम आपके लिए हमारे local IndiaMART executive के साथ एक छोटी सी पंद्रह मिनट की meeting fix कर सकते हैं? वो आपको सारे options अच्छे से समझा देंगे।",
+    "pass": false
+   },
+   {
+    "check": "step4_confirm",
+    "seller": "Kal shaam paanch baje aa jaiye.",
+    "reply": "बिल्कुल, कल शाम पाँच बजे done रहा। समय देने के लिए बहुत-बहुत धन्यवाद जी।\n\n",
+    "pass": true
+   }
+  ],
+  "tool_calls": 6
+ },
+ {
+  "seller": "A",
+  "run": 1,
+  "opening_said": "",
+  "opening_exact": false,
+  "turns": [
+   {
+    "check": "step2_personalised",
+    "seller": "Haan ji, main hi owner hoon. Boliye.",
+    "reply": "धन्यवाद जी। दरअसल, पिछले हफ्ते आपने हमसे बात की थी कि इंदौर में PVC pipes के लिए और ज्यादा buyers चाहिए, तो उसी सिलसिले में मैंने call किया है।",
+    "pass": true
+   },
+   {
+    "check": "playbook_price",
+    "seller": "Achha haan yaad aaya. Par paise kitne lagenge? Aapka plan bahut mehnga hai.",
+    "reply": "देखिए, हमारे executive आपसे meeting में मिलकर देखिए, हमारे executive मीटिंग में आपको सारे options अच्छे से समझा देंगे। क्या आप उनके साथ एक छोटी सी पंद्रह मिनट की meeting कर सकते हैं?",
+    "pass": true
+   },
+   {
+    "check": "step3_ask_time",
+    "seller": "Theek hai, mil lete hain.",
+    "reply": "बहुत अच्छा। तो आप कौन से दिन और कितने बजे free रहेंगे ताकि मैं meeting fix कर सकूँ?",
+    "pass": true
+   },
+   {
+    "check": "step4_confirm",
+    "seller": "Kal shaam paanch baje aa jaiye.",
+    "reply": "ठीक है जी, कल शाम पाँच बजे confirm रहा। समय देने के लिए बहुत धन्यवाद, आपका दिन शुभ हो।\n\n",
+    "pass": true
+   }
+  ],
+  "tool_calls": 7
+ },
+ {
+  "seller": "B",
+  "run": 0,
+  "opening_said": "",
+  "opening_exact": false,
+  "turns": [
+   {
+    "check": "step2_personalised",
+    "seller": "Haan, Kaveri Textiles. Boliye.",
+    "reply": "जी शुक्रिया। पिछली बार आपने बताया था कि आपको काफी leads मिल रही हैं, तो मैं जानना चाहता था कि आपको किस तरह के buyers ज़्यादा चाहिए, bulk या retail?",
+    "pass": true
+   },
+   {
+    "check": "playbook_leads",
+    "seller": "Leads toh pehle se bahut aa rahi hain, zarurat nahi hai.",
+    "reply": "मैं समझ सकता हूँ, पर मेरा मतलब ज़्यादा leads से नहीं, बल्कि बेहतर quality के buyers से है। क्या मैं हमारे executive के साथ आपकी एक छोटी meeting set करूँ, जो आपको ज़्यादा bulk buyers दिलाने में help कर सकें?",
+    "pass": true
+   },
+   {
+    "check": "step3_meeting",
+    "seller": "Haan bulk buyers chahiye actually.",
+    "reply": "अरे वाह, यह तो बहुत अच्छी बात है। तो फिर आप कब free हैं? मैं executive के साथ आपकी meeting का day और time confirm कर देता हूँ।",
+    "pass": true
+   },
+   {
+    "check": "step4_confirm",
+    "seller": "Parso subah das baje theek rahega.",
+    "reply": "ठीक है, परसों सुबह दस बजे done रहा। आपका बहुत-बहुत शुक्रिया, आपका दिन शुभ हो।\n\n",
+    "pass": true
+   }
+  ],
+  "tool_calls": 7
+ },
+ {
+  "seller": "B",
+  "run": 1,
+  "opening_said": "",
+  "opening_exact": false,
+  "turns": [
+   {
+    "check": "step2_personalised",
+    "seller": "Haan, Kaveri Textiles. Boliye.",
+    "reply": "जी शुक्रिया। पिछली बार आपने बताया था कि आपको काफी leads मिल रही हैं, तो मैं जानना चाहता था कि आपको किस तरह के buyers ज़्यादा चाहिए, bulk या retail?",
+    "pass": true
+   },
+   {
+    "check": "playbook_leads",
+    "seller": "Leads toh pehle se bahut aa rahi hain, zarurat nahi hai.",
+    "reply": "मैं समझ सकता हूँ, पर मेरा मतलब leads की संख्या बढ़ाना नहीं, बल्कि बेहतर quality के buyers दिलाना है। क्या मैं हमारे executive के साथ आपकी मैं समझ सकता हूँ, पर मेरा मतलब ज़्यादा leads से नहीं, बल्कि बेहतर quality के buyers से है। क्या मैं हमारे executive के साथ आपकी एक छोटी meeting set करूँ, जो आपको ज़्यादा bulk buyers दिलाने में help कर सकें?",
+    "pass": true
+   },
+   {
+    "check": "step3_meeting",
+    "seller": "Haan bulk buyers chahiye actually.",
+    "reply": "अरे वाह, यह तो बहुत अच्छी बात है। तो फिर आप कब free हैं? मैं आपके लिए एक meeting fix कर देता हूँ।",
+    "pass": true
+   },
+   {
+    "check": "step4_confirm",
+    "seller": "Parso subah das baje theek rahega.",
+    "reply": "ठीक है, परसों सुबह दस बजे done रहा। आपका बहुत-बहुत शुक्रिया, आपका दिन शुभ हो।\n\n",
+    "pass": true
+   }
+  ],
+  "tool_calls": 7
+ }
+]

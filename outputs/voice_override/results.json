@@ -1,0 +1,65 @@
+[
+ {
+  "case": "default",
+  "speech_span_s": 10.66,
+  "active_speech_s": 3.22,
+  "f0_median_hz": 123.1,
+  "voiced_frames": 259,
+  "stt_lang": "hi-IN",
+  "transcript": "नमस्ते, मैं इंडिया मार्ट से बोल रहा हूँ। क्या आपके पास दो मिनट हैं? नमस्ते, क्या आप अभी भी कॉल कर रहे हैं?"
+ },
+ {
+  "case": "anand_m_p1.0",
+  "speech_span_s": 11.04,
+  "active_speech_s": 3.52,
+  "f0_median_hz": 127.0,
+  "voiced_frames": 281,
+  "stt_lang": "hi-IN",
+  "transcript": "नमस्ते, मैं इंडिया मार्ट से बोल रहा हूँ। क्या आपके पास 2 मिनट हैं? नमस्ते, क्या आप अभी भी कॉल पर हैं?"
+ },
+ {
+  "case": "aarti_f_p0.85",
+  "speech_span_s": 10.98,
+  "active_speech_s": 3.46,
+  "f0_median_hz": 126.0,
+  "voiced_frames": 277,
+  "stt_lang": "hi-IN",
+  "transcript": "नमस्ते, मैं इंडिया मार्ट से बोल रहा हूँ। क्या आपके पास दो मिनट हैं? नमस्ते, क्या आप अभी भी कॉल पर हैं?"
+ },
+ {
+  "case": "aarti_f_p1.25",
+  "speech_span_s": 11.04,
+  "active_speech_s": 3.52,
+  "f0_median_hz": 127.0,
+  "voiced_frames": 281,
+  "stt_lang": "hi-IN",
+  "transcript": "नमस्ते, मैं इंडिया मार्ट से बोल रहा हूँ। क्या आपके पास 2 मिनट हैं? नमस्ते, क्या आप अभी भी कॉल पर हैं?"
+ },
+ {
+  "case": "aarti_f_pitch+0.2",
+  "speech_span_s": 11.04,
+  "active_speech_s": 3.52,
+  "f0_median_hz": 127.0,
+  "voiced_frames": 281,
+  "stt_lang": "hi-IN",
+  "transcript": "नमस्ते, मैं इंडिया मार्ट से बोल रहा हूँ। क्या आपके पास 2 मिनट हैं? नमस्ते, क्या आप अभी भी कॉल पर हैं?"
+ },
+ {
+  "case": "aarti_f_pitch-0.2",
+  "speech_span_s": 10.98,
+  "active_speech_s": 3.46,
+  "f0_median_hz": 126.0,
+  "voiced_frames": 277,
+  "stt_lang": "hi-IN",
+  "transcript": "नमस्ते, मैं इंडिया मार्ट से बोल रहा हूँ। क्या आपके पास दो मिनट हैं? नमस्ते, क्या आप अभी भी कॉल पर हैं?"
+ },
+ {
+  "case": "lang_english_no_opening",
+  "speech_span_s": 9.7,
+  "active_speech_s": 2.8,
+  "f0_median_hz": 139.7,
+  "voiced_frames": 216,
+  "stt_lang": "en-IN",
+  "transcript": "Hi, I am Shubh, calling from Sarvam. How can I help you today? Hey, are you still on the call?"
+ }
+]

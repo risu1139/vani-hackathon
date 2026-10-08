@@ -1,0 +1,1553 @@
+[
+ {
+  "utt": "Abhi busy hoon yaar, jaldi bolo kya hai",
+  "exp": {
+   "rushed": 1,
+   "language": "hinglish"
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.99
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.46
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.09
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.34
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hindi",
+     "probabilities": {
+      "hinglish": 0.45,
+      "unclear": 0,
+      "gujarati": 0,
+      "hindi": 0.55,
+      "english": 0,
+      "tamil": 0
+     },
+     "confidence": 0.45
+    }
+   },
+   "usage": {
+    "input_tokens": 1004,
+    "output_tokens": 152,
+    "cost": 4.2168e-05
+   },
+   "id": "gen-dec-1791343242-uK6NR0WTtfekUpPEO7zp",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Main driving kar raha hoon, baad mein call karo",
+  "exp": {
+   "rushed": 1,
+   "language": "hinglish"
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.99
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.08
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.01
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hinglish",
+     "probabilities": {
+      "english": 0,
+      "gujarati": 0,
+      "unclear": 0,
+      "tamil": 0,
+      "hinglish": 0.52,
+      "hindi": 0.48
+     },
+     "confidence": 0.41
+    }
+   },
+   "usage": {
+    "input_tokens": 1003,
+    "output_tokens": 152,
+    "cost": 4.2126e-05
+   },
+   "id": "gen-dec-1791343242-DstZ7RVmr1G51bBEw08p",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Time nahi hai abhi, short mein batao",
+  "exp": {
+   "rushed": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.99
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.33
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.2
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hinglish",
+     "probabilities": {
+      "hinglish": 0.54,
+      "unclear": 0,
+      "gujarati": 0,
+      "hindi": 0.46,
+      "tamil": 0,
+      "english": 0
+     },
+     "confidence": 0.44
+    }
+   },
+   "usage": {
+    "input_tokens": 1001,
+    "output_tokens": 152,
+    "cost": 4.2042e-05
+   },
+   "id": "gen-dec-1791343243-8kzshVKmugOK3PyLf6PE",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Meeting mein hoon, shaam ko baat karte hain",
+  "exp": {
+   "rushed": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.99
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.06
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.01
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.28
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hinglish",
+     "probabilities": {
+      "tamil": 0,
+      "hindi": 0.2,
+      "hinglish": 0.8,
+      "english": 0,
+      "gujarati": 0,
+      "unclear": 0
+     },
+     "confidence": 0.76
+    }
+   },
+   "usage": {
+    "input_tokens": 1004,
+    "output_tokens": 152,
+    "cost": 4.2168e-05
+   },
+   "id": "gen-dec-1791343242-2RmEgSnIgKrexYmHXrFe",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Seekiram sollunga, naan busy",
+  "exp": {
+   "rushed": 1,
+   "language": "tamil"
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.98
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.27
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "language": {
+     "type": "choice",
+     "choice": "tamil",
+     "probabilities": {
+      "tamil": 1,
+      "hinglish": 0,
+      "hindi": 0,
+      "gujarati": 0,
+      "unclear": 0,
+      "english": 0
+     },
+     "confidence": 1
+    }
+   },
+   "usage": {
+    "input_tokens": 999,
+    "output_tokens": 152,
+    "cost": 4.1958e-05
+   },
+   "id": "gen-dec-1791343243-y7FhHqLGoQJ4ARTlX8Ed",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Hu atyare busy chhu, pachhi vaat karu",
+  "exp": {
+   "rushed": 1,
+   "language": "gujarati"
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.98
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.19
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.07
+    },
+    "language": {
+     "type": "choice",
+     "choice": "gujarati",
+     "probabilities": {
+      "gujarati": 0.81,
+      "hinglish": 0.07,
+      "hindi": 0.1,
+      "english": 0,
+      "tamil": 0,
+      "unclear": 0.01
+     },
+     "confidence": 0.77
+    }
+   },
+   "usage": {
+    "input_tokens": 1003,
+    "output_tokens": 153,
+    "cost": 4.2126e-05
+   },
+   "id": "gen-dec-1791343243-paaVOxL5ZzsTL2Ilq7kl",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Kitni baar call karoge, pareshan kar diya hai",
+  "exp": {
+   "frustrated": 1,
+   "language": "hindi"
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.42
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.98
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hindi",
+     "probabilities": {
+      "unclear": 0,
+      "english": 0,
+      "hindi": 0.75,
+      "tamil": 0,
+      "hinglish": 0.25,
+      "gujarati": 0
+     },
+     "confidence": 0.7
+    }
+   },
+   "usage": {
+    "input_tokens": 1005,
+    "output_tokens": 152,
+    "cost": 4.221e-05
+   },
+   "id": "gen-dec-1791343243-tbTpjYD2gOrWcQO4a31L",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Faltu call mat karo bhai, dimag mat khao",
+  "exp": {
+   "frustrated": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.42
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.98
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.07
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hinglish",
+     "probabilities": {
+      "hinglish": 0.54,
+      "unclear": 0,
+      "tamil": 0,
+      "english": 0,
+      "hindi": 0.46,
+      "gujarati": 0
+     },
+     "confidence": 0.45
+    }
+   },
+   "usage": {
+    "input_tokens": 1005,
+    "output_tokens": 152,
+    "cost": 4.221e-05
+   },
+   "id": "gen-dec-1791343244-rkpXRpIgSCEBhDvJ8trL",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Yeh teesri baar call aa raha hai aaj, band karo yeh sab",
+  "exp": {
+   "frustrated": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.62
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.95
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hindi",
+     "probabilities": {
+      "english": 0,
+      "unclear": 0,
+      "hinglish": 0.39,
+      "tamil": 0,
+      "hindi": 0.61,
+      "gujarati": 0
+     },
+     "confidence": 0.52
+    }
+   },
+   "usage": {
+    "input_tokens": 1009,
+    "output_tokens": 152,
+    "cost": 4.2378e-05
+   },
+   "id": "gen-dec-1791343244-5zQgL9hfIsbWflpRR8G9",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Samajh nahi aaya, kya matlab meeting?",
+  "exp": {
+   "confused": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "interested": {
+     "type": "noul",
+     "noul": 0.14
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hinglish",
+     "probabilities": {
+      "unclear": 0,
+      "hinglish": 0.75,
+      "english": 0,
+      "hindi": 0.25,
+      "tamil": 0,
+      "gujarati": 0
+     },
+     "confidence": 0.7
+    },
+    "rushed": {
+     "type": "noul",
+     "noul": 0.06
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.1
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.96
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.03
+    }
+   },
+   "usage": {
+    "input_tokens": 1002,
+    "output_tokens": 152,
+    "cost": 4.2084e-05
+   },
+   "id": "gen-dec-1791343244-kuqiKhDAE2Iy5QTld5hA",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Kya bola aapne? Kis cheez ka call hai yeh?",
+  "exp": {
+   "confused": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.19
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.96
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.19
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hindi",
+     "probabilities": {
+      "hinglish": 0.3,
+      "unclear": 0,
+      "gujarati": 0,
+      "english": 0,
+      "hindi": 0.7,
+      "tamil": 0
+     },
+     "confidence": 0.63
+    }
+   },
+   "usage": {
+    "input_tokens": 1007,
+    "output_tokens": 152,
+    "cost": 4.2294e-05
+   },
+   "id": "gen-dec-1791343244-98xzxdcoRGamWK8pZU7u",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Enna sollureenga, puriyala",
+  "exp": {
+   "confused": 1,
+   "language": "tamil"
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.6
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.47
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.87
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.22
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.32
+    },
+    "language": {
+     "type": "choice",
+     "choice": "tamil",
+     "probabilities": {
+      "gujarati": 0,
+      "tamil": 1,
+      "hinglish": 0,
+      "unclear": 0,
+      "hindi": 0,
+      "english": 0
+     },
+     "confidence": 1
+    }
+   },
+   "usage": {
+    "input_tokens": 1000,
+    "output_tokens": 152,
+    "cost": 4.2e-05
+   },
+   "id": "gen-dec-1791343244-WTQcn6uxu0gR5AeTXu9T",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Aap bot ho kya? Recorded call hai?",
+  "exp": {
+   "bot_question": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.29
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.12
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.98
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hinglish",
+     "probabilities": {
+      "gujarati": 0,
+      "unclear": 0,
+      "hinglish": 0.83,
+      "english": 0.01,
+      "tamil": 0,
+      "hindi": 0.16
+     },
+     "confidence": 0.8
+    }
+   },
+   "usage": {
+    "input_tokens": 1001,
+    "output_tokens": 152,
+    "cost": 4.2042e-05
+   },
+   "id": "gen-dec-1791343245-k8s4iligLnzvgsxMBO4R",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Kisi insaan se baat karao, machine se nahi",
+  "exp": {
+   "bot_question": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.07
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.81
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.07
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.95
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.07
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hindi",
+     "probabilities": {
+      "english": 0,
+      "gujarati": 0,
+      "hinglish": 0.44,
+      "unclear": 0,
+      "tamil": 0,
+      "hindi": 0.56
+     },
+     "confidence": 0.46
+    }
+   },
+   "usage": {
+    "input_tokens": 1004,
+    "output_tokens": 152,
+    "cost": 4.2168e-05
+   },
+   "id": "gen-dec-1791343245-q7CbEKwybsV1EnZmQCAl",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Are you a robot or a real person?",
+  "exp": {
+   "bot_question": 1,
+   "language": "english"
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.21
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.07
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.97
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "language": {
+     "type": "choice",
+     "choice": "english",
+     "probabilities": {
+      "gujarati": 0,
+      "hindi": 0,
+      "unclear": 0,
+      "hinglish": 0.01,
+      "tamil": 0,
+      "english": 0.99
+     },
+     "confidence": 0.98
+    }
+   },
+   "usage": {
+    "input_tokens": 1000,
+    "output_tokens": 151,
+    "cost": 4.2e-05
+   },
+   "id": "gen-dec-1791343245-o9WGuZaKiMVnNLfoj05S",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Achha, kitna charge hai iska?",
+  "exp": {
+   "interested": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.97
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hindi",
+     "probabilities": {
+      "unclear": 0,
+      "english": 0,
+      "hindi": 0.55,
+      "tamil": 0,
+      "hinglish": 0.45,
+      "gujarati": 0
+     },
+     "confidence": 0.45
+    }
+   },
+   "usage": {
+    "input_tokens": 1000,
+    "output_tokens": 152,
+    "cost": 4.2e-05
+   },
+   "id": "gen-dec-1791343245-rHDBCckl3Fg2JfLacRBh",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Theek hai, kal 11 baje aa jaiye office",
+  "exp": {
+   "interested": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.15
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.01
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.96
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hinglish",
+     "probabilities": {
+      "unclear": 0,
+      "gujarati": 0,
+      "hindi": 0.42,
+      "english": 0,
+      "hinglish": 0.58,
+      "tamil": 0
+     },
+     "confidence": 0.49
+    }
+   },
+   "usage": {
+    "input_tokens": 1005,
+    "output_tokens": 152,
+    "cost": 4.221e-05
+   },
+   "id": "gen-dec-1791343246-UjURRQcMkbTsuAMVaNY2",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Details WhatsApp pe bhej do, dekhta hoon",
+  "exp": {
+   "interested": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.21
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.06
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.01
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.85
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hinglish",
+     "probabilities": {
+      "english": 0,
+      "unclear": 0,
+      "hindi": 0.26,
+      "tamil": 0,
+      "gujarati": 0,
+      "hinglish": 0.74
+     },
+     "confidence": 0.69
+    }
+   },
+   "usage": {
+    "input_tokens": 1004,
+    "output_tokens": 152,
+    "cost": 4.2168e-05
+   },
+   "id": "gen-dec-1791343246-t95NgC5fhxiGtFcBkXB1",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Tame ketla paisa leso? Mane details moklo",
+  "exp": {
+   "interested": 1,
+   "language": "gujarati"
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.07
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.13
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.07
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.96
+    },
+    "language": {
+     "type": "choice",
+     "choice": "gujarati",
+     "probabilities": {
+      "hinglish": 0,
+      "unclear": 0,
+      "gujarati": 0.99,
+      "hindi": 0.01,
+      "tamil": 0,
+      "english": 0
+     },
+     "confidence": 0.99
+    }
+   },
+   "usage": {
+    "input_tokens": 1004,
+    "output_tokens": 153,
+    "cost": 4.2168e-05
+   },
+   "id": "gen-dec-1791343246-2BBG3VNv92K1tQaRyPFO",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Haan boliye",
+  "exp": {
+   "rushed": 0,
+   "frustrated": 0,
+   "confused": 0,
+   "bot_question": 0
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.01
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.75
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hindi",
+     "probabilities": {
+      "hindi": 0.96,
+      "hinglish": 0.04,
+      "tamil": 0,
+      "gujarati": 0,
+      "english": 0,
+      "unclear": 0
+     },
+     "confidence": 0.95
+    }
+   },
+   "usage": {
+    "input_tokens": 995,
+    "output_tokens": 152,
+    "cost": 4.179e-05
+   },
+   "id": "gen-dec-1791343246-pqPlYRHAe3Mm1t7EPRfH",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Haan ji, main hi bol raha hoon",
+  "exp": {
+   "rushed": 0,
+   "frustrated": 0,
+   "confused": 0
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.47
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hindi",
+     "probabilities": {
+      "gujarati": 0,
+      "tamil": 0,
+      "hinglish": 0.08,
+      "english": 0,
+      "hindi": 0.92,
+      "unclear": 0
+     },
+     "confidence": 0.9
+    }
+   },
+   "usage": {
+    "input_tokens": 1001,
+    "output_tokens": 152,
+    "cost": 4.2042e-05
+   },
+   "id": "gen-dec-1791343247-2pqfh32alawXgPtIMd3j",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Aapka naam kya hai aur kaunsi company se ho?",
+  "exp": {
+   "bot_question": 0,
+   "confused": 0
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.27
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hindi",
+     "probabilities": {
+      "gujarati": 0,
+      "english": 0,
+      "hindi": 0.62,
+      "hinglish": 0.38,
+      "unclear": 0,
+      "tamil": 0
+     },
+     "confidence": 0.54
+    }
+   },
+   "usage": {
+    "input_tokens": 1004,
+    "output_tokens": 152,
+    "cost": 4.2168e-05
+   },
+   "id": "gen-dec-1791343247-EH9AFaMNNCyObuXLKedG",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Nahi chahiye, interest nahi hai, thank you",
+  "exp": {
+   "frustrated": 0,
+   "interested": 0
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.06
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.08
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.01
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hinglish",
+     "probabilities": {
+      "gujarati": 0,
+      "english": 0,
+      "unclear": 0,
+      "hinglish": 0.93,
+      "hindi": 0.07,
+      "tamil": 0
+     },
+     "confidence": 0.91
+    }
+   },
+   "usage": {
+    "input_tokens": 1003,
+    "output_tokens": 152,
+    "cost": 4.2126e-05
+   },
+   "id": "gen-dec-1791343247-GNAlgPE2FKWlNHVlJJxt",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Already IndiaMART wale sir se baat ho gayi hai",
+  "exp": {
+   "frustrated": 0,
+   "confused": 0
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.12
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.13
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.09
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hinglish",
+     "probabilities": {
+      "hindi": 0.08,
+      "gujarati": 0,
+      "hinglish": 0.92,
+      "unclear": 0,
+      "tamil": 0,
+      "english": 0
+     },
+     "confidence": 0.9
+    }
+   },
+   "usage": {
+    "input_tokens": 1005,
+    "output_tokens": 152,
+    "cost": 4.221e-05
+   },
+   "id": "gen-dec-1791343247-xkfSwAzj1w9A6D7xm79T",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Ok ok",
+  "exp": {
+   "rushed": 0,
+   "frustrated": 0,
+   "confused": 0,
+   "interested": 0
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.1
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.69
+    },
+    "language": {
+     "type": "choice",
+     "choice": "english",
+     "probabilities": {
+      "hindi": 0.01,
+      "tamil": 0,
+      "hinglish": 0.14,
+      "gujarati": 0,
+      "unclear": 0.06,
+      "english": 0.79
+     },
+     "confidence": 0.74
+    }
+   },
+   "usage": {
+    "input_tokens": 993,
+    "output_tokens": 151,
+    "cost": 4.1706e-05
+   },
+   "id": "gen-dec-1791343248-Y7c33LfqyxRwNvD4dWku",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Yes tell me, what is this about?",
+  "exp": {
+   "language": "english",
+   "frustrated": 0
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.04
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.06
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.32
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.73
+    },
+    "language": {
+     "type": "choice",
+     "choice": "english",
+     "probabilities": {
+      "hindi": 0,
+      "unclear": 0,
+      "tamil": 0,
+      "hinglish": 0.02,
+      "gujarati": 0,
+      "english": 0.98
+     },
+     "confidence": 0.97
+    }
+   },
+   "usage": {
+    "input_tokens": 1000,
+    "output_tokens": 151,
+    "cost": 4.2e-05
+   },
+   "id": "gen-dec-1791343248-35dpLVBqqOYhZtquSAFx",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Illa, venda",
+  "exp": {
+   "language": "tamil"
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.43
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.26
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.42
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.12
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.17
+    },
+    "language": {
+     "type": "choice",
+     "choice": "tamil",
+     "probabilities": {
+      "hinglish": 0.08,
+      "gujarati": 0.03,
+      "english": 0.02,
+      "unclear": 0.07,
+      "tamil": 0.71,
+      "hindi": 0.09
+     },
+     "confidence": 0.66
+    }
+   },
+   "usage": {
+    "input_tokens": 995,
+    "output_tokens": 152,
+    "cost": 4.179e-05
+   },
+   "id": "gen-dec-1791343248-xAe2AiMV9xNdZIS35HjM",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Mane kai samjanu nahi, shu kaam che?",
+  "exp": {
+   "confused": 1,
+   "language": "gujarati"
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.07
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.14
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.96
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.05
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.34
+    },
+    "language": {
+     "type": "choice",
+     "choice": "gujarati",
+     "probabilities": {
+      "hindi": 0.03,
+      "hinglish": 0.01,
+      "tamil": 0,
+      "english": 0,
+      "gujarati": 0.96,
+      "unclear": 0
+     },
+     "confidence": 0.96
+    }
+   },
+   "usage": {
+    "input_tokens": 1004,
+    "output_tokens": 153,
+    "cost": 4.2168e-05
+   },
+   "id": "gen-dec-1791343248-RrSCdi0hWkR7Y9SXAjBw",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Abhi nahi, mahine baad call karna",
+  "exp": {
+   "rushed": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "rushed": {
+     "type": "noul",
+     "noul": 0.98
+    },
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.14
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.01
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.03
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hinglish",
+     "probabilities": {
+      "unclear": 0,
+      "hindi": 0.41,
+      "gujarati": 0,
+      "hinglish": 0.59,
+      "tamil": 0,
+      "english": 0
+     },
+     "confidence": 0.5
+    }
+   },
+   "usage": {
+    "input_tokens": 1002,
+    "output_tokens": 152,
+    "cost": 4.2084e-05
+   },
+   "id": "gen-dec-1791343249-mRtyhJ8YCFxkh8xaAdEg",
+   "provider": "TypeSafe"
+  }
+ },
+ {
+  "utt": "Bhai pehle bhi bola tha mujhe nahi chahiye, phir se call kyun kiya?",
+  "exp": {
+   "frustrated": 1
+  },
+  "resp": {
+   "model": "typesafe/jev-1.13-20260917",
+   "answers": {
+    "frustrated": {
+     "type": "noul",
+     "noul": 0.92
+    },
+    "confused": {
+     "type": "noul",
+     "noul": 0.11
+    },
+    "bot_question": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "interested": {
+     "type": "noul",
+     "noul": 0.02
+    },
+    "language": {
+     "type": "choice",
+     "choice": "hindi",
+     "probabilities": {
+      "gujarati": 0,
+      "unclear": 0,
+      "hinglish": 0.42,
+      "hindi": 0.58,
+      "english": 0,
+      "tamil": 0
+     },
+     "confidence": 0.49
+    },
+    "rushed": {
+     "type": "noul",
+     "noul": 0.12
+    }
+   },
+   "usage": {
+    "input_tokens": 1014,
+    "output_tokens": 152,
+    "cost": 4.2588e-05
+   },
+   "id": "gen-dec-1791343249-FR0cDH9HlOmaezU4twmi",
+   "provider": "TypeSafe"
+  }
+ }
+]

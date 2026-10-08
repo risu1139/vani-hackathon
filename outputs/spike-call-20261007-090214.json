@@ -1,0 +1,173 @@
+[
+ {
+  "interaction_id": "20261007/3b51b733-09:00:49-02bab5d4",
+  "t_start": 1791343854.9613793,
+  "turns": [
+   {
+    "seller": "Haan boliye, kaun bol raha hai?",
+    "expected": "neutral",
+    "t_sent": 1791343854.9613793,
+    "t_end_speech": 1791343856.728065,
+    "reply_latency_s": 2.27,
+    "tool_calls": 2,
+    "tool_after_speech_s": 1.58,
+    "mode": "neutral",
+    "sent_utterance": "हाँ बोलिए।",
+    "agent_said": "जी, मैं IndiaMART से बात कर रहा हूँ। मैंने आपको यह बताने के लिए call किया है कि हम आपकी help कर सकते हैं ताकि आपको और ज़्यादा buyer enquiries मिल सकें।",
+    "asr_heard": "हाँ बोलिए। हाँ बोलिए, कौन बोल रहा है?"
+   },
+   {
+    "seller": "Achha IndiaMART se. Kya kaam hai?",
+    "expected": "neutral",
+    "t_sent": 1791343867.3699985,
+    "t_end_speech": 1791343869.9082284,
+    "reply_latency_s": 1.68,
+    "tool_calls": 1,
+    "tool_after_speech_s": 2.04,
+    "mode": "neutral",
+    "sent_utterance": "अच्छा इंडिया मार्ट से क्या काम है?",
+    "agent_said": "दरअसल, मैं चाहता था कि हमारे एक executive आपसे एक छोटी सी meeting करें। वो आपको बताएंगे कि आप अपने business के लिए और ज़्यादा buyers कैसे पा सकते हैं।",
+    "asr_heard": "अच्छा इंडिया मार्ट से क्या काम है?"
+   },
+   {
+    "seller": "Abhi busy hoon yaar, jaldi bolo kya hai",
+    "expected": "rushed",
+    "t_sent": 1791343879.9850035,
+    "t_end_speech": 1791343882.9788358,
+    "reply_latency_s": 1.65,
+    "tool_calls": 2,
+    "tool_after_speech_s": 0.51,
+    "mode": "neutral",
+    "sent_utterance": "अभी बिज़ी हूँ यार।",
+    "agent_said": "मैं समझ सकता हूँ। बस एक छोटी सी meeting set करनी थी ताकि हमारे expert आपको ज़्यादा enquiries लाने का तरीका बता सकें। क्या कल आपके पास थोड़ा time होगा?",
+    "asr_heard": "अभी बिज़ी हूँ यार। अभी बिज़ी हूँ यार, जल्दी बोलो क्या है।"
+   },
+   {
+    "seller": "Samajh nahi aaya, kya matlab meeting?",
+    "expected": "confused",
+    "t_sent": 1791343894.2923193,
+    "t_end_speech": 1791343896.3530211,
+    "reply_latency_s": 2.21,
+    "tool_calls": 2,
+    "tool_after_speech_s": 1.25,
+    "mode": "neutral",
+    "sent_utterance": "समझ नहीं आया।",
+    "agent_said": "मतलब, हमारे executive आपसे call या video call पर बात करेंगे। वो आपको simple तरीके बताएंगे जिससे आपके products के लिए ज़्यादा buyers आपसे contact करें।",
+    "asr_heard": "समझ नहीं आया क्या मतलब मीटिंग?"
+   },
+   {
+    "seller": "Aap bot ho kya? Recorded call hai?",
+    "expected": "bot_question",
+    "t_sent": 1791343907.304596,
+    "t_end_speech": 1791343909.76324,
+    "reply_latency_s": 1.9,
+    "tool_calls": 2,
+    "tool_after_speech_s": 0.72,
+    "mode": "neutral",
+    "sent_utterance": "आप बॉट हो क्या?",
+    "agent_said": "जी हाँ, मैं IndiaMART नहीं नहीं, मैं IndiaMART का AI assistant हूँ। मैं आपसे live बात कर रहा हूँ ताकि आपकी help कर सकूँ।",
+    "asr_heard": "आप बॉट हो क्या? आप बॉट हो क्या? रिकॉर्डेड कॉल है?"
+   },
+   {
+    "seller": "Theek hai, kal gyarah baje aa jaiye",
+    "expected": "neutral",
+    "t_sent": 1791343918.0103555,
+    "t_end_speech": 1791343920.8230479,
+    "reply_latency_s": 2.3,
+    "tool_calls": 2,
+    "tool_after_speech_s": 0.27,
+    "mode": "neutral",
+    "sent_utterance": "ठीक है।",
+    "agent_said": "बहुत अच्छा। तो कल सुबह ग्यारह बजे की meeting fix रही। हमारे executive आपको call कर लेंगे।",
+    "asr_heard": "ठीक है। ठीक है, कल 11 बजे आ जाइए।"
+   }
+  ],
+  "events": [
+   [
+    1791343856.1723142,
+    "user",
+    "हाँ बोलिए।"
+   ],
+   [
+    1791343857.2763057,
+    "user",
+    "हाँ बोलिए, कौन बोल रहा है?"
+   ],
+   [
+    1791343858.387154,
+    "bot",
+    "जी, मैं IndiaMART से बात कर रहा हूँ। मैंने आपको यह बताने के लिए call किया है कि हम आपकी help कर सकते हैं ताकि आपको और ज़्यादा buyer enquiries मिल सकें।"
+   ],
+   [
+    1791343870.3714197,
+    "user",
+    "अच्छा इंडिया मार्ट से क्या काम है?"
+   ],
+   [
+    1791343871.047482,
+    "bot",
+    "दरअसल, मैं चाहता था कि हमारे एक executive आपसे एक छोटी सी meeting करें। वो आपको बताएंगे कि आप अपने business के लिए और ज़्यादा buyers कैसे पा सकते हैं।"
+   ],
+   [
+    1791343881.8070774,
+    "user",
+    "अभी बिज़ी हूँ यार।"
+   ],
+   [
+    1791343883.52162,
+    "user",
+    "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है।"
+   ],
+   [
+    1791343884.0251126,
+    "bot",
+    "मैं समझ सकता हूँ। बस एक छोटी सी meeting set करनी थी ताकि हमारे expert आपको ज़्यादा enquiries लाने का तरीका बता सकें। क्या कल आपके पास थोड़ा time होगा?"
+   ],
+   [
+    1791343896.8394907,
+    "user",
+    "समझ नहीं आया क्या मतलब मीटिंग?"
+   ],
+   [
+    1791343898.2717314,
+    "bot",
+    "मतलब, हमारे executive आपसे call या video call पर बात करेंगे। वो आपको simple तरीके बताएंगे जिससे आपके products के लिए ज़्यादा buyers आपसे contact करें।"
+   ],
+   [
+    1791343908.8252385,
+    "user",
+    "आप बॉट हो क्या?"
+   ],
+   [
+    1791343909.13616,
+    "bot",
+    "जी हाँ, मैं IndiaMART"
+   ],
+   [
+    1791343910.442236,
+    "user",
+    "आप बॉट हो क्या? रिकॉर्डेड कॉल है?"
+   ],
+   [
+    1791343911.058911,
+    "bot",
+    "नहीं नहीं, मैं IndiaMART का AI assistant हूँ। मैं आपसे live बात कर रहा हूँ ताकि आपकी help कर सकूँ।"
+   ],
+   [
+    1791343919.6511934,
+    "user",
+    "ठीक है।"
+   ],
+   [
+    1791343921.331684,
+    "user",
+    "ठीक है, कल 11 बजे आ जाइए।"
+   ],
+   [
+    1791343922.4100714,
+    "bot",
+    "बहुत अच्छा। तो कल सुबह ग्यारह बजे की meeting fix रही। हमारे executive आपको call कर लेंगे।"
+   ]
+  ]
+ }
+]
