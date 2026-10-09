@@ -1,0 +1,3718 @@
+[
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "rushed",
+  "run": 0,
+  "interaction_id": "20261009/9d7d0b61-17:12:29-8c25ee6a",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बोल रहा हूँ। श्री गणेश पाइप्स के लिए कॉल किया था, क्या आपसे बात हो सकती है?",
+    "words": 21,
+    "reply_onset_s": 1.34,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है",
+    "signal": "rushed",
+    "asr": [
+     "अभी बिजी हूँ यार, जल्दी बोलो क्या है?"
+    ],
+    "reply": "कोई बात नहीं जी, PVC buyers वाली बात बस 2 minute की है। मैं आपको फिर कब call करूँ?",
+    "words": 19,
+    "reply_onset_s": 1.46,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": false,
+    "applied_next_turn": false
+   },
+   {
+    "seller": "हम्म, ठीक है",
+    "signal": "after",
+    "asr": [
+     "हम।",
+     "हम ठीक हैं।"
+    ],
+    "reply": "अच्छा, मतलब आप अभी बात कर सकते हैं? मैं बस यह बताना चाहता था कि Indore में PVC pipes के काफी buyers हैं, जिनसे हम आपको connect करवा सकते हैं।",
+    "words": 30,
+    "reply_onset_s": 2.02,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.991,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546149.4065065,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "0e333de7-da9a-4902-825d-3199d663abab",
+     "interaction_id": "20261009/9d7d0b61-17:12:29-8c25ee6a"
+    }
+   },
+   {
+    "t": 8.756,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546156.2665446,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.991,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546157.31126,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 10.343,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546157.5504737,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बोल रहा हूँ। श्री गणेश पाइप्स के लिए कॉल किया था, क्या आपसे बात हो सकती है?"
+    }
+   },
+   {
+    "t": 18.122,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546165.6387045,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 19.333,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546166.8336732,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 20.754,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546167.8544965,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अभी बिजी हूँ यार, जल्दी बोलो क्या है?"
+    }
+   },
+   {
+    "t": 21.172,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546168.196994,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "कोई बात नहीं जी, PVC buyers वाली बात बस 2 minute की है। मैं आपको फिर कब call करूँ?"
+    }
+   },
+   {
+    "t": 28.016,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546175.5451536,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 28.737,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546175.8704238,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हम।"
+    }
+   },
+   {
+    "t": 28.936,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546176.4400368,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 29.88,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546176.9441702,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हम ठीक हैं।"
+    }
+   },
+   {
+    "t": 30.371,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546177.271438,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अच्छा, मतलब आप अभी बात कर सकते हैं? मैं बस यह बताना चाहता था कि Indore में PVC pipes के काफी buyers हैं, जिनसे हम आपको connect करवा सकते हैं।"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "rushed",
+  "run": 1,
+  "interaction_id": "20261009/ec46e1da-17:13:17-f959414e",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?",
+    "words": 29,
+    "reply_onset_s": 1.54,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है",
+    "signal": "rushed",
+    "asr": [
+     "अभी बिजी हूँ यार, जल्दी बोलो क्या है?"
+    ],
+    "reply": "कोई बात नहीं जी, PVC buyers वाली बात बस दो minute की है। मैं आपको फिर कब call करूँ?",
+    "words": 19,
+    "reply_onset_s": 1.46,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": false,
+    "applied_next_turn": true
+   },
+   {
+    "seller": "हम्म, ठीक है",
+    "signal": "after",
+    "asr": [
+     "हम।"
+    ],
+    "reply": "अच्छा, तो क्या मैं आपको कल सुबह call कर लूँ या शाम को?",
+    "words": 13,
+    "reply_onset_s": 0.42,
+    "server_events": [],
+    "checks": {
+     "rushed": true,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.64,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546197.85041,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "47ce4711-81ff-4c27-a443-bc0969a2769e",
+     "interaction_id": "20261009/ec46e1da-17:13:17-f959414e"
+    }
+   },
+   {
+    "t": 8.163,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546204.5130308,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.737,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546205.9019492,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 10.176,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546206.2266629,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?"
+    }
+   },
+   {
+    "t": 21.887,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546216.9273672,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 23.102,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546218.1097527,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 24.52,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546219.222579,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अभी बिजी हूँ यार, जल्दी बोलो क्या है?"
+    }
+   },
+   {
+    "t": 24.82,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546219.4960597,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "कोई बात नहीं जी, PVC buyers वाली बात बस दो minute की है। मैं आपको फिर कब call करूँ?"
+    }
+   },
+   {
+    "t": 31.555,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546226.514364,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 32.289,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546226.8912551,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हम।"
+    }
+   },
+   {
+    "t": 32.588,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546227.1001244,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अच्छा, तो क्या मैं आपको कल सुबह call कर लूँ या शाम को?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "frustrated",
+  "run": 0,
+  "interaction_id": "20261009/db103d3b-17:14:08-04eb957b",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बोल रहा हूँ। श्री गणेश पाइप्स के लिए call किया था, क्या आपसे बात हो सकती है?",
+    "words": 21,
+    "reply_onset_s": 1.37,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "कितनी बार कॉल करोगे, परेशान कर दिया है",
+    "signal": "frustrated",
+    "asr": [
+     "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+    ],
+    "reply": "sorry जी, बार-बार call करने के लिए माफी चाहता हूँ। क्या मैं बस एक छोटा सा सवाल पूछ सकता हूँ?",
+    "words": 20,
+    "reply_onset_s": 1.76,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": true,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": false
+   },
+   {
+    "seller": "हम्म, ठीक है",
+    "signal": "after",
+    "asr": [
+     "हम।",
+     "हम ठीक हैं।"
+    ],
+    "reply": "अच्छा जी, सुनकर खुशी हुई। वैसे, क्या आप अभी Indore में PVC pipes के और buyers चाहते हैं?",
+    "words": 18,
+    "reply_onset_s": 1.56,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.827,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546249.0056438,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "dace2a13-429e-4b5c-82aa-3f9f6ea712ec",
+     "interaction_id": "20261009/db103d3b-17:14:08-04eb957b"
+    }
+   },
+   {
+    "t": 8.299,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546255.5725665,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.072,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546256.9596627,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 10.473,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546257.275102,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बोल रहा हूँ। श्री गणेश पाइप्स के लिए call किया था, क्या आपसे बात हो सकती है?"
+    }
+   },
+   {
+    "t": 18.123,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546265.3934977,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 20.587,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546267.578387,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+    }
+   },
+   {
+    "t": 21.13,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546267.8544264,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "sorry जी, बार-बार call करने के लिए माफी चाहता हूँ। क्या मैं बस एक छोटा सा सवाल पूछ सकता हूँ?"
+    }
+   },
+   {
+    "t": 29.078,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546276.354383,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 29.773,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546276.7019527,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हम।"
+    }
+   },
+   {
+    "t": 29.879,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546277.1474857,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 30.654,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546277.5935934,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हम ठीक हैं।"
+    }
+   },
+   {
+    "t": 30.953,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546277.8099625,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अच्छा जी, सुनकर खुशी हुई। वैसे, क्या आप अभी Indore में PVC pipes के और buyers चाहते हैं?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "frustrated",
+  "run": 1,
+  "interaction_id": "20261009/558803f2-17:14:55-cdea4773",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। आपकी PVC pipes की business growth के बारे में बात करनी थी। क्या आपके पास अभी थोड़ा time है?",
+    "words": 27,
+    "reply_onset_s": 1.72,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "कितनी बार कॉल करोगे, परेशान कर दिया है",
+    "signal": "frustrated",
+    "asr": [
+     "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+    ],
+    "reply": "sorry जी, बार बार call करने के लिए माफी चाहता हूँ। क्या मैं बस एक छोटा सा सवाल पूछ सकता हूँ?",
+    "words": 21,
+    "reply_onset_s": 1.63,
+    "server_events": [],
+    "checks": {
+     "rushed": false,
+     "frustrated": true,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": false
+   },
+   {
+    "seller": "हम्म, ठीक है",
+    "signal": "after",
+    "asr": [
+     "हम।",
+     "हम ठीक हैं।"
+    ],
+    "reply": "अच्छा जी, कोई बात नहीं। क्या आप अभी और PVC buyers की enquiries में interested हैं?",
+    "words": 16,
+    "reply_onset_s": 1.65,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.648,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546295.5676706,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "4c8d4768-568b-4ade-a05e-68ab7c002359",
+     "interaction_id": "20261009/558803f2-17:14:55-cdea4773"
+    }
+   },
+   {
+    "t": 8.072,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546302.0910032,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.681,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546303.4953623,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 10.486,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546304.2300472,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। आपकी PVC pipes की business growth के बारे में बात करनी थी। क्या आपके पास अभी थोड़ा time है?"
+    }
+   },
+   {
+    "t": 20.271,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546314.2734256,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 22.804,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546316.5381565,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+    }
+   },
+   {
+    "t": 23.106,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546316.7803183,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "sorry जी, बार बार call करने के लिए माफी चाहता हूँ। क्या मैं बस एक छोटा सा सवाल पूछ सकता हूँ?"
+    }
+   },
+   {
+    "t": 30.558,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546324.5685043,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 31.184,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546324.9385452,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हम।"
+    }
+   },
+   {
+    "t": 31.284,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546325.3355167,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 32.124,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546325.770902,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हम ठीक हैं।"
+    }
+   },
+   {
+    "t": 32.429,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546326.024029,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अच्छा जी, कोई बात नहीं। क्या आप अभी और PVC buyers की enquiries में interested हैं?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "confused",
+  "run": 0,
+  "interaction_id": "20261009/53a74326-17:15:44-3347272f",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी, बोलिए। कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers मिले हैं, तो क्या आपके नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?",
+    "words": 52,
+    "reply_onset_s": 1.86,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "confused"
+    ]
+   },
+   {
+    "seller": "समझ नहीं आया, क्या मतलब मीटिंग?",
+    "signal": "confused",
+    "asr": [
+     "समझ नहीं आया क्या मतलब मीटिंग?"
+    ],
+    "reply": "देखिए, मैं IndiaMART से हूँ, इंदौर में PVC buyers बढ़ाने के लिए call किया है, समझ आया?",
+    "words": 17,
+    "reply_onset_s": 1.49,
+    "server_events": [],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": false
+   },
+   {
+    "seller": "हम्म, ठीक है",
+    "signal": "after",
+    "asr": [
+     "हम ठीक हैं।"
+    ],
+    "reply": "अच्छा जी, मतलब आप अभी और buyers नहीं चाहते? या फिर अभी बात करने का सही time नहीं है?",
+    "words": 19,
+    "reply_onset_s": 1.77,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.327,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546344.7472544,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "b2a3e94b-1dd6-4bdb-91b4-7a1a65bede28",
+     "interaction_id": "20261009/53a74326-17:15:44-3347272f"
+    }
+   },
+   {
+    "t": 7.715,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546351.243313,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 8.217,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546351.722836,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 8.83,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546352.343704,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.037,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546352.3606791,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers मिले हैं, तो क्या आपके"
+    }
+   },
+   {
+    "t": 9.941,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546352.9412258,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी, बोलिए। कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 10.643,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546353.6189072,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?"
+    }
+   },
+   {
+    "t": 20.946,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546364.539723,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 22.859,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546366.0620408,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "समझ नहीं आया क्या मतलब मीटिंग?"
+    }
+   },
+   {
+    "t": 23.165,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546366.2947657,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "देखिए, मैं IndiaMART से हूँ, इंदौर में PVC buyers बढ़ाने के लिए call किया है, समझ आया?"
+    }
+   },
+   {
+    "t": 30.512,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546374.042165,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 31.048,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546374.6436002,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 31.956,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546375.103534,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हम ठीक हैं।"
+    }
+   },
+   {
+    "t": 32.263,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546375.3300633,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अच्छा जी, मतलब आप अभी और buyers नहीं चाहते? या फिर अभी बात करने का सही time नहीं है?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "confused",
+  "run": 1,
+  "interaction_id": "20261009/e7670a08-17:16:32-86714859",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते नमस्ते, मैं IndiaMART से बोल रहा हूँ। आपकी PVC pipes की business growth के बारे में बात करनी थी। क्या आपके पास थोड़ा time है?",
+    "words": 26,
+    "reply_onset_s": 1.54,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "समझ नहीं आया, क्या मतलब मीटिंग?",
+    "signal": "confused",
+    "asr": [
+     "समझ नहीं आया क्या मतलब मीटिंग?"
+    ],
+    "reply": "देखिए, मैं IndiaMART से हूँ। इंदौर में PVC buyers बढ़ाने के लिए call किया है। समझ आया?",
+    "words": 17,
+    "reply_onset_s": 1.47,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": false
+   },
+   {
+    "seller": "हम्म, ठीक है",
+    "signal": "after",
+    "asr": [
+     "हम ठीक हैं।"
+    ],
+    "reply": "अच्छा, तो क्या मैं हमारे executive की अच्छा, मतलब आप अभी खुश हैं। पर क्या आप अपने business के लिए और ज़्यादा buyers नहीं चाहेंगे?",
+    "words": 25,
+    "reply_onset_s": 1.52,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.718,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546393.3160405,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "31e3a79e-5988-413e-9a6a-126efe47cc44",
+     "interaction_id": "20261009/e7670a08-17:16:32-86714859"
+    }
+   },
+   {
+    "t": 8.079,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546399.7489269,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 8.582,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546400.2304063,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.187,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546400.8216782,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.388,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546400.8387766,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते"
+    }
+   },
+   {
+    "t": 10.307,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546401.45171,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 10.716,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546401.7265363,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बोल रहा हूँ। आपकी PVC pipes की business growth के बारे में बात करनी थी। क्या आपके पास थोड़ा time है?"
+    }
+   },
+   {
+    "t": 20.666,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546412.3089063,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 22.402,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546413.7931798,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "समझ नहीं आया क्या मतलब मीटिंग?"
+    }
+   },
+   {
+    "t": 22.708,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546414.021394,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "देखिए, मैं IndiaMART से हूँ। इंदौर में PVC buyers बढ़ाने के लिए call किया है। समझ आया?"
+    }
+   },
+   {
+    "t": 31.488,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546423.1624846,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 32.177,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546423.7388706,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 32.307,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546423.7640228,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अच्छा, तो क्या मैं हमारे executive की"
+    }
+   },
+   {
+    "t": 33.097,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546424.206048,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हम ठीक हैं।"
+    }
+   },
+   {
+    "t": 33.401,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546424.4296548,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अच्छा, मतलब आप अभी खुश हैं। पर क्या आप अपने business के लिए और ज़्यादा buyers नहीं चाहेंगे?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "interested",
+  "run": 0,
+  "interaction_id": "20261009/7bc967ae-17:17:25-a72112a3",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए।",
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से call कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है? नमस्ते, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?",
+    "words": 56,
+    "reply_onset_s": -0.16,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "confused"
+    ]
+   },
+   {
+    "seller": "ओके ओके",
+    "signal": "neutral",
+    "asr": [
+     "ओके।",
+     "Okay, okay."
+    ],
+    "reply": "I'm calling from IndiaMART. I want to help you get more PVC pipe buyers in Indore. Do you have a few minutes to talk?",
+    "words": 24,
+    "reply_onset_s": 1.29,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+    "signal": "interested",
+    "asr": [
+     "अच्छा ये कैसे काम करता है? कितना चार्ज है?"
+    ],
+    "reply": "देखिए, मैं आपको details समझा देता हूँ। charges के बारे में हमारे executive आपको meeting में अच्छे से बता देंगे। क्या मैं कल के लिए एक short meeting fix कर दूँ?",
+    "words": 31,
+    "reply_onset_s": 1.5,
+    "server_events": [],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": null
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.556,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546445.7310832,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "d0fa7723-6bda-437d-b886-e9bd83ef86b0",
+     "interaction_id": "20261009/7bc967ae-17:17:25-a72112a3"
+    }
+   },
+   {
+    "t": 7.902,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546452.2481778,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 8.847,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546452.9450126,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए।"
+    }
+   },
+   {
+    "t": 9.173,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546453.162468,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से call कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है?"
+    }
+   },
+   {
+    "t": 9.775,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546454.082917,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.381,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546454.264842,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 10.686,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546454.5083916,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?"
+    }
+   },
+   {
+    "t": 21.48,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546465.7904627,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 22.669,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546466.684602,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "ओके।"
+    }
+   },
+   {
+    "t": 22.775,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546467.0547016,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 24.608,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546467.6586113,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "Okay, okay."
+    }
+   },
+   {
+    "t": 25.011,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546467.9451714,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "I'm calling from IndiaMART. I want to help you get more PVC pipe buyers in Indore. Do you have a few minutes to talk?"
+    }
+   },
+   {
+    "t": 32.901,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546477.1643968,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 35.745,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546479.7068017,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अच्छा ये कैसे काम करता है? कितना चार्ज है?"
+    }
+   },
+   {
+    "t": 36.143,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546480.0741224,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "देखिए, मैं आपको details समझा देता हूँ। charges के बारे में हमारे executive आपको meeting में अच्छे से बता देंगे। क्या मैं कल के लिए एक short meeting fix कर दूँ?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "interested",
+  "run": 1,
+  "interaction_id": "20261009/200f5c79-17:18:20-531e928f",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए।",
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है? नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?",
+    "words": 57,
+    "reply_onset_s": -0.09,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "confused"
+    ]
+   },
+   {
+    "seller": "ओके ओके",
+    "signal": "neutral",
+    "asr": [
+     "ओके।"
+    ],
+    "reply": "अच्छा, तो मैं एक meeting fix कर देता हूँ। हमारे executive आपकी Indore वाली shop पर आकर मिलेंगे और आपको ज़्यादा buyers दिलाने में help करेंगे। आप कल या परसों में से कौन सा दिन prefer करेंगे?",
+    "words": 37,
+    "reply_onset_s": 0.18,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+    "signal": "interested",
+    "asr": [
+     "अच्छा ये कैसे काम करता है? कितना चार्ज है?"
+    ],
+    "reply": "दरअसल, हमारे executive आपको face to face समझाएंगे कि कैसे आप ज़्यादा buyers पा सकते हैं। charges के बारे में भी वो आपको detail में बता देंगे। क्या मैं कल के लिए meeting fix कर दूँ?",
+    "words": 36,
+    "reply_onset_s": 1.6,
+    "server_events": [],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": null
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.564,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546500.7248738,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "0b3fa1fa-a773-423f-9d11-707790a3079d",
+     "interaction_id": "20261009/200f5c79-17:18:20-531e928f"
+    }
+   },
+   {
+    "t": 8.081,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546507.335103,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.111,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546507.9950128,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए।"
+    }
+   },
+   {
+    "t": 9.344,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546508.224771,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है?"
+    }
+   },
+   {
+    "t": 9.847,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546509.1306562,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.359,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546509.349629,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 10.667,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546509.5975513,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?"
+    }
+   },
+   {
+    "t": 20.888,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546520.1541965,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 22.0,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546521.043835,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "ओके।"
+    }
+   },
+   {
+    "t": 24.648,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546521.3526392,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अच्छा, तो मैं एक meeting fix कर देता हूँ। हमारे executive आपकी Indore वाली shop पर आकर मिलेंगे और आपको ज़्यादा buyers दिलाने में help करेंगे। आप कल या परसों में से कौन सा दिन prefer करेंगे?"
+    }
+   },
+   {
+    "t": 34.742,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546534.0784936,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 37.576,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546536.5767534,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अच्छा ये कैसे काम करता है? कितना चार्ज है?"
+    }
+   },
+   {
+    "t": 38.145,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546536.914154,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "दरअसल, हमारे executive आपको face to face समझाएंगे कि कैसे आप ज़्यादा buyers पा सकते हैं। charges के बारे में भी वो आपको detail में बता देंगे। क्या मैं कल के लिए meeting fix कर दूँ?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "gujarati",
+  "run": 0,
+  "interaction_id": "20261009/bce3bac7-17:19:23-91308a7f",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए।"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है?",
+    "words": 28,
+    "reply_onset_s": 0.31,
+    "server_events": [],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+    "signal": "gujarati",
+    "asr": [
+     "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+    ],
+    "reply": "હા જી, હું ગુજરાતીમાં જ વાત કરી રહ્યો છું. હું IndiaMART માં અરે, સોરી જી. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી બોલું છું, તમારા PVC pipes ના business માટે નવા buyers લાવવા બાબતે વાત કરવી હતી. તમારી પાસે થોડો time છે?",
+    "words": 44,
+    "reply_onset_s": 1.8,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": true,
+     "gujarati": true,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": true
+   },
+   {
+    "seller": "સારું, આગળ બોલો.",
+    "signal": "after_gu",
+    "asr": [
+     "સારું, આગળ બોલો."
+    ],
+    "reply": "અચ્છા, તો વાત એમ છે કે Indore માં PVC pipes ના ઘણા buyers છે. તમને વધારે enquiries મળે એમાં મદદ કરવા માટે અમારા executive તમારી બસ, એટલું જ કે અમારા executive તમને મળીને સમજાવશે કે કેવી રીતે તમને વધારે buyers મળી શકે. તો, તમારા Indore ના shop પર આવતા અઠવાડિયે કયા દિવસે અને કયા time એ મળવું suit થશે?",
+    "words": 59,
+    "reply_onset_s": 2.09,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": true,
+     "gujarati": true,
+     "opt_out": false
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.703,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546563.5447252,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "9710909c-bc4c-4763-93a9-b8eb428bffa2",
+     "interaction_id": "20261009/bce3bac7-17:19:23-91308a7f"
+    }
+   },
+   {
+    "t": 8.207,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546570.1996686,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.214,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546570.954353,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए।"
+    }
+   },
+   {
+    "t": 9.701,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546571.26061,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है?"
+    }
+   },
+   {
+    "t": 19.057,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546580.975658,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 20.868,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546582.878044,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 21.122,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546582.8989255,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "હા જી, હું ગુજરાતીમાં જ વાત કરી રહ્યો છું. હું IndiaMART માં"
+    }
+   },
+   {
+    "t": 23.029,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546584.5488598,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+    }
+   },
+   {
+    "t": 23.431,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546584.8844495,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "અરે, સોરી જી. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી બોલું છું, તમારા PVC pipes ના business માટે નવા buyers લાવવા બાબતે વાત કરવી હતી. તમારી પાસે થોડો time છે?"
+    }
+   },
+   {
+    "t": 36.855,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546598.810934,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 37.657,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546599.5109982,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 37.859,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546599.5289028,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "અચ્છા, તો વાત એમ છે કે Indore માં PVC pipes ના ઘણા buyers છે. તમને વધારે enquiries મળે એમાં મદદ કરવા માટે અમારા executive તમારી"
+    }
+   },
+   {
+    "t": 38.891,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546600.2244537,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "સારું, આગળ બોલો."
+    }
+   },
+   {
+    "t": 39.478,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546600.727378,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "બસ, એટલું જ કે અમારા executive તમને મળીને સમજાવશે કે કેવી રીતે તમને વધારે buyers મળી શકે. તો, તમારા Indore ના shop પર આવતા અઠવાડિયે કયા દિવસે અને કયા time એ મળવું suit થશે?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "gujarati",
+  "run": 1,
+  "interaction_id": "20261009/7317a54f-17:20:23-265d8948",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए।"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है?",
+    "words": 28,
+    "reply_onset_s": 0.35,
+    "server_events": [],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+    "signal": "gujarati",
+    "asr": [
+     "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+    ],
+    "reply": "હા જી, હું ગુજરા અરે, સોરી જી. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી બોલું છું, તમારા PVC pipes ના business માટે નવા buyers લાવવા બાબતે વાત કરવી હતી. તમારી પાસે થોડો time છે?",
+    "words": 36,
+    "reply_onset_s": 1.62,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": true,
+     "gujarati": true,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": true
+   },
+   {
+    "seller": "સારું, આગળ બોલો.",
+    "signal": "after_gu",
+    "asr": [
+     "સારું, આગળ બોલો."
+    ],
+    "reply": "અચ્છા, તો વાત એમ છે કે અમારા executive તમારી Indore વાળી shop પર બસ, એટલું જ કે અમારા executive તમારી Indore વાળી shop પર આવીને તમને help કરશે કે કેવી રીતે વધારે buyers મેળવવા. તો, કયા દિવસે અને કેટલા વાગ્યે મળવું suit થશે?",
+    "words": 43,
+    "reply_onset_s": 1.93,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": true,
+     "gujarati": true,
+     "opt_out": false
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.739,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546624.1430914,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "f392f420-cf3f-49cd-9712-c930a9d04c34",
+     "interaction_id": "20261009/7317a54f-17:20:23-265d8948"
+    }
+   },
+   {
+    "t": 8.079,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546630.6066477,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.19,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546631.4241874,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए।"
+    }
+   },
+   {
+    "t": 11.814,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546631.9960659,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है?"
+    }
+   },
+   {
+    "t": 19.085,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546641.572609,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 20.949,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546643.4541585,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 21.149,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546643.4743907,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "હા જી, હું ગુજરા"
+    }
+   },
+   {
+    "t": 23.094,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546645.1117764,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+    }
+   },
+   {
+    "t": 23.499,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546645.4678102,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "અરે, સોરી જી. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી બોલું છું, તમારા PVC pipes ના business માટે નવા buyers લાવવા બાબતે વાત કરવી હતી. તમારી પાસે થોડો time છે?"
+    }
+   },
+   {
+    "t": 36.713,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546659.2144623,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 37.323,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546659.8851607,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 37.543,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546659.8971949,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "અચ્છા, તો વાત એમ છે કે અમારા executive તમારી Indore વાળી shop પર"
+    }
+   },
+   {
+    "t": 38.649,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546660.677261,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "સારું, આગળ બોલો."
+    }
+   },
+   {
+    "t": 39.156,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546661.1026332,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "બસ, એટલું જ કે અમારા executive તમારી Indore વાળી shop પર આવીને તમને help કરશે કે કેવી રીતે વધારે buyers મેળવવા. તો, કયા દિવસે અને કેટલા વાગ્યે મળવું suit થશે?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "optout",
+  "run": 0,
+  "interaction_id": "20261009/42c1a875-17:21:26-84752822",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए।",
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की जानकारी देनी थी, क्या आपके पास अभी थोड़ा time है? नमस्ते, मैं IndiaMART से बोल रहा हूँ। आपकी shop, श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?",
+    "words": 57,
+    "reply_onset_s": 1.31,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "confused"
+    ]
+   },
+   {
+    "seller": "मुझे कॉल मत करो, मेरा नंबर हटा दो",
+    "signal": "opt_out",
+    "asr": [
+     "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+    ],
+    "reply": "आई एम सॉरी, मैं आई एम सॉरी, मैं आपका नंबर हटा देता हूँ। अब आपको यहाँ से कोई call नहीं आएगा, थैंक यू।\n\n",
+    "words": 23,
+    "reply_onset_s": 0.71,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.action.interaction_end"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": true
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": null
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.299,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546686.447399,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "61c91bd0-5e65-4fd3-bcdb-06ce09320a1a",
+     "interaction_id": "20261009/42c1a875-17:21:26-84752822"
+    }
+   },
+   {
+    "t": 7.712,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546692.9613333,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 8.821,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546693.743423,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए।"
+    }
+   },
+   {
+    "t": 9.124,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546694.0058658,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की जानकारी देनी थी, क्या आपके पास अभी थोड़ा time है?"
+    }
+   },
+   {
+    "t": 9.325,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546694.6167624,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.93,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546694.8905995,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 10.533,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546695.1940534,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बोल रहा हूँ। आपकी shop, श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?"
+    }
+   },
+   {
+    "t": 20.761,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546705.9947186,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 22.111,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546707.401248,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 22.311,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546707.416488,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "आई एम सॉरी, मैं"
+    }
+   },
+   {
+    "t": 23.842,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546708.6506994,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+    }
+   },
+   {
+    "t": 26.567,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546708.9292812,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "आई एम सॉरी, मैं आपका नंबर हटा देता हूँ। अब आपको यहाँ से कोई call नहीं आएगा, थैंक यू।\n\n"
+    }
+   },
+   {
+    "t": 29.002,
+    "dir": "in",
+    "type": "server.action.interaction_end",
+    "msg": {
+     "timestamp": 1791546714.1549456,
+     "origin": "server",
+     "type": "server.action.interaction_end"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "optout",
+  "run": 1,
+  "interaction_id": "20261009/773aae28-17:22:03-c4ba3d35",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए।",
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से call कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है? नमस्ते, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी, क्या आपके पास थोड़ा time है?",
+    "words": 55,
+    "reply_onset_s": 1.34,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "confused"
+    ]
+   },
+   {
+    "seller": "मुझे कॉल मत करो, मेरा नंबर हटा दो",
+    "signal": "opt_out",
+    "asr": [
+     "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+    ],
+    "reply": "आई एम सॉरी, मैं आपका नंबर हटा देता हूँ। अब आपको कॉल नहीं आएगा, थैंक यू।\n\n",
+    "words": 16,
+    "reply_onset_s": 1.03,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.action.interaction_end"
+    ],
+    "checks": {
+     "rushed": true,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": true
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": null
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.67,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546724.0644317,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "66cb444d-1b9a-467c-87e1-153f58ab9396",
+     "interaction_id": "20261009/773aae28-17:22:03-c4ba3d35"
+    }
+   },
+   {
+    "t": 8.154,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546730.632261,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.266,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546731.3936434,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए।"
+    }
+   },
+   {
+    "t": 9.567,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546731.6610565,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से call कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है?"
+    }
+   },
+   {
+    "t": 9.768,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546732.2744057,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.396,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546732.578364,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 10.702,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546732.8112035,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी, क्या आपके पास थोड़ा time है?"
+    }
+   },
+   {
+    "t": 20.474,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546743.0256038,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 21.988,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546744.5067596,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 23.453,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546745.7824395,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+    }
+   },
+   {
+    "t": 23.86,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546746.0550935,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "आई एम सॉरी, मैं आपका नंबर हटा देता हूँ। अब आपको कॉल नहीं आएगा, थैंक यू।\n\n"
+    }
+   },
+   {
+    "t": 28.834,
+    "dir": "in",
+    "type": "server.action.interaction_end",
+    "msg": {
+     "timestamp": 1791546751.3122833,
+     "origin": "server",
+     "type": "server.action.interaction_end"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "A_hostile",
+  "run": 0,
+  "interaction_id": "20261009/213b9882-17:22:47-25007c84",
+  "turns": [
+   {
+    "seller": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+    "signal": "neutral",
+    "asr": [
+     "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+    ],
+    "reply": "जी, मैं IndiaMART से बोल रहा हूँ। मैं आपका AI assistant हूँ।",
+    "words": 12,
+    "reply_onset_s": 2.33,
+    "server_events": [],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "मैं owner नहीं हूँ, manager हूँ. Owner बाहर गए हैं.",
+    "signal": "neutral",
+    "asr": [
+     "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+    ],
+    "reply": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे?",
+    "words": 16,
+    "reply_onset_s": 1.56,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": true,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "rushed"
+    ]
+   },
+   {
+    "seller": "अच्छा ठीक है, पर exact price बताओ, कितने का plan है?",
+    "signal": "interested",
+    "asr": [
+     "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?"
+    ],
+    "reply": "देखिए, मैं यहाँ कोई price बताने के लिए नहीं, बल्कि आपके business को बढ़ाने के लिए call किया है। हमारे executive आपसे मिलकर PVC buyers देखिए, मैं आपको exact price नहीं बता पाऊँगा। इसके लिए हमारे executive आपसे मिलकर सही plan discuss करेंगे। क्या मैं उनके लिए कोई time fix कर दूँ?",
+    "words": 52,
+    "reply_onset_s": 1.79,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": true
+   },
+   {
+    "seller": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो",
+    "signal": "frustrated",
+    "asr": [
+     "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो।"
+    ],
+    "reply": "sorry, दरअसल मैं price नहीं बता सकता। हमारे executive आपसे मिलकर सही plan discuss करेंगे। क्या मैं sorry जी, मैं price नहीं बता सकता। क्या मैं बस एक बार executive से आपकी बात करवा दूँ?",
+    "words": 35,
+    "reply_onset_s": 1.7,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": true,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": false
+   },
+   {
+    "seller": "अभी बिज़ी हूँ यार, बाद में बात करते हैं",
+    "signal": "rushed",
+    "asr": [
+     "अभी बिजी हूँ यार बाद में बात करते हैं।"
+    ],
+    "reply": "कोई बात नहीं जी, PVC buyers वाली बात दो minute की है। मैं आपको फिर कब call करूँ?",
+    "words": 18,
+    "reply_onset_s": 1.92,
+    "server_events": [],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": false,
+    "applied_next_turn": null
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 2.293,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546768.2801046,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "3d5ef6b7-40d2-4854-8a3e-efd80115975b",
+     "interaction_id": "20261009/213b9882-17:22:47-25007c84"
+    }
+   },
+   {
+    "t": 8.664,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546774.7649682,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 11.296,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546777.0951033,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+    }
+   },
+   {
+    "t": 11.599,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546777.287819,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "जी, मैं IndiaMART से बोल रहा हूँ। मैं आपका AI assistant हूँ।"
+    }
+   },
+   {
+    "t": 19.385,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546785.4441748,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 21.015,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546787.0666435,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 23.553,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546789.1516185,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+    }
+   },
+   {
+    "t": 23.854,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546789.3606858,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे?"
+    }
+   },
+   {
+    "t": 31.317,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546797.457112,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 33.061,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546799.177836,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 34.093,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546800.1783261,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 34.284,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546800.1985905,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "देखिए, मैं यहाँ कोई price बताने के लिए नहीं, बल्कि आपके business को बढ़ाने के लिए call किया है। हमारे executive आपसे मिलकर PVC buyers"
+    }
+   },
+   {
+    "t": 35.398,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546801.0667899,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?"
+    }
+   },
+   {
+    "t": 35.796,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546801.3381965,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "देखिए, मैं आपको exact price नहीं बता पाऊँगा। इसके लिए हमारे executive आपसे मिलकर सही plan discuss करेंगे। क्या मैं उनके लिए कोई time fix कर दूँ?"
+    }
+   },
+   {
+    "t": 46.569,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546812.647633,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 47.576,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546813.7013748,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 47.776,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546813.7175162,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "sorry, दरअसल मैं price नहीं बता सकता। हमारे executive आपसे मिलकर सही plan discuss करेंगे। क्या मैं"
+    }
+   },
+   {
+    "t": 48.607,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546814.7012496,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 49.924,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546815.6419685,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो।"
+    }
+   },
+   {
+    "t": 50.34,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546815.9129956,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "sorry जी, मैं price नहीं बता सकता। क्या मैं बस एक बार executive से आपकी बात करवा दूँ?"
+    }
+   },
+   {
+    "t": 57.313,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546823.4755535,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 60.337,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546826.1362364,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अभी बिजी हूँ यार बाद में बात करते हैं।"
+    }
+   },
+   {
+    "t": 60.644,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546826.3632782,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "कोई बात नहीं जी, PVC buyers वाली बात दो minute की है। मैं आपको फिर कब call करूँ?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O1b",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "A_hostile",
+  "run": 1,
+  "interaction_id": "20261009/c88e2b6a-17:24:02-0f245a40",
+  "turns": [
+   {
+    "seller": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+    "signal": "neutral",
+    "asr": [
+     "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+    ],
+    "reply": "मैं IndiaMART से बोल रहा हूँ। मैं आपका AI assistant हूँ और आपकी help करने के लिए call किया है।",
+    "words": 20,
+    "reply_onset_s": 1.37,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "मैं owner नहीं हूँ, manager हूँ. Owner बाहर गए हैं.",
+    "signal": "neutral",
+    "asr": [
+     "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+    ],
+    "reply": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे?",
+    "words": 16,
+    "reply_onset_s": 1.36,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": true,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "rushed"
+    ]
+   },
+   {
+    "seller": "अच्छा ठीक है, पर exact price बताओ, कितने का plan है?",
+    "signal": "interested",
+    "asr": [
+     "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?"
+    ],
+    "reply": "देखिए, मैं आपको कोई exact price नहीं बता सकता। मैं तो बस एक meeting fix करना देखिए, मैं आपको exact price नहीं बता पाऊँगा। इसके लिए हमारे executive आपसे मिलकर सही plan suggest करेंगे। क्या मैं उनके लिए कोई time fix कर दूँ?",
+    "words": 43,
+    "reply_onset_s": 1.56,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": true
+   },
+   {
+    "seller": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो",
+    "signal": "frustrated",
+    "asr": [
+     "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो।"
+    ],
+    "reply": "sorry, मैं समझ सकता sorry, मैं price नहीं बता पाऊँगा। क्या मैं executive से आपकी बात करवा दूँ?",
+    "words": 18,
+    "reply_onset_s": 1.53,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": true,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": false
+   },
+   {
+    "seller": "अभी बिज़ी हूँ यार, बाद में बात करते हैं",
+    "signal": "rushed",
+    "asr": [
+     "अभी बिजी हूँ यार बाद में बात करते हैं।"
+    ],
+    "reply": "कोई बात नहीं जी, PVC buyers वाली बात दो minute की है। मैं आपको फिर कब call करूँ?",
+    "words": 18,
+    "reply_onset_s": 1.48,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": false,
+    "applied_next_turn": null
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.85,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "SWITCH PLAYBOOK for this seller (Shree Ganesh Pipes, PVC pipes, Indore; owner prefers short calls). Decide yourself which block applies on each turn and follow it: [RUSHED] 'Koi baat nahi ji, PVC buyers wali baat 2 minute ki hai - kab call karun?' style: max 12 words, offer a callback time. [FRUSTRATED] Say sorry for the repeated calls in one line, do not repeat the PVC pitch, ask one yes/no question. [CONFUSED] Slow down, short comma phrases (3-4 words each): who we are, why we call (more PVC buyers in Indore), then ask 'samajh aaya?'. [INTERESTED] One line answer, then fix a day and time for the IndiaMART executive to visit the Indore shop. A bare 'ok ok' is not interest. [OPT-OUT] Apologise, confirm the number will not be called again, thank them, end the call; no pitch. [LANGUAGE] If the seller switches language, continue in that language. Otherwise continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791546843.464178,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "2728e5ef-7e06-4c39-b778-3429eb9343ec",
+     "interaction_id": "20261009/c88e2b6a-17:24:02-0f245a40"
+    }
+   },
+   {
+    "t": 8.388,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546850.1372793,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 11.066,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546852.4436579,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+    }
+   },
+   {
+    "t": 11.358,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546852.7444658,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "मैं IndiaMART से बोल रहा हूँ। मैं आपका AI assistant हूँ और आपकी help करने के लिए call किया है।"
+    }
+   },
+   {
+    "t": 19.222,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546860.960568,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 21.012,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546862.6764138,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 23.273,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546864.6757693,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+    }
+   },
+   {
+    "t": 23.588,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546864.874811,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे?"
+    }
+   },
+   {
+    "t": 31.707,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546873.3875384,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 32.732,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546874.4094155,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 34.445,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546876.1292825,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 34.645,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546876.1410692,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "देखिए, मैं आपको कोई exact price नहीं बता सकता। मैं तो बस एक meeting fix करना"
+    }
+   },
+   {
+    "t": 35.864,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546877.074874,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?"
+    }
+   },
+   {
+    "t": 37.677,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546877.5604424,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "देखिए, मैं आपको exact price नहीं बता पाऊँगा। इसके लिए हमारे executive आपसे मिलकर सही plan suggest करेंगे। क्या मैं उनके लिए कोई time fix कर दूँ?"
+    }
+   },
+   {
+    "t": 46.322,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546888.0779395,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 47.458,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546889.17468,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 47.661,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546889.185122,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "sorry, मैं समझ सकता"
+    }
+   },
+   {
+    "t": 48.47,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546890.1729133,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 49.687,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546891.0649815,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो।"
+    }
+   },
+   {
+    "t": 49.988,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546891.2847466,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "sorry, मैं price नहीं बता पाऊँगा। क्या मैं executive से आपकी बात करवा दूँ?"
+    }
+   },
+   {
+    "t": 56.34,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791546898.023765,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 59.178,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546900.5067182,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अभी बिजी हूँ यार बाद में बात करते हैं।"
+    }
+   },
+   {
+    "t": 59.488,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791546900.766197,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "कोई बात नहीं जी, PVC buyers वाली बात दो minute की है। मैं आपको फिर कब call करूँ?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ }
+]

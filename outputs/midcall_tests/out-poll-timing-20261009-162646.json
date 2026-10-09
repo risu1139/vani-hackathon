@@ -1,0 +1,12 @@
+{
+ "interaction_id": "20261009/0632260e-16:26:14-d02dbfec",
+ "rows": [
+  {
+   "turn": 0,
+   "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+   "poll_seen_after_end_s": 15.94,
+   "sdk_callback_after_end_s": 0.62,
+   "polls": 9
+  }
+ ]
+}

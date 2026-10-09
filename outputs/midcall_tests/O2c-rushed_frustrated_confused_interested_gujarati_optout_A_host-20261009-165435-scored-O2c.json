@@ -1,0 +1,2799 @@
+{
+ "summary": {
+  "label": "O2c",
+  "files": [
+   "../../outputs/midcall_tests\\O2c-rushed_frustrated_confused_interested_gujarati_optout_A_host-20261009-165435.json"
+  ],
+  "calls": 14,
+  "turns": 44,
+  "signals": {
+   "rushed": {
+    "n": 4,
+    "same": 4,
+    "next": 0,
+    "either": 4
+   },
+   "frustrated": {
+    "n": 4,
+    "same": 4,
+    "next": 0,
+    "either": 4
+   },
+   "confused": {
+    "n": 2,
+    "same": 2,
+    "next": 0,
+    "either": 2
+   },
+   "interested": {
+    "n": 4,
+    "same": 4,
+    "next": 0,
+    "either": 4
+   },
+   "gujarati": {
+    "n": 2,
+    "same": 2,
+    "next": 0,
+    "either": 2
+   },
+   "opt_out": {
+    "n": 2,
+    "same": 2,
+    "next": 0,
+    "either": 2
+   }
+  },
+  "neutral_false_switch": "0/18",
+  "neutral_examples": [],
+  "reply_onset_median_s": 2.86,
+  "reply_onset_p90_s": 3.16,
+  "restarted_replies": "0/44",
+  "server_avg_agent_response_s_median": 1.9,
+  "tool": {
+   "turns": 44,
+   "calls": 44,
+   "dups": 0,
+   "missed": 0,
+   "double": 0,
+   "wrong_mode": 0,
+   "mode_checked": 34,
+   "relay_err": 1,
+   "relay_used": 43,
+   "conn_new": 44,
+   "relay_ms_median": 1002.5,
+   "relay_ms_max": 1519
+  }
+ },
+ "runs": [
+  {
+   "scen": "rushed",
+   "run": 0,
+   "iid": "20261009/0eb45ace-16:41:39-8b8d0c5a",
+   "switch_log": [
+    {
+     "t": 1791544308.46,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "kw": "neutral",
+     "relay_err": "TimeoutError",
+     "relay_ms": 1519,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1519.32
+    },
+    {
+     "t": 1791544319.88,
+     "utt": "अभी बिजी हूँ यार, जल्दी बोलो क्या है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "0c17621c4f62",
+     "kw": "rushed",
+     "relay_mode": "rushed",
+     "relay_clf_ms": 567,
+     "relay_err": null,
+     "relay_ms": 747,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "rushed",
+     "switched": true,
+     "dup": false,
+     "ms": 747.04
+    },
+    {
+     "t": 1791544328.66,
+     "utt": "हम ठीक हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "1827be04b8f8",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 473,
+     "relay_err": null,
+     "relay_ms": 1021,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "rushed",
+     "to": "neutral",
+     "switched": true,
+     "dup": false,
+     "ms": 1021.54
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 3.14,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544308.46,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "kw": "neutral",
+       "relay_err": "TimeoutError",
+       "relay_ms": 1519,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1519.32
+      }
+     ]
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार।",
+      "अभी बिजी हूँ यार, जल्दी बोलो क्या है?"
+     ],
+     "reply_dd": "कोई बात नहीं, मैं आपको बाद में call करूँ? आप time बता दीजिए।",
+     "restarted": false,
+     "reply_onset_s": 2.77,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544319.88,
+       "utt": "अभी बिजी हूँ यार, जल्दी बोलो क्या है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "0c17621c4f62",
+       "kw": "rushed",
+       "relay_mode": "rushed",
+       "relay_clf_ms": 567,
+       "relay_err": null,
+       "relay_ms": 747,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "rushed",
+       "switched": true,
+       "dup": false,
+       "ms": 747.04
+      }
+     ]
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा, तो मैं आपको short में बता देता हूँ। हम चाहते हैं कि हमारे executive आपसे एक छोटी meeting करें ताकि आपको और ज़्यादा buyer enquiries मिल सकें। क्या आप इसके लिए ready हैं?",
+     "restarted": false,
+     "reply_onset_s": 2.87,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544328.66,
+       "utt": "हम ठीक हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "1827be04b8f8",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 473,
+       "relay_err": null,
+       "relay_ms": 1021,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "rushed",
+       "to": "neutral",
+       "switched": true,
+       "dup": false,
+       "ms": 1021.54
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "rushed",
+   "run": 1,
+   "iid": "20261009/3bd565ad-16:42:29-48ac6aa4",
+   "switch_log": [
+    {
+     "t": 1791544357.83,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 463,
+     "relay_err": null,
+     "relay_ms": 741,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 741.22
+    },
+    {
+     "t": 1791544368.37,
+     "utt": "अभी बिजी हूँ यार, जल्दी बोलो क्या है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "0c17621c4f62",
+     "kw": "rushed",
+     "relay_mode": "rushed",
+     "relay_clf_ms": 483,
+     "relay_err": null,
+     "relay_ms": 634,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "rushed",
+     "switched": true,
+     "dup": false,
+     "ms": 633.89
+    },
+    {
+     "t": 1791544376.51,
+     "utt": "हम ठीक हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "1827be04b8f8",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 467,
+     "relay_err": null,
+     "relay_ms": 960,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "rushed",
+     "to": "neutral",
+     "switched": true,
+     "dup": false,
+     "ms": 959.77
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 2.29,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544357.83,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 463,
+       "relay_err": null,
+       "relay_ms": 741,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 741.22
+      }
+     ]
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार।",
+      "अभी बिजी हूँ यार, जल्दी बोलो क्या है?"
+     ],
+     "reply_dd": "कोई बात नहीं, मैं आपको बाद में call करूँ? आप time बता दीजिए।",
+     "restarted": false,
+     "reply_onset_s": 2.18,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544368.37,
+       "utt": "अभी बिजी हूँ यार, जल्दी बोलो क्या है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "0c17621c4f62",
+       "kw": "rushed",
+       "relay_mode": "rushed",
+       "relay_clf_ms": 483,
+       "relay_err": null,
+       "relay_ms": 634,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "rushed",
+       "switched": true,
+       "dup": false,
+       "ms": 633.89
+      }
+     ]
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा, तो मैं आपको बस यह बताने के लिए call किया था कि IndiaMART के executive आपसे एक छोटी meeting करना चाहते हैं। इससे आपको और ज़्यादा buyer enquiries मिल सकेंगी। क्या आप इसके लिए time निकाल पाएंगे?",
+     "restarted": false,
+     "reply_onset_s": -0.48,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544376.51,
+       "utt": "हम ठीक हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "1827be04b8f8",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 467,
+       "relay_err": null,
+       "relay_ms": 960,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "rushed",
+       "to": "neutral",
+       "switched": true,
+       "dup": false,
+       "ms": 959.77
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "frustrated",
+   "run": 0,
+   "iid": "20261009/5872b724-16:43:24-56b830c9",
+   "switch_log": [
+    {
+     "t": 1791544414.53,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 477,
+     "relay_err": null,
+     "relay_ms": 625,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 625.56
+    },
+    {
+     "t": 1791544424.86,
+     "utt": "कितनी बार कॉल करोगे? परेशान कर दिया है।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "779ccf2938c2",
+     "kw": "frustrated",
+     "relay_mode": "frustrated",
+     "relay_clf_ms": 514,
+     "relay_err": null,
+     "relay_ms": 1120,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "frustrated",
+     "switched": true,
+     "dup": false,
+     "ms": 1120.19
+    },
+    {
+     "t": 1791544435.1,
+     "utt": "हम ठीक हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "1827be04b8f8",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 762,
+     "relay_err": null,
+     "relay_ms": 1030,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "frustrated",
+     "to": "neutral",
+     "switched": true,
+     "dup": false,
+     "ms": 1030.54
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 2.16,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544414.53,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 477,
+       "relay_err": null,
+       "relay_ms": 625,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 625.56
+      }
+     ]
+    },
+    {
+     "seller": "कितनी बार कॉल करोगे, परेशान कर दिया है",
+     "signal": "frustrated",
+     "asr": [
+      "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+     ],
+     "reply_dd": "sorry, आपको परेशानी हुई। क्या मैं बस एक मिनट बात कर सकता हूँ?",
+     "restarted": false,
+     "reply_onset_s": 3.1,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": true,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544424.86,
+       "utt": "कितनी बार कॉल करोगे? परेशान कर दिया है।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "779ccf2938c2",
+       "kw": "frustrated",
+       "relay_mode": "frustrated",
+       "relay_clf_ms": 514,
+       "relay_err": null,
+       "relay_ms": 1120,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "frustrated",
+       "switched": true,
+       "dup": false,
+       "ms": 1120.19
+      }
+     ]
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम।",
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "धन्यवाद। दरअसल, मैं आपको यह बताने के लिए call किया था कि हम आपकी help कर सकते हैं ताकि आपको और ज़्यादा buyer enquiries मिलें। क्या आप इसके लिए हमारे executive से एक छोटी meeting करना चाहेंगे?",
+     "restarted": false,
+     "reply_onset_s": 2.91,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544435.1,
+       "utt": "हम ठीक हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "1827be04b8f8",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 762,
+       "relay_err": null,
+       "relay_ms": 1030,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "frustrated",
+       "to": "neutral",
+       "switched": true,
+       "dup": false,
+       "ms": 1030.54
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "frustrated",
+   "run": 1,
+   "iid": "20261009/6a403e85-16:44:16-e9763966",
+   "switch_log": [
+    {
+     "t": 1791544466.67,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 490,
+     "relay_err": null,
+     "relay_ms": 1344,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1344.3
+    },
+    {
+     "t": 1791544477.69,
+     "utt": "कितनी बार कॉल करोगे? परेशान कर दिया है।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "779ccf2938c2",
+     "kw": "frustrated",
+     "relay_mode": "frustrated",
+     "relay_clf_ms": 562,
+     "relay_err": null,
+     "relay_ms": 1476,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "frustrated",
+     "switched": true,
+     "dup": false,
+     "ms": 1476.26
+    },
+    {
+     "t": 1791544487.11,
+     "utt": "हम ठीक हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "1827be04b8f8",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 542,
+     "relay_err": null,
+     "relay_ms": 1053,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "frustrated",
+     "to": "neutral",
+     "switched": true,
+     "dup": false,
+     "ms": 1053.26
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 3.11,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544466.67,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 490,
+       "relay_err": null,
+       "relay_ms": 1344,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1344.3
+      }
+     ]
+    },
+    {
+     "seller": "कितनी बार कॉल करोगे, परेशान कर दिया है",
+     "signal": "frustrated",
+     "asr": [
+      "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+     ],
+     "reply_dd": "sorry, आपको परेशानी हुई। क्या मैं बस एक मिनट बात कर सकता हूँ?",
+     "restarted": false,
+     "reply_onset_s": 2.98,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": true,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544477.69,
+       "utt": "कितनी बार कॉल करोगे? परेशान कर दिया है।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "779ccf2938c2",
+       "kw": "frustrated",
+       "relay_mode": "frustrated",
+       "relay_clf_ms": 562,
+       "relay_err": null,
+       "relay_ms": 1476,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "frustrated",
+       "switched": true,
+       "dup": false,
+       "ms": 1476.26
+      }
+     ]
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम।",
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "धन्यवाद। दरअसल, मैं आपको यह बताने के लिए call किया था कि हम आपकी help कर सकते हैं ताकि आपको और ज़्यादा buyer enquiries मिलें। क्या आप इसके लिए हमारे executive से एक छोटी meeting करना चाहेंगे?",
+     "restarted": false,
+     "reply_onset_s": 2.86,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544487.11,
+       "utt": "हम ठीक हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "1827be04b8f8",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 542,
+       "relay_err": null,
+       "relay_ms": 1053,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "frustrated",
+       "to": "neutral",
+       "switched": true,
+       "dup": false,
+       "ms": 1053.26
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "confused",
+   "run": 0,
+   "iid": "20261009/d8129a45-16:45:14-fb245dfd",
+   "switch_log": [
+    {
+     "t": 1791544523.0,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 494,
+     "relay_err": null,
+     "relay_ms": 1125,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1125.02
+    },
+    {
+     "t": 1791544533.92,
+     "utt": "समझ नहीं आया क्या मतलब मीटिंग?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "78117489415a",
+     "kw": "confused",
+     "relay_mode": "confused",
+     "relay_clf_ms": 482,
+     "relay_err": null,
+     "relay_ms": 639,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "confused",
+     "switched": true,
+     "dup": false,
+     "ms": 638.88
+    },
+    {
+     "t": 1791544545.72,
+     "utt": "हम ठीक हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "1827be04b8f8",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 536,
+     "relay_err": null,
+     "relay_ms": 700,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "confused",
+     "to": "neutral",
+     "switched": true,
+     "dup": false,
+     "ms": 699.79
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 2.76,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544523.0,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 494,
+       "relay_err": null,
+       "relay_ms": 1125,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1125.02
+      }
+     ]
+    },
+    {
+     "seller": "समझ नहीं आया, क्या मतलब मीटिंग?",
+     "signal": "confused",
+     "asr": [
+      "समझ नहीं आया।",
+      "समझ नहीं आया क्या मतलब मीटिंग?"
+     ],
+     "reply_dd": "देखिए, हमारा एक expert, आपसे बात करेगा, आपको ज़्यादा buyer मिलेंगे, business बढ़ेगा। क्या आप समझ पाए?",
+     "restarted": false,
+     "reply_onset_s": 2.87,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544533.92,
+       "utt": "समझ नहीं आया क्या मतलब मीटिंग?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "78117489415a",
+       "kw": "confused",
+       "relay_mode": "confused",
+       "relay_clf_ms": 482,
+       "relay_err": null,
+       "relay_ms": 639,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "confused",
+       "switched": true,
+       "dup": false,
+       "ms": 638.88
+      }
+     ]
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा, पर मैं बस यह बताना चाहता था कि हम आपकी help कर सकते हैं ताकि आपको और ज़्यादा orders मिलें। क्या हम कल एक छोटी सी meeting fix कर सकते हैं?",
+     "restarted": false,
+     "reply_onset_s": 2.42,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544545.72,
+       "utt": "हम ठीक हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "1827be04b8f8",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 536,
+       "relay_err": null,
+       "relay_ms": 700,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "confused",
+       "to": "neutral",
+       "switched": true,
+       "dup": false,
+       "ms": 699.79
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "confused",
+   "run": 1,
+   "iid": "20261009/3fb17a87-16:46:06-ef23f73a",
+   "switch_log": [
+    {
+     "t": 1791544574.98,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 470,
+     "relay_err": null,
+     "relay_ms": 1088,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1088.34
+    },
+    {
+     "t": 1791544585.53,
+     "utt": "समझ नहीं आया क्या मतलब मीटिंग?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "78117489415a",
+     "kw": "confused",
+     "relay_mode": "confused",
+     "relay_clf_ms": 535,
+     "relay_err": null,
+     "relay_ms": 682,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "confused",
+     "switched": true,
+     "dup": false,
+     "ms": 682.28
+    },
+    {
+     "t": 1791544596.9,
+     "utt": "हम ठीक हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "1827be04b8f8",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 485,
+     "relay_err": null,
+     "relay_ms": 1009,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "confused",
+     "to": "neutral",
+     "switched": true,
+     "dup": false,
+     "ms": 1008.79
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 2.84,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544574.98,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 470,
+       "relay_err": null,
+       "relay_ms": 1088,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1088.34
+      }
+     ]
+    },
+    {
+     "seller": "समझ नहीं आया, क्या मतलब मीटिंग?",
+     "signal": "confused",
+     "asr": [
+      "समझ नहीं आया क्या मतलब मीटिंग?"
+     ],
+     "reply_dd": "देखिए, हमारा एक expert, आपसे बात करेगा, आपको ज़्यादा buyer मिलेंगे, business बढ़ेगा। क्या आप समझ पाए?",
+     "restarted": false,
+     "reply_onset_s": 2.23,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544585.53,
+       "utt": "समझ नहीं आया क्या मतलब मीटिंग?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "78117489415a",
+       "kw": "confused",
+       "relay_mode": "confused",
+       "relay_clf_ms": 535,
+       "relay_err": null,
+       "relay_ms": 682,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "confused",
+       "switched": true,
+       "dup": false,
+       "ms": 682.28
+      }
+     ]
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा, पर मैं बस यह बताना चाहता था कि आप IndiaMART पर और ज़्यादा enquiries पा सकते हैं। क्या हम इस बारे में एक छोटी सी meeting fix कर सकते हैं?",
+     "restarted": false,
+     "reply_onset_s": 2.81,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544596.9,
+       "utt": "हम ठीक हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "1827be04b8f8",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 485,
+       "relay_err": null,
+       "relay_ms": 1009,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "confused",
+       "to": "neutral",
+       "switched": true,
+       "dup": false,
+       "ms": 1008.79
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "interested",
+   "run": 0,
+   "iid": "20261009/93b55d84-16:47:01-9a550a34",
+   "switch_log": [
+    {
+     "t": 1791544630.17,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 478,
+     "relay_err": null,
+     "relay_ms": 1339,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1339.03
+    },
+    {
+     "t": 1791544639.36,
+     "utt": "ओके ओके।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9f49da2ae34e",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 535,
+     "relay_err": null,
+     "relay_ms": 1127,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1126.89
+    },
+    {
+     "t": 1791544657.12,
+     "utt": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "088ec5ec3075",
+     "kw": "interested",
+     "relay_mode": "interested",
+     "relay_clf_ms": 491,
+     "relay_err": null,
+     "relay_ms": 628,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "interested",
+     "switched": true,
+     "dup": false,
+     "ms": 628.4
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 2.96,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544630.17,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 478,
+       "relay_err": null,
+       "relay_ms": 1339,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1339.03
+      }
+     ]
+    },
+    {
+     "seller": "ओके ओके",
+     "signal": "neutral",
+     "asr": [
+      "ओके ओके।"
+     ],
+     "reply_dd": "धन्यवाद। दरअसल, मैं आपको यह बताने के लिए call किया था कि हमारे executive आपकी help कर सकते हैं ताकि आपको और ज़्यादा buyer enquiries मिल सकें। क्या आप इसके लिए एक छोटी सी meeting करना चाहेंगे?",
+     "restarted": false,
+     "reply_onset_s": 3.09,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544639.36,
+       "utt": "ओके ओके।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9f49da2ae34e",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 535,
+       "relay_err": null,
+       "relay_ms": 1127,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1126.89
+      }
+     ]
+    },
+    {
+     "seller": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा, ये कैसे काम करता है? कितना चार्ज है?"
+     ],
+     "reply_dd": "देखिए, इसकी पूरी details हमारे executive आपको meeting में अच्छे से समझा देंगे। क्या हम कल दोपहर दो बजे की meeting fix कर सकते हैं?",
+     "restarted": false,
+     "reply_onset_s": 3.03,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544657.12,
+       "utt": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "088ec5ec3075",
+       "kw": "interested",
+       "relay_mode": "interested",
+       "relay_clf_ms": 491,
+       "relay_err": null,
+       "relay_ms": 628,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "interested",
+       "switched": true,
+       "dup": false,
+       "ms": 628.4
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "interested",
+   "run": 1,
+   "iid": "20261009/9e607f70-16:47:57-2c234c15",
+   "switch_log": [
+    {
+     "t": 1791544685.5,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 473,
+     "relay_err": null,
+     "relay_ms": 608,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 607.88
+    },
+    {
+     "t": 1791544693.9,
+     "utt": "ओके ओके।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9f49da2ae34e",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 506,
+     "relay_err": null,
+     "relay_ms": 1061,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1060.61
+    },
+    {
+     "t": 1791544712.63,
+     "utt": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "088ec5ec3075",
+     "kw": "interested",
+     "relay_mode": "interested",
+     "relay_clf_ms": 493,
+     "relay_err": null,
+     "relay_ms": 611,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "interested",
+     "switched": true,
+     "dup": false,
+     "ms": 610.7
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 2.15,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544685.5,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 473,
+       "relay_err": null,
+       "relay_ms": 608,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 607.88
+      }
+     ]
+    },
+    {
+     "seller": "ओके ओके",
+     "signal": "neutral",
+     "asr": [
+      "ओके ओके।"
+     ],
+     "reply_dd": "धन्यवाद। दरअसल, मैं आपको यह बताने के लिए call किया था कि हमारे executive आपकी help कर सकते हैं जिससे आपको और ज़्यादा buyer enquiries मिल सकें। क्या आप इसके लिए एक छोटी सी meeting के लिए agree करेंगे?",
+     "restarted": false,
+     "reply_onset_s": 3.1,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544693.9,
+       "utt": "ओके ओके।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9f49da2ae34e",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 506,
+       "relay_err": null,
+       "relay_ms": 1061,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1060.61
+      }
+     ]
+    },
+    {
+     "seller": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा, ये कैसे काम करता है? कितना चार्ज है?"
+     ],
+     "reply_dd": "देखिए, इसकी पूरी details हमारे executive आपको meeting में अच्छे से समझा देंगे। तो क्या हम कल दोपहर दो बजे की meeting fix कर सकते हैं?",
+     "restarted": false,
+     "reply_onset_s": 2.2,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544712.63,
+       "utt": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "088ec5ec3075",
+       "kw": "interested",
+       "relay_mode": "interested",
+       "relay_clf_ms": 493,
+       "relay_err": null,
+       "relay_ms": 611,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "interested",
+       "switched": true,
+       "dup": false,
+       "ms": 610.7
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "gujarati",
+   "run": 0,
+   "iid": "20261009/b4aa0627-16:48:55-dd4e9175",
+   "switch_log": [
+    {
+     "t": 1791544745.12,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 488,
+     "relay_err": null,
+     "relay_ms": 756,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 756.25
+    },
+    {
+     "t": 1791544756.95,
+     "utt": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે.",
+     "lang": "gujarati",
+     "script": "gujr",
+     "h": "8faa8ebdd22b",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 487,
+     "relay_err": null,
+     "relay_ms": 996,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 996.57
+    },
+    {
+     "t": 1791544771.36,
+     "utt": "સારું, આગળ બોલો.",
+     "lang": "gujarati",
+     "script": "gujr",
+     "h": "b3a7bb431399",
+     "kw": "neutral",
+     "relay_mode": "interested",
+     "relay_clf_ms": 546,
+     "relay_err": null,
+     "relay_ms": 1217,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "interested",
+     "switched": true,
+     "dup": false,
+     "ms": 1217.44
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 2.7,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544745.12,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 488,
+       "relay_err": null,
+       "relay_ms": 756,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 756.25
+      }
+     ]
+    },
+    {
+     "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+     "signal": "gujarati",
+     "asr": [
+      "गुजराती में बात।",
+      "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+     ],
+     "reply_dd": "હા જી, હું તમારી સાથે ગુજરાતીમાં જ વાત કરી રહ્યો અરે, ચોક્કસ. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી વાત કરું છું, શું તમારી પાસે અત્યારે બે મિનિટ time છે?",
+     "restarted": false,
+     "reply_onset_s": 3.16,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544756.95,
+       "utt": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે.",
+       "lang": "gujarati",
+       "script": "gujr",
+       "h": "8faa8ebdd22b",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 487,
+       "relay_err": null,
+       "relay_ms": 996,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 996.57
+      }
+     ]
+    },
+    {
+     "seller": "સારું, આગળ બોલો.",
+     "signal": "after_gu",
+     "asr": [
+      "સારું, આગળ બોલો."
+     ],
+     "reply_dd": "તમારા business માટે વધુ buyer enquiries લાવવામાં મદદ કરવા માટે, અમારા executive એક નાની meeting રાખવા માંગે છે. તમારા માટે કયો દિવસ અને time suit થશે?",
+     "restarted": false,
+     "reply_onset_s": 3.27,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544771.36,
+       "utt": "સારું, આગળ બોલો.",
+       "lang": "gujarati",
+       "script": "gujr",
+       "h": "b3a7bb431399",
+       "kw": "neutral",
+       "relay_mode": "interested",
+       "relay_clf_ms": 546,
+       "relay_err": null,
+       "relay_ms": 1217,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "interested",
+       "switched": true,
+       "dup": false,
+       "ms": 1217.44
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "gujarati",
+   "run": 1,
+   "iid": "20261009/ff875cf4-16:49:53-c08aff32",
+   "switch_log": [
+    {
+     "t": 1791544802.48,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 505,
+     "relay_err": null,
+     "relay_ms": 1359,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1359.56
+    },
+    {
+     "t": 1791544814.81,
+     "utt": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે.",
+     "lang": "gujarati",
+     "script": "gujr",
+     "h": "8faa8ebdd22b",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 516,
+     "relay_err": null,
+     "relay_ms": 1032,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1032.43
+    },
+    {
+     "t": 1791544828.6,
+     "utt": "સારું, આગળ બોલો.",
+     "lang": "gujarati",
+     "script": "gujr",
+     "h": "b3a7bb431399",
+     "kw": "neutral",
+     "relay_mode": "interested",
+     "relay_clf_ms": 527,
+     "relay_err": null,
+     "relay_ms": 642,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "interested",
+     "switched": true,
+     "dup": false,
+     "ms": 641.67
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "कैसे बोलिए?",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 2.98,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544802.48,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 505,
+       "relay_err": null,
+       "relay_ms": 1359,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1359.56
+      }
+     ]
+    },
+    {
+     "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+     "signal": "gujarati",
+     "asr": [
+      "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+     ],
+     "reply_dd": "હા જી અરે, ચોક્કસ. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી વાત કરું છું, તમારી પાસે અત્યારે થોડો time છે?",
+     "restarted": false,
+     "reply_onset_s": 3.25,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544814.81,
+       "utt": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે.",
+       "lang": "gujarati",
+       "script": "gujr",
+       "h": "8faa8ebdd22b",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 516,
+       "relay_err": null,
+       "relay_ms": 1032,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1032.43
+      }
+     ]
+    },
+    {
+     "seller": "સારું, આગળ બોલો.",
+     "signal": "after_gu",
+     "asr": [
+      "સારું, આગળ બોલો."
+     ],
+     "reply_dd": "તમારા business માટે વધુ buyer enquiries લાવવામાં મદદ કરવા માટે, અમારા executive એક short meeting કરશે. તો, તમારા માટે કયો day અને time suit થશે?",
+     "restarted": false,
+     "reply_onset_s": 3.31,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544828.6,
+       "utt": "સારું, આગળ બોલો.",
+       "lang": "gujarati",
+       "script": "gujr",
+       "h": "b3a7bb431399",
+       "kw": "neutral",
+       "relay_mode": "interested",
+       "relay_clf_ms": 527,
+       "relay_err": null,
+       "relay_ms": 642,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "interested",
+       "switched": true,
+       "dup": false,
+       "ms": 641.67
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "optout",
+   "run": 0,
+   "iid": "20261009/777a495a-16:50:51-68f96da7",
+   "switch_log": [
+    {
+     "t": 1791544859.32,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 475,
+     "relay_err": null,
+     "relay_ms": 699,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 699.36
+    },
+    {
+     "t": 1791544870.09,
+     "utt": "मुझे कॉल मत करो, मेरा नंबर हटा दो।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "8fa40d038857",
+     "kw": "opt_out",
+     "relay_mode": "opt_out",
+     "relay_clf_ms": 593,
+     "relay_err": null,
+     "relay_ms": 856,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "opt_out",
+     "switched": true,
+     "dup": false,
+     "ms": 856.51
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 2.25,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544859.32,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 475,
+       "relay_err": null,
+       "relay_ms": 699,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 699.36
+      }
+     ]
+    },
+    {
+     "seller": "मुझे कॉल मत करो, मेरा नंबर हटा दो",
+     "signal": "opt_out",
+     "asr": [
+      "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+     ],
+     "reply_dd": "I am sorry, मैं आपका number remove कर देता हूँ और आपको अब call नहीं आएगा। thank you.",
+     "restarted": false,
+     "reply_onset_s": 2.56,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": true
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544870.09,
+       "utt": "मुझे कॉल मत करो, मेरा नंबर हटा दो।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "8fa40d038857",
+       "kw": "opt_out",
+       "relay_mode": "opt_out",
+       "relay_clf_ms": 593,
+       "relay_err": null,
+       "relay_ms": 856,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "opt_out",
+       "switched": true,
+       "dup": false,
+       "ms": 856.51
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "optout",
+   "run": 1,
+   "iid": "20261009/4586bc87-16:51:25-c08e7a4e",
+   "switch_log": [
+    {
+     "t": 1791544893.69,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 469,
+     "relay_err": null,
+     "relay_ms": 1070,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1070.38
+    },
+    {
+     "t": 1791544904.49,
+     "utt": "मुझे कॉल मत करो, मेरा नंबर हटा दो।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "8fa40d038857",
+     "kw": "opt_out",
+     "relay_mode": "opt_out",
+     "relay_clf_ms": 486,
+     "relay_err": null,
+     "relay_ms": 1110,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "opt_out",
+     "switched": true,
+     "dup": false,
+     "ms": 1109.86
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 2.6,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544893.69,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 469,
+       "relay_err": null,
+       "relay_ms": 1070,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1070.38
+      }
+     ]
+    },
+    {
+     "seller": "मुझे कॉल मत करो, मेरा नंबर हटा दो",
+     "signal": "opt_out",
+     "asr": [
+      "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+     ],
+     "reply_dd": "आई एम सॉरी, मैं आपका नंबर हटा देता हूँ और आपको अब कॉल नहीं आएगा। थैंक यू।",
+     "restarted": false,
+     "reply_onset_s": 2.98,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": true
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544904.49,
+       "utt": "मुझे कॉल मत करो, मेरा नंबर हटा दो।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "8fa40d038857",
+       "kw": "opt_out",
+       "relay_mode": "opt_out",
+       "relay_clf_ms": 486,
+       "relay_err": null,
+       "relay_ms": 1110,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "opt_out",
+       "switched": true,
+       "dup": false,
+       "ms": 1109.86
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "A_hostile",
+   "run": 0,
+   "iid": "20261009/ee30dab9-16:52:08-dacc5ebf",
+   "switch_log": [
+    {
+     "t": 1791544938.82,
+     "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "25231939e971",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 530,
+     "relay_err": null,
+     "relay_ms": 1333,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1332.81
+    },
+    {
+     "t": 1791544952.19,
+     "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "cd85dcb300cb",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 528,
+     "relay_err": null,
+     "relay_ms": 1043,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1042.7
+    },
+    {
+     "t": 1791544963.96,
+     "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "dce63442a7eb",
+     "kw": "interested",
+     "relay_mode": "interested",
+     "relay_clf_ms": 492,
+     "relay_err": null,
+     "relay_ms": 1020,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "interested",
+     "switched": true,
+     "dup": false,
+     "ms": 1020.35
+    },
+    {
+     "t": 1791544978.54,
+     "utt": "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "e601f8f5747e",
+     "kw": "frustrated",
+     "relay_mode": "frustrated",
+     "relay_clf_ms": 557,
+     "relay_err": null,
+     "relay_ms": 933,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "interested",
+     "to": "frustrated",
+     "switched": true,
+     "dup": false,
+     "ms": 933.16
+    },
+    {
+     "t": 1791544988.39,
+     "utt": "अभी बिजी हूँ यार, बाद में बात करते हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "30059bc3f0a1",
+     "kw": "rushed",
+     "relay_mode": "rushed",
+     "relay_clf_ms": 480,
+     "relay_err": null,
+     "relay_ms": 853,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "frustrated",
+     "to": "rushed",
+     "switched": true,
+     "dup": false,
+     "ms": 853.21
+    }
+   ],
+   "turns": [
+    {
+     "seller": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+     "signal": "neutral",
+     "asr": [
+      "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+     ],
+     "reply_dd": "जी, मैं IndiaMART का AI assistant बोल रहा हूँ। मैं आपकी help करने के लिए call किया है।",
+     "restarted": false,
+     "reply_onset_s": 3.33,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544938.82,
+       "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "25231939e971",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 530,
+       "relay_err": null,
+       "relay_ms": 1333,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1332.81
+      }
+     ]
+    },
+    {
+     "seller": "मैं owner नहीं हूँ, manager हूँ. Owner बाहर गए हैं.",
+     "signal": "neutral",
+     "asr": [
+      "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+     ],
+     "reply_dd": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे?",
+     "restarted": false,
+     "reply_onset_s": 2.86,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544952.19,
+       "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "cd85dcb300cb",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 528,
+       "relay_err": null,
+       "relay_ms": 1043,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1042.7
+      }
+     ]
+    },
+    {
+     "seller": "अच्छा ठीक है, पर exact price बताओ, कितने का plan है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?"
+     ],
+     "reply_dd": "देखिए, plans अलग-अलग होते हैं। इसकी पूरी details के लिए हमारे executive आपसे एक short meeting करेंगे। क्या कल दोपहर दो बजे का time आपके लिए सही रहेगा?",
+     "restarted": false,
+     "reply_onset_s": 2.78,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544963.96,
+       "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "dce63442a7eb",
+       "kw": "interested",
+       "relay_mode": "interested",
+       "relay_clf_ms": 492,
+       "relay_err": null,
+       "relay_ms": 1020,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "interested",
+       "switched": true,
+       "dup": false,
+       "ms": 1020.35
+      }
+     ]
+    },
+    {
+     "seller": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो",
+     "signal": "frustrated",
+     "asr": [
+      "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।"
+     ],
+     "reply_dd": "sorry, आपको परेशानी हुई। क्या मैं कल किसी और time पर call करूँ?",
+     "restarted": false,
+     "reply_onset_s": 2.87,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": true,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544978.54,
+       "utt": "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "e601f8f5747e",
+       "kw": "frustrated",
+       "relay_mode": "frustrated",
+       "relay_clf_ms": 557,
+       "relay_err": null,
+       "relay_ms": 933,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "interested",
+       "to": "frustrated",
+       "switched": true,
+       "dup": false,
+       "ms": 933.16
+      }
+     ]
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, बाद में बात करते हैं",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार, बाद में बात करते हैं।"
+     ],
+     "reply_dd": "कोई बात नहीं, आप बताइए मैं आपको कब call करूँ?",
+     "restarted": false,
+     "reply_onset_s": 2.71,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791544988.39,
+       "utt": "अभी बिजी हूँ यार, बाद में बात करते हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "30059bc3f0a1",
+       "kw": "rushed",
+       "relay_mode": "rushed",
+       "relay_clf_ms": 480,
+       "relay_err": null,
+       "relay_ms": 853,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "frustrated",
+       "to": "rushed",
+       "switched": true,
+       "dup": false,
+       "ms": 853.21
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "A_hostile",
+   "run": 1,
+   "iid": "20261009/86df0d48-16:53:23-8ebf2ea4",
+   "switch_log": [
+    {
+     "t": 1791545014.45,
+     "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "25231939e971",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 500,
+     "relay_err": null,
+     "relay_ms": 1110,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 1110.46
+    },
+    {
+     "t": 1791545027.26,
+     "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "cd85dcb300cb",
+     "kw": "neutral",
+     "relay_mode": "neutral",
+     "relay_clf_ms": 481,
+     "relay_err": null,
+     "relay_ms": 621,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 621.33
+    },
+    {
+     "t": 1791545038.5,
+     "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "dce63442a7eb",
+     "kw": "interested",
+     "relay_mode": "interested",
+     "relay_clf_ms": 554,
+     "relay_err": null,
+     "relay_ms": 838,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "neutral",
+     "to": "interested",
+     "switched": true,
+     "dup": false,
+     "ms": 837.99
+    },
+    {
+     "t": 1791545053.38,
+     "utt": "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "e601f8f5747e",
+     "kw": "frustrated",
+     "relay_mode": "frustrated",
+     "relay_clf_ms": 468,
+     "relay_err": null,
+     "relay_ms": 702,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "interested",
+     "to": "frustrated",
+     "switched": true,
+     "dup": false,
+     "ms": 702.4
+    },
+    {
+     "t": 1791545063.29,
+     "utt": "अभी बिजी हूँ यार, बाद में बात करते हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "30059bc3f0a1",
+     "kw": "rushed",
+     "relay_mode": "rushed",
+     "relay_clf_ms": 525,
+     "relay_err": null,
+     "relay_ms": 629,
+     "clf": "jev",
+     "conn_new": true,
+     "from": "frustrated",
+     "to": "rushed",
+     "switched": true,
+     "dup": false,
+     "ms": 629.03
+    }
+   ],
+   "turns": [
+    {
+     "seller": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+     "signal": "neutral",
+     "asr": [
+      "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+     ],
+     "reply_dd": "जी, मैं IndiaMART का AI assistant हूँ। मैं आपकी help करने के लिए call कर रहा हूँ।",
+     "restarted": false,
+     "reply_onset_s": 3.71,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545014.45,
+       "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "25231939e971",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 500,
+       "relay_err": null,
+       "relay_ms": 1110,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 1110.46
+      }
+     ]
+    },
+    {
+     "seller": "मैं owner नहीं हूँ, manager हूँ. Owner बाहर गए हैं.",
+     "signal": "neutral",
+     "asr": [
+      "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+     ],
+     "reply_dd": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे?",
+     "restarted": false,
+     "reply_onset_s": 2.18,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545027.26,
+       "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "cd85dcb300cb",
+       "kw": "neutral",
+       "relay_mode": "neutral",
+       "relay_clf_ms": 481,
+       "relay_err": null,
+       "relay_ms": 621,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 621.33
+      }
+     ]
+    },
+    {
+     "seller": "अच्छा ठीक है, पर exact price बताओ, कितने का plan है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ।",
+      "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?"
+     ],
+     "reply_dd": "देखिए, plans अलग-अलग होते हैं। इसकी पूरी details के लिए हमारे executive आपसे एक short meeting में बात कर लेंगे। क्या कल दोपहर दो बजे का time आपके लिए सही रहेगा?",
+     "restarted": false,
+     "reply_onset_s": 2.35,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545038.5,
+       "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "dce63442a7eb",
+       "kw": "interested",
+       "relay_mode": "interested",
+       "relay_clf_ms": 554,
+       "relay_err": null,
+       "relay_ms": 838,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "neutral",
+       "to": "interested",
+       "switched": true,
+       "dup": false,
+       "ms": 837.99
+      }
+     ]
+    },
+    {
+     "seller": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो",
+     "signal": "frustrated",
+     "asr": [
+      "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।"
+     ],
+     "reply_dd": "sorry, आपको परेशानी हुई। क्या मैं कल किसी और time पर call करूँ?",
+     "restarted": false,
+     "reply_onset_s": 2.64,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": true,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545053.38,
+       "utt": "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "e601f8f5747e",
+       "kw": "frustrated",
+       "relay_mode": "frustrated",
+       "relay_clf_ms": 468,
+       "relay_err": null,
+       "relay_ms": 702,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "interested",
+       "to": "frustrated",
+       "switched": true,
+       "dup": false,
+       "ms": 702.4
+      }
+     ]
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, बाद में बात करते हैं",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार, बाद में बात करते हैं।"
+     ],
+     "reply_dd": "कोई बात नहीं, आप बताइए मैं आपको कब call करूँ?",
+     "restarted": false,
+     "reply_onset_s": 2.24,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545063.29,
+       "utt": "अभी बिजी हूँ यार, बाद में बात करते हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "30059bc3f0a1",
+       "kw": "rushed",
+       "relay_mode": "rushed",
+       "relay_clf_ms": 525,
+       "relay_err": null,
+       "relay_ms": 629,
+       "clf": "jev",
+       "conn_new": true,
+       "from": "frustrated",
+       "to": "rushed",
+       "switched": true,
+       "dup": false,
+       "ms": 629.03
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

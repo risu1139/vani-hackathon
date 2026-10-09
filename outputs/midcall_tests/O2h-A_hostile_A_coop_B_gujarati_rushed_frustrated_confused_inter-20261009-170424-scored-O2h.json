@@ -1,0 +1,1578 @@
+{
+ "summary": {
+  "label": "O2h",
+  "files": [
+   "../../outputs/midcall_tests\\O2h-A_hostile_A_coop_B_gujarati_rushed_frustrated_confused_inter-20261009-170424.json"
+  ],
+  "calls": 9,
+  "turns": 31,
+  "signals": {
+   "interested": {
+    "n": 5,
+    "same": 5,
+    "next": 0,
+    "either": 5
+   },
+   "frustrated": {
+    "n": 2,
+    "same": 2,
+    "next": 0,
+    "either": 2
+   },
+   "rushed": {
+    "n": 2,
+    "same": 2,
+    "next": 0,
+    "either": 2
+   },
+   "gujarati": {
+    "n": 2,
+    "same": 2,
+    "next": 0,
+    "either": 2
+   },
+   "confused": {
+    "n": 1,
+    "same": 1,
+    "next": 0,
+    "either": 1
+   },
+   "opt_out": {
+    "n": 1,
+    "same": 1,
+    "next": 0,
+    "either": 1
+   }
+  },
+  "neutral_false_switch": "0/13",
+  "neutral_examples": [],
+  "reply_onset_median_s": 1.98,
+  "reply_onset_p90_s": 2.43,
+  "restarted_replies": "2/31",
+  "server_avg_agent_response_s_median": 1.1,
+  "tool": {
+   "turns": 31,
+   "calls": 32,
+   "dups": 0,
+   "missed": 0,
+   "double": 1,
+   "wrong_mode": 3,
+   "mode_checked": 24,
+   "relay_err": 0,
+   "relay_used": 0,
+   "conn_new": 0,
+   "relay_ms_median": null,
+   "relay_ms_max": null
+  }
+ },
+ "runs": [
+  {
+   "scen": "A_hostile",
+   "run": 0,
+   "iid": "20261009/dd0f25fc-16:54:08-f93607cf",
+   "switch_log": [
+    {
+     "t": 1791545057.99,
+     "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "25231939e971",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.11
+    },
+    {
+     "t": 1791545071.77,
+     "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "cd85dcb300cb",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.16
+    },
+    {
+     "t": 1791545082.77,
+     "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ, कितने का प्लान है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "1584c4fefe28",
+     "from": "neutral",
+     "to": "interested",
+     "switched": true,
+     "dup": false,
+     "ms": 0.09
+    },
+    {
+     "t": 1791545097.76,
+     "utt": "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "e601f8f5747e",
+     "from": "interested",
+     "to": "frustrated",
+     "switched": true,
+     "dup": false,
+     "ms": 0.07
+    },
+    {
+     "t": 1791545107.04,
+     "utt": "अभी बिजी हूँ यार, बाद में बात करते हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "30059bc3f0a1",
+     "from": "frustrated",
+     "to": "rushed",
+     "switched": true,
+     "dup": false,
+     "ms": 0.07
+    }
+   ],
+   "turns": [
+    {
+     "seller": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+     "signal": "neutral",
+     "asr": [
+      "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+     ],
+     "reply_dd": "जी, मैं IndiaMART से बोल रहा हूँ। मैं आपका AI assistant हूँ और आपकी help करने के लिए call किया है।",
+     "restarted": false,
+     "reply_onset_s": 1.71,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545057.99,
+       "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "25231939e971",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.11
+      }
+     ]
+    },
+    {
+     "seller": "मैं owner नहीं हूँ, manager हूँ. Owner बाहर गए हैं.",
+     "signal": "neutral",
+     "asr": [
+      "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+     ],
+     "reply_dd": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे?",
+     "restarted": false,
+     "reply_onset_s": 3.75,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545071.77,
+       "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "cd85dcb300cb",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.16
+      }
+     ]
+    },
+    {
+     "seller": "अच्छा ठीक है, पर exact price बताओ, कितने का plan है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ, कितने का प्लान है?"
+     ],
+     "reply_dd": "देखिए, plans अलग-अलग होते हैं। इसकी पूरी details के लिए हमारे executive आपसे एक short meeting में बात कर लेंगे। क्या कल सुबह दस बजे का time आपके लिए सही रहेगा?",
+     "restarted": false,
+     "reply_onset_s": 2.02,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545082.77,
+       "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ, कितने का प्लान है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "1584c4fefe28",
+       "from": "neutral",
+       "to": "interested",
+       "switched": true,
+       "dup": false,
+       "ms": 0.09
+      }
+     ]
+    },
+    {
+     "seller": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो",
+     "signal": "frustrated",
+     "asr": [
+      "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।"
+     ],
+     "reply_dd": "sorry, आपको परेशानी हुई। क्या मैं आपको बाद में call कर सकता हूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.82,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": true,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545097.76,
+       "utt": "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "e601f8f5747e",
+       "from": "interested",
+       "to": "frustrated",
+       "switched": true,
+       "dup": false,
+       "ms": 0.07
+      }
+     ]
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, बाद में बात करते हैं",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार।",
+      "अभी बिजी हूँ यार, बाद में बात करते हैं।"
+     ],
+     "reply_dd": "कोई बात नहीं, आप बताइए मैं आपको कब call करूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.88,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545107.04,
+       "utt": "अभी बिजी हूँ यार, बाद में बात करते हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "30059bc3f0a1",
+       "from": "frustrated",
+       "to": "rushed",
+       "switched": true,
+       "dup": false,
+       "ms": 0.07
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "A_coop",
+   "run": 0,
+   "iid": "20261009/9a92fd02-16:55:43-a0b331d6",
+   "switch_log": [
+    {
+     "t": 1791545151.89,
+     "utt": "हाँ जी, मैं ही ओनर हूँ। बोलिए।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "304e0e741a89",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.08
+    },
+    {
+     "t": 1791545169.92,
+     "utt": "अच्छा। हाँ याद आया। पर पैसे कितने लगेंगे? आपका प्लान बहुत महंगा है।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "801029031158",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.1
+    },
+    {
+     "t": 1791545184.47,
+     "utt": "ठीक है, मिल लेते हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "cb85f39a92f7",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.1
+    },
+    {
+     "t": 1791545196.88,
+     "utt": "कल शाम पाँच बजे आ जाइए।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "24900d582b0a",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.08
+    }
+   ],
+   "turns": [
+    {
+     "seller": "Haan ji, main hi owner hoon. Boliye.",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी, मैं ही ओनर हूँ। बोलिए।"
+     ],
+     "reply_dd": "धन्यवाद। मैं IndiaMART से बात कर रहा हूँ। दरअसल, मैं आपको यह बताने के लिए call किया था कि हम आपकी help कर सकते हैं ताकि आपको और ज़्यादा buyer enquiries मिल सकें।",
+     "restarted": false,
+     "reply_onset_s": 2.64,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545151.89,
+       "utt": "हाँ जी, मैं ही ओनर हूँ। बोलिए।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "304e0e741a89",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.08
+      }
+     ]
+    },
+    {
+     "seller": "Achha haan yaad aaya. Par paise kitne lagenge? Aapka plan bahut mehnga hai.",
+     "signal": "interested",
+     "asr": [
+      "अच्छा। हाँ याद आया। पर पैसे कितने लगेंगे? आपका प्लान बहुत महंगा है।"
+     ],
+     "reply_dd": "देखिए, मैं यहाँ कोई plan बेचने के लिए call नहीं कर रहा हूँ। मैं बस एक छोटी सी meeting fix करना चाहता हूँ, जहाँ हमारे executive आपको बताएँगे कि आप अपनी sales कैसे बढ़ा सकते हैं।",
+     "restarted": false,
+     "reply_onset_s": 0.96,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545169.92,
+       "utt": "अच्छा। हाँ याद आया। पर पैसे कितने लगेंगे? आपका प्लान बहुत महंगा है।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "801029031158",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.1
+      }
+     ]
+    },
+    {
+     "seller": "Theek hai, mil lete hain.",
+     "signal": "interested",
+     "asr": [
+      "ठीक है, मिल लेते हैं।"
+     ],
+     "reply_dd": "अरे वाह, बहुत शुक्रिया। तो क्या कल दोपहर दो बजे का time आपके लिए सही रहेगा?",
+     "restarted": false,
+     "reply_onset_s": 4.0,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545184.47,
+       "utt": "ठीक है, मिल लेते हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "cb85f39a92f7",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.1
+      }
+     ]
+    },
+    {
+     "seller": "Kal shaam paanch baje aa jaiye.",
+     "signal": "neutral",
+     "asr": [
+      "कल शाम पाँच बजे आ जाइए।"
+     ],
+     "reply_dd": "ठीक है जी, कल शाम पाँच बजे done रहा। हमारे executive आपसे मिल लेंगे। धन्यवाद!",
+     "restarted": false,
+     "reply_onset_s": 1.98,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545196.88,
+       "utt": "कल शाम पाँच बजे आ जाइए।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "24900d582b0a",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.08
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "B_gujarati",
+   "run": 0,
+   "iid": "20261009/f986898d-16:57:11-7f414299",
+   "switch_log": [
+    {
+     "t": 1791545241.35,
+     "utt": "Leads की जरूरत नहीं है पहले से बहुत आ रही हैं।",
+     "lang": "hinglish",
+     "script": "deva",
+     "h": "ad554b6f2927",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.09
+    },
+    {
+     "t": 1791545255.39,
+     "utt": "और आपका प्लान महंगा भी है।",
+     "lang": "hinglish",
+     "script": "deva",
+     "h": "47ca6b2e896f",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.12
+    },
+    {
+     "t": 1791545271.0,
+     "utt": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે.",
+     "lang": "gujarati",
+     "script": "gujr",
+     "h": "8faa8ebdd22b",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.09
+    },
+    {
+     "t": 1791545289.66,
+     "utt": "સારું બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?",
+     "lang": "gujarati",
+     "script": "gujr",
+     "h": "3ee04ed89701",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.13
+    },
+    {
+     "t": 1791545303.4,
+     "utt": "કાલે સવારે દસ વાગ્યે.",
+     "lang": "gujarati",
+     "script": "gujr",
+     "h": "747c35115d90",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.08
+    }
+   ],
+   "turns": [
+    {
+     "seller": "Leads ki zarurat nahi hai, pehle se bahut aa rahi hain.",
+     "signal": "neutral",
+     "asr": [
+      "Leads की जरूरत नहीं है पहले से बहुत आ रही हैं।"
+     ],
+     "reply_dd": "यह तो बहुत अच्छी बात है। वैसे, हमारे executive आपको यह बता सकते हैं कि आप इन leads को और बेहतर तरीके से कैसे convert कर सकते हैं। क्या हम एक छोटी सी meeting fix कर सकते हैं?",
+     "restarted": false,
+     "reply_onset_s": 1.82,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545241.35,
+       "utt": "Leads की जरूरत नहीं है पहले से बहुत आ रही हैं।",
+       "lang": "hinglish",
+       "script": "deva",
+       "h": "ad554b6f2927",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.09
+      }
+     ]
+    },
+    {
+     "seller": "Aur aapka plan mehnga bhi hai.",
+     "signal": "neutral",
+     "asr": [
+      "और आपका प्लान महंगा भी है।"
+     ],
+     "reply_dd": "मैं समझ सकता हूँ। दरअसल, हमारे executive आपको ऐसे options बता सकते हैं जो आपके budget में fit हों और आपको ज़्यादा profit दें। क्या आप कल थोड़ा time निकाल पाएंगे?",
+     "restarted": false,
+     "reply_onset_s": 1.58,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545255.39,
+       "utt": "और आपका प्लान महंगा भी है।",
+       "lang": "hinglish",
+       "script": "deva",
+       "h": "47ca6b2e896f",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.12
+      }
+     ]
+    },
+    {
+     "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+     "signal": "gujarati",
+     "asr": [
+      "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+     ],
+     "reply_dd": "અરે, ચોક્કસ જી. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. તો હું કહેતો હતો કે અમારા executive તમને એવા options બતાવી શકશે જે તમારા budget માં fit થાય. શું તમે કાલે થોડો time કાઢી શકશો?",
+     "restarted": false,
+     "reply_onset_s": 2.13,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545271.0,
+       "utt": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે.",
+       "lang": "gujarati",
+       "script": "gujr",
+       "h": "8faa8ebdd22b",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.09
+      }
+     ]
+    },
+    {
+     "seller": "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?",
+     "signal": "interested",
+     "asr": [
+      "સારું બલ્ક બાયર્સ જોઈએ છે.",
+      "સારું બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?"
+     ],
+     "reply_dd": "બરાબર, બલ્ક buyers મેળવવા માટે જ અમારા executive તમને help કરશે. શું કાલે બપોરે ૩ વાગ્યે તમારો time slot book કરી દઉં?",
+     "restarted": false,
+     "reply_onset_s": 2.36,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545289.66,
+       "utt": "સારું બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?",
+       "lang": "gujarati",
+       "script": "gujr",
+       "h": "3ee04ed89701",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.13
+      }
+     ]
+    },
+    {
+     "seller": "કાલે સવારે દસ વાગ્યે.",
+     "signal": "after_gu",
+     "asr": [
+      "કાલે સવારે દસ વાગ્યે."
+     ],
+     "reply_dd": "ચોક્કસ, કાલે સવારે ૧૦ વાગ્યે તમારો slot book કરી દીધો છે. અમારા executive તમને call કરશે. તમારો ખૂબ ખૂબ આભાર!",
+     "restarted": false,
+     "reply_onset_s": 2.24,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545303.4,
+       "utt": "કાલે સવારે દસ વાગ્યે.",
+       "lang": "gujarati",
+       "script": "gujr",
+       "h": "747c35115d90",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.08
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "rushed",
+   "run": 0,
+   "iid": "20261009/c0f7f58b-16:58:56-3a0bd4d5",
+   "switch_log": [
+    {
+     "t": 1791545346.79,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.11
+    },
+    {
+     "t": 1791545357.09,
+     "utt": "अभी बिजी हूँ यार, जल्दी बोलो क्या है।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "4487423bc7cd",
+     "from": "neutral",
+     "to": "rushed",
+     "switched": true,
+     "dup": false,
+     "ms": 0.11
+    },
+    {
+     "t": 1791545365.57,
+     "utt": "हम ठीक हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "1827be04b8f8",
+     "from": "rushed",
+     "to": "neutral",
+     "switched": true,
+     "dup": false,
+     "ms": 0.08
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट का time है?",
+     "restarted": false,
+     "reply_onset_s": 1.97,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545346.79,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.11
+      }
+     ]
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार, जल्दी बोलो क्या है।"
+     ],
+     "reply_dd": "कोई बात नहीं, मैं आपको बाद में call करूँ? आप time बता दीजिए।",
+     "restarted": false,
+     "reply_onset_s": 2.1,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545357.09,
+       "utt": "अभी बिजी हूँ यार, जल्दी बोलो क्या है।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "4487423bc7cd",
+       "from": "neutral",
+       "to": "rushed",
+       "switched": true,
+       "dup": false,
+       "ms": 0.11
+      }
+     ]
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा, तो मैं बस यह बताना चाहता था कि IndiaMART के executive आपसे एक छोटी meeting करना चाहते हैं। इससे आपको और ज़्यादा buyer enquiries मिल सकती हैं। क्या आप इसके लिए ready हैं?",
+     "restarted": false,
+     "reply_onset_s": 1.49,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545365.57,
+       "utt": "हम ठीक हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "1827be04b8f8",
+       "from": "rushed",
+       "to": "neutral",
+       "switched": true,
+       "dup": false,
+       "ms": 0.08
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "frustrated",
+   "run": 0,
+   "iid": "20261009/a5c1ea07-16:59:58-a7649768",
+   "switch_log": [
+    {
+     "t": 1791545406.77,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.09
+    },
+    {
+     "t": 1791545417.29,
+     "utt": "कितनी बार कॉल करोगे? परेशान कर दिया है।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "779ccf2938c2",
+     "from": "neutral",
+     "to": "frustrated",
+     "switched": true,
+     "dup": false,
+     "ms": 0.07
+    },
+    {
+     "t": 1791545425.16,
+     "utt": "हम ठीक हैं।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "1827be04b8f8",
+     "from": "frustrated",
+     "to": "neutral",
+     "switched": true,
+     "dup": false,
+     "ms": 0.08
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या मेरी बात आपकी business owner से हो रही है?",
+     "restarted": false,
+     "reply_onset_s": 1.83,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545406.77,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.09
+      }
+     ]
+    },
+    {
+     "seller": "कितनी बार कॉल करोगे, परेशान कर दिया है",
+     "signal": "frustrated",
+     "asr": [
+      "कितनी बार कॉल करोगे?",
+      "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+     ],
+     "reply_dd": "sorry, आपको बार-बार call करने के लिए मैं माफी चाहता हूँ। क्या मैं बस sorry, आपको परेशानी हुई। क्या मैं बस दो मिनट बात कर सकता हूँ?",
+     "restarted": false,
+     "reply_onset_s": 2.03,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545417.29,
+       "utt": "कितनी बार कॉल करोगे? परेशान कर दिया है।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "779ccf2938c2",
+       "from": "neutral",
+       "to": "frustrated",
+       "switched": true,
+       "dup": false,
+       "ms": 0.07
+      }
+     ]
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम।",
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "शुक्रिया। दरअसल, मैं आपको यह बताने के लिए call किया था कि हम आपकी help कर सकते हैं ताकि आपको धन्यवाद। दरअसल, मैं आपको यह बताने के लिए call किया था कि हम आपके business के लिए और ज़्यादा buyer enquiries ला सकते हैं। क्या आप इसके बारे में जानना चाहेंगे?",
+     "restarted": false,
+     "reply_onset_s": 0.02,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545425.16,
+       "utt": "हम ठीक हैं।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "1827be04b8f8",
+       "from": "frustrated",
+       "to": "neutral",
+       "switched": true,
+       "dup": false,
+       "ms": 0.08
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "confused",
+   "run": 0,
+   "iid": "20261009/1c348d43-17:00:46-c65aba58",
+   "switch_log": [
+    {
+     "t": 1791545454.99,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.09
+    },
+    {
+     "t": 1791545465.11,
+     "utt": "समझ नहीं आया।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "31c38583ab42",
+     "from": "neutral",
+     "to": "confused",
+     "switched": true,
+     "dup": false,
+     "ms": 0.07
+    },
+    {
+     "t": 1791545477.43,
+     "utt": "हाँ, ठीक है।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "943e89f3ec52",
+     "from": "confused",
+     "to": "neutral",
+     "switched": true,
+     "dup": false,
+     "ms": 0.08
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। मैं आपके business को बढ़ाने और ज़्यादा buyer enquiries दिलाने में आपकी help करना चाहता हूँ।",
+     "restarted": false,
+     "reply_onset_s": 1.65,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545454.99,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.09
+      }
+     ]
+    },
+    {
+     "seller": "समझ नहीं आया, क्या मतलब मीटिंग?",
+     "signal": "confused",
+     "asr": [
+      "समझ नहीं आया।"
+     ],
+     "reply_dd": "कोई बात नहीं, मैं समझाता हूँ। मतलब, ज़्यादा ग्राहक, आपके पास आएँ, आपका business बढ़े। क्या आप समझ पाए?",
+     "restarted": false,
+     "reply_onset_s": 0.58,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545465.11,
+       "utt": "समझ नहीं आया।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "31c38583ab42",
+       "from": "neutral",
+       "to": "confused",
+       "switched": true,
+       "dup": false,
+       "ms": 0.07
+      }
+     ]
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हाँ।",
+      "हाँ, ठीक है।"
+     ],
+     "reply_dd": "अच्छा, तो मैं चाहता था कि हमारे एक executive आपसे छोटी सी meeting करें। वो आपको बताएँगे कि आप ज़्यादा orders कैसे पा सकते हैं। क्या आपके पास थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 2.06,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545477.43,
+       "utt": "हाँ, ठीक है।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "943e89f3ec52",
+       "from": "confused",
+       "to": "neutral",
+       "switched": true,
+       "dup": false,
+       "ms": 0.08
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "interested",
+   "run": 0,
+   "iid": "20261009/70a4c6e7-17:01:47-e65d7a63",
+   "switch_log": [
+    {
+     "t": 1791545515.31,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.08
+    },
+    {
+     "t": 1791545524.17,
+     "utt": "ओके, ओके।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9b05234dae5b",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.08
+    },
+    {
+     "t": 1791545538.99,
+     "utt": "अच्छा, ये कैसे काम करता है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "41f48cdb521e",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.14
+    },
+    {
+     "t": 1791545540.21,
+     "utt": "अच्छा, यह कैसे काम करता है? कितना चार्ज है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "63d8a060b763",
+     "from": "neutral",
+     "to": "interested",
+     "switched": true,
+     "dup": false,
+     "ms": 0.1
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 1.76,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545515.31,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.08
+      }
+     ]
+    },
+    {
+     "seller": "ओके ओके",
+     "signal": "neutral",
+     "asr": [
+      "ओके, ओके।"
+     ],
+     "reply_dd": "धन्यवाद। दरअसल, मैं आपको यह बताने के लिए call किया था",
+     "restarted": true,
+     "reply_onset_s": 2.21,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545524.17,
+       "utt": "ओके, ओके।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9b05234dae5b",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.08
+      }
+     ]
+    },
+    {
+     "seller": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा।",
+      "अच्छा, यह कैसे काम करता है? कितना चार्ज है?"
+     ],
+     "reply_dd": "तो मैं सोच रहा था कि हमारे एक executive आपके साथ एक छोटी सी meeting कर सकते हैं देखिए, इसके details के लिए हमारे executive आपसे एक short meeting में बात करेंगे और सब कुछ clear कर देंगे। क्या कल दोपहर दो बजे का time आपके लिए सही रहेगा?",
+     "restarted": false,
+     "reply_onset_s": 2.32,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545538.99,
+       "utt": "अच्छा, ये कैसे काम करता है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "41f48cdb521e",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.14
+      },
+      {
+       "t": 1791545540.21,
+       "utt": "अच्छा, यह कैसे काम करता है? कितना चार्ज है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "63d8a060b763",
+       "from": "neutral",
+       "to": "interested",
+       "switched": true,
+       "dup": false,
+       "ms": 0.1
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "gujarati",
+   "run": 0,
+   "iid": "20261009/95484c8d-17:02:46-8d28cd7c",
+   "switch_log": [
+    {
+     "t": 1791545575.38,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.12
+    },
+    {
+     "t": 1791545586.71,
+     "utt": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે.",
+     "lang": "gujarati",
+     "script": "gujr",
+     "h": "8faa8ebdd22b",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.08
+    },
+    {
+     "t": 1791545600.54,
+     "utt": "સારું, આગળ બોલો.",
+     "lang": "gujarati",
+     "script": "gujr",
+     "h": "b3a7bb431399",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.07
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 1.6,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545575.38,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.12
+      }
+     ]
+    },
+    {
+     "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+     "signal": "gujarati",
+     "asr": [
+      "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+     ],
+     "reply_dd": "અરે, ચોક્કસ. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી વાત કરું છું, તમારી પાસે અત્યારે બે મિનિટ time છે?",
+     "restarted": false,
+     "reply_onset_s": 2.04,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545586.71,
+       "utt": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે.",
+       "lang": "gujarati",
+       "script": "gujr",
+       "h": "8faa8ebdd22b",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.08
+      }
+     ]
+    },
+    {
+     "seller": "સારું, આગળ બોલો.",
+     "signal": "after_gu",
+     "asr": [
+      "સારું, આગળ બોલો."
+     ],
+     "reply_dd": "તમારા product માટે તમને વધારે buyer enquiries મળે એમાં help કરવા માટે, અમારા એક executive તમારી સાથે short meeting કરી શકે છે. શું તમે આ માટે time કાઢી શકશો?",
+     "restarted": false,
+     "reply_onset_s": 2.14,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545600.54,
+       "utt": "સારું, આગળ બોલો.",
+       "lang": "gujarati",
+       "script": "gujr",
+       "h": "b3a7bb431399",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.07
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "scen": "optout",
+   "run": 0,
+   "iid": "20261009/d79db5b7-17:03:48-3dd335a3",
+   "switch_log": [
+    {
+     "t": 1791545636.88,
+     "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "9a1992835da1",
+     "from": "neutral",
+     "to": "neutral",
+     "switched": false,
+     "dup": false,
+     "ms": 0.08
+    },
+    {
+     "t": 1791545648.26,
+     "utt": "मुझे कॉल मत करो, मेरा नंबर हटा दो।",
+     "lang": "hindi",
+     "script": "deva",
+     "h": "8fa40d038857",
+     "from": "neutral",
+     "to": "opt_out",
+     "switched": true,
+     "dup": false,
+     "ms": 0.06
+    }
+   ],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। मैं आपके business के लिए ज़्यादा buyer enquiries लाने में आपकी help करना चाहता हूँ।",
+     "restarted": true,
+     "reply_onset_s": 1.82,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545636.88,
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "9a1992835da1",
+       "from": "neutral",
+       "to": "neutral",
+       "switched": false,
+       "dup": false,
+       "ms": 0.08
+      }
+     ]
+    },
+    {
+     "seller": "मुझे कॉल मत करो, मेरा नंबर हटा दो",
+     "signal": "opt_out",
+     "asr": [
+      "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+     ],
+     "reply_dd": "आई एम सॉरी, मैं आपका नंबर अभी हटा देता हूँ। अब आपको हमारी तरफ से कोई call नहीं आएगा, थैंक यू।",
+     "restarted": false,
+     "reply_onset_s": 2.43,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": true
+     },
+     "jev": null,
+     "tool_rows": [
+      {
+       "t": 1791545648.26,
+       "utt": "मुझे कॉल मत करो, मेरा नंबर हटा दो।",
+       "lang": "hindi",
+       "script": "deva",
+       "h": "8fa40d038857",
+       "from": "neutral",
+       "to": "opt_out",
+       "switched": true,
+       "dup": false,
+       "ms": 0.06
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

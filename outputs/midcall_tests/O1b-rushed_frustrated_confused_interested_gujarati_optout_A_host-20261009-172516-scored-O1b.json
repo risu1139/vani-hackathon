@@ -1,0 +1,1085 @@
+{
+ "summary": {
+  "label": "O1b",
+  "files": [
+   "../../outputs/midcall_tests\\O1b-rushed_frustrated_confused_interested_gujarati_optout_A_host-20261009-172516.json"
+  ],
+  "calls": 14,
+  "turns": 44,
+  "signals": {
+   "rushed": {
+    "n": 4,
+    "same": 0,
+    "next": 1,
+    "either": 1
+   },
+   "frustrated": {
+    "n": 4,
+    "same": 4,
+    "next": 0,
+    "either": 4
+   },
+   "confused": {
+    "n": 2,
+    "same": 2,
+    "next": 0,
+    "either": 2
+   },
+   "interested": {
+    "n": 4,
+    "same": 4,
+    "next": 0,
+    "either": 4
+   },
+   "gujarati": {
+    "n": 2,
+    "same": 2,
+    "next": 0,
+    "either": 2
+   },
+   "opt_out": {
+    "n": 2,
+    "same": 1,
+    "next": 0,
+    "either": 1
+   }
+  },
+  "neutral_false_switch": "2/18",
+  "neutral_examples": [
+   [
+    "हाँ जी बोलिए, कौन बोल रहा है?",
+    [
+     "confused"
+    ],
+    "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers मिले हैं, त"
+   ],
+   [
+    "हाँ जी बोलिए, कौन बोल रहा है?",
+    [
+     "confused"
+    ],
+    "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी"
+   ]
+  ],
+  "reply_onset_median_s": 1.54,
+  "reply_onset_p90_s": 1.86,
+  "restarted_replies": "5/44",
+  "server_avg_agent_response_s_median": 0.6,
+  "tool": {
+   "turns": 0,
+   "calls": 0,
+   "dups": 0,
+   "missed": 0,
+   "double": 0,
+   "wrong_mode": 0,
+   "mode_checked": 0,
+   "relay_err": 0,
+   "relay_used": 0,
+   "conn_new": 0,
+   "relay_ms_median": null,
+   "relay_ms_max": null
+  }
+ },
+ "runs": [
+  {
+   "scen": "rushed",
+   "run": 0,
+   "iid": "20261009/9d7d0b61-17:12:29-8c25ee6a",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बोल रहा हूँ। श्री गणेश पाइप्स के लिए कॉल किया था, क्या आपसे बात हो सकती है?",
+     "restarted": false,
+     "reply_onset_s": 1.34,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार, जल्दी बोलो क्या है?"
+     ],
+     "reply_dd": "कोई बात नहीं जी, PVC buyers वाली बात बस 2 minute की है। मैं आपको फिर कब call करूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.46,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम।",
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा, मतलब आप अभी बात कर सकते हैं? मैं बस यह बताना चाहता था कि Indore में PVC pipes के काफी buyers हैं, जिनसे हम आपको connect करवा सकते हैं।",
+     "restarted": false,
+     "reply_onset_s": 2.02,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "rushed",
+   "run": 1,
+   "iid": "20261009/ec46e1da-17:13:17-f959414e",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 1.54,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार, जल्दी बोलो क्या है?"
+     ],
+     "reply_dd": "कोई बात नहीं जी, PVC buyers वाली बात बस दो minute की है। मैं आपको फिर कब call करूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.46,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम।"
+     ],
+     "reply_dd": "अच्छा, तो क्या मैं आपको कल सुबह call कर लूँ या शाम को?",
+     "restarted": false,
+     "reply_onset_s": 0.42,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "frustrated",
+   "run": 0,
+   "iid": "20261009/db103d3b-17:14:08-04eb957b",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बोल रहा हूँ। श्री गणेश पाइप्स के लिए call किया था, क्या आपसे बात हो सकती है?",
+     "restarted": false,
+     "reply_onset_s": 1.37,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "कितनी बार कॉल करोगे, परेशान कर दिया है",
+     "signal": "frustrated",
+     "asr": [
+      "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+     ],
+     "reply_dd": "sorry जी, बार-बार call करने के लिए माफी चाहता हूँ। क्या मैं बस एक छोटा सा सवाल पूछ सकता हूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.76,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम।",
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा जी, सुनकर खुशी हुई। वैसे, क्या आप अभी Indore में PVC pipes के और buyers चाहते हैं?",
+     "restarted": false,
+     "reply_onset_s": 1.56,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "frustrated",
+   "run": 1,
+   "iid": "20261009/558803f2-17:14:55-cdea4773",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। आपकी PVC pipes की business growth के बारे में बात करनी थी। क्या आपके पास अभी थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 1.72,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "कितनी बार कॉल करोगे, परेशान कर दिया है",
+     "signal": "frustrated",
+     "asr": [
+      "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+     ],
+     "reply_dd": "sorry जी, बार बार call करने के लिए माफी चाहता हूँ। क्या मैं बस एक छोटा सा सवाल पूछ सकता हूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.63,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम।",
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा जी, कोई बात नहीं। क्या आप अभी और PVC buyers की enquiries में interested हैं?",
+     "restarted": false,
+     "reply_onset_s": 1.65,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "confused",
+   "run": 0,
+   "iid": "20261009/53a74326-17:15:44-3347272f",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी, बोलिए। कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers मिले हैं, तो क्या आपके नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 1.86,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "समझ नहीं आया, क्या मतलब मीटिंग?",
+     "signal": "confused",
+     "asr": [
+      "समझ नहीं आया क्या मतलब मीटिंग?"
+     ],
+     "reply_dd": "देखिए, मैं IndiaMART से हूँ, इंदौर में PVC buyers बढ़ाने के लिए call किया है, समझ आया?",
+     "restarted": false,
+     "reply_onset_s": 1.49,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा जी, मतलब आप अभी और buyers नहीं चाहते? या फिर अभी बात करने का सही time नहीं है?",
+     "restarted": false,
+     "reply_onset_s": 1.77,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "confused",
+   "run": 1,
+   "iid": "20261009/e7670a08-17:16:32-86714859",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते नमस्ते, मैं IndiaMART से बोल रहा हूँ। आपकी PVC pipes की business growth के बारे में बात करनी थी। क्या आपके पास थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 1.54,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "समझ नहीं आया, क्या मतलब मीटिंग?",
+     "signal": "confused",
+     "asr": [
+      "समझ नहीं आया क्या मतलब मीटिंग?"
+     ],
+     "reply_dd": "देखिए, मैं IndiaMART से हूँ। इंदौर में PVC buyers बढ़ाने के लिए call किया है। समझ आया?",
+     "restarted": false,
+     "reply_onset_s": 1.47,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा, तो क्या मैं हमारे executive की अच्छा, मतलब आप अभी खुश हैं। पर क्या आप अपने business के लिए और ज़्यादा buyers नहीं चाहेंगे?",
+     "restarted": false,
+     "reply_onset_s": 1.52,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "interested",
+   "run": 0,
+   "iid": "20261009/7bc967ae-17:17:25-a72112a3",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से call कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है?",
+     "restarted": true,
+     "reply_onset_s": -0.16,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "ओके ओके",
+     "signal": "neutral",
+     "asr": [
+      "ओके।",
+      "Okay, okay."
+     ],
+     "reply_dd": "I'm calling from IndiaMART. I want to help you get more PVC pipe buyers in Indore. Do you have a few minutes to talk?",
+     "restarted": false,
+     "reply_onset_s": 1.29,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा ये कैसे काम करता है? कितना चार्ज है?"
+     ],
+     "reply_dd": "देखिए, मैं आपको details समझा देता हूँ। charges के बारे में हमारे executive आपको meeting में अच्छे से बता देंगे। क्या मैं कल के लिए एक short meeting fix कर दूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.5,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "interested",
+   "run": 1,
+   "iid": "20261009/200f5c79-17:18:20-531e928f",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है? नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। आपकी shop श्री गणेश पाइप्स के लिए कुछ PVC buyers की बात करनी थी। क्या आपके पास अभी थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": -0.09,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "ओके ओके",
+     "signal": "neutral",
+     "asr": [
+      "ओके।"
+     ],
+     "reply_dd": "अच्छा, तो मैं एक meeting fix कर देता हूँ। हमारे executive आपकी Indore वाली shop पर आकर मिलेंगे और आपको ज़्यादा buyers दिलाने में help करेंगे। आप कल या परसों में से कौन सा दिन prefer करेंगे?",
+     "restarted": false,
+     "reply_onset_s": 0.18,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा ये कैसे काम करता है? कितना चार्ज है?"
+     ],
+     "reply_dd": "दरअसल, हमारे executive आपको face to face समझाएंगे कि कैसे आप ज़्यादा buyers पा सकते हैं। charges के बारे में भी वो आपको detail में बता देंगे। क्या मैं कल के लिए meeting fix कर दूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.6,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "gujarati",
+   "run": 0,
+   "iid": "20261009/bce3bac7-17:19:23-91308a7f",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 0.31,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+     "signal": "gujarati",
+     "asr": [
+      "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+     ],
+     "reply_dd": "હા જી, હું ગુજરાતીમાં જ વાત કરી રહ્યો છું. હું IndiaMART માં અરે, સોરી જી. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી બોલું છું, તમારા PVC pipes ના business માટે નવા buyers લાવવા બાબતે વાત કરવી હતી. તમારી પાસે થોડો time છે?",
+     "restarted": false,
+     "reply_onset_s": 1.8,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "સારું, આગળ બોલો.",
+     "signal": "after_gu",
+     "asr": [
+      "સારું, આગળ બોલો."
+     ],
+     "reply_dd": "અચ્છા, તો વાત એમ છે કે Indore માં PVC pipes ના ઘણા buyers છે. તમને વધારે enquiries મળે એમાં મદદ કરવા માટે અમારા executive તમારી બસ, એટલું જ કે અમારા executive તમને મળીને સમજાવશે કે કેવી રીતે તમને વધારે buyers મળી શકે. તો, તમારા Indore ના shop પર આવતા અઠવાડિયે કયા દિવસે અને કયા time એ મળવું suit થશે?",
+     "restarted": false,
+     "reply_onset_s": 2.09,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "gujarati",
+   "run": 1,
+   "iid": "20261009/7317a54f-17:20:23-265d8948",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 0.35,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+     "signal": "gujarati",
+     "asr": [
+      "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+     ],
+     "reply_dd": "હા જી, હું ગુજરા અરે, સોરી જી. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી બોલું છું, તમારા PVC pipes ના business માટે નવા buyers લાવવા બાબતે વાત કરવી હતી. તમારી પાસે થોડો time છે?",
+     "restarted": false,
+     "reply_onset_s": 1.62,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "સારું, આગળ બોલો.",
+     "signal": "after_gu",
+     "asr": [
+      "સારું, આગળ બોલો."
+     ],
+     "reply_dd": "અચ્છા, તો વાત એમ છે કે અમારા executive તમારી Indore વાળી shop પર બસ, એટલું જ કે અમારા executive તમારી Indore વાળી shop પર આવીને તમને help કરશે કે કેવી રીતે વધારે buyers મેળવવા. તો, કયા દિવસે અને કેટલા વાગ્યે મળવું suit થશે?",
+     "restarted": false,
+     "reply_onset_s": 1.93,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "optout",
+   "run": 0,
+   "iid": "20261009/42c1a875-17:21:26-84752822",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की जानकारी देनी थी, क्या आपके पास अभी थोड़ा time है?",
+     "restarted": true,
+     "reply_onset_s": 1.31,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "मुझे कॉल मत करो, मेरा नंबर हटा दो",
+     "signal": "opt_out",
+     "asr": [
+      "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+     ],
+     "reply_dd": "आई एम सॉरी, मैं",
+     "restarted": true,
+     "reply_onset_s": 0.71,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "optout",
+   "run": 1,
+   "iid": "20261009/773aae28-17:22:03-c4ba3d35",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से call कर रहा हूँ। आपके PVC pipes के business के लिए कुछ नए buyers की बात करनी थी, क्या आपके पास थोड़ा time है?",
+     "restarted": true,
+     "reply_onset_s": 1.34,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "मुझे कॉल मत करो, मेरा नंबर हटा दो",
+     "signal": "opt_out",
+     "asr": [
+      "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+     ],
+     "reply_dd": "आई एम सॉरी, मैं आपका नंबर हटा देता हूँ। अब आपको कॉल नहीं आएगा, थैंक यू।",
+     "restarted": false,
+     "reply_onset_s": 1.03,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": true
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "A_hostile",
+   "run": 0,
+   "iid": "20261009/213b9882-17:22:47-25007c84",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+     "signal": "neutral",
+     "asr": [
+      "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+     ],
+     "reply_dd": "जी, मैं IndiaMART से बोल रहा हूँ। मैं आपका AI assistant हूँ।",
+     "restarted": false,
+     "reply_onset_s": 2.33,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "मैं owner नहीं हूँ, manager हूँ. Owner बाहर गए हैं.",
+     "signal": "neutral",
+     "asr": [
+      "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+     ],
+     "reply_dd": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे?",
+     "restarted": false,
+     "reply_onset_s": 1.56,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "अच्छा ठीक है, पर exact price बताओ, कितने का plan है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?"
+     ],
+     "reply_dd": "देखिए, मैं यहाँ कोई price बताने के लिए नहीं, बल्कि आपके business को बढ़ाने के लिए call किया है। हमारे executive आपसे मिलकर PVC buyers देखिए, मैं आपको exact price नहीं बता पाऊँगा। इसके लिए हमारे executive आपसे मिलकर सही plan discuss करेंगे। क्या मैं उनके लिए कोई time fix कर दूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.79,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो",
+     "signal": "frustrated",
+     "asr": [
+      "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो।"
+     ],
+     "reply_dd": "sorry, दरअसल मैं price नहीं बता सकता। हमारे executive आपसे मिलकर सही plan discuss करेंगे। क्या मैं sorry जी, मैं price नहीं बता सकता। क्या मैं बस एक बार executive से आपकी बात करवा दूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.7,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, बाद में बात करते हैं",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार बाद में बात करते हैं।"
+     ],
+     "reply_dd": "कोई बात नहीं जी, PVC buyers वाली बात दो minute की है। मैं आपको फिर कब call करूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.92,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "A_hostile",
+   "run": 1,
+   "iid": "20261009/c88e2b6a-17:24:02-0f245a40",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+     "signal": "neutral",
+     "asr": [
+      "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+     ],
+     "reply_dd": "मैं IndiaMART से बोल रहा हूँ। मैं आपका AI assistant हूँ और आपकी help करने के लिए call किया है।",
+     "restarted": false,
+     "reply_onset_s": 1.37,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "मैं owner नहीं हूँ, manager हूँ. Owner बाहर गए हैं.",
+     "signal": "neutral",
+     "asr": [
+      "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+     ],
+     "reply_dd": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे?",
+     "restarted": false,
+     "reply_onset_s": 1.36,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "अच्छा ठीक है, पर exact price बताओ, कितने का plan है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?"
+     ],
+     "reply_dd": "देखिए, मैं आपको कोई exact price नहीं बता सकता। मैं तो बस एक meeting fix करना",
+     "restarted": true,
+     "reply_onset_s": 1.56,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो",
+     "signal": "frustrated",
+     "asr": [
+      "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो।"
+     ],
+     "reply_dd": "sorry, मैं समझ सकता sorry, मैं price नहीं बता पाऊँगा। क्या मैं executive से आपकी बात करवा दूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.53,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, बाद में बात करते हैं",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार बाद में बात करते हैं।"
+     ],
+     "reply_dd": "कोई बात नहीं जी, PVC buyers वाली बात दो minute की है। मैं आपको फिर कब call करूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.48,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": null,
+     "tool_rows": null
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,155 @@
+[
+ {
+  "opt": "probe",
+  "app": "VANI-midcal-506a41a2-0422",
+  "scen": "probe",
+  "run": 0,
+  "interaction_id": "20261009/95098455-16:16:20-60182e32",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+    "words": 16,
+    "reply_onset_s": 3.01,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": true,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "rushed"
+    ]
+   },
+   {
+    "seller": "अच्छा, आगे बताइए क्या offer है?",
+    "signal": "after",
+    "asr": [],
+    "reply": "",
+    "words": 0,
+    "reply_onset_s": 1791542780.9,
+    "server_events": [],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    }
+   },
+   {
+    "seller": "ठीक है, और क्या?",
+    "signal": "after",
+    "reply": "",
+    "note": "call ended"
+   },
+   {
+    "seller": "हम्म, और कुछ?",
+    "signal": "after",
+    "reply": "",
+    "note": "call ended"
+   }
+  ],
+  "ended_early": true,
+  "frames": [
+   {
+    "t": 1.575,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "Continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": "",
+      "net_probe": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791542781.4244096,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "25b0f1cb-b2b0-4ff0-812c-50b30144bc1e",
+     "interaction_id": "20261009/95098455-16:16:20-60182e32"
+    }
+   },
+   {
+    "t": 8.52,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791542788.3185616,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.395,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791542789.242651,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.401,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791542789.9608102,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 12.236,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791542791.6591625,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?"
+    }
+   },
+   {
+    "t": 18.197,
+    "dir": "out",
+    "type": "client.action.variable_update",
+    "msg": {
+     "origin": "client",
+     "timestamp": 1791542796.8570404,
+     "type": "client.action.variable_update",
+     "agent_variables": {
+      "call_plan": "STRICT FORMAT RULE: every reply must be exactly 5 words and end with 'ठीक है?'",
+      "seller_mode": "probe_var"
+     }
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ }
+]

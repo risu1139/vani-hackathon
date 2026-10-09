@@ -1,0 +1,147 @@
+{
+ "interaction_id": "20261009/4f468dc1-16:19:10-06436da4",
+ "during": [
+  {
+   "t": 1791542955.68,
+   "transcript_status": 200,
+   "transcript_ms": 599,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[]}",
+   "listed": false
+  },
+  {
+   "t": 1791542957.11,
+   "transcript_status": 200,
+   "transcript_ms": 513,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[]}",
+   "listed": false
+  },
+  {
+   "t": 1791542958.43,
+   "transcript_status": 200,
+   "transcript_ms": 521,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[]}",
+   "listed": false
+  },
+  {
+   "t": 1791542959.7,
+   "transcript_status": 200,
+   "transcript_ms": 437,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[]}",
+   "listed": false
+  },
+  {
+   "t": 1791542961.06,
+   "transcript_status": 200,
+   "transcript_ms": 530,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[]}",
+   "listed": false
+  },
+  {
+   "t": 1791542962.48,
+   "transcript_status": 200,
+   "transcript_ms": 530,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[]}",
+   "listed": false
+  },
+  {
+   "t": 1791542964.03,
+   "transcript_status": 200,
+   "transcript_ms": 573,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[]}",
+   "listed": false
+  },
+  {
+   "t": 1791542965.49,
+   "transcript_status": 200,
+   "transcript_ms": 526,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[]}",
+   "listed": false
+  },
+  {
+   "t": 1791542966.84,
+   "transcript_status": 200,
+   "transcript_ms": 471,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[{\"turn_id\":1,\"role\":\"assistant\",\"content\":\"नमस्ते, मैं सर्वम से शुभ बोल रहा हूँ, बताइए आज मैं आपकी क्या मदद कर सकता हूँ?\",\"language_",
+   "listed": false
+  },
+  {
+   "t": 1791542968.15,
+   "transcript_status": 200,
+   "transcript_ms": 495,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[{\"turn_id\":1,\"role\":\"assistant\",\"content\":\"नमस्ते, मैं सर्वम से शुभ बोल रहा हूँ, बताइए आज मैं आपकी क्या मदद कर सकता हूँ?\",\"language_",
+   "listed": false
+  },
+  {
+   "t": 1791542969.57,
+   "transcript_status": 200,
+   "transcript_ms": 492,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[{\"turn_id\":1,\"role\":\"assistant\",\"content\":\"नमस्ते, मैं सर्वम से शुभ बोल रहा हूँ, बताइए आज मैं आपकी क्या मदद कर सकता हूँ?\",\"language_",
+   "listed": false
+  },
+  {
+   "t": 1791542971.01,
+   "transcript_status": 200,
+   "transcript_ms": 537,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[{\"turn_id\":1,\"role\":\"assistant\",\"content\":\"नमस्ते, मैं सर्वम से शुभ बोल रहा हूँ, बताइए आज मैं आपकी क्या मदद कर सकता हूँ?\",\"language_",
+   "listed": false
+  },
+  {
+   "t": 1791542973.19,
+   "transcript_status": 200,
+   "transcript_ms": 441,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[{\"turn_id\":1,\"role\":\"assistant\",\"content\":\"नमस्ते, मैं सर्वम से शुभ बोल रहा हूँ, बताइए आज मैं आपकी क्या मदद कर सकता हूँ?\",\"language_",
+   "listed": false
+  },
+  {
+   "t": 1791542974.42,
+   "transcript_status": 200,
+   "transcript_ms": 421,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[{\"turn_id\":1,\"role\":\"assistant\",\"content\":\"नमस्ते, मैं सर्वम से शुभ बोल रहा हूँ, बताइए आज मैं आपकी क्या मदद कर सकता हूँ?\",\"language_",
+   "listed": false
+  },
+  {
+   "t": 1791542976.06,
+   "transcript_status": 200,
+   "transcript_ms": 764,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[{\"turn_id\":1,\"role\":\"assistant\",\"content\":\"नमस्ते, मैं सर्वम से शुभ बोल रहा हूँ, बताइए आज मैं आपकी क्या मदद कर सकता हूँ?\",\"language_",
+   "listed": false
+  },
+  {
+   "t": 1791542977.48,
+   "transcript_status": 200,
+   "transcript_ms": 452,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[{\"turn_id\":1,\"role\":\"assistant\",\"content\":\"नमस्ते, मैं सर्वम से शुभ बोल रहा हूँ, बताइए आज मैं आपकी क्या मदद कर सकता हूँ?\",\"language_",
+   "listed": false
+  }
+ ],
+ "after_end": [
+  {
+   "t": 1791542981.83,
+   "transcript_status": 200,
+   "transcript_ms": 441,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[{\"turn_id\":1,\"role\":\"assistant\",\"content\":\"नमस्ते, मैं सर्वम से शुभ बोल रहा हूँ, बताइए आज मैं आपकी क्या मदद कर सकता हूँ?\",\"language_",
+   "listed": false
+  },
+  {
+   "t": 1791542985.84,
+   "transcript_status": 200,
+   "transcript_ms": 460,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[{\"turn_id\":1,\"role\":\"assistant\",\"content\":\"नमस्ते, मैं सर्वम से शुभ बोल रहा हूँ, बताइए आज मैं आपकी क्या मदद कर सकता हूँ?\",\"language_",
+   "listed": false
+  },
+  {
+   "t": 1791542989.99,
+   "transcript_status": 200,
+   "transcript_ms": 479,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[{\"turn_id\":1,\"role\":\"assistant\",\"content\":\"नमस्ते, मैं सर्वम से शुभ बोल रहा हूँ, बताइए आज मैं आपकी क्या मदद कर सकता हूँ?\",\"language_",
+   "listed": false
+  },
+  {
+   "t": 1791542994.23,
+   "transcript_status": 200,
+   "transcript_ms": 470,
+   "transcript_body": "{\"interaction_id\":\"20261009/4f468dc1-16:19:10-06436da4\",\"messages\":[{\"turn_id\":1,\"role\":\"assistant\",\"content\":\"नमस्ते, मैं सर्वम से शुभ बोल रहा हूँ, बताइए आज मैं आपकी क्या मदद कर सकता हूँ?\",\"language_",
+   "listed": false
+  }
+ ]
+}

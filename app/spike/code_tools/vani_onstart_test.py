@@ -6,7 +6,16 @@ OnStart: set the voice, pace, pitch and opening per call from agent variables
 ReadSellerSignal: an in-Sarvam switcher. It classifies the seller's latest utterance with a keyword list
 (romanised + Devanagari, NFD), sets seller_mode and persona_directive, and appends a row to the switch_log
 variable. No external host is needed.
+
+2026-10-09 hardening (T4):
+- switch_log keeps the last LOG_ROWS rows as a valid JSON list (the old `json.dumps(log)[-4000:]` cut the
+  JSON in half once the log grew past 4000 chars).
+- Per-turn dedupe: the hash of the normalised utterance is kept in an internal variable; a repeat call with
+  the same utterance returns "no change" and is logged with dup=true (so double calls stay measurable).
+- Added opt_out and interested cues, and the "warna phone rakh do" frustrated cue (lexicon gap seen earlier).
+- Script of the utterance (deva / gujr / taml / latn) is logged, so language switches show in the log.
 """
+import hashlib
 import json
 import time
 import unicodedata
@@ -16,10 +25,19 @@ from sarvam_conv_ai_sdk import (SarvamOnStartTool, SarvamOnStartToolContext, Sar
                                 SarvamToolOutput)
 from sarvam_conv_ai_sdk.tool import SpeechSettings, TextToSpeechConfig
 
+LOG_ROWS = 25
+
 
 def _var(context, name):
     try:
         return context.get_agent_variable(name)
+    except Exception:
+        return None
+
+
+def _ivar(context, name):
+    try:
+        return context.get_internal_variable(name)
     except Exception:
         return None
 
@@ -50,14 +68,18 @@ class OnStart(SarvamOnStartTool):
 
 
 CUES = [
+    ("opt_out", ("call mat karo", "call mat karna", "phone mat karo", "dobara call mat", "number hata", "do not call",
+                 "don't call", "कॉल मत करो", "call मत करो", "कॉल मत करना", "फोन मत करो", "दोबारा कॉल मत", "नंबर हटा")),
+    ("frustrated", ("kitni baar", "baar baar", "pareshan", "band karo", "disturb", "faltu", "warna phone", "phone rakh",
+                    "कितनी बार", "बार बार", "परेशान", "बंद करो", "फालतू", "फ़ालतू", "वरना फोन", "फोन रख")),
     ("rushed", ("busy", "jaldi", "time nahi", "baad me", "abhi nahi", "driving", "meeting me",
                 "बिज़ी", "बिजी", "जल्दी", "टाइम नहीं", "बाद में", "अभी नहीं", "ड्राइव", "मीटिंग में")),
-    ("frustrated", ("kitni baar", "baar baar", "pareshan", "mat karo", "band karo", "disturb", "faltu",
-                    "कितनी बार", "बार बार", "परेशान", "मत करो", "बंद करो", "फालतू", "फ़ालतू")),
     ("confused", ("samajh nahi", "samjha nahi", "kya matlab", "kya bol",
                   "समझ नहीं", "समझा नहीं", "क्या मतलब", "क्या बोल")),
     ("bot_question", ("bot", "robot", "machine", "recorded", "insaan",
                       "बॉट", "रोबोट", "मशीन", "रिकॉर्डेड", "इंसान")),
+    ("interested", ("kitna charge", "kitne ka", "kab aayenge", "details bhej", "kaise milenge", "kaise aayenge",
+                    "कितना चार्ज", "कितने का", "कब आएंगे", "डिटेल्स भेज", "कैसे मिलेंगे", "कैसे आएंगे", "कैसे मिलेंगे")),
 ]
 DIRECTIVES = {
     "neutral": "Continue normally.",
@@ -65,6 +87,8 @@ DIRECTIVES = {
     "frustrated": "Seller is irritated. Apologise briefly, do not repeat the pitch, ask one yes/no question.",
     "confused": "Seller is confused. Slow down: re-explain in very simple Hindi, one idea only, written as very short phrases separated by commas (3-4 words per phrase), then check understanding.",
     "bot_question": "Seller asked if you are a bot. Honestly confirm you are IndiaMART's AI assistant, then continue.",
+    "interested": "Seller is interested. Answer briefly and move straight to fixing a meeting day and time.",
+    "opt_out": "Seller does not want calls. Apologise, confirm they will not be called again, thank them and end the call. Do not pitch.",
 }
 
 
@@ -80,6 +104,34 @@ def _classify(text):
     return "neutral"
 
 
+def _script(text):
+    counts = {"deva": 0, "gujr": 0, "taml": 0, "latn": 0}
+    for ch in text or "":
+        o = ord(ch)
+        if 0x0900 <= o <= 0x097F:
+            counts["deva"] += 1
+        elif 0x0A80 <= o <= 0x0AFF:
+            counts["gujr"] += 1
+        elif 0x0B80 <= o <= 0x0BFF:
+            counts["taml"] += 1
+        elif ch.isascii() and ch.isalpha():
+            counts["latn"] += 1
+    best = max(counts, key=counts.get)
+    return best if counts[best] else "none"
+
+
+def _append_log(context, row):
+    try:
+        log = json.loads(_var(context, "switch_log") or "[]")
+        if not isinstance(log, list):
+            log = []
+    except Exception:
+        log = []
+    log.append(row)
+    log = log[-LOG_ROWS:]
+    context.set_agent_variable("switch_log", json.dumps(log, ensure_ascii=False))
+
+
 class ReadSellerSignal(SarvamTool):
     """Reads the seller's latest words and returns how to adapt the conversation (seller_mode and a short persona_directive). Call this tool after EVERY seller turn, before you reply, passing the seller's last utterance exactly as spoken."""
 
@@ -89,17 +141,23 @@ class ReadSellerSignal(SarvamTool):
     async def run(self, context: SarvamToolContext) -> SarvamToolOutput:
         t0 = time.perf_counter()
         prev = _var(context, "seller_mode") or "neutral"
+        h = hashlib.sha256(_norm(self.seller_utterance).strip().encode("utf-8")).hexdigest()[:12]
+        row = {"t": round(time.time(), 2), "utt": self.seller_utterance[:80], "lang": self.language,
+               "script": _script(self.seller_utterance), "h": h}
+        if h == _ivar(context, "last_utt_hash"):
+            row.update({"from": prev, "to": prev, "switched": False, "dup": True,
+                        "ms": round((time.perf_counter() - t0) * 1000, 2)})
+            _append_log(context, row)
+            return SarvamToolOutput(message_to_llm=f"No change. Seller mode: {prev} | Directive: {_var(context, 'persona_directive')}",
+                                    context=context)
+        context.set_internal_variable("last_utt_hash", h)
         mode = _classify(self.seller_utterance)
         directive = DIRECTIVES[mode]
         context.set_agent_variable("seller_mode", mode)
         context.set_agent_variable("persona_directive", directive)
-        try:
-            log = json.loads(_var(context, "switch_log") or "[]")
-        except Exception:
-            log = []
-        log.append({"t": round(time.time(), 2), "utt": self.seller_utterance[:120], "lang": self.language,
-                    "from": prev, "to": mode, "switched": mode != prev, "ms": round((time.perf_counter() - t0) * 1000, 2)})
-        context.set_agent_variable("switch_log", json.dumps(log, ensure_ascii=False)[-4000:])
+        row.update({"from": prev, "to": mode, "switched": mode != prev, "dup": False,
+                    "ms": round((time.perf_counter() - t0) * 1000, 2)})
+        _append_log(context, row)
         return SarvamToolOutput(
             message_to_llm=f"Seller mode: {mode} | Directive for your next reply: {directive}",
             context=context,

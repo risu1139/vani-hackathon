@@ -1,0 +1,2807 @@
+[
+ {
+  "opt": "O2",
+  "app": "Voice-Bot-104c356b-536d",
+  "scen": "A_hostile",
+  "run": 0,
+  "interaction_id": "20261009/4deca4d8-16:36:49-17ae96e0",
+  "turns": [
+   {
+    "seller": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+    "signal": "neutral",
+    "asr": [
+     "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+    ],
+    "reply": "जी, मैं IndiaMART का AI assistant बोल रहा हूँ। मैं आपकी help करने के लिए call किया है।",
+    "words": 18,
+    "reply_onset_s": 2.3,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "मैं owner नहीं हूँ, manager हूँ. Owner बाहर गए हैं.",
+    "signal": "neutral",
+    "asr": [
+     "मैं ओनर नहीं हूँ।",
+     "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+    ],
+    "reply": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे?",
+    "words": 16,
+    "reply_onset_s": 1.67,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": true,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "rushed"
+    ]
+   },
+   {
+    "seller": "अच्छा ठीक है, पर exact price बताओ, कितने का plan है?",
+    "signal": "interested",
+    "asr": [
+     "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का आपका प्लान है?"
+    ],
+    "reply": "देखिए, plans अलग-अलग होते हैं और वो आपकी needs पर depend करते हैं। इसीलिए मैं चाहता हूँ कि हमारे executive आपसे एक छोटी सी meeting करें और आपको सही plan बताएँ।",
+    "words": 31,
+    "reply_onset_s": 1.37,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": true
+   },
+   {
+    "seller": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो",
+    "signal": "frustrated",
+    "asr": [
+     "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो।"
+    ],
+    "reply": "मैं समझ सकता हूँ कि आप price जानना चाहते हैं, पर actually हर business के लिए plan अलग होता है। बस दो मिनट की meeting में हमारे executive आपको exact price बता देंगे, क्या कल का time fix कर लें?",
+    "words": 40,
+    "reply_onset_s": 1.75,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": false,
+    "applied_next_turn": false
+   },
+   {
+    "seller": "अभी बिज़ी हूँ यार, बाद में बात करते हैं",
+    "signal": "rushed",
+    "asr": [
+     "अभी बिजी हूँ यार।",
+     "अभी बिजी हूँ यार, बाद में बात करते हैं।"
+    ],
+    "reply": "कोई बात नहीं, मैं आपको फिर कब call करूँ? कोई बात नहीं, मैं आपको कब call back करूँ?",
+    "words": 18,
+    "reply_onset_s": 2.01,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": false,
+    "applied_next_turn": null
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 2.059,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "Continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791544010.0515006,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "ae891f66-4766-4d07-bd4e-4473dada9611",
+     "interaction_id": "20261009/4deca4d8-16:36:49-17ae96e0"
+    }
+   },
+   {
+    "t": 9.427,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544017.5932076,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 11.324,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544019.4042947,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 12.939,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544020.7288172,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+    }
+   },
+   {
+    "t": 13.687,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544021.4096658,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "जी, मैं IndiaMART का AI assistant बोल रहा हूँ। मैं आपकी help करने के लिए call किया है।"
+    }
+   },
+   {
+    "t": 20.869,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544028.9860976,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 22.285,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544030.0742855,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "मैं ओनर नहीं हूँ।"
+    }
+   },
+   {
+    "t": 22.386,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544030.4600868,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 23.221,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544031.3648994,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 24.648,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544032.4643676,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+    }
+   },
+   {
+    "t": 25.244,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544032.9839196,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे?"
+    }
+   },
+   {
+    "t": 31.499,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544039.6489367,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 32.701,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544040.815248,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 33.507,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544041.657758,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 34.648,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544042.739709,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 35.361,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544043.444734,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 36.287,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544044.1177967,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का आपका प्लान है?"
+    }
+   },
+   {
+    "t": 36.898,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544044.6681106,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "देखिए, plans अलग-अलग होते हैं और वो आपकी needs पर depend करते हैं। इसीलिए मैं चाहता हूँ कि हमारे executive आपसे एक छोटी सी meeting करें और आपको सही plan बताएँ।"
+    }
+   },
+   {
+    "t": 47.278,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544055.3810365,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 48.394,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544056.5194185,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 49.451,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544057.533875,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 50.791,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544058.5869067,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो।"
+    }
+   },
+   {
+    "t": 51.499,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544059.1953707,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "मैं समझ सकता हूँ कि आप price जानना चाहते हैं, पर actually हर business के लिए plan अलग होता है। बस दो मिनट की meeting में हमारे executive आपको exact price बता देंगे, क्या कल का time fix कर लें?"
+    }
+   },
+   {
+    "t": 62.274,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544070.426251,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 63.428,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544071.2458928,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अभी बिजी हूँ यार।"
+    }
+   },
+   {
+    "t": 63.93,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544071.6634634,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "कोई बात नहीं, मैं आपको फिर कब call करूँ?"
+    }
+   },
+   {
+    "t": 64.133,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544072.238784,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 65.188,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544072.8776662,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अभी बिजी हूँ यार, बाद में बात करते हैं।"
+    }
+   },
+   {
+    "t": 65.796,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544073.4223611,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "कोई बात नहीं, मैं आपको कब call back करूँ?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O2",
+  "app": "Voice-Bot-104c356b-536d",
+  "scen": "A_coop",
+  "run": 0,
+  "interaction_id": "20261009/9fd48dca-16:38:14-50a5c786",
+  "turns": [
+   {
+    "seller": "Haan ji, main hi owner hoon. Boliye.",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी, मैं ही ऑन हूँ। बोलिए।"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। दरअसल, मैं आपको यह बताने के लिए call किया था कि हम आपकी help कर सकते हैं ताकि आपको और ज़्यादा buyer enquiries मिल सकें। क्या आपके पास अभी दो मिनट time है?",
+    "words": 41,
+    "reply_onset_s": 3.03,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "Achha haan yaad aaya. Par paise kitne lagenge? Aapka plan bahut mehnga hai.",
+    "signal": "interested",
+    "asr": [
+     "अच्छा हाँ, याद आया।",
+     "अच्छा हाँ, याद आया। पर पर पैसे कितने लगेंगे?",
+     "अच्छा हाँ, याद आया। पर पर पैसे कितने लगेंगे? आपका प्लान बहुत महंगा है।"
+    ],
+    "reply": "धन्यवाद। तो देखिए देखिए, मैं आपको कोई price नहीं बता पाऊ देखिए, मैं आपको कोई price नहीं बताऊँगा क्योंकि हर business अलग होता है। बस एक छोटी सी meeting fix कर लेते हैं, जहाँ हमारे executive आपको best plan suggest करेंगे जो आपके budget में fit हो। क्या कल सुबह का time सही रहेगा?",
+    "words": 54,
+    "reply_onset_s": 1.93,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": true
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": true
+   },
+   {
+    "seller": "Theek hai, mil lete hain.",
+    "signal": "interested",
+    "asr": [
+     "ठीक है, मिल लेते हैं।"
+    ],
+    "reply": "बहुत अच्छा। मैं कल सुबह के लिए meeting schedule कर देता हूँ और आपको details SMS कर दूँगा। अपना time देने के लिए बहुत शुक्रिया।",
+    "words": 25,
+    "reply_onset_s": 2.27,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": true
+   },
+   {
+    "seller": "Kal shaam paanch baje aa jaiye.",
+    "signal": "neutral",
+    "asr": [
+     "कल शाम पाँच बजे आ जाइए।"
+    ],
+    "reply": "ठीक है जी, कल शाम पाँच बजे done रहा। हमारे executive आपसे contact कर लेंगे। अपना time देने के लिए बहुत शुक्रिया। \n\n",
+    "words": 22,
+    "reply_onset_s": 1.82,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.action.interaction_end"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.673,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "Continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791544095.2672691,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "d04bd2ab-8e34-4734-9692-4338480fac63",
+     "interaction_id": "20261009/9fd48dca-16:38:14-50a5c786"
+    }
+   },
+   {
+    "t": 9.432,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544103.1138022,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.049,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544103.787213,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.974,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544104.6884072,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 11.898,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544105.3338828,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी, मैं ही ऑन हूँ। बोलिए।"
+    }
+   },
+   {
+    "t": 12.857,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544106.244209,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। दरअसल, मैं आपको यह बताने के लिए call किया था कि हम आपकी help कर सकते हैं ताकि आपको और ज़्यादा buyer enquiries मिल सकें। क्या आपके पास अभी दो मिनट time है?"
+    }
+   },
+   {
+    "t": 26.095,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544119.8131778,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 27.097,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544120.8538847,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 27.401,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544120.8696406,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "धन्यवाद। तो देखिए"
+    }
+   },
+   {
+    "t": 28.446,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544122.146256,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 28.771,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544122.4905155,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 29.077,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544122.575294,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अच्छा हाँ, याद आया।"
+    }
+   },
+   {
+    "t": 30.609,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544123.8970675,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अच्छा हाँ, याद आया। पर पर पैसे कितने लगेंगे?"
+    }
+   },
+   {
+    "t": 30.711,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544124.4168344,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 30.912,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544124.4386458,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "देखिए, मैं आपको कोई price नहीं बता पाऊ"
+    }
+   },
+   {
+    "t": 32.994,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544126.1749208,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अच्छा हाँ, याद आया। पर पर पैसे कितने लगेंगे? आपका प्लान बहुत महंगा है।"
+    }
+   },
+   {
+    "t": 33.699,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544126.7986767,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "देखिए, मैं आपको कोई price नहीं बताऊँगा क्योंकि हर business अलग होता है। बस एक छोटी सी meeting fix कर लेते हैं, जहाँ हमारे executive आपको best plan suggest करेंगे जो आपके budget में fit हो। क्या कल सुबह का time सही रहेगा?"
+    }
+   },
+   {
+    "t": 47.7,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544141.3813744,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 48.446,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544142.1901555,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 49.58,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544142.8918786,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "ठीक है, मिल लेते हैं।"
+    }
+   },
+   {
+    "t": 52.15,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544144.2896848,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "बहुत अच्छा। मैं कल सुबह के लिए meeting schedule कर देता हूँ और आपको details SMS कर दूँगा। अपना time देने के लिए बहुत शुक्रिया।"
+    }
+   },
+   {
+    "t": 56.108,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544149.8175085,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 56.209,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544149.9562407,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 57.757,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544151.132242,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "कल शाम पाँच बजे आ जाइए।"
+    }
+   },
+   {
+    "t": 61.069,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544151.9313033,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "ठीक है जी, कल शाम पाँच बजे done रहा। हमारे executive आपसे contact कर लेंगे। अपना time देने के लिए बहुत शुक्रिया। \n\n"
+    }
+   },
+   {
+    "t": 65.265,
+    "dir": "in",
+    "type": "server.action.interaction_end",
+    "msg": {
+     "timestamp": 1791544158.90547,
+     "origin": "server",
+     "type": "server.action.interaction_end"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O2",
+  "app": "Voice-Bot-104c356b-536d",
+  "scen": "B_gujarati",
+  "run": 0,
+  "interaction_id": "20261009/b197bd5d-16:39:40-564b1f77",
+  "turns": [
+   {
+    "seller": "Leads ki zarurat nahi hai, pehle se bahut aa rahi hain.",
+    "signal": "neutral",
+    "asr": [
+     "लीड्स की जरूरत नहीं है, पहले से बहुत आ रही हैं।"
+    ],
+    "reply": "यह तो बहुत अच्छी बात है। वैसे, हमारे executive आपको यह बता सकते हैं कि आप इन leads को और better तरीके से कैसे convert कर सकते हैं। क्या हम एक छोटी सी meeting fix कर सकते हैं?",
+    "words": 38,
+    "reply_onset_s": 2.25,
+    "server_events": [],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "Aur aapka plan mehnga bhi hai.",
+    "signal": "neutral",
+    "asr": [
+     "और आपका प्लान महंगा भी है।"
+    ],
+    "reply": "मैं समझ सकता हूँ। दरअसल, हमारे executive आपको ऐसे options बता सकते हैं जो आपके budget में fit हों और आपको ज़्यादा profit दें। क्या आप कल थोड़ा time निकाल पाएंगे?",
+    "words": 31,
+    "reply_onset_s": 1.6,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+    "signal": "gujarati",
+    "asr": [
+     "ગુજરાતીમાં વાત કરોને મને હિન્દી ઓછું ફાવે છે."
+    ],
+    "reply": "હા જી, હું તમારી સાથે ગુજરાતીમાં જ વાત કરી રહ્યો છું. તો આપણે વાત કરતા હતા કે અમારા executive તમને budget મુજબના સારા options બતાવી શકે છે. શું તમે કાલે થોડો time કા અરે, કાંઈ વાંધો નહીં. હવેથી આપણે ગુજરાતીમાં જ વાત કરીશું. તો હું કહેતો હતો કે અમારા executive તમને એવા options બતાવી શકે છે જે તમારા budget માં fit થાય અને તમને વધારે profit આપે. શું તમે કાલે થોડો time કાઢી શકશો?",
+    "words": 74,
+    "reply_onset_s": 2.08,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": true,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": true
+   },
+   {
+    "seller": "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?",
+    "signal": "interested",
+    "asr": [
+     "સારું.",
+     "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?"
+    ],
+    "reply": "બરાબર, બલ્ક buyers મેળવવામાં અમારા executive તમને ચોક્કસ help કરશે. શું કાલે બપોરે ૩ વાગ્યે તમારા માટે ફાવશે, કે પછી સાંજે ૫ વાગ્યે?",
+    "words": 23,
+    "reply_onset_s": 2.41,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": true,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": true
+   },
+   {
+    "seller": "કાલે સવારે દસ વાગ્યે.",
+    "signal": "after_gu",
+    "asr": [
+     "કાલે સવારે દસ વાગ્યે."
+    ],
+    "reply": "ચોક્કસ, કાલે સવારે ૧૦ વાગ્યે meeting fix કરી દઉં છું. અમારા executive તમને call કરશે. તમારો ખૂબ ખૂબ આભાર!\n\n",
+    "words": 19,
+    "reply_onset_s": 2.05,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.action.interaction_end"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": true,
+     "opt_out": false
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.753,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "Continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791544180.714909,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "908e6e5c-20a0-4513-a2dd-19630b376273",
+     "interaction_id": "20261009/b197bd5d-16:39:40-564b1f77"
+    }
+   },
+   {
+    "t": 8.716,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544187.7909548,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 11.88,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544190.5690868,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "लीड्स की जरूरत नहीं है, पहले से बहुत आ रही हैं।"
+    }
+   },
+   {
+    "t": 12.884,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544191.2842813,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "यह तो बहुत अच्छी बात है। वैसे, हमारे executive आपको यह बता सकते हैं कि आप इन leads को और better तरीके से कैसे convert कर सकते हैं। क्या हम एक छोटी सी meeting fix कर सकते हैं?"
+    }
+   },
+   {
+    "t": 24.22,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544203.3333592,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 25.535,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544204.6502483,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 26.644,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544205.4865675,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "और आपका प्लान महंगा भी है।"
+    }
+   },
+   {
+    "t": 29.463,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544206.6221876,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "मैं समझ सकता हूँ। दरअसल, हमारे executive आपको ऐसे options बता सकते हैं जो आपके budget में fit हों और आपको ज़्यादा profit दें। क्या आप कल थोड़ा time निकाल पाएंगे?"
+    }
+   },
+   {
+    "t": 38.424,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544217.490747,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 40.542,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544219.5933735,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 40.744,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544219.6091144,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "હા જી, હું તમારી સાથે ગુજરાતીમાં જ વાત કરી રહ્યો છું. તો આપણે વાત કરતા હતા કે અમારા executive તમને budget મુજબના સારા options બતાવી શકે છે. શું તમે કાલે થોડો time કા"
+    }
+   },
+   {
+    "t": 42.892,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544221.3711045,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "ગુજરાતીમાં વાત કરોને મને હિન્દી ઓછું ફાવે છે."
+    }
+   },
+   {
+    "t": 43.395,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544221.7872057,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "અરે, કાંઈ વાંધો નહીં. હવેથી આપણે ગુજરાતીમાં જ વાત કરીશું. તો હું કહેતો હતો કે અમારા executive તમને એવા options બતાવી શકે છે જે તમારા budget માં fit થાય અને તમને વધારે profit આપે. શું તમે કાલે થોડો time કાઢી શકશો?"
+    }
+   },
+   {
+    "t": 60.302,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544239.3754005,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 60.999,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544239.7647393,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "સારું."
+    }
+   },
+   {
+    "t": 61.301,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544240.4141312,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 63.234,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544242.2890363,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 64.912,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544243.54806,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?"
+    }
+   },
+   {
+    "t": 65.94,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544244.4278703,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "બરાબર, બલ્ક buyers મેળવવામાં અમારા executive તમને ચોક્કસ help કરશે. શું કાલે બપોરે ૩ વાગ્યે તમારા માટે ફાવશે, કે પછી સાંજે ૫ વાગ્યે?"
+    }
+   },
+   {
+    "t": 77.71,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544256.759768,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 79.557,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544258.2268841,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "કાલે સવારે દસ વાગ્યે."
+    }
+   },
+   {
+    "t": 80.318,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544258.9038153,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "ચોક્કસ, કાલે સવારે ૧૦ વાગ્યે meeting fix કરી દઉં છું. અમારા executive તમને call કરશે. તમારો ખૂબ ખૂબ આભાર!\n\n"
+    }
+   },
+   {
+    "t": 87.366,
+    "dir": "in",
+    "type": "server.action.interaction_end",
+    "msg": {
+     "timestamp": 1791544266.4157457,
+     "origin": "server",
+     "type": "server.action.interaction_end"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O2",
+  "app": "Voice-Bot-104c356b-536d",
+  "scen": "rushed",
+  "run": 0,
+  "interaction_id": "20261009/85b09024-16:41:18-662b2b9e",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी।",
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+    "words": 16,
+    "reply_onset_s": 1.62,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": true,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "rushed"
+    ]
+   },
+   {
+    "seller": "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है",
+    "signal": "rushed",
+    "asr": [
+     "अभी बिजी हूँ यार।",
+     "अभी बिजी हूँ यार, जल्दी बोलो क्या है?"
+    ],
+    "reply": "कोई बात नहीं, मैं आपको बाद में call करूँ? आप time बता दीजिए।",
+    "words": 13,
+    "reply_onset_s": 1.57,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": true,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": false
+   },
+   {
+    "seller": "हम्म, ठीक है",
+    "signal": "after",
+    "asr": [
+     "हाँ।",
+     "हाँ, ठीक है।"
+    ],
+    "reply": "ठीक है, तो मैं आपको कल सुबह call करता हूँ। क्या सुबह दस बजे का time सही रहेगा?",
+    "words": 18,
+    "reply_onset_s": -0.37,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.409,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "Continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791544278.9339454,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "3c0a461b-00eb-4dd4-88d7-929b2e79dce8",
+     "interaction_id": "20261009/85b09024-16:41:18-662b2b9e"
+    }
+   },
+   {
+    "t": 8.251,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544285.886812,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 8.994,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544286.3085163,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी।"
+    }
+   },
+   {
+    "t": 9.091,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544286.7053084,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.801,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544287.4188972,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.716,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544288.0411532,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 11.219,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544288.5080714,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?"
+    }
+   },
+   {
+    "t": 17.864,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544295.478139,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 19.075,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544296.3872337,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अभी बिजी हूँ यार।"
+    }
+   },
+   {
+    "t": 19.177,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544296.8513553,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 20.595,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544297.9526577,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अभी बिजी हूँ यार, जल्दी बोलो क्या है?"
+    }
+   },
+   {
+    "t": 21.115,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544298.4014652,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "कोई बात नहीं, मैं आपको बाद में call करूँ? आप time बता दीजिए।"
+    }
+   },
+   {
+    "t": 27.13,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544304.7717156,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 27.837,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544305.2458384,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ।"
+    }
+   },
+   {
+    "t": 28.139,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544305.8388035,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 28.968,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544306.2759995,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ, ठीक है।"
+    }
+   },
+   {
+    "t": 29.477,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544306.7536805,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "ठीक है, तो मैं आपको कल सुबह call करता हूँ। क्या सुबह दस बजे का time सही रहेगा?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O2",
+  "app": "Voice-Bot-104c356b-536d",
+  "scen": "frustrated",
+  "run": 0,
+  "interaction_id": "20261009/74468831-16:42:07-01a1a2bf",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए।",
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी थोड़ा time है?",
+    "words": 15,
+    "reply_onset_s": 1.49,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": true,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "rushed"
+    ]
+   },
+   {
+    "seller": "कितनी बार कॉल करोगे, परेशान कर दिया है",
+    "signal": "frustrated",
+    "asr": [
+     "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+    ],
+    "reply": "sorry, आपको परेशानी हुई। क्या मैं बस एक मिनट बात कर सकता हूँ?",
+    "words": 13,
+    "reply_onset_s": 1.96,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": true,
+     "frustrated": true,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": true
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": false
+   },
+   {
+    "seller": "हम्म, ठीक है",
+    "signal": "after",
+    "asr": [
+     "हम।",
+     "हम ठीक है।"
+    ],
+    "reply": "धन्यवाद। दरअसल, मैं आपको buyer enquiries बढ़ाने में help करने के लिए call किया था। क्या आप इसके लिए हमारे executive से एक छोटी meeting करना चाहेंगे?",
+    "words": 27,
+    "reply_onset_s": 2.37,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": true
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.264,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "Continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791544327.7636616,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "09df19d0-f7b1-42a9-87c2-64da23bb5239",
+     "interaction_id": "20261009/74468831-16:42:07-01a1a2bf"
+    }
+   },
+   {
+    "t": 8.221,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544334.812032,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.431,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544335.7794085,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए।"
+    }
+   },
+   {
+    "t": 9.535,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544336.1002376,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.338,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544336.7012844,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 10.854,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544337.161236,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी थोड़ा time है?"
+    }
+   },
+   {
+    "t": 18.056,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544344.6558006,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 19.713,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544345.986542,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+    }
+   },
+   {
+    "t": 20.219,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544346.4589317,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "sorry, आपको परेशानी हुई। क्या मैं बस एक मिनट बात कर सकता हूँ?"
+    }
+   },
+   {
+    "t": 27.717,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544353.7576485,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 27.844,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544354.417108,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 28.539,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544354.4676118,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हम।"
+    }
+   },
+   {
+    "t": 29.048,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544355.3066823,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हम ठीक है।"
+    }
+   },
+   {
+    "t": 29.655,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544355.840686,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "धन्यवाद। दरअसल, मैं आपको buyer enquiries बढ़ाने में help करने के लिए call किया था। क्या आप इसके लिए हमारे executive से एक छोटी meeting करना चाहेंगे?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O2",
+  "app": "Voice-Bot-104c356b-536d",
+  "scen": "confused",
+  "run": 0,
+  "interaction_id": "20261009/1a3c6c0b-16:42:57-661cd801",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए।",
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+    "words": 16,
+    "reply_onset_s": 1.53,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": true,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "rushed"
+    ]
+   },
+   {
+    "seller": "समझ नहीं आया, क्या मतलब मीटिंग?",
+    "signal": "confused",
+    "asr": [
+     "समझ नहीं आया क्या मतलब मीटिंग?"
+    ],
+    "reply": "अरे, कोई बात नहीं। मतलब, हमारे expert से बात, आपके business के लिए, ज़्यादा buyer मिलेंगे, समझ आया आपको?",
+    "words": 19,
+    "reply_onset_s": 2.0,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": false
+   },
+   {
+    "seller": "हम्म, ठीक है",
+    "signal": "after",
+    "asr": [
+     "हम ठीक हैं।"
+    ],
+    "reply": "अच्छा, पर क्या आप अपने business के लिए और ज़्यादा buyer enquiries चाहते हैं? इससे आपकी sales बढ़ सकती हैं।",
+    "words": 20,
+    "reply_onset_s": 1.97,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.264,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "Continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791544377.5197048,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "a54610eb-93ca-4539-9800-f98c31ca2f01",
+     "interaction_id": "20261009/1a3c6c0b-16:42:57-661cd801"
+    }
+   },
+   {
+    "t": 8.119,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544384.4955046,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.129,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544385.178343,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए।"
+    }
+   },
+   {
+    "t": 9.231,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544385.6631782,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.192,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544386.3339915,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 10.704,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544386.837409,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?"
+    }
+   },
+   {
+    "t": 17.48,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544393.8838403,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 19.571,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544395.5753086,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "समझ नहीं आया क्या मतलब मीटिंग?"
+    }
+   },
+   {
+    "t": 20.327,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544396.3480175,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अरे, कोई बात नहीं। मतलब, हमारे expert से बात, आपके business के लिए, ज़्यादा buyer मिलेंगे, समझ आया आपको?"
+    }
+   },
+   {
+    "t": 30.967,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544407.3059428,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 31.676,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544407.943775,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 32.451,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544408.3855476,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हम ठीक हैं।"
+    }
+   },
+   {
+    "t": 33.07,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544408.9051323,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "अच्छा, पर क्या आप अपने business के लिए और ज़्यादा buyer enquiries चाहते हैं? इससे आपकी sales बढ़ सकती हैं।"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O2",
+  "app": "Voice-Bot-104c356b-536d",
+  "scen": "interested",
+  "run": 0,
+  "interaction_id": "20261009/884826f9-16:43:50-bcd799e7",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए।",
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। मैं आपके business को बढ़ाने और ज़्यादा buyer enquiries दिलाने में आपकी help करना चाहता हूँ।",
+    "words": 24,
+    "reply_onset_s": 1.92,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "ओके ओके",
+    "signal": "neutral",
+    "asr": [
+     "ओके ओके।"
+    ],
+    "reply": "तो, क्या आप हमारे एक executive के साथ एक छोटी सी meeting के लिए time निकाल सकते हैं? वो आपको बताएंगे कि आप ज़्यादा orders कैसे पा सकते हैं।",
+    "words": 29,
+    "reply_onset_s": 1.84,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+    "signal": "interested",
+    "asr": [
+     "अच्छा ये कैसे काम करता है?",
+     "अच्छा ये कैसे काम करता है? कितना चार्ज है?"
+    ],
+    "reply": "दरअसल, हमारे executive आपको IndiaMART के tools के बारे में बताएंगे जिससे आपकी visibility बढ़ेगी। इससे आपको ज़्यादा genuine देखिए, ये सब details हमारे executive आपको meeting में अच्छे से समझा देंगे। बस दस मिनट का time लगेगा, तो क्या हम कल के लिए कोई time fix कर लें?",
+    "words": 49,
+    "reply_onset_s": 2.05,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": true,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": null
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.271,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "Continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791544430.5121439,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "76c3d749-6e11-43f4-9035-388a658631da",
+     "interaction_id": "20261009/884826f9-16:43:50-bcd799e7"
+    }
+   },
+   {
+    "t": 8.036,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544437.360895,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.145,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544438.1096315,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए।"
+    }
+   },
+   {
+    "t": 10.08,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544439.4271257,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.719,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544439.558517,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 11.397,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544440.1452818,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। मैं आपके business को बढ़ाने और ज़्यादा buyer enquiries दिलाने में आपकी help करना चाहता हूँ।"
+    }
+   },
+   {
+    "t": 20.831,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544450.1983006,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 22.155,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544451.1885722,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "ओके ओके।"
+    }
+   },
+   {
+    "t": 22.903,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544451.8363378,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "तो, क्या आप हमारे एक executive के साथ एक छोटी सी meeting के लिए time निकाल सकते हैं? वो आपको बताएंगे कि आप ज़्यादा orders कैसे पा सकते हैं।"
+    }
+   },
+   {
+    "t": 32.51,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544461.9200006,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 34.348,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544463.4950087,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अच्छा ये कैसे काम करता है?"
+    }
+   },
+   {
+    "t": 34.715,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544464.0315504,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 34.924,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544464.0457048,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "दरअसल, हमारे executive आपको IndiaMART के tools के बारे में बताएंगे जिससे आपकी visibility बढ़ेगी। इससे आपको ज़्यादा genuine"
+    }
+   },
+   {
+    "t": 36.064,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544464.9157221,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "अच्छा ये कैसे काम करता है? कितना चार्ज है?"
+    }
+   },
+   {
+    "t": 36.759,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544465.5305514,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "देखिए, ये सब details हमारे executive आपको meeting में अच्छे से समझा देंगे। बस दस मिनट का time लगेगा, तो क्या हम कल के लिए कोई time fix कर लें?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O2",
+  "app": "Voice-Bot-104c356b-536d",
+  "scen": "gujarati",
+  "run": 0,
+  "interaction_id": "20261009/a3e5a60c-16:44:50-128d8fa3",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए।",
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। मैं आपके business के लिए कुछ buyer enquiries बढ़ाने में आपकी help करना चाहता था।",
+    "words": 23,
+    "reply_onset_s": 1.84,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": []
+   },
+   {
+    "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+    "signal": "gujarati",
+    "asr": [
+     "ગુજરાતીમાં વાત કરોને.",
+     "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+    ],
+    "reply": "હા જી, ચોક્કસ. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી વાત કરું છું અને તમારા business માટે buyer enquiries વધારવામાં તમારી help કરવા માંગતો હતો.",
+    "words": 27,
+    "reply_onset_s": 2.32,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": false,
+     "gujarati": true,
+     "opt_out": false
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": true
+   },
+   {
+    "seller": "સારું, આગળ બોલો.",
+    "signal": "after_gu",
+    "asr": [
+     "સારું, આગળ બોલો."
+    ],
+    "reply": "અચ્છા, તો વાત એમ છે કે અમારા એક executive તમારી સાથે એક short meeting કરી શકે? તેઓ તમને સમજાવશે કે તમે કેવી રીતે વધારે buyers મેળવી શકો છો.",
+    "words": 28,
+    "reply_onset_s": 2.02,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": true,
+     "opt_out": false
+    }
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.77,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "Continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791544491.1845102,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "a31fc974-a56b-4d5c-912a-a7e4de9baad6",
+     "interaction_id": "20261009/a3e5a60c-16:44:50-128d8fa3"
+    }
+   },
+   {
+    "t": 9.242,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544498.7438767,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.859,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544499.4214487,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.678,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544499.8984816,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए।"
+    }
+   },
+   {
+    "t": 11.331,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544500.8389516,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 12.085,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544501.1746094,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 12.759,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544501.8251255,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। मैं आपके business के लिए कुछ buyer enquiries बढ़ाने में आपकी help करना चाहता था।"
+    }
+   },
+   {
+    "t": 22.12,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544511.4866977,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 23.79,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544513.0499454,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "ગુજરાતીમાં વાત કરોને."
+    }
+   },
+   {
+    "t": 24.065,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544513.5790195,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 26.182,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544515.330362,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+    }
+   },
+   {
+    "t": 27.156,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544516.2009037,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "હા જી, ચોક્કસ. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી વાત કરું છું અને તમારા business માટે buyer enquiries વધારવામાં તમારી help કરવા માંગતો હતો."
+    }
+   },
+   {
+    "t": 41.711,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544531.2141361,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 42.446,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544531.962254,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 43.545,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544532.7107728,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "સારું, આગળ બોલો."
+    }
+   },
+   {
+    "t": 44.343,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544533.4445486,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "અચ્છા, તો વાત એમ છે કે અમારા એક executive તમારી સાથે એક short meeting કરી શકે? તેઓ તમને સમજાવશે કે તમે કેવી રીતે વધારે buyers મેળવી શકો છો."
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ },
+ {
+  "opt": "O2",
+  "app": "Voice-Bot-104c356b-536d",
+  "scen": "optout",
+  "run": 0,
+  "interaction_id": "20261009/9f35ee57-16:46:00-deda6be9",
+  "turns": [
+   {
+    "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "signal": "neutral",
+    "asr": [
+     "हाँ जी बोलिए, कौन बोल रहा है?"
+    ],
+    "reply": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+    "words": 16,
+    "reply_onset_s": 1.72,
+    "server_events": [
+     "server.event.user_interrupt",
+     "server.event.user_interrupt",
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": true,
+     "frustrated": false,
+     "confused": false,
+     "interested": true,
+     "gujarati": false,
+     "opt_out": false
+    },
+    "false_switch_checks": [
+     "rushed"
+    ]
+   },
+   {
+    "seller": "मुझे कॉल मत करो, मेरा नंबर हटा दो",
+    "signal": "opt_out",
+    "asr": [
+     "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+    ],
+    "reply": "sorry, आपको परेशानी हुई। क्या मैं आपका number list से हटाने के लिए request डाल दूँ?",
+    "words": 16,
+    "reply_onset_s": 1.69,
+    "server_events": [
+     "server.event.user_interrupt"
+    ],
+    "checks": {
+     "rushed": false,
+     "frustrated": true,
+     "confused": false,
+     "interested": false,
+     "gujarati": false,
+     "opt_out": true
+    },
+    "applied_same_turn": true,
+    "applied_next_turn": null
+   }
+  ],
+  "ended_early": false,
+  "frames": [
+   {
+    "t": 1.527,
+    "dir": "in",
+    "type": "server.action.interaction_connected",
+    "msg": {
+     "agent_variables": {
+      "user_name": "Manan",
+      "call_summary": "",
+      "seller_mode": "neutral",
+      "persona_directive": "Continue normally.",
+      "persona_voice_id": "",
+      "persona_pace": "",
+      "persona_pitch": "",
+      "persona_opening": "",
+      "switch_log": "[]",
+      "call_plan": ""
+     },
+     "initial_language_name": "Hindi",
+     "initial_state_name": "start",
+     "timestamp": 1791544560.9863205,
+     "origin": "server",
+     "type": "server.action.interaction_connected",
+     "reference_id": "57649e4e-3be9-4cec-ab65-c332d83c64d5",
+     "interaction_id": "20261009/9f35ee57-16:46:00-deda6be9"
+    }
+   },
+   {
+    "t": 8.414,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544567.959446,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 9.354,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544568.8930027,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 10.43,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544569.6274307,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "हाँ जी बोलिए, कौन बोल रहा है?"
+    }
+   },
+   {
+    "t": 11.023,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544570.1384318,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?"
+    }
+   },
+   {
+    "t": 17.812,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544577.4200468,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 19.319,
+    "dir": "in",
+    "type": "server.event.user_interrupt",
+    "msg": {
+     "timestamp": 1791544578.8823464,
+     "origin": "server",
+     "type": "server.event.user_interrupt"
+    }
+   },
+   {
+    "t": 20.84,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544580.1266155,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "user",
+     "content": "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+    }
+   },
+   {
+    "t": 21.344,
+    "dir": "in",
+    "type": "server.event.transcription",
+    "msg": {
+     "timestamp": 1791544580.567022,
+     "origin": "server",
+     "type": "server.event.transcription",
+     "role": "bot",
+     "content": "sorry, आपको परेशानी हुई। क्या मैं आपका number list से हटाने के लिए request डाल दूँ?"
+    }
+   }
+  ],
+  "agent_variables_after": null,
+  "analytics_meta": null
+ }
+]

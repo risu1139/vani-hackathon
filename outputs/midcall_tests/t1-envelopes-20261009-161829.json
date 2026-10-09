@@ -1,0 +1,74 @@
+[
+ {
+  "variant": "var_agent_variables",
+  "alive_after_5s": false,
+  "close_code": 1000,
+  "close_reason": "",
+  "frames_after": [],
+  "frames_after_full": []
+ },
+ {
+  "variant": "var_variables",
+  "alive_after_5s": false,
+  "close_code": 1000,
+  "close_reason": "",
+  "frames_after": [],
+  "frames_after_full": []
+ },
+ {
+  "variant": "var_name_value",
+  "alive_after_5s": false,
+  "close_code": 1000,
+  "close_reason": "",
+  "frames_after": [],
+  "frames_after_full": []
+ },
+ {
+  "variant": "var_data",
+  "alive_after_5s": false,
+  "close_code": 1000,
+  "close_reason": "",
+  "frames_after": [],
+  "frames_after_full": []
+ },
+ {
+  "variant": "lang_language_name",
+  "alive_after_5s": false,
+  "close_code": 1000,
+  "close_reason": "",
+  "frames_after": [],
+  "frames_after_full": []
+ },
+ {
+  "variant": "lang_language",
+  "alive_after_5s": false,
+  "close_code": 1000,
+  "close_reason": "",
+  "frames_after": [],
+  "frames_after_full": []
+ },
+ {
+  "variant": "state_state_name",
+  "alive_after_5s": false,
+  "close_code": 1000,
+  "close_reason": "",
+  "frames_after": [],
+  "frames_after_full": []
+ },
+ {
+  "variant": "state_next_state",
+  "alive_after_5s": false,
+  "close_code": 1000,
+  "close_reason": "",
+  "frames_after": [],
+  "frames_after_full": []
+ },
+ {
+  "variant": "control_text",
+  "alive_after_5s": true,
+  "close_code": null,
+  "close_reason": null,
+  "frames_after": [],
+  "frames_after_full": []
+ }
+]

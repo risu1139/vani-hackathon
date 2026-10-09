@@ -1,0 +1,2343 @@
+{
+ "summary": {
+  "label": "O3t",
+  "files": [
+   "../../outputs/midcall_tests\\O3t-rushed_frustrated_confused_interested_gujarati_optout_A_host-20261009-170447.json"
+  ],
+  "calls": 14,
+  "turns": 44,
+  "signals": {
+   "rushed": {
+    "n": 4,
+    "same": 0,
+    "next": 0,
+    "either": 0
+   },
+   "frustrated": {
+    "n": 4,
+    "same": 4,
+    "next": 0,
+    "either": 4
+   },
+   "confused": {
+    "n": 2,
+    "same": 0,
+    "next": 0,
+    "either": 0
+   },
+   "interested": {
+    "n": 4,
+    "same": 4,
+    "next": 0,
+    "either": 4
+   },
+   "gujarati": {
+    "n": 2,
+    "same": 2,
+    "next": 0,
+    "either": 2
+   },
+   "opt_out": {
+    "n": 2,
+    "same": 0,
+    "next": 0,
+    "either": 0
+   }
+  },
+  "neutral_false_switch": "0/18",
+  "neutral_examples": [],
+  "reply_onset_median_s": 1.5,
+  "reply_onset_p90_s": 1.81,
+  "restarted_replies": "10/44",
+  "server_avg_agent_response_s_median": 0.52,
+  "tool": {
+   "turns": 0,
+   "calls": 0,
+   "dups": 0,
+   "missed": 0,
+   "double": 0,
+   "wrong_mode": 0,
+   "mode_checked": 0,
+   "relay_err": 0,
+   "relay_used": 0,
+   "conn_new": 0,
+   "relay_ms_median": null,
+   "relay_ms_max": null
+  }
+ },
+ "runs": [
+  {
+   "scen": "rushed",
+   "run": 0,
+   "iid": "20261009/3f363b49-16:51:07-647bcdb6",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। क्या आपके पास अभी थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 1.42,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "jev_ms": 753,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.04,
+        "confused": 0.18,
+        "bot_question": 0.04,
+        "interested": 0.1,
+        "opt_out": 0.01
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.61
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार, जल्दी बोलो क्या है?"
+     ],
+     "reply_dd": "अरे, sorry जी। दरअसल मैं आपको ज़्यादा buyer enquiries दिलाने में help करना चाहता हूँ। क्या आप इस बारे में बात करने के लिए हमारे executive के साथ एक छोटी सी meeting कर सकते हैं?",
+     "restarted": false,
+     "reply_onset_s": 1.48,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "अभी बिजी हूँ यार, जल्दी बोलो क्या है?",
+       "jev_ms": 595,
+       "scores": {
+        "rushed": 0.99,
+        "frustrated": 0.48,
+        "confused": 0.06,
+        "bot_question": 0.02,
+        "interested": 0.28,
+        "opt_out": 0.03
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "rushed",
+       "pushed": true,
+       "push_ms_after_transcript": 597,
+       "push_after_seller_end_s": 1.06,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.47
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हाँ।",
+      "हाँ, ठीक है।"
+     ],
+     "reply_dd": "बहुत शुक्रिया जी। मैं आपके लिए एक time slot book कर देता हूँ। क्या कल सुबह दस बजे का time आपके लिए सही रहेगा?",
+     "restarted": false,
+     "reply_onset_s": 1.12,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ।",
+       "jev_ms": 482,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.03,
+        "confused": 0.02,
+        "bot_question": 0.02,
+        "interested": 0.94,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "rushed",
+       "to": "interested",
+       "pushed": true,
+       "push_ms_after_transcript": 483,
+       "push_after_seller_end_s": 0.08,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": -0.4
+      },
+      {
+       "utt": "हाँ, ठीक है।",
+       "jev_ms": 580,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.04,
+        "confused": 0.02,
+        "bot_question": 0.01,
+        "interested": 0.93,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "interested",
+       "to": "interested",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.41
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "rushed",
+   "run": 1,
+   "iid": "20261009/02a09d83-16:51:57-43c15e9d",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 1.32,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "jev_ms": 482,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.04,
+        "confused": 0.14,
+        "bot_question": 0.05,
+        "interested": 0.1,
+        "opt_out": 0.01
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.51
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार, जल्दी बोलो क्या है।"
+     ],
+     "reply_dd": "अरे, sorry जी। दरअसल मैं आपको ज़्यादा buyer enquiries दिलाने में help करना चाहता हूँ। क्या आप हमारे executive के साथ एक छोटी सी meeting के लिए time निकाल पाएंगे?",
+     "restarted": false,
+     "reply_onset_s": 1.42,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "अभी बिजी हूँ यार, जल्दी बोलो क्या है।",
+       "jev_ms": 506,
+       "scores": {
+        "rushed": 0.99,
+        "frustrated": 0.45,
+        "confused": 0.05,
+        "bot_question": 0.02,
+        "interested": 0.3,
+        "opt_out": 0.03
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "rushed",
+       "pushed": true,
+       "push_ms_after_transcript": 512,
+       "push_after_seller_end_s": 1.24,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.73
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हाँ।"
+     ],
+     "reply_dd": "बहुत शुक्रिया जी। तो फिर कल दोपहर दो बजे का time सही रहेगा या आप कोई और time suggest करना चाहेंगे?",
+     "restarted": false,
+     "reply_onset_s": 0.38,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ।",
+       "jev_ms": 477,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.03,
+        "confused": 0.02,
+        "bot_question": 0.01,
+        "interested": 0.95,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "rushed",
+       "to": "interested",
+       "pushed": true,
+       "push_ms_after_transcript": 479,
+       "push_after_seller_end_s": 0.2,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": -0.28
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "frustrated",
+   "run": 0,
+   "iid": "20261009/03311f68-16:52:48-1d50d238",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 1.39,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ जी बोलिए।",
+       "jev_ms": 1263,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.03,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.15,
+        "opt_out": 0.01
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": -0.54
+      },
+      {
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "jev_ms": 500,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.04,
+        "confused": 0.15,
+        "bot_question": 0.05,
+        "interested": 0.1,
+        "opt_out": 0.01
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.77
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "कितनी बार कॉल करोगे, परेशान कर दिया है",
+     "signal": "frustrated",
+     "asr": [
+      "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+     ],
+     "reply_dd": "अरे, sorry जी, मेरा मकसद आपको परेशान करना नहीं था। बस आपकी help करने के लिए call किया था।",
+     "restarted": false,
+     "reply_onset_s": 1.42,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "कितनी बार कॉल करोगे? परेशान कर दिया है।",
+       "jev_ms": 533,
+       "scores": {
+        "rushed": 0.31,
+        "frustrated": 0.98,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.03,
+        "opt_out": 0.36
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "frustrated",
+       "pushed": true,
+       "push_ms_after_transcript": 535,
+       "push_after_seller_end_s": 1.04,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.51
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "दरअसल, मैं चाहता था कि हमारे executive आपसे एक छोटी सी meeting करें। वो आपको बताएंगे कि आप India अच्छा जी, यह तो बहुत अच्छी बात है। वैसे मैं आपको यह बताने के लिए call कर रहा था कि हम आपकी help कर सकते हैं ताकि आपको और ज़्यादा buyer enquiries मिल सकें।",
+     "restarted": false,
+     "reply_onset_s": 1.6,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हम ठीक हैं।",
+       "jev_ms": 491,
+       "scores": {
+        "rushed": 0.09,
+        "frustrated": 0.07,
+        "confused": 0.04,
+        "bot_question": 0.03,
+        "interested": 0.17,
+        "opt_out": 0.06
+       },
+       "lang": "hindi",
+       "from": "frustrated",
+       "to": "neutral",
+       "pushed": true,
+       "push_ms_after_transcript": 491,
+       "push_after_seller_end_s": 0.93,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.44
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "frustrated",
+   "run": 1,
+   "iid": "20261009/8d0b10f9-16:53:36-7ac64401",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते जी, मैं IndiaMART से बात कर रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 1.29,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ जी बोलिए।",
+       "jev_ms": 501,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.03,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.16,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": -0.42
+      },
+      {
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "jev_ms": 572,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.04,
+        "confused": 0.16,
+        "bot_question": 0.04,
+        "interested": 0.1,
+        "opt_out": 0.01
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.48
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "कितनी बार कॉल करोगे, परेशान कर दिया है",
+     "signal": "frustrated",
+     "asr": [
+      "कितनी बार कॉल करोगे? परेशान कर दिया है।"
+     ],
+     "reply_dd": "अरे, sorry जी, आपको बार-बार call की वजह से परेशानी हुई। दरअसल मैं बस आपकी help करना चाहता था ताकि आपको और ज़्यादा buyer enquiries मिल सकें",
+     "restarted": true,
+     "reply_onset_s": 1.33,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "कितनी बार कॉल करोगे? परेशान कर दिया है।",
+       "jev_ms": 572,
+       "scores": {
+        "rushed": 0.13,
+        "frustrated": 0.98,
+        "confused": 0.04,
+        "bot_question": 0.02,
+        "interested": 0.03,
+        "opt_out": 0.26
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "frustrated",
+       "pushed": true,
+       "push_ms_after_transcript": 574,
+       "push_after_seller_end_s": 1.2,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.62
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा, यह तो बहुत अच्छी बात है। वैसे, मैं आपको यह बताने के लिए call कर रहा था कि हम आपकी sales बढ़ाने में help कर सकते हैं। क्या आप और buyer enquiries चाहते हैं?",
+     "restarted": false,
+     "reply_onset_s": 1.51,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हम ठीक हैं।",
+       "jev_ms": 498,
+       "scores": {
+        "rushed": 0.07,
+        "frustrated": 0.11,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.06,
+        "opt_out": 0.05
+       },
+       "lang": "hindi",
+       "from": "frustrated",
+       "to": "neutral",
+       "pushed": true,
+       "push_ms_after_transcript": 500,
+       "push_after_seller_end_s": 0.86,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.36
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "confused",
+   "run": 0,
+   "iid": "20261009/c2a2f310-16:54:30-8edc8b12",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बोल रहा हूँ। क्या आपके पास अभी थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 1.61,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ जी बोलिए।",
+       "jev_ms": 514,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.02,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.16,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": -0.66
+      },
+      {
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "jev_ms": 489,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.04,
+        "confused": 0.16,
+        "bot_question": 0.04,
+        "interested": 0.1,
+        "opt_out": 0.01
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.63
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "समझ नहीं आया, क्या मतलब मीटिंग?",
+     "signal": "confused",
+     "asr": [
+      "समझ नहीं आया क्या मतलब मीटिंग?"
+     ],
+     "reply_dd": "दरअसल, मैं चाहता था कि हमारे एक executive आपसे छोटी सी meeting करें। वो आपको बताएंगे कि आप IndiaMART पर और ज़्यादा buyer enquiries कैसे पा सकते हैं।",
+     "restarted": false,
+     "reply_onset_s": 1.74,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "समझ नहीं आया क्या मतलब मीटिंग?",
+       "jev_ms": 490,
+       "scores": {
+        "rushed": 0.13,
+        "frustrated": 0.12,
+        "confused": 0.95,
+        "bot_question": 0.04,
+        "interested": 0.12,
+        "opt_out": 0.02
+       },
+       "lang": "hinglish",
+       "from": "neutral",
+       "to": "confused",
+       "pushed": true,
+       "push_ms_after_transcript": 493,
+       "push_after_seller_end_s": 1.07,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.58
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा, मैं समझ सकता हूँ। पर क्या आप अपनी sales और बढ़ाने में interested नहीं हैं?",
+     "restarted": false,
+     "reply_onset_s": 1.18,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हम ठीक हैं।",
+       "jev_ms": 533,
+       "scores": {
+        "rushed": 0.07,
+        "frustrated": 0.07,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.1,
+        "opt_out": 0.05
+       },
+       "lang": "hindi",
+       "from": "confused",
+       "to": "neutral",
+       "pushed": true,
+       "push_ms_after_transcript": 535,
+       "push_after_seller_end_s": 0.84,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.31
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "confused",
+   "run": 1,
+   "iid": "20261009/383dd31a-16:55:23-f4e43a4a",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "मैं IndiaMART से call कर रहा हूँ। मैं चाहता था कि हमारे एक executive आपकी help करें ताकि आपको और ज़्यादा buyer enquiries मिल सकें। क्या आपके पास इसके लिए थोड़ा time है? नमस्ते जी,",
+     "restarted": true,
+     "reply_onset_s": 2.01,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ जी बोलिए।",
+       "jev_ms": 581,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.03,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.13,
+        "opt_out": 0.01
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": -0.76
+      },
+      {
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "jev_ms": 697,
+       "scores": {
+        "rushed": 0.04,
+        "frustrated": 0.04,
+        "confused": 0.09,
+        "bot_question": 0.04,
+        "interested": 0.53,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "interested",
+       "pushed": true,
+       "push_ms_after_transcript": 729,
+       "push_after_seller_end_s": 1.59,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.86
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "समझ नहीं आया, क्या मतलब मीटिंग?",
+     "signal": "confused",
+     "asr": [
+      "समझ नहीं आया क्या मतलब मीटिंग?"
+     ],
+     "reply_dd": "दरअसल, हमारे एक executive आपसे छोटी सी meeting करना चाहते हैं। वो आपको बताएंगे कि कैसे आप IndiaMART पर और ज़्यादा buyer enquiries पा सकते हैं।",
+     "restarted": false,
+     "reply_onset_s": 1.47,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "समझ नहीं आया क्या मतलब मीटिंग?",
+       "jev_ms": 527,
+       "scores": {
+        "rushed": 0.11,
+        "frustrated": 0.12,
+        "confused": 0.95,
+        "bot_question": 0.04,
+        "interested": 0.11,
+        "opt_out": 0.02
+       },
+       "lang": "hinglish",
+       "from": "interested",
+       "to": "confused",
+       "pushed": true,
+       "push_ms_after_transcript": 534,
+       "push_after_seller_end_s": 1.06,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.53
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "हम्म, ठीक है",
+     "signal": "after",
+     "asr": [
+      "हम।",
+      "हम ठीक हैं।"
+     ],
+     "reply_dd": "अच्छा, मैं समझ सकता हूँ। पर क्या आप अपनी sales और business को और बढ़ाने में interested नहीं होंगे?",
+     "restarted": false,
+     "reply_onset_s": 1.1,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हम।",
+       "jev_ms": 560,
+       "scores": {
+        "rushed": 0.06,
+        "frustrated": 0.09,
+        "confused": 0.07,
+        "bot_question": 0.08,
+        "interested": 0.14,
+        "opt_out": 0.04
+       },
+       "lang": "hindi",
+       "from": "confused",
+       "to": "neutral",
+       "pushed": true,
+       "push_ms_after_transcript": 573,
+       "push_after_seller_end_s": -0.11,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": -0.69
+      },
+      {
+       "utt": "हम ठीक हैं।",
+       "jev_ms": 683,
+       "scores": {
+        "rushed": 0.07,
+        "frustrated": 0.07,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.09,
+        "opt_out": 0.05
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.31
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "interested",
+   "run": 0,
+   "iid": "20261009/5011f0b5-16:56:17-c6bd0c85",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "जी, मैं IndiaMART से call कर रहा हूँ। मैं देखना चाहता था कि क्या आप अपने business के लिए और ज़्यादा buyer enquiries पाना चाहेंगे? नमस्ते, मैं IndiaMART से बोल रहा हूँ। क्या आपके पास अभी थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 1.18,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ जी बोलिए।",
+       "jev_ms": 580,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.03,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.15,
+        "opt_out": 0.01
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": -0.53
+      },
+      {
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "jev_ms": 643,
+       "scores": {
+        "rushed": 0.04,
+        "frustrated": 0.04,
+        "confused": 0.11,
+        "bot_question": 0.04,
+        "interested": 0.27,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.39
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "ओके ओके",
+     "signal": "neutral",
+     "asr": [
+      "ओके ओके।"
+     ],
+     "reply_dd": "धन्यवाद। दरअसल, मैं आपको यह बताने के लिए call किया था कि हमारे executive आपकी help",
+     "restarted": true,
+     "reply_onset_s": 1.66,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "ओके ओके।",
+       "jev_ms": 742,
+       "scores": {
+        "rushed": 0.09,
+        "frustrated": 0.18,
+        "confused": 0.06,
+        "bot_question": 0.03,
+        "interested": 0.18,
+        "opt_out": 0.04
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.74
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा, यह कैसे काम करता है?",
+      "अच्छा, यह कैसे काम करता है? इतना चार्ज है।"
+     ],
+     "reply_dd": "देखिए, इसके बारे में विस्तार से बताने के लिए ही हमारे executive आपसे बात करना चाहते हैं। वो आपको समझाएंगे कि यह कैसे काम करता है और इसमें क्या charges होंगे। क्या हम कल के लिए एक छोटा सा time slot book कर सकते हैं?",
+     "restarted": false,
+     "reply_onset_s": 1.63,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "अच्छा, यह कैसे काम करता है?",
+       "jev_ms": 596,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.03,
+        "confused": 0.11,
+        "bot_question": 0.02,
+        "interested": 0.89,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "interested",
+       "pushed": true,
+       "push_ms_after_transcript": 598,
+       "push_after_seller_end_s": -0.18,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": -0.78
+      },
+      {
+       "utt": "अच्छा, यह कैसे काम करता है? इतना चार्ज है।",
+       "jev_ms": 585,
+       "scores": {
+        "rushed": 0.04,
+        "frustrated": 0.06,
+        "confused": 0.09,
+        "bot_question": 0.02,
+        "interested": 0.95,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "interested",
+       "to": "interested",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.52
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "interested",
+   "run": 1,
+   "iid": "20261009/3c8e98c1-16:57:14-47332021",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से call कर रहा हूँ। मैं देखना चाहता था कि क्या आप अपने business के लिए और ज़्यादा buyer enquiries पाना चाहेंगे? नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। क्या आपके पास अभी थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 1.33,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ जी बोलिए।",
+       "jev_ms": 498,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.03,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.16,
+        "opt_out": 0.01
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": -0.6
+      },
+      {
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "jev_ms": 498,
+       "scores": {
+        "rushed": 0.04,
+        "frustrated": 0.04,
+        "confused": 0.11,
+        "bot_question": 0.04,
+        "interested": 0.29,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.53
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "ओके ओके",
+     "signal": "neutral",
+     "asr": [
+      "ओके ओके।"
+     ],
+     "reply_dd": "धन्यवाद। दरअसल, मैं आपको यह बताने के लिए call किया था कि हमारे executive",
+     "restarted": true,
+     "reply_onset_s": 1.58,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "ओके ओके।",
+       "jev_ms": 541,
+       "scores": {
+        "rushed": 0.11,
+        "frustrated": 0.16,
+        "confused": 0.06,
+        "bot_question": 0.03,
+        "interested": 0.13,
+        "opt_out": 0.04
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.8
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा, यह कैसे काम करता है?",
+      "अच्छा, यह कैसे काम करता है? कितना चार्ज है?"
+     ],
+     "reply_dd": "देखिए, इसके बारे में हमारे executive आपको detail में समझा देंगे। वो बस यह check करेंगे कि आप अपनी sales कैसे बढ़ा सकते हैं। क्या हम कल के लिए एक छोटा सा time slot book कर लें?",
+     "restarted": false,
+     "reply_onset_s": 1.59,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "अच्छा, यह कैसे काम करता है?",
+       "jev_ms": 524,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.04,
+        "confused": 0.11,
+        "bot_question": 0.02,
+        "interested": 0.88,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "interested",
+       "pushed": true,
+       "push_ms_after_transcript": 535,
+       "push_after_seller_end_s": -0.22,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": -0.76
+      },
+      {
+       "utt": "अच्छा, यह कैसे काम करता है? कितना चार्ज है?",
+       "jev_ms": 551,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.04,
+        "confused": 0.08,
+        "bot_question": 0.02,
+        "interested": 0.96,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "interested",
+       "to": "interested",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.58
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "gujarati",
+   "run": 0,
+   "iid": "20261009/21d3d236-16:58:19-37f43e46",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से call कर रहा हूँ। मैं आपके business के लिए ज़्यादा buyer enquiries लाने में आपकी help करना चाहता हूँ। क्या आपके पास अभी थोड़ा time है? नमस्ते जी, मैं IndiaMART से बोल रहा हूँ। क्या आपके पास अभी दो मिनट time है?",
+     "restarted": false,
+     "reply_onset_s": 1.38,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ जी बोलिए।",
+       "jev_ms": 514,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.03,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.14,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": -0.71
+      },
+      {
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "jev_ms": 567,
+       "scores": {
+        "rushed": 0.04,
+        "frustrated": 0.04,
+        "confused": 0.11,
+        "bot_question": 0.03,
+        "interested": 0.42,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.68
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+     "signal": "gujarati",
+     "asr": [
+      "गुजराती में बात करो ने।",
+      "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+     ],
+     "reply_dd": "અરે, ના ના, કાંઈ વાંધો નહીં. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી બોલી રહ્યો છું, શું તમારી પાસે અત્યારે બે મિનિટ time છે?",
+     "restarted": false,
+     "reply_onset_s": 1.76,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": true,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "गुजराती में बात करो ने।",
+       "jev_ms": 512,
+       "scores": {
+        "rushed": 0.05,
+        "frustrated": 0.15,
+        "confused": 0.06,
+        "bot_question": 0.02,
+        "interested": 0.08,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": -1.26
+      },
+      {
+       "utt": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે.",
+       "jev_ms": 507,
+       "scores": {
+        "rushed": 0.05,
+        "frustrated": 0.15,
+        "confused": 0.05,
+        "bot_question": 0.02,
+        "interested": 0.08,
+        "opt_out": 0.02
+       },
+       "lang": "gujarati",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.64
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "સારું, આગળ બોલો.",
+     "signal": "after_gu",
+     "asr": [
+      "સારું, આગળ બોલો."
+     ],
+     "reply_dd": "તમે IndiaMART પર તમારા product list કર્યા છે, બરાબર ને? અમે તમને વધુ buyer enquiries મેળવવામાં help કરવા માંગીએ છીએ.",
+     "restarted": false,
+     "reply_onset_s": 1.61,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "સારું, આગળ બોલો.",
+       "jev_ms": 528,
+       "scores": {
+        "rushed": 0.08,
+        "frustrated": 0.08,
+        "confused": 0.04,
+        "bot_question": 0.02,
+        "interested": 0.61,
+        "opt_out": 0.02
+       },
+       "lang": "gujarati",
+       "from": "neutral",
+       "to": "interested",
+       "pushed": true,
+       "push_ms_after_transcript": 541,
+       "push_after_seller_end_s": 0.95,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.41
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "gujarati",
+   "run": 1,
+   "iid": "20261009/9685ef98-16:59:15-eb7141ab",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए।",
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बोल रहा हूँ। क्या आपके पास अभी थोड़ा time है?",
+     "restarted": false,
+     "reply_onset_s": 1.43,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ जी बोलिए।",
+       "jev_ms": 568,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.03,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.17,
+        "opt_out": 0.01
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": -0.81
+      },
+      {
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "jev_ms": 607,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.04,
+        "confused": 0.18,
+        "bot_question": 0.04,
+        "interested": 0.1,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.62
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+     "signal": "gujarati",
+     "asr": [
+      "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે."
+     ],
+     "reply_dd": "હા જી, બરાબર. હવે આપણે ગુજરાતીમાં જ વાત કરીશું. હું IndiaMART માંથી બોલી રહ્યો છું, શું તમારી પાસે અત્યારે થોડો time છે?",
+     "restarted": false,
+     "reply_onset_s": 2.17,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "ગુજરાતીમાં વાત કરોને, મને હિન્દી ઓછું ફાવે છે.",
+       "jev_ms": 542,
+       "scores": {
+        "rushed": 0.04,
+        "frustrated": 0.15,
+        "confused": 0.05,
+        "bot_question": 0.02,
+        "interested": 0.08,
+        "opt_out": 0.02
+       },
+       "lang": "gujarati",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.63
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "સારું, આગળ બોલો.",
+     "signal": "after_gu",
+     "asr": [
+      "સારું, આગળ બોલો."
+     ],
+     "reply_dd": "તમારા business માટે India તમે IndiaMART પર તમારા product list કર્યા છે, તો તમને વધારે buyer enquiries મળે એમાં help કરવા માટે અમારા એક executive તમારી સાથે short meeting કરવા માંગે છે. શું તમે એના માટે ready છો?",
+     "restarted": false,
+     "reply_onset_s": 1.89,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": true,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "સારું, આગળ બોલો.",
+       "jev_ms": 681,
+       "scores": {
+        "rushed": 0.08,
+        "frustrated": 0.07,
+        "confused": 0.06,
+        "bot_question": 0.03,
+        "interested": 0.63,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "interested",
+       "pushed": true,
+       "push_ms_after_transcript": 698,
+       "push_after_seller_end_s": 1.42,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.72
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "optout",
+   "run": 0,
+   "iid": "20261009/364dcbf1-17:00:19-857d595a",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से बात कर रहा हूँ। मैं आपको यह बताने के लिए call किया था कि हम",
+     "restarted": true,
+     "reply_onset_s": 1.54,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "jev_ms": 934,
+       "scores": {
+        "rushed": 0.04,
+        "frustrated": 0.04,
+        "confused": 0.18,
+        "bot_question": 0.03,
+        "interested": 0.24,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.84
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "मुझे कॉल मत करो, मेरा नंबर हटा दो",
+     "signal": "opt_out",
+     "asr": [
+      "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+     ],
+     "reply_dd": "अरे, sorry जी। अरे, sorry अगर आपको परेशानी हुई। मैं आपका number remove कर देता हूँ, बस एक बार confirm कर दीजिए कि आप आगे कोई update नहीं चाहते?",
+     "restarted": false,
+     "reply_onset_s": 1.89,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": true,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "मुझे कॉल मत करो, मेरा नंबर हटा दो।",
+       "jev_ms": 534,
+       "scores": {
+        "rushed": 0.07,
+        "frustrated": 0.83,
+        "confused": 0.04,
+        "bot_question": 0.02,
+        "interested": 0.02,
+        "opt_out": 0.99
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "opt_out",
+       "pushed": true,
+       "push_ms_after_transcript": 538,
+       "push_after_seller_end_s": 1.25,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.72
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "optout",
+   "run": 1,
+   "iid": "20261009/00dd3964-17:01:03-1a419118",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "हाँ जी बोलिए, कौन बोल रहा है?",
+     "signal": "neutral",
+     "asr": [
+      "हाँ जी बोलिए, कौन बोल रहा है?"
+     ],
+     "reply_dd": "नमस्ते, मैं IndiaMART से call कर रहा हूँ। मैं",
+     "restarted": true,
+     "reply_onset_s": 1.93,
+     "checks_dd": {
+      "rushed": true,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+       "jev_ms": 489,
+       "scores": {
+        "rushed": 0.04,
+        "frustrated": 0.04,
+        "confused": 0.11,
+        "bot_question": 0.03,
+        "interested": 0.16,
+        "opt_out": 0.02
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.94
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "मुझे कॉल मत करो, मेरा नंबर हटा दो",
+     "signal": "opt_out",
+     "asr": [
+      "मुझे कॉल मत करो, मेरा नंबर हटा दो।"
+     ],
+     "reply_dd": "अरे, sorry अगर मैंने आपको disturb किया। मैं बस आपकी help करना चाहता था ताकि आपको और",
+     "restarted": true,
+     "reply_onset_s": 1.38,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "मुझे कॉल मत करो, मेरा नंबर हटा दो।",
+       "jev_ms": 579,
+       "scores": {
+        "rushed": 0.08,
+        "frustrated": 0.84,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.02,
+        "opt_out": 0.99
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "opt_out",
+       "pushed": true,
+       "push_ms_after_transcript": 583,
+       "push_after_seller_end_s": 1.37,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.79
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "A_hostile",
+   "run": 0,
+   "iid": "20261009/1782d721-17:01:57-a54cc0d4",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+     "signal": "neutral",
+     "asr": [
+      "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+     ],
+     "reply_dd": "जी, मैं IndiaMART का AI assistant हूँ। मैं आपको यह बताने के लिए call कर रहा था कि आप अपने business के लिए और ज़्यादा buyer enquiries कैसे पा सकते हैं।",
+     "restarted": false,
+     "reply_onset_s": 1.29,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+       "jev_ms": 586,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.07,
+        "confused": 0.07,
+        "bot_question": 0.08,
+        "interested": 0.13,
+        "opt_out": 0.01
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.58
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "मैं owner नहीं हूँ, manager हूँ. Owner बाहर गए हैं.",
+     "signal": "neutral",
+     "asr": [
+      "मैं ओनर नहीं हूँ, मैनेजर हूँ।",
+      "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+     ],
+     "reply_dd": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे? ताकि मैं उन्हें सही time पर call कर सकूँ।",
+     "restarted": false,
+     "reply_onset_s": 1.51,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ।",
+       "jev_ms": 527,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.08,
+        "confused": 0.03,
+        "bot_question": 0.03,
+        "interested": 0.06,
+        "opt_out": 0.03
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": -0.73
+      },
+      {
+       "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।",
+       "jev_ms": 588,
+       "scores": {
+        "rushed": 0.07,
+        "frustrated": 0.07,
+        "confused": 0.03,
+        "bot_question": 0.03,
+        "interested": 0.05,
+        "opt_out": 0.03
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.69
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "अच्छा ठीक है, पर exact price बताओ, कितने का plan है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?"
+     ],
+     "reply_dd": "धन देखिए, plans की prices अलग-अलग होती हैं। इसीलिए मैं चाहता था कि हमारे executive आपसे एक छोटी सी meeting करें और आपकी ज़रूरत के हिसाब से सही plan बताएँ। क्या आप इसके लिए थोड़ा time निकाल सकते हैं?",
+     "restarted": false,
+     "reply_onset_s": 1.52,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?",
+       "jev_ms": 504,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.07,
+        "confused": 0.04,
+        "bot_question": 0.02,
+        "interested": 0.95,
+        "opt_out": 0.02
+       },
+       "lang": "hinglish",
+       "from": "neutral",
+       "to": "interested",
+       "pushed": true,
+       "push_ms_after_transcript": 510,
+       "push_after_seller_end_s": 1.01,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.5
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो",
+     "signal": "frustrated",
+     "asr": [
+      "फिर से पूछ रहा हूँ।",
+      "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।"
+     ],
+     "reply_dd": "दरअसल, मैं आपको कोई गलत price नहीं बताना चाहता क्योंकि यह आपके business की ज़रूरत पर depend करता है। हमारे executive आपको call करके best plan और price बता देंगे। क्या मैं उनके लिए एक छोटा सा अरे, sorry,",
+     "restarted": true,
+     "reply_onset_s": 1.77,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": true,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "फिर से पूछ रहा हूँ।",
+       "jev_ms": 567,
+       "scores": {
+        "rushed": 0.14,
+        "frustrated": 0.63,
+        "confused": 0.13,
+        "bot_question": 0.16,
+        "interested": 0.33,
+        "opt_out": 0.05
+       },
+       "lang": "hindi",
+       "from": "interested",
+       "to": "frustrated",
+       "pushed": true,
+       "push_ms_after_transcript": 571,
+       "push_after_seller_end_s": -1.14,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": -1.71
+      },
+      {
+       "utt": "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।",
+       "jev_ms": 491,
+       "scores": {
+        "rushed": 0.53,
+        "frustrated": 0.92,
+        "confused": 0.05,
+        "bot_question": 0.03,
+        "interested": 0.78,
+        "opt_out": 0.09
+       },
+       "lang": "hindi",
+       "from": "frustrated",
+       "to": "frustrated",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.65
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, बाद में बात करते हैं",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार, बाद में बात करते हैं।"
+     ],
+     "reply_dd": "कोई बात नहीं, मैं समझ सकता हूँ।",
+     "restarted": true,
+     "reply_onset_s": 1.81,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "अभी बिजी हूँ यार, बाद में बात करते हैं।",
+       "jev_ms": 547,
+       "scores": {
+        "rushed": 0.99,
+        "frustrated": 0.13,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.04,
+        "opt_out": 0.04
+       },
+       "lang": "hindi",
+       "from": "frustrated",
+       "to": "rushed",
+       "pushed": true,
+       "push_ms_after_transcript": 551,
+       "push_after_seller_end_s": 1.35,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.8
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  },
+  {
+   "scen": "A_hostile",
+   "run": 1,
+   "iid": "20261009/bcc87eb0-17:03:26-228b0ae6",
+   "switch_log": [],
+   "turns": [
+    {
+     "seller": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+     "signal": "neutral",
+     "asr": [
+      "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?"
+     ],
+     "reply_dd": "जी, मैं IndiaMART का AI assistant बोल रहा हूँ। मैं आपकी help करने के लिए call किया है।",
+     "restarted": false,
+     "reply_onset_s": 1.63,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": false,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+       "jev_ms": 506,
+       "scores": {
+        "rushed": 0.02,
+        "frustrated": 0.07,
+        "confused": 0.06,
+        "bot_question": 0.09,
+        "interested": 0.13,
+        "opt_out": 0.01
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.39
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "मैं owner नहीं हूँ, manager हूँ. Owner बाहर गए हैं.",
+     "signal": "neutral",
+     "asr": [
+      "मैं ओनर नहीं हूं।",
+      "मैं ओनर नहीं हूँ, मैनेजर हूँ।",
+      "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।"
+     ],
+     "reply_dd": "अच्छा, कोई बात नहीं। क्या आप बता सकते हैं कि ओनर जी कब तक वापस आएँगे? या फिर मैं आपसे ही बात कर सकता हूँ?",
+     "restarted": false,
+     "reply_onset_s": 1.32,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "मैं ओनर नहीं हूं।",
+       "jev_ms": 478,
+       "scores": {
+        "rushed": 0.04,
+        "frustrated": 0.13,
+        "confused": 0.04,
+        "bot_question": 0.1,
+        "interested": 0.04,
+        "opt_out": 0.04
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": -1.85
+      },
+      {
+       "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ।",
+       "jev_ms": 484,
+       "scores": {
+        "rushed": 0.03,
+        "frustrated": 0.1,
+        "confused": 0.04,
+        "bot_question": 0.05,
+        "interested": 0.06,
+        "opt_out": 0.03
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": -0.73
+      },
+      {
+       "utt": "मैं ओनर नहीं हूँ, मैनेजर हूँ। ओनर बाहर गए हैं।",
+       "jev_ms": 511,
+       "scores": {
+        "rushed": 0.07,
+        "frustrated": 0.08,
+        "confused": 0.03,
+        "bot_question": 0.04,
+        "interested": 0.06,
+        "opt_out": 0.03
+       },
+       "lang": "hindi",
+       "from": "neutral",
+       "to": "neutral",
+       "pushed": false,
+       "push_ms_after_transcript": null,
+       "push_after_seller_end_s": null,
+       "push_before_reply_onset": null,
+       "transcript_after_seller_end_s": 0.51
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "अच्छा ठीक है, पर exact price बताओ, कितने का plan है?",
+     "signal": "interested",
+     "asr": [
+      "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?"
+     ],
+     "reply_dd": "देखिए, plans की prices अलग-अलग होती हैं। हमारे executive आपसे meeting में बात करके आपकी ज़रूरत के हिसाब से सही plan बता देंगे। क्या आप कल के लिए थोड़ा time निकाल सकते हैं?",
+     "restarted": false,
+     "reply_onset_s": 1.41,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "अच्छा ठीक है, पर एग्जैक्ट प्राइस बताओ कितने का प्लान है?",
+       "jev_ms": 553,
+       "scores": {
+        "rushed": 0.05,
+        "frustrated": 0.08,
+        "confused": 0.04,
+        "bot_question": 0.02,
+        "interested": 0.94,
+        "opt_out": 0.02
+       },
+       "lang": "hinglish",
+       "from": "neutral",
+       "to": "interested",
+       "pushed": true,
+       "push_ms_after_transcript": 555,
+       "push_after_seller_end_s": 1.02,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.47
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो",
+     "signal": "frustrated",
+     "asr": [
+      "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।"
+     ],
+     "reply_dd": "sorry, दरअसल मैं आपको कोई गलत price नहीं बताना चाहता। इसीलिए हमारे executive आपसे बात करके exact details share करेंगे। क्या हम कल के लिए एक अरे, sorry जी, दरअसल prices fixed नहीं होतीं और वो आपकी requirements पर depend करती हैं। इसीलिए मैं चाहता हूँ कि हमारे executive आपसे बात करें और आपको best price बता सकें। क्या हम कल के लिए एक short meeting fix कर सकते हैं?",
+     "restarted": false,
+     "reply_onset_s": 1.68,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": true,
+      "confused": true,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "फिर से पूछ रहा हूं, प्राइस बताओ वरना फोन रख दो।",
+       "jev_ms": 503,
+       "scores": {
+        "rushed": 0.64,
+        "frustrated": 0.94,
+        "confused": 0.04,
+        "bot_question": 0.02,
+        "interested": 0.77,
+        "opt_out": 0.16
+       },
+       "lang": "hindi",
+       "from": "interested",
+       "to": "frustrated",
+       "pushed": true,
+       "push_ms_after_transcript": 504,
+       "push_after_seller_end_s": 1.17,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.66
+      }
+     ],
+     "tool_rows": null
+    },
+    {
+     "seller": "अभी बिज़ी हूँ यार, बाद में बात करते हैं",
+     "signal": "rushed",
+     "asr": [
+      "अभी बिजी हूँ यार, बाद में बात करते हैं।"
+     ],
+     "reply_dd": "कोई बात नहीं, मैं समझ सकता हूँ। वैसे, क्या कल सुबह या शाम का कोई time आपके लिए",
+     "restarted": true,
+     "reply_onset_s": 1.4,
+     "checks_dd": {
+      "rushed": false,
+      "frustrated": false,
+      "confused": false,
+      "interested": true,
+      "gujarati": false,
+      "opt_out": false
+     },
+     "jev": [
+      {
+       "utt": "अभी बिजी हूँ यार, बाद में बात करते हैं।",
+       "jev_ms": 699,
+       "scores": {
+        "rushed": 0.99,
+        "frustrated": 0.13,
+        "confused": 0.03,
+        "bot_question": 0.02,
+        "interested": 0.04,
+        "opt_out": 0.04
+       },
+       "lang": "hindi",
+       "from": "frustrated",
+       "to": "rushed",
+       "pushed": true,
+       "push_ms_after_transcript": 720,
+       "push_after_seller_end_s": 1.36,
+       "push_before_reply_onset": true,
+       "transcript_after_seller_end_s": 0.64
+      }
+     ],
+     "tool_rows": null
+    }
+   ]
+  }
+ ]
+}

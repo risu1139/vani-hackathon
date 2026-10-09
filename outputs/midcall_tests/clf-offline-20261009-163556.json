@@ -1,0 +1,567 @@
+{
+ "jev": {
+  "acc": "19/19",
+  "p50_ms": 495,
+  "max_ms": 1128,
+  "rows": [
+   {
+    "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "exp": "neutral",
+    "got": "neutral",
+    "ok": true,
+    "ms": 1128,
+    "scores": {
+     "rushed": 0.04,
+     "frustrated": 0.03,
+     "confused": 0.09,
+     "bot_question": 0.03,
+     "interested": 0.48,
+     "opt_out": 0.01
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है",
+    "exp": "rushed",
+    "got": "rushed",
+    "ok": true,
+    "ms": 483,
+    "scores": {
+     "rushed": 0.98,
+     "frustrated": 0.46,
+     "confused": 0.05,
+     "bot_question": 0.02,
+     "interested": 0.28,
+     "opt_out": 0.03
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "कितनी बार कॉल करोगे, परेशान कर दिया है",
+    "exp": "frustrated",
+    "got": "frustrated",
+    "ok": true,
+    "ms": 475,
+    "scores": {
+     "rushed": 0.33,
+     "frustrated": 0.98,
+     "confused": 0.04,
+     "bot_question": 0.03,
+     "interested": 0.03,
+     "opt_out": 0.33
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "समझ नहीं आया, क्या मतलब मीटिंग?",
+    "exp": "confused",
+    "got": "confused",
+    "ok": true,
+    "ms": 522,
+    "scores": {
+     "rushed": 0.08,
+     "frustrated": 0.12,
+     "confused": 0.96,
+     "bot_question": 0.04,
+     "interested": 0.12,
+     "opt_out": 0.02
+    },
+    "lang": "hinglish",
+    "err": null
+   },
+   {
+    "utt": "ओके ओके",
+    "exp": "neutral",
+    "got": "neutral",
+    "ok": true,
+    "ms": 529,
+    "scores": {
+     "rushed": 0.09,
+     "frustrated": 0.12,
+     "confused": 0.04,
+     "bot_question": 0.02,
+     "interested": 0.41,
+     "opt_out": 0.02
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+    "exp": "interested",
+    "got": "interested",
+    "ok": true,
+    "ms": 470,
+    "scores": {
+     "rushed": 0.04,
+     "frustrated": 0.04,
+     "confused": 0.12,
+     "bot_question": 0.02,
+     "interested": 0.96,
+     "opt_out": 0.02
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+    "exp": "neutral",
+    "got": "neutral",
+    "ok": true,
+    "ms": 482,
+    "scores": {
+     "rushed": 0.05,
+     "frustrated": 0.14,
+     "confused": 0.05,
+     "bot_question": 0.02,
+     "interested": 0.09,
+     "opt_out": 0.02
+    },
+    "lang": "gujarati",
+    "err": null
+   },
+   {
+    "utt": "मुझे कॉल मत करो, मेरा नंबर हटा दो",
+    "exp": "opt_out",
+    "got": "opt_out",
+    "ok": true,
+    "ms": 528,
+    "scores": {
+     "rushed": 0.1,
+     "frustrated": 0.84,
+     "confused": 0.03,
+     "bot_question": 0.02,
+     "interested": 0.02,
+     "opt_out": 0.99
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+    "exp": "neutral",
+    "got": "neutral",
+    "ok": true,
+    "ms": 509,
+    "scores": {
+     "rushed": 0.05,
+     "frustrated": 0.09,
+     "confused": 0.13,
+     "bot_question": 0.04,
+     "interested": 0.17,
+     "opt_out": 0.02
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "मैं owner नहीं हूँ, manager हूँ. Owner बाहर गए हैं.",
+    "exp": "neutral",
+    "got": "neutral",
+    "ok": true,
+    "ms": 470,
+    "scores": {
+     "rushed": 0.07,
+     "frustrated": 0.05,
+     "confused": 0.03,
+     "bot_question": 0.02,
+     "interested": 0.06,
+     "opt_out": 0.02
+    },
+    "lang": "hinglish",
+    "err": null
+   },
+   {
+    "utt": "अच्छा ठीक है, पर exact price बताओ, कितने का plan है?",
+    "exp": "interested",
+    "got": "interested",
+    "ok": true,
+    "ms": 537,
+    "scores": {
+     "rushed": 0.06,
+     "frustrated": 0.08,
+     "confused": 0.04,
+     "bot_question": 0.02,
+     "interested": 0.92,
+     "opt_out": 0.02
+    },
+    "lang": "hinglish",
+    "err": null
+   },
+   {
+    "utt": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो",
+    "exp": "frustrated",
+    "got": "frustrated",
+    "ok": true,
+    "ms": 483,
+    "scores": {
+     "rushed": 0.69,
+     "frustrated": 0.93,
+     "confused": 0.04,
+     "bot_question": 0.02,
+     "interested": 0.59,
+     "opt_out": 0.1
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "अभी बिज़ी हूँ यार, बाद में बात करते हैं",
+    "exp": "rushed",
+    "got": "rushed",
+    "ok": true,
+    "ms": 505,
+    "scores": {
+     "rushed": 0.99,
+     "frustrated": 0.2,
+     "confused": 0.03,
+     "bot_question": 0.02,
+     "interested": 0.03,
+     "opt_out": 0.04
+    },
+    "lang": "hinglish",
+    "err": null
+   },
+   {
+    "utt": "फिर से बोलिए, आवाज़ नहीं आई",
+    "exp": "confused",
+    "got": "confused",
+    "ok": true,
+    "ms": 499,
+    "scores": {
+     "rushed": 0.07,
+     "frustrated": 0.19,
+     "confused": 0.94,
+     "bot_question": 0.04,
+     "interested": 0.07,
+     "opt_out": 0.03
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "पांच मिनट बाद कॉल करो, अभी कस्टमर है",
+    "exp": "rushed",
+    "got": "rushed",
+    "ok": true,
+    "ms": 486,
+    "scores": {
+     "rushed": 0.99,
+     "frustrated": 0.1,
+     "confused": 0.03,
+     "bot_question": 0.02,
+     "interested": 0.08,
+     "opt_out": 0.03
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "हाँ हाँ बताइए, ऑर्डर कैसे आएंगे?",
+    "exp": "interested",
+    "got": "interested",
+    "ok": true,
+    "ms": 484,
+    "scores": {
+     "rushed": 0.05,
+     "frustrated": 0.03,
+     "confused": 0.04,
+     "bot_question": 0.02,
+     "interested": 0.96,
+     "opt_out": 0.02
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "भाई पहले भी बोला था मुझे नहीं चाहिए, फिर से कॉल क्यों किया?",
+    "exp": "frustrated",
+    "got": "frustrated",
+    "ok": true,
+    "ms": 486,
+    "scores": {
+     "rushed": 0.09,
+     "frustrated": 0.94,
+     "confused": 0.1,
+     "bot_question": 0.03,
+     "interested": 0.03,
+     "opt_out": 0.19
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "आप बॉट हो क्या? रिकॉर्डेड कॉल है?",
+    "exp": "bot_question",
+    "got": "bot_question",
+    "ok": true,
+    "ms": 495,
+    "scores": {
+     "rushed": 0.05,
+     "frustrated": 0.43,
+     "confused": 0.12,
+     "bot_question": 0.98,
+     "interested": 0.05,
+     "opt_out": 0.03
+    },
+    "lang": "hindi",
+    "err": null
+   },
+   {
+    "utt": "हाँ जी, मैं ही बोल रहा हूँ",
+    "exp": "neutral",
+    "got": "neutral",
+    "ok": true,
+    "ms": 536,
+    "scores": {
+     "rushed": 0.05,
+     "frustrated": 0.04,
+     "confused": 0.03,
+     "bot_question": 0.03,
+     "interested": 0.24,
+     "opt_out": 0.02
+    },
+    "lang": "hindi",
+    "err": null
+   }
+  ]
+ },
+ "sarvam:sarvam-105b": {
+  "acc": "14/19",
+  "p50_ms": 156,
+  "max_ms": 1316,
+  "rows": [
+   {
+    "utt": "हाँ जी बोलिए, कौन बोल रहा है?",
+    "exp": "neutral",
+    "got": "interested",
+    "ok": false,
+    "ms": 446,
+    "scores": {
+     "raw": "interested"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "अभी बिज़ी हूँ यार, जल्दी बोलो क्या है",
+    "exp": "rushed",
+    "got": "rushed",
+    "ok": true,
+    "ms": 1316,
+    "scores": {
+     "raw": "rushed"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "कितनी बार कॉल करोगे, परेशान कर दिया है",
+    "exp": "frustrated",
+    "got": "frustrated",
+    "ok": true,
+    "ms": 154,
+    "scores": {
+     "raw": "frustrated"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "समझ नहीं आया, क्या मतलब मीटिंग?",
+    "exp": "confused",
+    "got": "confused",
+    "ok": true,
+    "ms": 162,
+    "scores": {
+     "raw": "confused"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "ओके ओके",
+    "exp": "neutral",
+    "got": "neutral",
+    "ok": true,
+    "ms": 164,
+    "scores": {
+     "raw": "neutral"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "अच्छा, ये कैसे काम करता है? कितना चार्ज है?",
+    "exp": "interested",
+    "got": "interested",
+    "ok": true,
+    "ms": 139,
+    "scores": {
+     "raw": "interested"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.",
+    "exp": "neutral",
+    "got": "confused",
+    "ok": false,
+    "ms": 177,
+    "scores": {
+     "raw": "confused"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "मुझे कॉल मत करो, मेरा नंबर हटा दो",
+    "exp": "opt_out",
+    "got": "opt_out",
+    "ok": true,
+    "ms": 194,
+    "scores": {
+     "raw": "opt_out"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "पहले ये बताओ आप कौन हो और कहाँ से बोल रहे हो?",
+    "exp": "neutral",
+    "got": "confused",
+    "ok": false,
+    "ms": 155,
+    "scores": {
+     "raw": "confused"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "मैं owner नहीं हूँ, manager हूँ. Owner बाहर गए हैं.",
+    "exp": "neutral",
+    "got": "interested",
+    "ok": false,
+    "ms": 140,
+    "scores": {
+     "raw": "interested"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "अच्छा ठीक है, पर exact price बताओ, कितने का plan है?",
+    "exp": "interested",
+    "got": "interested",
+    "ok": true,
+    "ms": 176,
+    "scores": {
+     "raw": "interested"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "फिर से पूछ रहा हूँ, प्राइस बताओ वरना फोन रख दो",
+    "exp": "frustrated",
+    "got": "frustrated",
+    "ok": true,
+    "ms": 153,
+    "scores": {
+     "raw": "frustrated"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "अभी बिज़ी हूँ यार, बाद में बात करते हैं",
+    "exp": "rushed",
+    "got": "rushed",
+    "ok": true,
+    "ms": 152,
+    "scores": {
+     "raw": "rushed"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "फिर से बोलिए, आवाज़ नहीं आई",
+    "exp": "confused",
+    "got": "confused",
+    "ok": true,
+    "ms": 156,
+    "scores": {
+     "raw": "confused"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "पांच मिनट बाद कॉल करो, अभी कस्टमर है",
+    "exp": "rushed",
+    "got": "rushed",
+    "ok": true,
+    "ms": 185,
+    "scores": {
+     "raw": "rushed"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "हाँ हाँ बताइए, ऑर्डर कैसे आएंगे?",
+    "exp": "interested",
+    "got": "interested",
+    "ok": true,
+    "ms": 144,
+    "scores": {
+     "raw": "interested"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "भाई पहले भी बोला था मुझे नहीं चाहिए, फिर से कॉल क्यों किया?",
+    "exp": "frustrated",
+    "got": "frustrated",
+    "ok": true,
+    "ms": 154,
+    "scores": {
+     "raw": "frustrated"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "आप बॉट हो क्या? रिकॉर्डेड कॉल है?",
+    "exp": "bot_question",
+    "got": "bot_question",
+    "ok": true,
+    "ms": 176,
+    "scores": {
+     "raw": "bot_question"
+    },
+    "lang": null,
+    "err": null
+   },
+   {
+    "utt": "हाँ जी, मैं ही बोल रहा हूँ",
+    "exp": "neutral",
+    "got": "interested",
+    "ok": false,
+    "ms": 153,
+    "scores": {
+     "raw": "interested"
+    },
+    "lang": null,
+    "err": null
+   }
+  ]
+ }
+}
