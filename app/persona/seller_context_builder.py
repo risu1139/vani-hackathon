@@ -17,7 +17,8 @@ Output stays in git-ignored data/.
 
 Run (from the repo root; tokens VANI_AK / VANI_USERS_TOKEN are read from .env):
   python app/persona/seller_context_builder.py index
-  python app/persona/seller_context_builder.py build --glid 12345678 [--no-api] [--refresh]
+  python app/persona/seller_context_builder.py build --glid 12345678 [--no-api] [--refresh | --rebuild]
+Output: data/contexts/<glid>/ (INDEX.md, core.md, topic files, calls/, context.json, all.md).
 """
 import argparse
 import glob
@@ -526,18 +527,64 @@ def _j(s):
         return {}
 
 
+def other_records(files):
+    """Sources SCRUBBER skips. Kept so no source is dropped just because a seller has no rows (user, 2026-10-10).
+    Only useful fields: no pincode/address, no KYC document paths or extracted ID values."""
+    leap = [{"date": (r.get("entered_on") or "")[:16], "answered": r.get("is_call_answered"),
+             "disposition": r.get("disposition_remarks"), "reason_code": r.get("call_disposition_reason"),
+             "lead_id": r.get("fk_eto_ofr_display_id")} for r in files.get("leap_call_logs", [])]
+    locs = [{"city": r.get("city"), "state": r.get("state"), "cluster_rank": r.get("cluster_rank"),
+             "source": r.get("address_source") or r.get("latlong_source"), "created_on": (r.get("created_on") or "")[:10]}
+            for r in files.get("so_locations", [])]
+    kyc_docs = [{"document_type": r.get("document_type"), "status": r.get("verification_status"),
+                 "uploaded_on": (r.get("uploaded_on") or "")[:10], "verified_on": (r.get("verified_on") or "")[:10]}
+                for r in files.get("so_kyc_documents", [])]
+    kyc_checks = [{k: v for k, v in r.items() if not re.search(r"value|number|path|extract|name|address|glusr", k, re.I)}
+                  for r in files.get("so_kyc_field_checks", [])]
+    kyc_sessions = [{k: v for k, v in r.items() if re.search(r"status|date|on$|type|stage|result", k, re.I)}
+                    for r in files.get("so_kyc_sessions", [])]
+    return {"leap_calls": leap, "onboarding_locations": locs, "kyc_documents": kyc_docs,
+            "kyc_field_checks": kyc_checks, "kyc_sessions": kyc_sessions}
+
+
+def render_other(o):
+    lines = ["### X01 Lead-enrichment (LEAP) calls linked to this GLID", "*Source:* aids/Call_Logs_Hackathon.csv", ""]
+    lines += [f"- {c['date']}: answered {c['answered']}; {c['disposition']} (code {c['reason_code']})" for c in o["leap_calls"]] or ["_no data_"]
+    return "\n".join(lines + [""])
+
+
+def render_kyc(o):
+    lines = ["### X02 Onboarding locations (city level only)", "*Source:* seller_onboarding/so_seller_locations.csv", ""]
+    lines += [f"- {l['city']}, {l['state']} (rank {l['cluster_rank']}, {l['source']}, {l['created_on']})" for l in o["onboarding_locations"]] or ["_no data_"]
+    lines += ["", "### X03 KYC status (no document paths, no ID values)", "*Source:* seller_onboarding/so_kyc_*.csv", ""]
+    lines += [f"- {d['document_type']}: {d['status']} (uploaded {d['uploaded_on']}, verified {d['verified_on']})" for d in o["kyc_documents"]] or ["_no documents_"]
+    if o["kyc_sessions"]:
+        lines.append(f"- Sessions: {json.dumps(o['kyc_sessions'], ensure_ascii=False)[:600]}")
+    if o["kyc_field_checks"]:
+        lines.append(f"- Field checks: {json.dumps(o['kyc_field_checks'], ensure_ascii=False)[:600]}")
+    return "\n".join(lines + [""])
+
+
 def call_history(files, now):
     """Old VANI bot calls, ALL of them, newest first (user, 2026-10-10: give the agent the full information).
     Per call: full summary, every evaluator agent's output, and the turn-by-turn transcript when one exists.
     `relevance` (recent <=30 d, older <=90 d, old) is a label for the agent to weigh, not a filter.
     Signals are counts of text matches per call, dated so B2 can decay them."""
-    calls = files.get("ps07_bot_calls", [])
+    seen, calls = set(), []
+    for c in files.get("ps07_bot_calls", []) + files.get("ps07_recording_sample", []) + files.get("gc_bot_calls", []):
+        if c.get("attempt_id") not in seen:
+            seen.add(c.get("attempt_id"))
+            calls.append(c)
     ev = {}
     for r in files.get("ps07_evaluator", []):
         ev.setdefault(r.get("attempt_id"), {})[r.get("eval_agent")] = _j(r.get("agent_output"))
     turns = {}
     for t in files.get("ps07_call_turns", []):
         turns.setdefault(t.get("attempt_id"), []).append(t)
+    have = set(turns)
+    for t in files.get("gc_bot_call_turns", []):  # GC copy used only for calls PS07 has no transcript for
+        if t.get("attempt_id") not in have:
+            turns.setdefault(t.get("attempt_id"), []).append(t)
     out = {"n_calls_all_history": len(calls), "outcome_counts_all_history": {}, "objection_categories_all_history": {},
            "meetings_fixed_all_history": 0, "calls": [], "older_calls_ignored": 0}
     for c in calls:
@@ -650,7 +697,7 @@ FILES_MAP = [
 
 def _point_md(pid, P):
     v, src = P.get(pid, (None, ""))
-    if pid in ("E09", "E10", "E11", "E12", "G00"):
+    if pid in ("E09", "E10", "E11", "E12", "G00", "X00"):
         return None
     lab = S.LABELS.get(pid, pid)
     return f"### {pid} {lab}\n*Source:* {src}\n\n{S.render_value(v) if not S.blank(v) else '_no data_'}\n"
@@ -726,7 +773,7 @@ def key_facts(P, hist, peer, leads, s_aov, m_aov, cat):
     return K[:25]
 
 
-def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref):
+def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref, other):
     base = os.path.join(OUT, glid)
     os.makedirs(os.path.join(base, "calls"), exist_ok=True)
     for f in glob.glob(os.path.join(base, "calls", "*.md")):
@@ -748,6 +795,10 @@ def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref)
             parts += [render_category(cat), render_aov(s_aov, m_aov, cat)]
         if "E11" in prefixes:
             parts.append(render_peer(peer))
+        if name == "core.md":
+            parts.append(render_kyc(other))
+        if name == "channels.md":
+            parts.append(render_other(other))
         if "E12" in prefixes:
             parts.append(render_showcase(leads, ref).replace("| # |", "| CL |"))
         w(name, "\n".join(parts))
@@ -792,10 +843,10 @@ def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref)
 
 
 # ---------------------------------------------------------------- build
-def build(glid, use_api=True, refresh=False):
+def build(glid, use_api=True, refresh=False, rebuild=False):
     glid = glid.strip()
     folder = os.path.join(OUT, glid)
-    if not refresh and os.path.exists(os.path.join(folder, "INDEX.md")):
+    if not refresh and not rebuild and os.path.exists(os.path.join(folder, "INDEX.md")):
         return folder, "INDEX.md", "cached"
     files = seller_rows(glid)
     if not files:
@@ -818,11 +869,17 @@ def build(glid, use_api=True, refresh=False):
     text = text.replace("\n## F. ", "\n" + render_category(cat) + "\n" + render_aov(s_aov, m_aov, cat) + "\n" + render_peer(peer)
                         + "\n" + render_showcase(leads, ref) + "\n## F. ", 1)
     hist = call_history(files, datetime.now())
+    other = other_records(files)
+    P["X00"] = (other, "LEAP calls, onboarding locations, KYC status (persona builder)")
     P["G00"] = (hist, "ps07_bot_calls + ps07_evaluator (rebuilt by the persona builder)")
     text = text.replace("\n## H. ", "\n" + render_history(hist) + "\n## H. ", 1) if "\n## H. " in text else text + "\n" + render_history(hist)
     text = text.replace("Unmasked (PII handling: legal team).",
                         "PII removed for persona use: phones, emails, pincode, lat/long, street address, ID numbers.")
-    folder, sizes = write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref)
+    folder, sizes = write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref, other)
+    import pii_check  # every build is scanned; leftovers are reported loudly
+    left = pii_check.scan(folder)
+    if left:
+        print(f"PII WARNING {glid}: " + ", ".join(f"{k} {len(v)}" for k, v in left.items()), file=sys.stderr)
     with open(os.path.join(folder, "all.md"), "w", encoding="utf-8") as f:  # one-file copy for humans; the agent uses the split files
         f.write(scrub_text(text))
     for old in (os.path.join(OUT, f"{glid}.md"), os.path.join(OUT, f"{glid}.json")):  # retire the old single-file layout
@@ -839,14 +896,15 @@ def main():
     b = sub.add_parser("build")
     b.add_argument("--glid", required=True)
     b.add_argument("--no-api", action="store_true")
-    b.add_argument("--refresh", action="store_true")
+    b.add_argument("--refresh", action="store_true", help="re-fetch all APIs and queries")
+    b.add_argument("--rebuild", action="store_true", help="rewrite the folder from cached data, no new queries")
     p = a.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
     if p.cmd == "index":
         index()
     else:
         t0 = time.time()
-        md, js, how = build(p.glid, not p.no_api, p.refresh)
+        md, js, how = build(p.glid, not p.no_api, p.refresh, p.rebuild)
         print(f"{how}: {md} ({js}) ({time.time() - t0:.1f} s)")
 
 
