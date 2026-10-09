@@ -332,6 +332,180 @@ def render_aov(seller, mcats, cat_rows):
     return "\n".join(lines + [""])
 
 
+# ---------------------------------------------------------------- peer statistic (E11), all ladder rungs
+BANDS = ["0 - 40 L", "40 L - 1.5 Cr", "1.5 - 5 Cr", "5 - 25 Cr", "25 - 100 Cr", "100 - 500 Cr", "> 500 Cr"]
+MIN_PEERS = 5
+
+
+def _median(xs):
+    xs = sorted(x for x in xs if x is not None)
+    return None if not xs else xs[len(xs) // 2]
+
+
+def peer_stat(glid, cat_rows, refresh=False, days=30):
+    """Same-category, same-size peers at every rung of the fallback ladder, precomputed so the agent can pick offline.
+    Peers = sellers mapped to the seller's main MCAT (pg-imblr glusr_usr_mcat_prd_count) with a GST turnover band.
+    Outcome = buy leads bought in the last `days` days (weberp.eto_lead_pur_hist). Peer AOV = 'Probable Order Value'
+    of the leads they bought in this MCAT. The GST number column is never selected."""
+    mcats = [r["mcat_id"] for r in cat_rows if str(r.get("mcat_id", "")).isdigit()]
+    if not mcats:
+        return {"status": "no_mcat"}
+
+    def q():
+        mlist = ",".join(mcats)
+        own = redash(f"""select coalesce(eto_ofr_prime_mcat_id, user_matched_mcat_id, search_top_mcat_id) m, count(*) n
+            from weberp.eto_lead_pur_hist where fk_glusr_usr_id={glid} and eto_pur_date >= current_date - 90 group by 1 order by 2 desc""",
+                     REDASH_BL_DS)
+        if own is None:
+            return None
+        bought = [str(int(r["m"])) for r in own if r.get("m") and str(int(r["m"])) in mcats]
+        main = bought[0] if bought else mcats[0]
+        me = redash(f"""select u.fk_gl_city_id c, u.fk_gl_state_id s, gd.glusr_gst_annual_turnover b
+            from glusr_usr u left join glusr_gst_details gd on gd.fk_glusr_usr_id = u.glusr_usr_id where u.glusr_usr_id={glid}""",
+                    REDASH_BL_DS) or [{}]
+        me = me[0]
+        band = me.get("b")
+        if band not in BANDS:
+            return {"status": "no_band", "main_mcat": main, "band": band}
+        bi = BANDS.index(band)
+        near = [b for b in BANDS[max(0, bi - 1):bi + 2] if not (bi == 0 and BANDS.index(b) > 1)]
+        blist = ",".join(f"'{b}'" for b in near)
+        rows = redash(f"""with peers as (select distinct fk_glusr_usr_id g from glusr_usr_mcat_prd_count where fk_glcat_mcat_id={main}
+                and fk_glusr_usr_id <> {glid}),
+            pinfo as (select p.g, gd.glusr_gst_annual_turnover b, u.fk_gl_city_id c, u.fk_gl_state_id s from peers p
+                join glusr_gst_details gd on gd.fk_glusr_usr_id = p.g join glusr_usr u on u.glusr_usr_id = p.g
+                where gd.glusr_gst_annual_turnover in ({blist})),
+            pur as (select h.fk_glusr_usr_id g, count(*) n_any,
+                sum(case when coalesce(h.eto_ofr_prime_mcat_id, h.user_matched_mcat_id, h.search_top_mcat_id) = {main} then 1 else 0 end) n_mcat
+                from weberp.eto_lead_pur_hist h where h.fk_glusr_usr_id in (select g from pinfo) and h.eto_pur_date >= current_date - {days} group by 1)
+            select pi.b, pi.c, pi.s, coalesce(pu.n_any, 0) n_any, coalesce(pu.n_mcat, 0) n_mcat, pi.g from pinfo pi left join pur pu on pu.g = pi.g""",
+                      REDASH_BL_DS, timeout=180)
+        if rows is None:
+            return None
+        povs = redash(f"""select h.fk_glusr_usr_id g, a.fk_im_spec_options_desc v from weberp.eto_lead_pur_hist h
+            join eto_attribute a on a.fk_eto_ofr_display_id = h.fk_eto_ofr_id and a.fk_im_spec_master_desc = 'Probable Order Value'
+            where h.fk_glusr_usr_id in (select fk_glusr_usr_id from glusr_usr_mcat_prd_count where fk_glcat_mcat_id={main})
+            and coalesce(h.eto_ofr_prime_mcat_id, h.user_matched_mcat_id, h.search_top_mcat_id) = {main}
+            and h.eto_pur_date >= current_date - {days}""", REDASH_BL_DS, timeout=180) or []
+        pov_by = {}
+        for r in povs:
+            v = pov_value(r.get("v"))
+            if v is not None:
+                pov_by.setdefault(str(r["g"]), []).append(v)
+        own_n = {"any": sum(int(r["n"]) for r in own), "main_mcat": sum(int(r["n"]) for r in own if r.get("m") and str(int(r["m"])) == main)}
+        rungs = []
+        for i, (geo, same_band) in enumerate([("city", True), ("state", True), ("india", True), ("state", False), ("india", False)], 1):
+            sel = [r for r in rows if (r["b"] == band if same_band else True)
+                   and (geo == "india" or (geo == "city" and r["c"] == me.get("c")) or (geo == "state" and r["s"] == me.get("s")))]
+            buyers = [r for r in sel if int(r["n_mcat"]) > 0]
+            aovs = [x for r in buyers for x in pov_by.get(str(r["g"]), [])]
+            rungs.append({
+                "rung": i, "geo": geo, "band_scope": "same band" if same_band else "band ±1 (" + ", ".join(near) + ")",
+                "peers_mapped": len(sel), "peers_bought_in_mcat": len(buyers),
+                "share_bought": round(len(buyers) / len(sel), 3) if sel else None,
+                "leads_bought_total": sum(int(r["n_mcat"]) for r in buyers),
+                "median_leads_per_buyer": _median([int(r["n_mcat"]) for r in buyers]),
+                "peer_aov_median_rs": round(_median(aovs)) if aovs else None, "peer_valued_leads": len(aovs),
+                "allowed": len(buyers) >= MIN_PEERS})
+        first = next((r for r in rungs if r["allowed"]), None)
+        return {"status": "ok", "window_days": days, "main_mcat": main, "band": band, "city_id": me.get("c"), "state_id": me.get("s"),
+                "seller_leads_bought": {"any_mcat": own_n["any"], "main_mcat": own_n["main_mcat"], "window_days": 90},
+                "first_allowed_rung": first["rung"] if first else None, "rungs": rungs,
+                "note": "Peer counts undercount: about 24% of purchases have no MCAT. Never claim what peers earned or closed."}
+    return _cached(os.path.join(AOV_CACHE, "peer", f"{glid}.json"), q, refresh)
+
+
+def render_peer(p):
+    lines = ["## E11. Peer statistic (same MCAT, same turnover band; fallback ladder)", "",
+             "*Source:* pg-imblr glusr_usr_mcat_prd_count + glusr_gst_details + weberp.eto_lead_pur_hist + eto_attribute, via Redash. "
+             f"A rung is allowed only with at least {MIN_PEERS} peers who bought leads in the MCAT. Use the first allowed rung and "
+             "name its geography honestly. Never compare a small seller with a much bigger band.", ""]
+    if not p or p.get("status") != "ok":
+        return "\n".join(lines + [f"_not available: {(p or {}).get('status', 'query failed')}_", ""])
+    s = p["seller_leads_bought"]
+    lines.append(f"- Seller: band {p['band']}, main MCAT {p['main_mcat']}; bought {s['main_mcat']} leads in this MCAT "
+                 f"({s['any_mcat']} in all MCATs) in the last {s['window_days']} days. First allowed rung: {p['first_allowed_rung']}.")
+    lines.append("")
+    lines.append("| Rung | Area | Band | Peers mapped | Bought in MCAT | Share | Leads total | Median per buyer | Peer AOV median | Allowed |")
+    lines.append("|---|---|---|---|---|---|---|---|---|---|")
+    for r in p["rungs"]:
+        lines.append(f"| {r['rung']} | {r['geo']} | {r['band_scope']} | {r['peers_mapped']} | {r['peers_bought_in_mcat']} | {r['share_bought']} | "
+                     f"{r['leads_bought_total']} | {r['median_leads_per_buyer']} | {r['peer_aov_median_rs']} | {'yes' if r['allowed'] else 'no'} |")
+    return "\n".join(lines + ["", p.get("note", ""), ""])
+
+
+# ---------------------------------------------------------------- showcase-lead candidates (E12)
+def showcase_leads(cat_rows, peer, seller_aov_stats, refresh=False, keep=12):
+    """Live and recent expired buy leads in the seller's top MCATs, with order value / quantity, scored for fit.
+    Only product, quantity, value, region and status are kept: never the buyer's name, company or contact."""
+    mcats = [r["mcat_id"] for r in cat_rows if str(r.get("mcat_id", "")).isdigit()]
+    if not mcats:
+        return []
+    mlist = ",".join(mcats)
+    attr = lambda col, cond: (f"(select a.fk_im_spec_options_desc from eto_attribute a where a.fk_eto_ofr_display_id = o.{col} "
+                              f"and a.fk_im_spec_master_desc {cond} limit 1)")
+
+    def q(table, status, extra, col="eto_ofr_display_id"):
+        return redash(f"""select '{status}' status, o.{col} id, left(o.eto_ofr_title, 90) title, o.fk_glcat_mcat_id mcat,
+            ci.gl_city_name city, st.gl_state_name state, ci.fk_gl_state_id state_id, o.eto_ofr_city_id city_id,
+            date(o.eto_ofr_approv_date_orig) posted, {attr(col, "= 'Probable Order Value'")} pov,
+            {attr(col, "ilike 'quantity'")} qty, {attr(col, "ilike 'quantity unit'")} unit
+            from {table} o left join gl_city ci on ci.gl_city_id = o.eto_ofr_city_id left join gl_state st on st.gl_state_id = ci.fk_gl_state_id
+            where o.fk_glcat_mcat_id in ({mlist}) {extra} order by o.eto_ofr_approv_date_orig desc limit 120""", REDASH_BL_DS, timeout=150)
+
+    def fetch():
+        live = q("eto_ofr", "live", "and o.eto_ofr_approv = 'A'")
+        exp = q("eto_ofr_expired", "expired", "and date(o.eto_ofr_approv_date_orig) >= current_date - 30")
+        if live is None and exp is None:
+            return None
+        return (live or []) + (exp or [])
+    rows = _cached(os.path.join(AOV_CACHE, "leads", f"{'_'.join(mcats)}.json"), fetch, refresh) or []
+    ref = (seller_aov_stats or {}).get("median_rs")
+    import math
+    out = []
+    for r in rows:
+        v = pov_value(r.get("pov"))
+        if v is None and not r.get("qty"):
+            continue
+        age = None
+        try:
+            age = (datetime.now().date() - datetime.strptime(str(r.get("posted"))[:10], "%Y-%m-%d").date()).days
+        except Exception:
+            pass
+        fit = 0.0
+        if v and ref:
+            fit += max(0.0, 2 - abs(math.log10(v / (ref * 1.2))))      # near (a little above) the seller's AOV
+        elif v:
+            fit += 1.0
+        same_city = peer and r.get("city_id") is not None and r.get("city_id") == peer.get("city_id")
+        same_state = peer and r.get("state_id") is not None and r.get("state_id") == peer.get("state_id")
+        fit += 2 if same_city else 1 if same_state else 0
+        fit += 1 if r["status"] == "live" else 0
+        fit += max(0, 1 - (age or 30) / 30)
+        out.append({"status": r["status"], "lead_id": r.get("id"), "product": r.get("title"), "mcat": r.get("mcat"),
+                    "quantity": r.get("qty"), "unit": r.get("unit"), "order_value_text": r.get("pov"),
+                    "order_value_rs": round(v) if v else None, "buyer_city": r.get("city"), "buyer_state": r.get("state"),
+                    "posted": str(r.get("posted"))[:10], "days_ago": age, "same_city": bool(same_city), "same_state": bool(same_state),
+                    "fit_score": round(fit, 2)})
+    out.sort(key=lambda x: -x["fit_score"])
+    return out[:keep]
+
+
+def render_showcase(leads, ref):
+    lines = ["## E12. Showcase buy-lead candidates (best first)", "",
+             "*Source:* pg-imblr eto_ofr (live) + eto_ofr_expired (last 30 days) + eto_attribute, via Redash. "
+             f"fit_score rewards order value near (a little above) the seller's AOV (ref Rs {ref}), the same city/state, live, and new. "
+             "Say only product, quantity, value, region and status. Never the buyer's name, company or contact.", ""]
+    if not leads:
+        return "\n".join(lines + ["_no candidate with an order value or a quantity_", ""])
+    lines += ["| # | Status | Product | Qty | Order value | Buyer region | Posted | Fit |", "|---|---|---|---|---|---|---|---|"]
+    for i, l in enumerate(leads, 1):
+        q = f"{l['quantity'] or ''} {l['unit'] or ''}".strip()
+        lines.append(f"| {i} | {l['status']} | {l['product']} | {q} | {l['order_value_text'] or ''} | "
+                     f"{l['buyer_city'] or ''}, {l['buyer_state'] or ''} | {l['posted']} ({l['days_ago']} d) | {l['fit_score']} |")
+    return "\n".join(lines + [""])
+
+
 # ---------------------------------------------------------------- old VANI call history (G)
 RECENT_DAYS, MAX_DAYS = 30, 90
 SIG = {
@@ -470,7 +644,13 @@ def build(glid, use_api=True, refresh=False):
     P["E10"] = ({"seller": s_aov, "mcats": m_aov}, "buy-lead Probable Order Value via Redash (pg-imblr), DWH aov_bucket")
     os.makedirs(OUT, exist_ok=True)
     text = S.render(glid, meta, P, files, api)
-    text = text.replace("\n## F. ", "\n" + render_category(cat) + "\n" + render_aov(s_aov, m_aov, cat) + "\n## F. ", 1)
+    peer = peer_stat(glid, cat, refresh) if use_api else None
+    leads = showcase_leads(cat, peer, (s_aov or {}).get("stats"), refresh) if use_api else []
+    P["E11"] = (peer, "pg-imblr peer statistic, all ladder rungs (Redash)")
+    P["E12"] = (leads, "pg-imblr live + expired buy leads with order value (Redash)")
+    ref = ((s_aov or {}).get("stats") or {}).get("median_rs")
+    text = text.replace("\n## F. ", "\n" + render_category(cat) + "\n" + render_aov(s_aov, m_aov, cat) + "\n" + render_peer(peer)
+                        + "\n" + render_showcase(leads, ref) + "\n## F. ", 1)
     hist = call_history(files, datetime.now())
     P["G00"] = (hist, "ps07_bot_calls + ps07_evaluator (rebuilt by the persona builder)")
     text = text.replace("\n## H. ", "\n" + render_history(hist) + "\n## H. ", 1) if "\n## H. " in text else text + "\n" + render_history(hist)
