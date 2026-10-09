@@ -1,0 +1,30 @@
+{
+ "_doc": "Contract between compile_vars.py (skill) and the Sarvam agent (template + code tools). Every variable listed here MUST be defined in the Sarvam agent (undefined variables are dropped by Sarvam). Written 2026-10-10. Values are strings unless noted.",
+ "set_before_call": {
+  "decision_id": "run id; written into every switch_log row",
+  "persona_voice_id": "Bulbul v4 speaker UUID (catalogue-checked)",
+  "persona_voice_gender": "F | M  (drives gendered Hindi forms in identity_line / persona_style)",
+  "persona_pace": "number as string, 0.85-1.25",
+  "persona_pitch": "number as string, -0.3-0.3",
+  "persona_language": "Sarvam language name for OnStart set_initial_language_name, e.g. HINDI, GUJARATI, ENGLISH",
+  "persona_opening": "first line spoken (initial bot message); native script; gender-agreed",
+  "identity_line": "how VANI introduces itself if asked who is calling (per language, gender-agreed); never says AI/bot/branch manager/account manager",
+  "persona_style_id": "P0..P6 or COMPOSED; the switch tool picks directive variants by it",
+  "persona_style": "Speaking Style text: formality, warmth, sophistication, code-mix, words per turn, salutation",
+  "division_block": "objective + division-specific rules text (NSD or CSD); replaces Jinja {% if %}",
+  "call_plan": "numbered steps: hook, ask, objection playbook with responses, close",
+  "verified_facts": "the ONLY numbers/claims VANI may say (hook claim + fact values), each one line",
+  "guardrails_extra": "seller-specific guardrails (e.g. acknowledge earlier calls; do not ask for a new meeting)",
+  "switch_sensitivity": "JSON string, e.g. {\"rushed\":\"high\",\"confused\":\"normal\",...}",
+  "seller_name": "name token filled on premises (first name + ji) - never sent to the frontier model",
+  "company_name": "company token filled on premises",
+  "city": "seller city"
+ },
+ "set_during_call_by_tools": {
+  "seller_mode": "neutral | rushed | frustrated | confused | interested | bot_question | opt_out | language_switch",
+  "persona_directive": "current directive text (style-specific variant)",
+  "switch_log": "JSON list of rows {t, turn, utt, lang, from, to, cue, directive_id, change, reason, ms}; never shown to the LLM",
+  "meeting_fixed": "yes | no (set by book_meeting tool)",
+  "meeting_slot": "natural-language slot the seller agreed (set by book_meeting tool)"
+ }
+}

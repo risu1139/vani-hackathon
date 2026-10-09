@@ -106,6 +106,10 @@ def build(ctx, today):
                   detail={"turnover_band": band, "aov_tier": aov_tier, "seller_aov_rs": s_stats.get("median_rs"),
                           "category_aov_rs": c_stats.get("median_rs"), "category_p75_rs": c_stats.get("p75_rs")},
                   missing=[] if band in BANDS else ["C02.annual_turnover"]))
+    hv = (band in BANDS and BANDS.index(band) >= 3) or aov_tier == "high"
+    T.append(item("trait", "trait.high_value", hv, [ev("C02", "C02.annual_turnover", band), ev("E10", "E10 AOV tier", aov_tier)],
+                  0.8 if band in BANDS else 0.4, "high value = turnover 5 Cr+ or AOV tier high (seller AOV >= category top quarter)",
+                  detail={"why": "high-value sellers may get Hinglish/English instead of the regional language (team decision)"}))
     c3 = g("C03") if isinstance(g("C03"), dict) else {}
     nob = " ".join(str(v) for v in c3.values() if v).lower()
     st = "manufacturer" if "manufactur" in nob else "trader" if re.search(r"trad|wholesal|retail|distribut|supplier", nob) \
@@ -124,13 +128,13 @@ def build(ctx, today):
         first = (a3.get("glusr_usr_cfirstname") or a3.get("glusr_usr_firstname") or "").strip().split(" ")[0]
         if first:
             if MALE_EXCEPTIONS.match(first):
-                gen, src, conf = "M", "name", 0.6
+                gen, src, conf = "M", "name", 0.4
             elif FEMALE_NAMES.match(first):
-                gen, src, conf = "F", "name", 0.55
+                gen, src, conf = "F", "name", 0.4
             else:
-                gen, src, conf = "M", "name", 0.55
+                gen, src, conf = "M", "name", 0.4
     T.append(item("trait", "trait.seller_gender", gen, [ev("A07", "A07", a7), ev("A03", "A03.first_name", "(name, not repeated here)")], conf,
-                  "recorded A07 first (1.0); else a first-name guess (0.55-0.6). Used ONLY to choose VANI's voice; never said aloud",
+                  "recorded A07 first (1.0); else a first-name guess (0.4). Used ONLY to choose VANI's voice; never said aloud",
                   detail={"source": src}))
     b3 = g("B03") if isinstance(g("B03"), dict) else {}
     ct = g("X05") if isinstance(g("X05"), dict) else {}
@@ -143,7 +147,7 @@ def build(ctx, today):
                   "regional language of the state unless the seller is high value (team decision); observed languages from calls"))
     T.append(item("trait", "trait.city_tier", ct.get("tier") or "unknown", [ev("X05", "X05", ct)], 0.8 if ct.get("tier") else 0.2,
                   "gl_city_classification 1 metro / 2 tier2 / 3 small town / empty village; rural proxy = small town or village",
-                  detail={"rural_proxy": ct.get("rural_proxy"), "hindi_belt": ct.get("hindi_belt"), "state": ct.get("state")}))
+                  detail={"rural_proxy": ct.get("rural_proxy"), "hindi_belt": ct.get("hindi_belt"), "state": ct.get("state") or state or None}))
     d6 = g("D06") if isinstance(g("D06"), dict) else {}
     sc = d6.get("scorecard") if isinstance(d6.get("scorecard"), dict) else {}
     cqs = num(sc.get("cqs"), num(d6.get("eng_cqs")))
