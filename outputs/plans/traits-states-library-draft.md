@@ -24,7 +24,7 @@ Each state has a date. The weight of a state decreases with time.
 | 3 | Product | `trait.product_focus` | Covered |
 | 4 | Call pattern: problem / wants to upgrade | `state.intent` | Covered |
 | 4 | Call pattern: busy, irate | `state.call_mood` | Covered |
-| 4 | Call pattern: M/F | `trait.seller_gender` | **Check.** I think "M/F" means the seller gender. Tell me if it means a different thing. |
+| 4 | Call pattern: M/F | `trait.seller_gender` | **Decided:** it is the seller gender. Store it (recorded value first, else a guess with its source and confidence). |
 | 5 | Past / available business: BL, AoV | `state.bl_usage`, `trait.business_scale` | Covered |
 | 5 | Past / available business: Enq | `state.enquiry_flow` | Covered |
 | 5 | Past / available business: PNS | `state.pns_flow` | Covered |
@@ -180,7 +180,7 @@ Example: a CSD seller has lapsed credits and an open complaint. The agent select
 ## 8. Questions for you
 
 1. Is this set of traits and states correct? Tell me the items to merge, remove or add.
-2. Board item 4, "M/F": is it the seller gender, or a different thing?
+2. (Decided: board item 4 "M/F" is the seller gender.)
 3. (Decided: board item 6 is the showcase lead. See section 7a.)
 4. For `scale_tier`, do we use your board split (turnover below or above 1.5 Cr) together with AOV?
 5. Do TMW and KCD sellers get the CSD hooks?
