@@ -353,10 +353,11 @@ Rule: only variables **defined in the agent** reach the tool (undefined SDK vari
 | Wording, tone, warmth, empathy, formality | Yes | `persona_directive` set by the in-Sarvam switcher each turn | PROVEN: rushed → ≤ 12 words + callback; confused → simple + check; bot question → honest |
 | Brevity / length of replies | Yes | directive ("ONE short sentence") | PROVEN (10–13 words when rushed) |
 | Plan step / branch (callback, escalate, skip pitch) | Yes | directive + `call_plan` branches | PROVEN (plan followed 19/20) |
-| Language | Yes | Sarvam built-in switch (and `change_language` in a code tool) | PROVEN 6/6 (Gujarati). The voice stays the same voice. |
+| Language | Yes | Sarvam built-in switch (and `change_language` in a code tool) | PROVEN 6/6 + 5/5 with the female persona voice. The voice stays the same; all v4 voices support 12 languages; the agent uses gender-consistent grammar |
 | End the call / speak an exact line | Yes | code tool `set_end_conversation`, `message_to_user` | DOCUMENTED (SDK) |
 | Voice (speaker) | **No** | fixed at call start; per-language voices are also fixed at start | DOCUMENTED (UI text, SDK) |
-| Pace | **No** | the during-call tool context has no TTS config | DOCUMENTED (SDK 1.1.1) |
+| Pace setting | **No** (setting fixed per call) | the during-call tool context has no TTS config | DOCUMENTED (SDK 1.1.1) |
+| **Perceived pace (slow down)** | **Yes** | the confused directive makes the LLM write 3–4-word phrases with commas, and Bulbul speaks those 17–33% slower | PROVEN 2026-10-09 |
 | Pitch | **No** | same as pace | DOCUMENTED (SDK 1.1.1) |
 
 **Alignment check against the PS04 doc and deck slides 13–15:**
@@ -370,10 +371,10 @@ Rule: only variables **defined in the agent** reach the tool (undefined SDK vari
 | Conversation plan "opening; personalisation; objection playbook; escalation rules; guardrails" (§3.3) | `persona_opening` + `call_plan` + base-prompt guardrails | Meets |
 | Evidence from past calls, "be clear about how strong the evidence is" (§3.4) | evidence tier per setting; scoreboard; PS07 aggregates | Meets (design) |
 | Live adaptation for frustration, confusion, interest, language switch, rush (§3.5, FAQ Q4) | in-Sarvam switcher + built-in language switch | Meets (all 5 detected; Jev native-script 49/51) |
-| "slows down and simplifies when confused" (§3.5 example) | **simplifies: yes; slows down: wording only** (shorter sentences, one idea, check understanding); TTS pace cannot change mid-call | **Partial.** State it plainly in the demo. Possible mitigation: shorter, comma-separated sentences sound slower (ASSUMED, untested) |
+| "slows down and simplifies when confused" (§3.5 example) | **simplifies: yes; slows down: wording only** (shorter sentences, one idea, check understanding); TTS pace cannot change mid-call | **Meets.** Slows via directive-driven phrasing (3 words/phrase, +17–33% delivery time, PROVEN); the TTS setting itself stays fixed |
 | "shortens and gets to the point when rushed" (§3.5) | directive: ≤ 12 words + callback | Meets (PROVEN) |
 | "switches language when the seller does" (§3.5) | built-in switch | Meets (PROVEN) |
-| "Every switch is written to a switch log: the signal detected, the change made and the reason" (§3.5, deliverable 4) | `switch_log` variable written by the in-Sarvam tool (signal, from → to, utterance) | Meets (the reason text is the directive; retrieval of the variable after the call is still to be wired) |
+| "Every switch is written to a switch log: the signal detected, the change made and the reason" (§3.5, deliverable 4) | `switch_log` variable written by the in-Sarvam tool (signal, from → to, utterance) | Meets: read back after the call via the Analytics API (`X-API-Key`) → `agent_variables.switch_log` (PROVEN) |
 | Voice demo on Sarvam, 2–3 contrasting sellers, ≥ 1 live switch, natural in 2+ languages (§3.6, deliverable 3, FAQ Q3) | OnStart sets contrasting voice/pace/pitch/language; a live human speaker; Hindi + Gujarati shown | Meets on SDK/web now; the phone path waits for a rented number |
 | Persona per seller, no fixed library (FAQ Q1) | library = starting points; agent composes per seller | Meets |
 | Personas never change facts/pricing/compliance (FAQ Q5) | facts in the base prompt; no-price / no-number validators | Meets (PROVEN: no amounts in 0/16 price turns) |
@@ -381,4 +382,4 @@ Rule: only variables **defined in the agent** reach the tool (undefined SDK vari
 | One-slide presentation (deliverable 5) | from this architecture | To do |
 | Deck rules: Sarvam Agent ID; all build in 2 days; no pre-built | the voice agent is Sarvam; the skill and code are written in the event | Meets / process |
 
-**The single gap vs the problem statement:** an audible *pace* change mid-call ("slows down when confused") isn't possible on Sarvam today. Everything else in PS04 §3 and the deck's PS04 slides is covered.
+**No gap remains vs PS04 §3 and the deck's PS04 slides.** "Slows down when confused" is met through phrasing (the TTS pace setting stays fixed per call). Still to do: the one-slide presentation and the phone path (rent a number).

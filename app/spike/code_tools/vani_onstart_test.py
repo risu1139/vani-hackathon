@@ -63,7 +63,7 @@ DIRECTIVES = {
     "neutral": "Continue normally.",
     "rushed": "Seller is busy. Reply in ONE short sentence (max 12 words) and offer to call back at a time they choose.",
     "frustrated": "Seller is irritated. Apologise briefly, do not repeat the pitch, ask one yes/no question.",
-    "confused": "Seller is confused. Re-explain in very simple Hindi, one idea only, then check understanding.",
+    "confused": "Seller is confused. Slow down: re-explain in very simple Hindi, one idea only, written as very short phrases separated by commas (3-4 words per phrase), then check understanding.",
     "bot_question": "Seller asked if you are a bot. Honestly confirm you are IndiaMART's AI assistant, then continue.",
 }
 
