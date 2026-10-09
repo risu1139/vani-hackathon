@@ -319,3 +319,17 @@ Rule: only variables **defined in the agent** reach the tool (undefined SDK vari
 | Team decisions; data policy; one skill end to end | DOCUMENTED | `raw/hackathon/2026-10-0{8,9}-team-decision*.md` |
 | Peer data agent sources, cold 12.9%, demo pool, peer skill pattern | DOCUMENTED (team brief 2026-10-09; not yet filed in `raw/`) | team lead |
 | Thresholds, levels, placeholders, `call_plan`, review process | ASSUMED / OPEN | this document |
+
+---
+
+## Update 2026-10-09: open items closed (see raw/research/2026-10-09-open-items-closure.md)
+
+| Open item | Result | Effect on architecture |
+|---|---|---|
+| Signal-server host | Daytona preview has no DNS; the sandbox was found stopped; the quick tunnel was dead. **Switcher moved inside Sarvam** as a during-call Python code tool (`ReadSellerSignal`): keyword list + policy, writes `seller_mode` / `persona_directive` / `switch_log` variables. PROVEN. | No external host in the call path. Jev becomes optional in-call (needs Sarvam egress 4.213.167.70 allowlisted) or runs offline in the review loop. |
+| Separate `call_plan` variable | Plan only in `call_plan` (referenced in the instructions) + in-Sarvam switcher: 19/20 (effectively 20/20) on the hostile + Gujarati scenarios. PROVEN. | Plan re-sending every turn is dropped. |
+| Pitch via OnStart | 239 / 267 / 286 Hz at −0.3 / 0 / +0.3. PROVEN. | Pitch is a usable persona dimension. |
+| During-call voice/pace change | Not possible: the during-call tool context has no TTS config (SDK 1.1.1). DOCUMENTED. | Live "slow down when confused" = wording change only; say so in the demo. |
+| Phone number | Parked (rent from Sarvam later). | — |
+| Data agent schema | `app/contracts/seller_context.schema.json` v0.1 drafted and shared; the data agent owns it. | B1 contract fixed for parallel work. |
+| Peer facts in raw/ | Filed: raw/hackathon/2026-10-09-peer-briefs.md. | Citations available. |

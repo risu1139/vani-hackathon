@@ -1,0 +1,646 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "vani/seller_context/v0",
+  "title": "VANI seller context (B1 output, one per seller per as_of)",
+  "description": "DRAFT v0, written 2026-10-09 by the persona session from the data agent's brief (raw/hackathon/2026-10-09-peer-briefs.md). Owner: the data agent (seller-data-coverage-demo). File path: data/contexts/<glid>_<as_of>.json. Every value must use only information available before as_of. Each field is listed in field_sources with its source and date. v0.1 (2026-10-09): optional additions from the data agent (callee numbers, timing bands, responsiveness, account, catalogue; whatsapp/api sources; field_sources fetched_at/as_of_safe). All additions are optional.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "glid",
+    "as_of",
+    "profile",
+    "history",
+    "missing_fields",
+    "completeness",
+    "field_sources"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "seller_context/v0"
+    },
+    "glid": {
+      "type": "string",
+      "description": "IndiaMART GLID (fk_glusr_usr_id / seller_glid). Join key."
+    },
+    "as_of": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Snapshot time. Nothing after this time may appear."
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "city": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "state": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "business_type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "turnover_slab": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "nature_of_business": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "gst_registration_year": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Year only. Never the GST number."
+        },
+        "top_categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "maxItems": 3
+        },
+        "num_categories": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "company_name_token": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Token (e.g. {company}); the real name is resolved on premises at compile time."
+        },
+        "customer_type": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "is_paid": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "kyc_flags": {
+          "type": "object",
+          "description": "Boolean flags only. No ID numbers."
+        }
+      }
+    },
+    "engagement": {
+      "type": "object",
+      "description": "Counts over 90 days / 1 year; enquiry responsiveness; PNS; WhatsApp read rate (Global Context sellers only).",
+      "additionalProperties": {
+        "type": [
+          "number",
+          "integer",
+          "null"
+        ]
+      }
+    },
+    "history": {
+      "type": "object",
+      "description": "Rebuilt as of as_of from bot-call rows. The seller file's past_* columns leak the future and must not be used.",
+      "required": [
+        "n_prior_calls"
+      ],
+      "properties": {
+        "n_prior_calls": {
+          "type": "integer"
+        },
+        "n_answered": {
+          "type": "integer"
+        },
+        "last_outcome": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "gap_days_since_last_call": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "outcome_counts": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer"
+          }
+        },
+        "last_summary_masked": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "end_pattern": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "e.g. dropped_after_identity, seller_ended, completed"
+        },
+        "bot_versions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "executive_contact_between_calls": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "timing": {
+      "type": "object",
+      "properties": {
+        "pickup_by_hour": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        },
+        "best_hours": {
+          "type": "array",
+          "items": {
+            "type": "integer"
+          }
+        },
+        "unanswered_streak": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "promised_callback_slot": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "call_trigger_bucket": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "attempt_no": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "buyer_call_pickup_by_band": {
+          "type": "object",
+          "description": "Failed/answered buyer PNS calls by hour band 0-9/9-12/12-16/16-20/20-24, per number (12 months)."
+        },
+        "do_not_call_hours": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "last_seen": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    },
+    "memory_facts": {
+      "type": "array",
+      "description": "Decision-changing facts from summaries, evaluator JSON and turns, kept as rolling memory across all past calls.",
+      "items": {
+        "type": "object",
+        "required": [
+          "family",
+          "value",
+          "call_date",
+          "source"
+        ],
+        "properties": {
+          "family": {
+            "enum": [
+              "callback_when",
+              "contact_person",
+              "language",
+              "competitor",
+              "need",
+              "complaint",
+              "constraint",
+              "price_detail",
+              "other",
+              "channel"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "description": "Masked: names, phones and emails replaced by tokens."
+          },
+          "call_date": {
+            "type": "string",
+            "format": "date"
+          },
+          "source": {
+            "enum": [
+              "summary",
+              "evaluator",
+              "transcript",
+              "chatbot",
+              "enquiry",
+              "whatsapp",
+              "api"
+            ]
+          },
+          "durable": {
+            "type": "boolean"
+          },
+          "span_id": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "language": {
+      "type": "object",
+      "properties": {
+        "observed": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Languages seen in calls (GC buyer-call extraction or seller turns)."
+        },
+        "english_share": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "hinglish_share": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "state_default": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "basis": {
+          "enum": [
+            "observed",
+            "state_default",
+            "unknown"
+          ]
+        }
+      }
+    },
+    "speech_style": {
+      "type": "object",
+      "properties": {
+        "words_per_turn": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "words_per_sec": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "n_turns_observed": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      }
+    },
+    "callee": {
+      "type": "object",
+      "description": "Who answered on past calls. No designation exists per phone number.",
+      "properties": {
+        "not_decision_maker_calls": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "wrong_number_calls": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "alternate_person_role": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "e.g. family, owner_boss, staff (role only, no name)"
+        },
+        "account_contact_designation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "numbers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "slot": {
+                "enum": [
+                  "GSM",
+                  "M1",
+                  "M2",
+                  "L1",
+                  "L2"
+                ]
+              },
+              "pns_type": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pns_status": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "pickup_success_7d": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "pickup_success_30d": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              },
+              "pickup_success_90d": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "salutation_gender": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Account salutation, as recorded (98% empty). Never inferred. Not an input to persona decisions unless the team lead decides otherwise."
+        }
+      }
+    },
+    "demand": {
+      "type": "object",
+      "description": "Buyer-side demand signals (enquiries, buyleads), counts only."
+    },
+    "flags": {
+      "type": "object",
+      "properties": {
+        "dnc": {
+          "type": "boolean"
+        },
+        "already_with_executive": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "showed_frustration": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "asked_if_bot": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "cold": {
+      "type": "boolean",
+      "description": "True when the seller has no prior bot call."
+    },
+    "missing_fields": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "completeness": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "field_sources": {
+      "type": "object",
+      "description": "Path → {source, date}, so the composer can cite the reason for each persona setting.",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "source"
+        ],
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "date": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "fetched_at": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "as_of_safe": {
+            "type": "boolean",
+            "description": "False for rolling 'current' API values; replay/evaluation must exclude them."
+          }
+        }
+      }
+    },
+    "responsiveness": {
+      "type": "object",
+      "properties": {
+        "callback_speed_buckets": {
+          "type": "object"
+        },
+        "buyer_reply_pct": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "thumbs_up_responsiveness_pct": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "median_hours_to_first_read": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      }
+    },
+    "account": {
+      "type": "object",
+      "properties": {
+        "plan": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "member_since": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "has_account_manager": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "complaints_count": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "not_satisfied_feedback": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "rating": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "bl_credit_lapsed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "current_balance_band": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "blni_reasons": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "local_competition": {
+          "type": "object"
+        }
+      }
+    },
+    "catalogue": {
+      "type": "object",
+      "properties": {
+        "top_products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "price": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "approved_count": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "without_photo_count": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "without_price_count": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "category_rank_counts": {
+          "type": "object"
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}
