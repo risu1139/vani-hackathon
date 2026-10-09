@@ -543,8 +543,36 @@ def other_records(files):
                   for r in files.get("so_kyc_field_checks", [])]
     kyc_sessions = [{k: v for k, v in r.items() if re.search(r"status|date|on$|type|stage|result", k, re.I)}
                     for r in files.get("so_kyc_sessions", [])]
+    sf = (files.get("ps07_seller_file") or [{}])[0]
+    flags = {k: sf.get(k) for k in ("do_not_call_requested", "already_in_touch_with_executive", "showed_frustration",
+                                    "asked_if_talking_to_bot")}
     return {"leap_calls": leap, "onboarding_locations": locs, "kyc_documents": kyc_docs,
-            "kyc_field_checks": kyc_checks, "kyc_sessions": kyc_sessions}
+            "kyc_field_checks": kyc_checks, "kyc_sessions": kyc_sessions, "seller_flags": flags}
+
+
+HINDI_BELT = {"uttar pradesh", "bihar", "madhya pradesh", "rajasthan", "haryana", "jharkhand", "chhattisgarh",
+              "uttarakhand", "himachal pradesh", "delhi"}
+
+
+def city_tier(peer, refresh=False):
+    """gl_city.gl_city_classification for the seller's city: 1 metro, 2 tier-2, 3 small town, empty = village / very small.
+    Rural proxy = 3 or empty (team decision 2026-10-10). Uses the city id that the peer query already fetched."""
+    cid = (peer or {}).get("city_id")
+    if not cid:
+        return {"status": "no_city_id"}
+
+    def q():
+        rows = redash(f"""select ci.gl_city_name city, ci.gl_city_classification cls, st.gl_state_name state
+            from gl_city ci left join gl_state st on st.gl_state_id = ci.fk_gl_state_id where ci.gl_city_id = {int(cid)}""", REDASH_BL_DS)
+        if rows is None:
+            return None
+        r = (rows or [{}])[0]
+        cls = r.get("cls")
+        tier = {1: "metro", 2: "tier2", 3: "small_town"}.get(int(cls) if cls not in (None, "") else -1, "village_or_unclassified")
+        return {"status": "ok", "city": r.get("city"), "state": r.get("state"), "classification": cls, "tier": tier,
+                "rural_proxy": tier in ("small_town", "village_or_unclassified"),
+                "hindi_belt": (r.get("state") or "").strip().lower() in HINDI_BELT}
+    return _cached(os.path.join(AOV_CACHE, "city", f"{int(cid)}.json"), q, refresh)
 
 
 def render_other(o):
@@ -553,8 +581,15 @@ def render_other(o):
     return "\n".join(lines + [""])
 
 
-def render_kyc(o):
-    lines = ["### X02 Onboarding locations (city level only)", "*Source:* seller_onboarding/so_seller_locations.csv", ""]
+def render_kyc(o, ct=None):
+    f = o.get("seller_flags") or {}
+    lines = ["### X04 Seller flags (PS07 seller file, Apr–Sep, undated)", "*Source:* ps07_seller_file", "",
+             f"- do_not_call_requested: {f.get('do_not_call_requested')}; already_in_touch_with_executive: {f.get('already_in_touch_with_executive')}; "
+             f"showed_frustration: {f.get('showed_frustration')}; asked_if_talking_to_bot: {f.get('asked_if_talking_to_bot')}", "",
+             "### X05 City tier (rural proxy)", "*Source:* pg-imblr gl_city.gl_city_classification", "",
+             (f"- {ct.get('city')}, {ct.get('state')}: classification {ct.get('classification')} → {ct.get('tier')}; "
+              f"rural proxy {ct.get('rural_proxy')}; Hindi belt {ct.get('hindi_belt')}" if ct and ct.get("status") == "ok" else "_not available_"), "",
+             "### X02 Onboarding locations (city level only)", "*Source:* seller_onboarding/so_seller_locations.csv", ""]
     lines += [f"- {l['city']}, {l['state']} (rank {l['cluster_rank']}, {l['source']}, {l['created_on']})" for l in o["onboarding_locations"]] or ["_no data_"]
     lines += ["", "### X03 KYC status (no document paths, no ID values)", "*Source:* seller_onboarding/so_kyc_*.csv", ""]
     lines += [f"- {d['document_type']}: {d['status']} (uploaded {d['uploaded_on']}, verified {d['verified_on']})" for d in o["kyc_documents"]] or ["_no documents_"]
@@ -697,7 +732,7 @@ FILES_MAP = [
 
 def _point_md(pid, P):
     v, src = P.get(pid, (None, ""))
-    if pid in ("E09", "E10", "E11", "E12", "G00", "X00"):
+    if pid in ("E09", "E10", "E11", "E12", "G00", "X00", "X05"):
         return None
     lab = S.LABELS.get(pid, pid)
     return f"### {pid} {lab}\n*Source:* {src}\n\n{S.render_value(v) if not S.blank(v) else '_no data_'}\n"
@@ -730,6 +765,12 @@ def key_facts(P, hist, peer, leads, s_aov, m_aov, cat):
     c5 = g("C05") or {}
     add(f"Division: {h2.get('vertical_name')}; plan: {c5.get('paid_free')} ({c5.get('byr_custtype')})", "core.md#H02")
     add(f"Turnover: {_short(g('C02'))}", "business.md#C02")
+    ct = g("X05") or {}
+    if ct.get("status") == "ok":
+        add(f"City tier: {ct.get('city')}, {ct.get('state')} → {ct.get('tier')} (rural proxy {ct.get('rural_proxy')}, Hindi belt {ct.get('hindi_belt')})", "core.md#X05")
+    fl = (g("X00") or {}).get("seller_flags") or {}
+    add(f"Seller flags: DNC requested {fl.get('do_not_call_requested')}; already with executive {fl.get('already_in_touch_with_executive')}; "
+        f"showed frustration {fl.get('showed_frustration')}; asked if bot {fl.get('asked_if_talking_to_bot')}", "core.md#X04")
     add(f"Location: {_short(g('B01'))}", "core.md#B01")
     add(f"Contact designation: {_short(g('A04'))}; recorded gender/salutation: {_short(g('A07')) if g('A07') else 'none'}", "core.md#A04")
     add(f"Languages seen on calls: {_short(g('B03'))}", "core.md#B03")
@@ -796,7 +837,7 @@ def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref,
         if "E11" in prefixes:
             parts.append(render_peer(peer))
         if name == "core.md":
-            parts.append(render_kyc(other))
+            parts.append(render_kyc(other, P.get("X05", (None,))[0]))
         if name == "channels.md":
             parts.append(render_other(other))
         if "E12" in prefixes:
@@ -870,6 +911,7 @@ def build(glid, use_api=True, refresh=False, rebuild=False):
                         + "\n" + render_showcase(leads, ref) + "\n## F. ", 1)
     hist = call_history(files, datetime.now())
     other = other_records(files)
+    P["X05"] = (city_tier(peer, refresh) if use_api else None, "pg-imblr gl_city classification")
     P["X00"] = (other, "LEAP calls, onboarding locations, KYC status (persona builder)")
     P["G00"] = (hist, "ps07_bot_calls + ps07_evaluator (rebuilt by the persona builder)")
     text = text.replace("\n## H. ", "\n" + render_history(hist) + "\n## H. ", 1) if "\n## H. " in text else text + "\n" + render_history(hist)
