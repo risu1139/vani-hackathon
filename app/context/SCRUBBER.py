@@ -66,8 +66,7 @@ LABELS = {
     "J03": "Buyer-call extractions", "K01": "Call trigger", "K02": "Attempt number", "K03": "Local time / season",
     "K04": "Dialled number type",
 }
-GROUPS = [("G", "Previous conversations with VANI (already known; recent = last 30 days, calls older than 90 days ignored)"),
-          ("A", "Identity and callee"), ("B", "Location and language"), ("C", "Business profile"),
+GROUPS = [("A", "Identity and callee"), ("B", "Location and language"), ("C", "Business profile"),
           ("D", "Categories and products"), ("E", "Buyer demand and buyleads"), ("F", "Phone behaviour and timing"),
           ("H", "Human relationship"), ("I", "Account health and risk"),
           ("J", "Other channels"), ("K", "This call's context")]
@@ -253,6 +252,8 @@ SCHED_SUB = re.compile(r"callback|call_back|busy|later|reschedul|voicemail|no_re
 SCHED_SENT = re.compile(r"(call ?back|call (him|her|them|me)? ?(later|tomorrow|again)|call later|busy|driving|baad me|kal call|"
                         r"\b\d{1,2}(:\d{2})?\s?(am|pm|baje)\b|tomorrow|next week|reschedul|follow[- ]?up (at|time|call))", re.I)
 EXCLUDED = {"F04", "F05", "F06", "F07", "K02"}  # scheduling data: handled by the scheduling agent
+# previous VANI call history (G01-G11) is not in our scope (user, 2026-10-09): computed but not output
+EXCLUDED |= {f"G{i:02d}" for i in range(1, 12)}
 # a sentence with any of these carries discussion content: keep it, only blank its time words
 SUBSTANCE = re.compile(r"meeting|visit|executive|\bsales\b|interest|denied|bother|stop call|do not call|don't call|complain|"
                        r"frustrat|angry|irritat|price|product|requirement|paid|package|service|order|buyer|enquir|catalog|"
@@ -692,9 +693,8 @@ def render(glid, meta, P, files, api):
     out = [f"# Seller context: {glid}", "",
            f"Generated {datetime.now():%Y-%m-%d %H:%M} by `app/context/SCRUBBER.py`. Test-set stratum **{meta.get('stratum')}**. "
            f"Data points with a value: **{len(filled)} / {len(shown)}**. Unmasked (PII handling: legal team).", "",
-           "**How to use:** section G is what you already know from earlier calls: continue from the last call, do not re-ask "
-           "what was already answered, and trust recent calls over older ones. Call timing, retries, callbacks and busy / "
-           "call-later outcomes are left out on purpose: scheduling is handled by a separate agent, so never decide when to call.", "",
+           "**How to use:** seller profile, callee, business, catalogue, demand, account and channel data. Previous VANI call "
+           "history and call scheduling (timing, retries, callbacks) are handled elsewhere and are not in this file.", "",
            "**Sources present:** files: " + ", ".join(f"{k} ({len(v)})" for k, v in sorted(files.items()) if v) + "; APIs: " +
            ", ".join(f"{k} (HTTP {r.get('_http')})" for k, r in sorted(api.items())), "",
            "**Missing data points:** " + (", ".join(k for k in shown if k not in filled) or "none"), ""]
@@ -720,7 +720,8 @@ def run_one(glid, data, meta, use_api, refresh):
     with open(os.path.join(OUT, f"{glid}.md"), "w", encoding="utf-8") as f:
         f.write(render(glid, meta.get(glid, {}), P, files, api))
     with open(os.path.join(OUT, f"{glid}.points.json"), "w", encoding="utf-8") as f:
-        json.dump(scrub_ids({k: {"value": v, "source": s} for k, (v, s) in P.items()}), f, ensure_ascii=False, default=str)
+        json.dump(scrub_ids({k: {"value": v, "source": s} for k, (v, s) in P.items() if k not in EXCLUDED}), f,
+                  ensure_ascii=False, default=str)
     filled = sum(1 for k, (v, _) in P.items() if has_value(v) and k not in EXCLUDED)
     api_ok = sum(1 for r in api.values() if r.get("_http") == 200)
     return glid, filled, api_ok, len(api)

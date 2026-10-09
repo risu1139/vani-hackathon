@@ -1,0 +1,21 @@
+{
+ "_note": "SYNTHETIC example (fabricated values) of data/contexts/<glid>.points.json. Real files live in git-ignored data/. Shape: {data_point_id: {value, source}}. G (old VANI call history) and scheduling points (F04-F07, K02) are not emitted.",
+ "A01": {"value": "100000001", "source": "test set stratum = rich"},
+ "A02": {"value": {"api": "Example Traders", "gc": "Example Traders"}, "source": "users_detail.glusr_usr_companyname - gc_profile"},
+ "A03": {"value": {"glusr_usr_firstname": "Asha", "glusr_usr_lastname": "Verma"}, "source": "users_detail"},
+ "A04": {"value": {"users_detail": "Proprietor"}, "source": "users_detail.glusr_usr_designation"},
+ "B01": {"value": {"seller_city": "Pune", "seller_state": "Maharashtra"}, "source": "ps07 seller file - users_detail"},
+ "B03": {"value": {"Hindi": 4, "English": 2}, "source": "gc_buyer_call_extractions.languages (6 calls)"},
+ "C01": {"value": {"business_type": "Proprietorship"}, "source": "ps07 seller file"},
+ "C02": {"value": {"annual_turnover": "40 L - 1.5 Cr"}, "source": "ps07 seller file"},
+ "C03": {"value": {"nature_of_business": "Manufacturer"}, "source": "ps07 seller file"},
+ "C04": {"value": {"gst_registration_year": "2019", "member_since": "2022-03-14"}, "source": "seller file, users_detail"},
+ "C05": {"value": {"users_custtype": "CATALOG", "scorecard_service": "Free"}, "source": "users_detail, cust_scorecard"},
+ "D01": {"value": {"top": {"top_category_1": "Cotton Thread", "top_category_group": "Textile"}}, "source": "ps07 seller file"},
+ "D05": {"value": {"api_top_products": [{"pc_item_name": "Cotton Thread 40s", "pc_item_fob_price": "120"}]}, "source": "prd_mapping_api"},
+ "D06": {"value": {"eng_cqs": "41", "scorecard": {"cqs": 41, "prd_no_prices": 6, "name_only_prd": 3}}, "source": "seller file, cust_scorecard"},
+ "E01": {"value": {"topbar": {"enq_lw": 2, "enq_lm": 9, "enq_lq": 27}}, "source": "gettopbarsmry (live)"},
+ "E08": {"value": {"counts": {"mcat_data": [{"local_bl": 58, "hyperlocal_bl": 12, "mcat_list": "Cotton Thread"}]}}, "source": "nsdprepplus (live)"},
+ "H01": {"value": {"exec_calls": 0}, "source": "ps07_executive_calls (last 90 d) - getgldsrcount"},
+ "K01": {"value": {"latest_trigger_bucket": "PIM"}, "source": "btc_attempts (latest); live value comes from the dialler"}
+}
