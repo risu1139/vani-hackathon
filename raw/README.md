@@ -48,3 +48,4 @@ Status key: **current** = still the basis for the wiki · **reference** = facts 
 | 2026-10-09-onstart-pace-and-phone-check.md | Measured: pace via OnStart variables audible (0.9 vs 1.3: ~21% faster); phone path API accepts agent_variables but workspace has no telephony connection (needs KYC rent or BYO provider) | current |
 | 2026-10-09-jev-devanagari-spike.md | Measured: Jev on native-script turns 49/51 vs romanised 50/51; tricky cases 10/10 incl. 'phir se' insistence; ~500 ms | current |
 | 2026-10-09-team-decision-one-skill-e2e.md | Team lead: one skill, one trigger does data → traits/states → VANI persona → variables → call; nightly cook = production later | current |
+| hackathon/2026-10-09-new-data-files-buyer-side.md | Structure of 4 files added 2026-10-09: VANI QA matrix (fatal/non-fatal), buyer-side call logs, production buyer-side Sarvam prompt (jinja variable sections, ask limits, call_step), seller onboarding zip | current |
