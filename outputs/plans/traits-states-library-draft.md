@@ -28,7 +28,7 @@ Each state has a date. The weight of a state decreases with time.
 | 5 | Past / available business: BL, AoV | `state.bl_usage`, `trait.business_scale` | Covered |
 | 5 | Past / available business: Enq | `state.enquiry_flow` | Covered |
 | 5 | Past / available business: PNS | `state.pns_flow` | Covered |
-| 6 | BL: live / expired | `state.bl_usage` (credits active, unused or lapsed) | **Check.** I think "live / expired" means the seller's BL credits. It can also mean live buy leads in the category. Tell me which. |
+| 6 | BL: live / expired | `state.showcase_lead` (new) | **Decided.** Find one best-suited buy lead in the seller's category. It can be live or expired. VANI uses it to show how the seller can earn. |
 | 6 | BL: high value | `state.bl_value` (new) | Added now. It was missing in the first draft. |
 | 7 | Similar seller: local, turnover below / above 1.5 Cr | `state.peer_position`, `trait.business_scale.scale_tier` | Covered. The peer data is in research. |
 | 8 | Past service experience | `trait.service_history`, `state.open_grievance` | Covered |
@@ -122,6 +122,7 @@ The agent must give this evidence as the reason for each persona choice.
 | `state.call_fatigue` | added | `vani_calls_7d`, `vani_calls_30d`, `asked_stop_calling` | G00 | 7 d |
 | `state.open_grievance` | 8 | `latest_complaint`, `theme`, `resolved` (yes / no / unknown) | I01, grievance signal in G00 | 60 d |
 | `state.category_demand_now` | added | `local_bl`, `hyperlocal_bl`, `bulk_share`, `price_band` | E08, E09 | 30 d |
+| `state.showcase_lead` | 6 | `title`, `quantity`, `order_value_range`, `buyer_region`, `status` (live / expired), `days_since_posted`, `fit_score` | Live and expired buy leads in the seller's MCAT with "Probable Order Value" and "Quantity" (pg-imblr `eto_ofr`, `eto_ofr_expired`, `eto_attribute`). Never the buyer's name, company or phone. | 7 d |
 | `state.peer_position` | 7 | `peer_cell` (MCAT, turnover band, AOV band, area), `peer_count`, `peer_median_bl_bought`, `seller_vs_peers` | Peer statistic (in research) | 30 d |
 
 ## 7. Hooks: the agent selects the hook for each seller
@@ -153,6 +154,7 @@ A hook has rules. The agent can use a hook only when its data is present and tru
 | `hook.lead_quality_fix` | CSD | `state.bl_quality_issue` is present |
 | `hook.enquiry_drop` | CSD | `state.enquiry_flow.trend` = falling |
 | `hook.peer_usage` | NSD, CSD | `state.peer_position` has enough peers **of the same size** |
+| `hook.money_lead` | NSD, CSD | `state.showcase_lead` has an order value. **Money first:** if a money fact exists, VANI says it. |
 | `hook.resolve_grievance` | CSD | `state.open_grievance` is not resolved. VANI first accepts the problem. Then VANI asks for the meeting to fix it. |
 
 How the agent selects:
@@ -163,11 +165,23 @@ How the agent selects:
 
 Example: a CSD seller has lapsed credits and an open complaint. The agent selects `hook.resolve_grievance` first, not `hook.unused_credits`.
 
+## 7a. How the script selects the showcase lead
+
+1. Take the leads in the seller's top MCATs. Use live leads first. Use expired leads from the last 30 days if no live lead fits.
+2. Keep only leads with an order value or a quantity.
+3. Give each lead a score. The score is high when:
+   - the order value is near the seller's AOV or a little above it (a small seller must not get a very large lead, and a large seller must not get a very small lead);
+   - the buyer city is near the seller (same city, then state);
+   - the lead is new;
+   - the quantity is in the seller's range (retail or bulk).
+4. Select the lead with the highest score. Keep the second lead as a backup.
+5. VANI says only the product, the quantity, the value, the region and the status. Example: "Kal hi Hyderabad se ek buyer ne 200 piece ka order daala hai, lagbhag 10–11 hazaar ka."
+
 ## 8. Questions for you
 
 1. Is this set of traits and states correct? Tell me the items to merge, remove or add.
 2. Board item 4, "M/F": is it the seller gender, or a different thing?
-3. Board item 6, "live / expired": is it the seller's BL credits, or the live buy leads in the category?
+3. (Decided: board item 6 is the showcase lead. See section 7a.)
 4. For `scale_tier`, do we use your board split (turnover below or above 1.5 Cr) together with AOV?
 5. Do TMW and KCD sellers get the CSD hooks?
 6. Do the hooks go in the VANI persona library, or in a third library?
