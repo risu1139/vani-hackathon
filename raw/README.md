@@ -46,3 +46,4 @@ Status key: **current** = still the basis for the wiki · **reference** = facts 
 | 2026-10-09-team-decision-data-sharing.md | Team lead's data policy: no GST/PAN/ID numbers to frontier model; names/address only when a task needs them; Sarvam gets what personalisation needs | current |
 | 2026-10-09-onstart-code-tool-spike.md | Measured: per-call voice/pace/opening via OnStart code tool + defined agent variables works (female 269 Hz vs male 94 Hz, openings verbatim) | current |
 | 2026-10-09-onstart-pace-and-phone-check.md | Measured: pace via OnStart variables audible (0.9 vs 1.3: ~21% faster); phone path API accepts agent_variables but workspace has no telephony connection (needs KYC rent or BYO provider) | current |
+| 2026-10-09-jev-devanagari-spike.md | Measured: Jev on native-script turns 49/51 vs romanised 50/51; tricky cases 10/10 incl. 'phir se' insistence; ~500 ms | current |

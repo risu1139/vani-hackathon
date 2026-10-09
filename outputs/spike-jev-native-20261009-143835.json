@@ -1,0 +1,73 @@
+{
+ "A_romanized_current": {
+  "agree": {
+   "rushed": "10/10",
+   "language": "11/11",
+   "frustrated": "10/10",
+   "confused": "9/9",
+   "bot_question": "5/5",
+   "interested": "5/6"
+  },
+  "total": "50/51",
+  "p50_ms": 508,
+  "misses": [
+   "Ok ok | interested: want 0 got 0.69"
+  ]
+ },
+ "B_native_current": {
+  "agree": {
+   "rushed": "10/10",
+   "language": "10/11",
+   "frustrated": "10/10",
+   "confused": "9/9",
+   "bot_question": "5/5",
+   "interested": "5/6"
+  },
+  "total": "49/51",
+  "p50_ms": 509,
+  "misses": [
+   "मैं ड्राइविंग कर रहा हूँ, बाद में कॉल कर | language: want hinglish got hindi",
+   "ओके ओके | interested: want 0 got 0.6"
+  ]
+ },
+ "C_native_nativecues": {
+  "agree": {
+   "rushed": "10/10",
+   "language": "10/11",
+   "frustrated": "10/10",
+   "confused": "9/9",
+   "bot_question": "5/5",
+   "interested": "5/6"
+  },
+  "total": "49/51",
+  "p50_ms": 505,
+  "misses": [
+   "मैं ड्राइविंग कर रहा हूँ, बाद में कॉल कर | language: want hinglish got hindi",
+   "ओके ओके | interested: want 0 got 0.55"
+  ]
+ },
+ "D_extra_current": {
+  "agree": {
+   "confused": "3/3",
+   "frustrated": "2/2",
+   "interested": "2/2",
+   "rushed": "2/2",
+   "language": "1/1"
+  },
+  "total": "10/10",
+  "p50_ms": 498,
+  "misses": []
+ },
+ "E_extra_nativecues": {
+  "agree": {
+   "confused": "3/3",
+   "frustrated": "2/2",
+   "interested": "2/2",
+   "rushed": "2/2",
+   "language": "1/1"
+  },
+  "total": "10/10",
+  "p50_ms": 493,
+  "misses": []
+ }
+}

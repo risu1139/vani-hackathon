@@ -34,7 +34,7 @@ Voice (gender + timbre → v4 speaker), language (PNS → state → Hinglish def
 - **No per-turn hook.** Our server runs only when the agent's LLM calls the tool. It did so on 24/24 turns at temperature 0, sometimes twice (partial then full utterance).
 - **No bring-your-own LLM** in Sarvam agents. OpenRouter models can't write spoken replies.
 - **Jev is a decision model**, not a chat model: `POST openrouter.ai/api/alpha/decisions`. No fine-tuning; only `state`, `instructions`, `criteria`.
-- **Tool payload is Devanagari**, so cues need Devanagari + NFD normalisation.
+- **Tool payload is Devanagari**, so cues need Devanagari + NFD normalisation. **Jev handles native script** (PROVEN 2026-10-09, [[2026-10-09-jev-devanagari-spike]]): 49/51 native vs 50/51 romanised; 'phir se' insistence correctly not confusion; ~500 ms.
 - **Multi-state agents are legacy**; we use one state + variables (`seller_mode`, `persona_directive`).
 - **Code Tools** (deterministic variable writes) are "available on request": ask Sarvam on Day 1.
 
