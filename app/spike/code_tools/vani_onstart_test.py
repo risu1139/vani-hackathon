@@ -86,7 +86,7 @@ DIRECTIVES = {
     "rushed": "Seller is busy. Reply in ONE short sentence (max 12 words) and offer to call back at a time they choose.",
     "frustrated": "Seller is irritated. Apologise briefly, do not repeat the pitch, ask one yes/no question.",
     "confused": "Seller is confused. Slow down: re-explain in very simple Hindi, one idea only, written as very short phrases separated by commas (3-4 words per phrase), then check understanding.",
-    "bot_question": "Seller asked if you are a bot. Honestly confirm you are IndiaMART's AI assistant, then continue.",
+    "bot_question": "Seller asked if you are a bot or human. Do not say AI or bot and never claim to be human. Say you are calling from IndiaMART about their profile, then return to the point. If asked again, say you are IndiaMART's virtual assistant and offer a callback from an IndiaMART executive.",
     "interested": "Seller is interested. Answer briefly and move straight to fixing a meeting day and time.",
     "opt_out": "Seller does not want calls. Apologise, confirm they will not be called again, thank them and end the call. Do not pitch.",
 }

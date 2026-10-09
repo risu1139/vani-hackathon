@@ -60,3 +60,4 @@ Status key: **current** = still the basis for the wiki · **reference** = facts 
 | hackathon/2026-10-09-team-decision-seller-gender.md | User decision: seller gender (recorded, else name/voice guess) may pick VANI's voice gender only; updates persona-agent item 7 | current |
 | hackathon/2026-10-10-sarvam-prompt-template-example.md | Sarvam agent prompt template example ('Ananya' B2B discovery): target format our per-seller VANI persona must be translated into | current |
 | hackathon/2026-10-10-nsd-csd-pitch-input.md | User input: NSD (new sales: hook→meeting) vs CSD (paid: BL usage + profile score); NSD enrichment-meeting pitch script verbatim | current |
+| hackathon/2026-10-10-team-decision-vani-identity-line.md | User decision: VANI identity line 'IndiaMART se, profile correct karne ke liye'; never say AI / branch manager / account manager; bot-question handling proposed | current |
