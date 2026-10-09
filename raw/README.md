@@ -41,3 +41,4 @@ Status key: **current** = still the basis for the wiki · **reference** = facts 
 | 2026-10-09-sarvam-voice-recheck.md | Day-1 re-check: pace+pitch work on v3/v4 (API); per-call SDK override still ignored; per-language voices route; native script advice | current |
 | 2026-10-09-per-language-voice-spike.md | Measured: per-call voice via Per-language voices + initial_language_name works (Hindi→female 286 Hz, English→male 140 Hz); reverted | current |
 | 2026-10-09-last30days-agent-decider-vs-guardrails.md | Scan: agent as decider vs deterministic harness (2026 practitioner view: hybrid; agent decides once, code executes) | reference |
+| 2026-10-09-team-decisions-persona-agent.md | Team lead's decisions: agent composes VANI persona with tools, suggests new personas (human adds), frontier-model decider, voice via Code Tools or demo agent versions, no rule table in plan | current |
