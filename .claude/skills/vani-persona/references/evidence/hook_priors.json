@@ -1,0 +1,1090 @@
+{
+ "_doc": "Evidence-graded starting priors for the OPENING/HOOK STYLE per seller segment, from the PS07 natural experiment (bot versions). Source: raw/research/2026-10-10-bot-version-segment-analysis.md. Use as a starting point only; Loop 2 updates it with new outcomes. Category-level rows are WEAK (multiple comparisons) unless they repeat on a time split.",
+ "hook_styles": {
+  "enquiry_count": "main_vani: '{N}+ buyer enquiries in {city} in your category' (DEFAULT)",
+  "interest": "arrowhead: 'buyers already showed interest in your profile; experts can triple it; free 20-minute meeting'",
+  "discovery": "main: discovery question about the seller's own market (branch-manager framing; we never say branch manager)"
+ },
+ "overall": [
+  {
+   "hook": "interest",
+   "diff_pts_vs_enquiry_count": -0.52,
+   "ci95_pts": [
+    -0.9,
+    -0.14
+   ],
+   "significant": true,
+   "n": 30670
+  },
+  {
+   "hook": "discovery",
+   "diff_pts_vs_enquiry_count": -2.46,
+   "ci95_pts": [
+    -3.81,
+    -1.1
+   ],
+   "significant": true,
+   "n": 5571
+  },
+  {
+   "hook": "personalis",
+   "diff_pts_vs_enquiry_count": 3.02,
+   "ci95_pts": [
+    -0.31,
+    6.36
+   ],
+   "significant": true,
+   "n": 452
+  },
+  {
+   "hook": "summary_va",
+   "diff_pts_vs_enquiry_count": -8.23,
+   "ci95_pts": [
+    -12.01,
+    -4.45
+   ],
+   "significant": true,
+   "n": 91
+  },
+  {
+   "hook": "base_vani",
+   "diff_pts_vs_enquiry_count": 6.89,
+   "ci95_pts": [
+    2.32,
+    11.46
+   ],
+   "significant": true,
+   "n": 289
+  }
+ ],
+ "by_segment": [
+  {
+   "segment": "turnover",
+   "value": "0 - 40 L",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -0.93,
+   "ci95_pts": [
+    -1.42,
+    -0.45
+   ],
+   "significant": true,
+   "n": 18114,
+   "base_rate_pct": 11.47
+  },
+  {
+   "segment": "turnover",
+   "value": "0 - 40 L",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -3.17,
+   "ci95_pts": [
+    -4.92,
+    -1.42
+   ],
+   "significant": true,
+   "n": 3055,
+   "base_rate_pct": 11.47
+  },
+  {
+   "segment": "turnover",
+   "value": "1.5 - 5 Cr",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 0.01,
+   "ci95_pts": [
+    -1.2,
+    1.21
+   ],
+   "significant": true,
+   "n": 2411,
+   "base_rate_pct": 8.94
+  },
+  {
+   "segment": "turnover",
+   "value": "1.5 - 5 Cr",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -0.58,
+   "ci95_pts": [
+    -4.41,
+    3.26
+   ],
+   "significant": true,
+   "n": 501,
+   "base_rate_pct": 8.94
+  },
+  {
+   "segment": "turnover",
+   "value": "25 - 100 Cr",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -0.44,
+   "ci95_pts": [
+    -3.5,
+    2.62
+   ],
+   "significant": true,
+   "n": 298,
+   "base_rate_pct": 8.97
+  },
+  {
+   "segment": "turnover",
+   "value": "40 L - 1.5 Cr",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -0.71,
+   "ci95_pts": [
+    -1.59,
+    0.18
+   ],
+   "significant": true,
+   "n": 4606,
+   "base_rate_pct": 9.6
+  },
+  {
+   "segment": "turnover",
+   "value": "40 L - 1.5 Cr",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -0.6,
+   "ci95_pts": [
+    -3.81,
+    2.61
+   ],
+   "significant": true,
+   "n": 850,
+   "base_rate_pct": 9.6
+  },
+  {
+   "segment": "turnover",
+   "value": "5 - 25 Cr",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 0.02,
+   "ci95_pts": [
+    -1.63,
+    1.67
+   ],
+   "significant": true,
+   "n": 1308,
+   "base_rate_pct": 8.72
+  },
+  {
+   "segment": "turnover",
+   "value": "5 - 25 Cr",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -1.13,
+   "ci95_pts": [
+    -6.16,
+    3.9
+   ],
+   "significant": true,
+   "n": 257,
+   "base_rate_pct": 8.72
+  },
+  {
+   "segment": "turnover",
+   "value": "unknown",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 0.99,
+   "ci95_pts": [
+    -0.35,
+    2.34
+   ],
+   "significant": true,
+   "n": 3767,
+   "base_rate_pct": 18.4
+  },
+  {
+   "segment": "turnover",
+   "value": "unknown",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -3.37,
+   "ci95_pts": [
+    -8.3,
+    1.56
+   ],
+   "significant": true,
+   "n": 737,
+   "base_rate_pct": 18.4
+  },
+  {
+   "segment": "region",
+   "value": "Central",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 2.57,
+   "ci95_pts": [
+    -0.31,
+    5.46
+   ],
+   "significant": true,
+   "n": 550,
+   "base_rate_pct": 13.65
+  },
+  {
+   "segment": "region",
+   "value": "Central",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -6.86,
+   "ci95_pts": [
+    -12.6,
+    -1.13
+   ],
+   "significant": true,
+   "n": 279,
+   "base_rate_pct": 13.65
+  },
+  {
+   "segment": "region",
+   "value": "East",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 1.81,
+   "ci95_pts": [
+    0.02,
+    3.59
+   ],
+   "significant": true,
+   "n": 1392,
+   "base_rate_pct": 12.38
+  },
+  {
+   "segment": "region",
+   "value": "East",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -3.87,
+   "ci95_pts": [
+    -8.29,
+    0.55
+   ],
+   "significant": true,
+   "n": 476,
+   "base_rate_pct": 12.38
+  },
+  {
+   "segment": "region",
+   "value": "North",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -1.16,
+   "ci95_pts": [
+    -1.7,
+    -0.62
+   ],
+   "significant": true,
+   "n": 14135,
+   "base_rate_pct": 11.23
+  },
+  {
+   "segment": "region",
+   "value": "North",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -1.75,
+   "ci95_pts": [
+    -3.72,
+    0.22
+   ],
+   "significant": true,
+   "n": 2870,
+   "base_rate_pct": 11.23
+  },
+  {
+   "segment": "region",
+   "value": "South",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 1.21,
+   "ci95_pts": [
+    -0.22,
+    2.64
+   ],
+   "significant": true,
+   "n": 4435,
+   "base_rate_pct": 11.97
+  },
+  {
+   "segment": "region",
+   "value": "West",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -0.63,
+   "ci95_pts": [
+    -1.3,
+    0.04
+   ],
+   "significant": true,
+   "n": 9959,
+   "base_rate_pct": 11.68
+  },
+  {
+   "segment": "region",
+   "value": "West",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -2.15,
+   "ci95_pts": [
+    -4.35,
+    0.06
+   ],
+   "significant": true,
+   "n": 1861,
+   "base_rate_pct": 11.68
+  },
+  {
+   "segment": "category_group",
+   "value": "Apparel, Clothing & Garments",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -3.02,
+   "ci95_pts": [
+    -4.33,
+    -1.7
+   ],
+   "significant": true,
+   "n": 2493,
+   "base_rate_pct": 13.31
+  },
+  {
+   "segment": "category_group",
+   "value": "Apparel, Clothing & Garments",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": 1.27,
+   "ci95_pts": [
+    -4.61,
+    7.15
+   ],
+   "significant": true,
+   "n": 428,
+   "base_rate_pct": 13.31
+  },
+  {
+   "segment": "category_group",
+   "value": "Architectural & Designing Services",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 1.79,
+   "ci95_pts": [
+    -2.76,
+    6.34
+   ],
+   "significant": true,
+   "n": 199,
+   "base_rate_pct": 13.47
+  },
+  {
+   "segment": "category_group",
+   "value": "Automobiles, Spare Parts and Accessories",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 0.45,
+   "ci95_pts": [
+    -1.85,
+    2.75
+   ],
+   "significant": true,
+   "n": 744,
+   "base_rate_pct": 10.38
+  },
+  {
+   "segment": "category_group",
+   "value": "Automobiles, Spare Parts and Accessories",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -1.18,
+   "ci95_pts": [
+    -7.79,
+    5.43
+   ],
+   "significant": true,
+   "n": 142,
+   "base_rate_pct": 10.38
+  },
+  {
+   "segment": "category_group",
+   "value": "Ayurvedic & Herbal Product",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -3.53,
+   "ci95_pts": [
+    -7.06,
+    -0.01
+   ],
+   "significant": true,
+   "n": 223,
+   "base_rate_pct": 11.6
+  },
+  {
+   "segment": "category_group",
+   "value": "Bags, Handbags, Luggage Bags, Belts, Wallets and Accessories",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -0.83,
+   "ci95_pts": [
+    -3.6,
+    1.94
+   ],
+   "significant": true,
+   "n": 388,
+   "base_rate_pct": 11.87
+  },
+  {
+   "segment": "category_group",
+   "value": "Building Construction Material, Equipment, Civil Engineering and Real Estate",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 0.27,
+   "ci95_pts": [
+    -0.92,
+    1.45
+   ],
+   "significant": true,
+   "n": 3380,
+   "base_rate_pct": 11.86
+  },
+  {
+   "segment": "category_group",
+   "value": "Building Construction Material, Equipment, Civil Engineering and Real Estate",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": 0.3,
+   "ci95_pts": [
+    -3.91,
+    4.52
+   ],
+   "significant": true,
+   "n": 584,
+   "base_rate_pct": 11.86
+  },
+  {
+   "segment": "category_group",
+   "value": "Chemicals, Dyes & Allied Products",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -1.4,
+   "ci95_pts": [
+    -3.62,
+    0.82
+   ],
+   "significant": true,
+   "n": 664,
+   "base_rate_pct": 9.52
+  },
+  {
+   "segment": "category_group",
+   "value": "Computers, Software, IT Support & Solutions",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 1.62,
+   "ci95_pts": [
+    -2.34,
+    5.58
+   ],
+   "significant": true,
+   "n": 274,
+   "base_rate_pct": 10.83
+  },
+  {
+   "segment": "category_group",
+   "value": "Consumer Electronics &  Household Appliances",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -1.58,
+   "ci95_pts": [
+    -3.17,
+    0.01
+   ],
+   "significant": true,
+   "n": 1619,
+   "base_rate_pct": 12.16
+  },
+  {
+   "segment": "category_group",
+   "value": "Consumer Electronics &  Household Appliances",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": 3.41,
+   "ci95_pts": [
+    -2.64,
+    9.46
+   ],
+   "significant": true,
+   "n": 270,
+   "base_rate_pct": 12.16
+  },
+  {
+   "segment": "category_group",
+   "value": "Cosmetics, Toiletries & Personal Care Products",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 0.05,
+   "ci95_pts": [
+    -2.06,
+    2.15
+   ],
+   "significant": true,
+   "n": 972,
+   "base_rate_pct": 11.46
+  },
+  {
+   "segment": "category_group",
+   "value": "Cosmetics, Toiletries & Personal Care Products",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -6.01,
+   "ci95_pts": [
+    -12.53,
+    0.51
+   ],
+   "significant": true,
+   "n": 185,
+   "base_rate_pct": 11.46
+  },
+  {
+   "segment": "category_group",
+   "value": "Electrical Equipment and Supplies",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -0.94,
+   "ci95_pts": [
+    -2.86,
+    0.99
+   ],
+   "significant": true,
+   "n": 1087,
+   "base_rate_pct": 11.86
+  },
+  {
+   "segment": "category_group",
+   "value": "Electrical Equipment and Supplies",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -2.62,
+   "ci95_pts": [
+    -10.1,
+    4.85
+   ],
+   "significant": true,
+   "n": 193,
+   "base_rate_pct": 11.86
+  },
+  {
+   "segment": "category_group",
+   "value": "Electronics Components and Supplies",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 1.37,
+   "ci95_pts": [
+    -2.16,
+    4.91
+   ],
+   "significant": true,
+   "n": 236,
+   "base_rate_pct": 8.46
+  },
+  {
+   "segment": "category_group",
+   "value": "Fashion & Garment Accessories for Men, Women & Kids",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -3.02,
+   "ci95_pts": [
+    -6.24,
+    0.19
+   ],
+   "significant": true,
+   "n": 238,
+   "base_rate_pct": 10.77
+  },
+  {
+   "segment": "category_group",
+   "value": "Fertilizers, Seeds, Plants, Agro Machines & Tools, Poultry & Animal Husbandry",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 0.41,
+   "ci95_pts": [
+    -2.2,
+    3.02
+   ],
+   "significant": true,
+   "n": 566,
+   "base_rate_pct": 12.54
+  },
+  {
+   "segment": "category_group",
+   "value": "Furniture, Furniture Supplies & Furniture Hardware",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 3.3,
+   "ci95_pts": [
+    0.44,
+    6.16
+   ],
+   "significant": true,
+   "n": 558,
+   "base_rate_pct": 12.56
+  },
+  {
+   "segment": "category_group",
+   "value": "Gems, Jewellery, Precious Stones, Vaastu & Astrology",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -3.04,
+   "ci95_pts": [
+    -5.31,
+    -0.77
+   ],
+   "significant": true,
+   "n": 971,
+   "base_rate_pct": 12.73
+  },
+  {
+   "segment": "category_group",
+   "value": "Gifts, Crafts, Antiques & Handmade Decoratives",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 2.2,
+   "ci95_pts": [
+    -0.1,
+    4.49
+   ],
+   "significant": true,
+   "n": 881,
+   "base_rate_pct": 10.74
+  },
+  {
+   "segment": "category_group",
+   "value": "Home Furnishings and Home Textiles",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 1.37,
+   "ci95_pts": [
+    -1.77,
+    4.51
+   ],
+   "significant": true,
+   "n": 445,
+   "base_rate_pct": 11.58
+  },
+  {
+   "segment": "category_group",
+   "value": "Housewares, Home Appliances, Household Decorations & Consumables",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -1.25,
+   "ci95_pts": [
+    -3.11,
+    0.61
+   ],
+   "significant": true,
+   "n": 1189,
+   "base_rate_pct": 11.6
+  },
+  {
+   "segment": "category_group",
+   "value": "Housewares, Home Appliances, Household Decorations & Consumables",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -9.31,
+   "ci95_pts": [
+    -17.62,
+    -1.0
+   ],
+   "significant": true,
+   "n": 188,
+   "base_rate_pct": 11.6
+  },
+  {
+   "segment": "category_group",
+   "value": "Industrial & Engineering Products, Spares and Supplies",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -1.02,
+   "ci95_pts": [
+    -2.92,
+    0.87
+   ],
+   "significant": true,
+   "n": 978,
+   "base_rate_pct": 9.82
+  },
+  {
+   "segment": "category_group",
+   "value": "Industrial & Engineering Products, Spares and Supplies",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -0.24,
+   "ci95_pts": [
+    -5.85,
+    5.37
+   ],
+   "significant": true,
+   "n": 183,
+   "base_rate_pct": 9.82
+  },
+  {
+   "segment": "category_group",
+   "value": "Industrial & Engineering Services, Solutions & Consultancy",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 1.41,
+   "ci95_pts": [
+    -1.85,
+    4.67
+   ],
+   "significant": true,
+   "n": 440,
+   "base_rate_pct": 12.64
+  },
+  {
+   "segment": "category_group",
+   "value": "Industrial Plants, Machinery & Equipment",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -1.36,
+   "ci95_pts": [
+    -3.47,
+    0.75
+   ],
+   "significant": true,
+   "n": 911,
+   "base_rate_pct": 11.55
+  },
+  {
+   "segment": "category_group",
+   "value": "Industrial Plants, Machinery & Equipment",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -9.46,
+   "ci95_pts": [
+    -16.88,
+    -2.03
+   ],
+   "significant": true,
+   "n": 112,
+   "base_rate_pct": 11.55
+  },
+  {
+   "segment": "category_group",
+   "value": "Kitchen Containers, Utensils, Stove, Cookware, Tableware and Food Choppers",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -1.88,
+   "ci95_pts": [
+    -3.78,
+    0.01
+   ],
+   "significant": true,
+   "n": 1022,
+   "base_rate_pct": 11.15
+  },
+  {
+   "segment": "category_group",
+   "value": "Kitchen Containers, Utensils, Stove, Cookware, Tableware and Food Choppers",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": 5.25,
+   "ci95_pts": [
+    -2.61,
+    13.11
+   ],
+   "significant": true,
+   "n": 162,
+   "base_rate_pct": 11.15
+  },
+  {
+   "segment": "category_group",
+   "value": "Mechanical Components & Parts",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 0.96,
+   "ci95_pts": [
+    -1.31,
+    3.22
+   ],
+   "significant": true,
+   "n": 737,
+   "base_rate_pct": 9.05
+  },
+  {
+   "segment": "category_group",
+   "value": "Media, Advertising, Copywriting & Publishing Services",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -0.25,
+   "ci95_pts": [
+    -3.78,
+    3.28
+   ],
+   "significant": true,
+   "n": 305,
+   "base_rate_pct": 10.24
+  },
+  {
+   "segment": "category_group",
+   "value": "Metals, Minerals, Ores & Alloys",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -0.8,
+   "ci95_pts": [
+    -3.43,
+    1.84
+   ],
+   "significant": true,
+   "n": 593,
+   "base_rate_pct": 11.56
+  },
+  {
+   "segment": "category_group",
+   "value": "Operation Theater, Medical Imaging and Pathology Instruments and Hospital Supplies",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 1.15,
+   "ci95_pts": [
+    -1.47,
+    3.78
+   ],
+   "significant": true,
+   "n": 492,
+   "base_rate_pct": 10.37
+  },
+  {
+   "segment": "category_group",
+   "value": "Packaging Material, Supplies & Machines",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -0.4,
+   "ci95_pts": [
+    -2.11,
+    1.3
+   ],
+   "significant": true,
+   "n": 1143,
+   "base_rate_pct": 10.38
+  },
+  {
+   "segment": "category_group",
+   "value": "Packaging Material, Supplies & Machines",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": 1.38,
+   "ci95_pts": [
+    -4.39,
+    7.16
+   ],
+   "significant": true,
+   "n": 189,
+   "base_rate_pct": 10.38
+  },
+  {
+   "segment": "category_group",
+   "value": "Packers & Movers, Clearing Agents & Logistic Services",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -1.19,
+   "ci95_pts": [
+    -5.88,
+    3.5
+   ],
+   "significant": true,
+   "n": 177,
+   "base_rate_pct": 13.9
+  },
+  {
+   "segment": "category_group",
+   "value": "Pen, Pencil, Books, Notebooks, Stationery, Whiteboard & Publications",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -1.51,
+   "ci95_pts": [
+    -4.56,
+    1.53
+   ],
+   "significant": true,
+   "n": 413,
+   "base_rate_pct": 12.2
+  },
+  {
+   "segment": "category_group",
+   "value": "Pharmaceutical Drugs, Medicines, Vitamins and Other Healthcare Products",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -2.83,
+   "ci95_pts": [
+    -5.36,
+    -0.3
+   ],
+   "significant": true,
+   "n": 388,
+   "base_rate_pct": 10.53
+  },
+  {
+   "segment": "category_group",
+   "value": "Scientific, Measuring, Laboratory Instruments & Supplies",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -2.9,
+   "ci95_pts": [
+    -6.11,
+    0.3
+   ],
+   "significant": true,
+   "n": 267,
+   "base_rate_pct": 9.73
+  },
+  {
+   "segment": "category_group",
+   "value": "Security Devices, Safety Systems and Security Services",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 1.34,
+   "ci95_pts": [
+    -3.06,
+    5.75
+   ],
+   "significant": true,
+   "n": 180,
+   "base_rate_pct": 10.72
+  },
+  {
+   "segment": "category_group",
+   "value": "Sports Goods, Games, Toys & Accessories",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 1.09,
+   "ci95_pts": [
+    -1.84,
+    4.02
+   ],
+   "significant": true,
+   "n": 386,
+   "base_rate_pct": 10.81
+  },
+  {
+   "segment": "category_group",
+   "value": "Stationery and Paper Products",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 1.3,
+   "ci95_pts": [
+    -2.63,
+    5.23
+   ],
+   "significant": true,
+   "n": 226,
+   "base_rate_pct": 10.94
+  },
+  {
+   "segment": "category_group",
+   "value": "Stones, Marble & Granite Supplies",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -0.63,
+   "ci95_pts": [
+    -5.5,
+    4.24
+   ],
+   "significant": true,
+   "n": 155,
+   "base_rate_pct": 13.37
+  },
+  {
+   "segment": "category_group",
+   "value": "Textiles, Yarn, Fabrics & Allied Industries",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": -2.66,
+   "ci95_pts": [
+    -5.3,
+    -0.02
+   ],
+   "significant": true,
+   "n": 369,
+   "base_rate_pct": 9.96
+  },
+  {
+   "segment": "category_group",
+   "value": "Tools, Machine Tools, Power Tools & Hand Tools",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 0.21,
+   "ci95_pts": [
+    -2.34,
+    2.76
+   ],
+   "significant": true,
+   "n": 422,
+   "base_rate_pct": 8.25
+  },
+  {
+   "segment": "category_group",
+   "value": "Vegetables, Fruits, Grains, Dairy Products & Other FMCG and Grocery Items",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 0.38,
+   "ci95_pts": [
+    -1.22,
+    1.99
+   ],
+   "significant": true,
+   "n": 1905,
+   "base_rate_pct": 13.62
+  },
+  {
+   "segment": "category_group",
+   "value": "Vegetables, Fruits, Grains, Dairy Products & Other FMCG and Grocery Items",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -1.87,
+   "ci95_pts": [
+    -7.79,
+    4.04
+   ],
+   "significant": true,
+   "n": 322,
+   "base_rate_pct": 13.62
+  },
+  {
+   "segment": "category_group",
+   "value": "unknown",
+   "hook": "interest",
+   "vs": "enquiry_count",
+   "diff_pts": 0.64,
+   "ci95_pts": [
+    -2.13,
+    3.42
+   ],
+   "significant": true,
+   "n": 728,
+   "base_rate_pct": 16.0
+  },
+  {
+   "segment": "category_group",
+   "value": "unknown",
+   "hook": "discovery",
+   "vs": "enquiry_count",
+   "diff_pts": -0.43,
+   "ci95_pts": [
+    -11.33,
+    10.46
+   ],
+   "significant": true,
+   "n": 154,
+   "base_rate_pct": 16.0
+  }
+ ],
+ "evidence_grade_rule": "MODERATE if significant on region or turnover; WEAK if significant only on a category group or not significant; GUESS where no row exists",
+ "dimensions_without_data": [
+  "voice_gender",
+  "formality",
+  "pitch"
+ ]
+}
