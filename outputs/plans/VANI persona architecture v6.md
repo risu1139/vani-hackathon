@@ -19,7 +19,7 @@ As of 2026-10-09 (hackathon day 1). For the team lead, then an external reviewer
 7. The skill runs on a frontier model. The skill uses two libraries as starting points: traits and states, and VANI personas. The agent composes. It does not only select.
 8. Code checks the agent's output. Code checks facts, prices, compliance and ID numbers. The agent cannot change these checks.
 9. Sarvam sets the voice, speed, pitch and opening at the start of each call. We proved this on 2026-10-09.
-10. During the call, a signal server finds frustration, confusion, interest, rush and language change. It tells VANI to change what it says. Each change goes into the switch log.
+10. During the call, VANI adapts on the same turn. Prompt rules tell it how to answer each signal. Our keyword tool inside Sarvam runs on every seller turn. It sets the mode of record, ends the call on an opt-out, and writes the switch log. Sarvam's built-in switch handles language. After the call, a frontier model reviews the call.
 11. After the call, a reviewer labels mistakes. Two learning loops then improve the switches and the personas. No model is trained.
 12. We record every decision and every call from day one.
 13. A nightly batch for all sellers is for production later. It is not part of the hackathon build.
@@ -60,11 +60,11 @@ Kept from v5: frontier decider; agent composes, library = starting points; voice
                                  ▼
  SARVAM VOICE AGENT ── OnStart tool reads persona_voice_id/pace/pitch/opening → TTS + opening (fixed for call)
    seller ◄─voice─► agent  (base prompt: facts, prices, compliance; sections switched by variables)
-        └── tool call per turn ──► B8 SIGNAL SERVER: lexicon (now) + Jev (next turn) + code policy
+        └── tool call per turn ──► B8 IN-CALL SWITCHER (in Sarvam): prompt rules + keyword tool + Patient endpointing
                                    ◄── persona_directive (+ call_plan, seller_mode) · switch log row
                                  ▼
  B9 REVIEW (Fatal / Non-Fatal; switch correctness; persona fit) ──► B10 LOOPS (between runs)
-     LOOP 1 switch: lexicon · thresholds · Jev wording ── frozen gold gate ──► B8
+     LOOP 1 switch: keyword list · prompt rules (from frontier review) ── frozen gold gate ──► B8
      LOOP 2 persona: seller memory · trait/state + persona scoreboard · suggestions ── human ──► B1, B3, B4 tools
  B11 DATA RECORDS (from day one): snapshot ref · decision · call · switch log · outcome · review · manifest
 ```
@@ -84,9 +84,9 @@ Kept from v5: frontier decider; agent composes, library = starting points; voice
 | **B6 Compile variables** | D3; Voice 20 | Template to Sarvam agent variables + placeholders filled from context; *rej.* free-form prompt per call | `persona_decision` → `sarvam_call_vars` | B7, B8 | Variables → voice/pace PROVEN; template ASSUMED |
 | **B7 Place call** | D3 live demo | SDK session now; Instant Outbound after number rental; *rej.* scripted simulator only (FAQ Q3) | `sarvam_call_vars` → `call_started` | Sarvam, B11 | SDK PROVEN; phone DOCUMENTED, blocked |
 | **Sarvam agent** (platform) | D3; Voice 20 | OnStart code tool + base prompt with variable-switched sections | vars → live call | B8, B9 | OnStart PROVEN |
-| **B8 Signal server** | Switches 25; D4 | Lexicon now + Jev next turn + code policy; LLM never decides live; *rej.* LLM-in-loop switcher | utterance + state → `persona_directive` + `switch_log_row` | Sarvam, B11 | Lexicon + tool path PROVEN; Jev native PROVEN; host OPEN |
-| **B9 Review** | Robustness 20; Evidence 15 | Reviewer (LLM draft + human) on masked transcript, QA-matrix format; *rej.* free-text notes | call record → `review` | B10 | ASSUMED |
-| **B10 Learning loops** | Evidence 15; Switches 25 | Loop 1 switch (gated), Loop 2 persona (memory, scoreboard, suggestions → human); no training | reviews, outcomes → library/lexicon diffs | B8, B1, B3, B4 | ASSUMED |
+| **B8 In-call switcher** | Switches 25; D4 | Prompt rules (same-turn reply) + hardened keyword code tool (mode of record, opt-out, switch log) + Patient endpointing, all inside Sarvam; *rej. for now* live Jev (+0.54 s/turn warm, ~450 ms floor), webhook/client push (blocked/disproven), external host | utterance → `seller_mode` + `persona_directive` + `switch_log_row` | Sarvam, B11 | PROVEN (tests 2026-10-09); live Jev re-test last |
+| **B9 Review** | Robustness 20; Evidence 15 | Frontier model (Claude in Daytona) reviews each call per turn, QA-matrix format, explains misses, proposes keyword/prompt diffs; human confirms; Jev optional cheap second labeller; *rej.* Jev as main reviewer (no reasons, turn-only), free-text notes | call record + switch_log → `review` | B10 | ASSUMED |
+| **B10 Learning loops** | Evidence 15; Switches 25 | Loop 1 switch: keyword list + prompt-rule diffs from B9 (gated); Loop 2 persona (memory, scoreboard, suggestions → human); no training | reviews, outcomes → library/lexicon/prompt diffs | B8, B1, B3, B4 | ASSUMED |
 | **B11 Data records** | Evidence 15; Robustness 20 | Append-only JSONL keyed by `decision_id`, on premises | all → records | B9, B10, slide | ASSUMED |
 
 ---
@@ -179,21 +179,58 @@ States also set per-seller switch sensitivity in B8. **Status.** ASSUMED.
 
 **Why.** D3: live demo with a live human (FAQ Q3: a pre-scripted switch scores lower). **How.** Now: Sarvam SDK session with a team member speaking live (PROVEN path). Later: Instant Outbound API with `agent_variables` (DOCUMENTED; blocked until a Sarvam number is rented with KYC). **What.** `sarvam_call_vars` → `{"decision_id","channel":"sdk|outbound","session_id|attempt_id","started_at"}`. **Status.** SDK PROVEN; phone OPEN.
 
-### B8 Signal server (live switches)
+### B8 In-call switcher (live switches, inside Sarvam)
 
-**Why.** Switches 25; D4 switch log; PS04 §3.5 and FAQ Q4. **How.** Sarvam calls our tool each turn. Lexicon decides now (< 5 ms, switch of record). Jev (Decisions API) runs in parallel and its result applies **next turn** (native script 49/51, tricky 10/10, ~500 ms p50: PROVEN from the VPN laptop). Code policy: priority, hysteresis, max switches; per-seller sensitivity comes from the seller's states. Required signals: frustration, confusion, interest, language switch, rush; optional gatekeeper. Language switches are logged from the transcript, because the agent does not call the tool on that turn (0/4: PROVEN). Voice, pace and pitch stay fixed for the call; a switch changes what and how much VANI says (shorter sentences, check question, apology/exit, meeting ask). An LLM never decides a switch live (decision between-run §3). **What.**
+**Why.** Switches 25; D4 switch log; PS04 §3.5 and FAQ Q4.
+
+**How.** Three parts, all inside the Sarvam agent; no external host in the call path:
+1. **Prompt rules (same turn).** The base prompt names each signal and VANI's response:
+   - rushed → one short sentence and a callback offer;
+   - frustrated → apologise once and stop pitching;
+   - confused → short comma-separated phrases, then check understanding;
+   - interested → move to the meeting ask;
+   - opt-out → apologise and end the call.
+
+   This makes the reply change on the same turn with 0 added latency. Tested (O1, 3 runs): every signal 3/3–6/6, rushed 5/6 same turn, 0/27 false switches, same response across runs.
+2. **Hardened keyword code tool `ReadSellerSignal`, called every seller turn.** It is the frozen decider of record.
+   - It sets `seller_mode` + `persona_directive` and ends the call on opt-out (`set_end_conversation`).
+   - It appends the D4 log row: signal, cue matched, change, source.
+   - A first prompt line makes the LLM call it before every reply.
+   - Tests (T4/O2h): called on 31/31 turns (was 30/31); 2/2 on language-switch turns (was 0/4); wrong mode 3/24, all from keyword-list gaps that Loop 1 fixes; switch_log valid JSON; about +0.4 s reply start over prompt-only.
+3. **Patient endpointing** (console "Eagerness to respond" = Patient): restarted replies 2/31 → 0/31, double calls 1 → 0, at +0.13 s (T9).
+
+**Language.** Sarvam's built-in detection switches language. The persona voice stays the same, because all v4 voices are multilingual.
+
+**Voice, pace and pitch.** These are fixed per call through OnStart. Mid-call "slow down" is done through phrasing.
+
+**Live Jev is deferred to a final re-test.**
+- The warm relay adds +0.54 s per turn: reply start 2.52 s vs 1.98 s.
+- Jev's own floor is about 450–500 ms. Network is 26 ms, and 1 call, 6 questions or 6 parallel calls make no difference.
+- The filler did not play.
+- A webhook or client push from the laptop is BLOCKED or DISPROVEN (T1/T2), and no live transcript leaves a phone call.
+
+Evidence: `raw/research/2026-10-09-midcall-switch-tests.md`, `-jev-latency-floor.md`, `-midcall-switch-all-routes.md`.
+
+**What.**
 
 ```json
 // in:  {"decision_id","turn","utterance","language"}
-// out: {"persona_directive":"…native…","seller_mode":"confused","call_step":"…"}
-// log: {"decision_id","turn","signal","source":"lexicon|jev|transcript","score","change","reason","ts"}
+// out: {"persona_directive":"…native…","seller_mode":"confused"}
+// log: {"decision_id","turn","signal","cue","source":"keyword|transcript","change","ts"}
 ```
 
-**Status.** Lexicon + tool path PROVEN; Jev native PROVEN (small hand-written set); host OPEN; Jev reachability from that host OPEN.
+**Status.** PROVEN on scripted SDK sessions (2026-10-09). Not yet run on a real phone call (number rental).
 
 ### B9 Review
 
-**Why.** Robustness 20, Evidence 15; feeds both loops. **How.** After each call a reviewer labels the call in the **Fatal / Non-Fatal** format of the production VANI QA matrix: looping, dead air (> 5 s), missed opportunity, plus switch correctness (right signal, right turn) and persona fit per dimension. LLM drafts on the masked transcript; a human confirms. **What.** `{"decision_id","overall":"pass|non_fatal|fatal","items":[{"param","verdict","turn","note"}],"switch_verdicts":[…],"fit":{"<dimension>":"ok|wrong"},"reviewer"}`. **Status.** Format DOCUMENTED (QA matrix); process ASSUMED.
+**Why.** Robustness 20, Evidence 15; feeds both loops. **How.** After each call a **frontier model** (Claude Code in Daytona, the same access as the B4 decider) reviews the transcript plus the switch log. It uses the **Fatal / Non-Fatal** format of the production VANI QA matrix (looping, dead air > 5 s, missed opportunity) and adds:
+- per-turn signal labels;
+- switch correctness: right signal, right turn;
+- persona fit per dimension;
+- the **reason** for each miss;
+- a proposed diff to the keyword list or prompt rules.
+
+A human confirms. Speed doesn't matter after the call, so the frontier model beats Jev here: it reads the whole call, explains its verdicts and proposes fixes. Jev (about $0.00002 per call, calibrated scores) is an optional cheap second labeller. **What.** `{"decision_id","overall":"pass|non_fatal|fatal","items":[{"param","verdict","turn","note"}],"switch_verdicts":[…],"fit":{"<dimension>":"ok|wrong"},"reviewer"}`. **Status.** Format DOCUMENTED (QA matrix); process ASSUMED.
 
 ### B10 Learning loops (between runs)
 
@@ -201,7 +238,7 @@ States also set per-seller switch sensitivity in B8. **Status.** ASSUMED.
 
 | Loop | Learns from | Changes | Gate | Feeds |
 |---|---|---|---|---|
-| 1 Switch | switch verdicts | lexicon, thresholds, Jev wording | frozen gold set must not regress | B8 |
+| 1 Switch | B9 switch verdicts + proposed diffs | keyword list, prompt rules | frozen gold set must not regress; human approves | B8 |
 | 2 Persona | outcomes (meeting booked), reviews, suggestions | seller memory; trait/state + persona scoreboard; new traits/states/personas | human approval | B1, B3, B4 tools |
 
 **Status.** ASSUMED. PS07 calls bootstrap both loops (DOCUMENTED decision).
@@ -252,7 +289,7 @@ Rule: only variables **defined in the agent** reach the tool (undefined SDK vari
 | D4 Switch log | B8, B11 | row per switch: signal, change, reason, source |
 | D5 One slide | B11 + all | sample spec, evidence tiers, workflow (frontier LLM, Sarvam, data flow, signals, integration) |
 | Fit 25 | B1, B2, B4 | traits/states from data, memory facts, cold path |
-| Switches 25 | B8, B10 L1 | lexicon precision table; Jev next turn; per-seller sensitivity |
+| Switches 25 | B8, B10 L1 | per-signal table (prompt rules + keyword tool); switch log; Loop 1 before/after |
 | Distinctness 20 | B3, B4, B6 | different voice, pace, language and plan per seller |
 | Natural voice 2+ languages 15 | B3, B6, Sarvam | per-call voice, native script, built-in language switch (6/6 PROVEN) |
 | Evidence 15 | B1, B5, B9, B10, B11 | evidence tier; PS07 recurrence; PS07 personalisation trials 0 for 3 cited honestly |
@@ -268,7 +305,7 @@ Rule: only variables **defined in the agent** reach the tool (undefined SDK vari
 
 | # | Item | Owner | Blocks |
 |---|---|---|---|
-| 1 | **Signal-server host** Sarvam can reach and that can reach Jev (Daytona needs wildcard DNS/TLS; VPN laptop + tunnel; internal box) | S + team lead | B8 |
+| 1 | ~~Signal-server host~~ CLOSED 2026-10-09: switcher runs inside Sarvam (prompt rules + keyword tool); live Jev re-test is the last item | S | B8 |
 | 2 | **`call_plan` variable**: not overwritten by tool response; plan followed as well as re-send | S | B6, B8 |
 | 3 | **Phone number rental** (Sarvam/Vobiz KYC) for Instant Outbound; until then SDK demo | Team lead | B7 |
 | 4 | **Organiser confirmations**: frontier decider vs "core agent must be Sarvam"; data policy vs "no customer data leaves the premises" | Team lead | B4, policy |
@@ -287,7 +324,7 @@ Rule: only variables **defined in the agent** reach the tool (undefined SDK vari
 3. **The peer data agent is a dependency we do not control.** Late or changed schema blocks B2. Mitigation: freeze the contract early; fixtures; B2 tolerates missing fields (FAQ Q6).
 4. **Composing adds variance; agreement is not correctness.** Mitigation: 2-of-3 bucketed agreement, citation checks, labelled fixtures; disagreement and repair rates measured, not assumed.
 5. **Personalisation may not lift meetings.** Three PS07 script-personalisation trials went 0 for 3 (PROVEN). Claim fit and adaptation, not lift; lift needs holdout after the event.
-6. **Live path fragility**: signal-server host, Jev reachability, ~17% restarted replies, ~2.1 s latency. Mitigation: lexicon works alone; health check before each demo call; freeze 12:00 D2; backup video 16:00 D2.
+6. **Live path fragility**: restarted replies (0/31 with Patient endpointing), ~2.0 s reply start, LLM must call the tool (31/31 with the hardened prompt line). Mitigation: prompt rules adapt even if a tool call is missed; health check before each demo call; freeze 12:00 D2; backup video 16:00 D2.
 
 ---
 
