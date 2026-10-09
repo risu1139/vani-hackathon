@@ -20,6 +20,7 @@ Run (from the repo root; tokens VANI_AK / VANI_USERS_TOKEN are read from .env):
   python app/persona/seller_context_builder.py build --glid 12345678 [--no-api] [--refresh]
 """
 import argparse
+import glob
 import json
 import os
 import re
@@ -625,12 +626,177 @@ def render_category(rows):
     return "\n".join(lines)
 
 
+# ---------------------------------------------------------------- folder layout (one folder per seller)
+# Decided 2026-10-10 (raw/research/2026-10-10-context-file-layout-research.md): INDEX.md first, core.md always, topic files on demand.
+FILES_MAP = [
+    ("core.md", "Identity, location and language, relationship with IndiaMART, account risk, this call",
+     "always read after INDEX.md", ["A", "B", "H", "I", "K"]),
+    ("business.md", "Business profile: type, turnover, nature, vintage, plan, KYC flags, profile and company page",
+     "before choosing formality, sophistication, voice, or the profile-gap hook", ["C"]),
+    ("catalogue.md", "Categories, products, catalogue quality and gaps",
+     "before the profile-gap hook or naming a product", ["D"]),
+    ("buyleads.md", "Buy leads bought, credits, consumption, rejection reasons, category value, AOV",
+     "before any buy-lead, money or CSD hook", ["E04", "E05", "E06", "E07", "E09", "E10"]),
+    ("enquiries.md", "Enquiries received, latest enquiries, responsiveness",
+     "before the enquiry or demand hook", ["E01", "E02", "E03"]),
+    ("channels.md", "Phone (PNS) behaviour, WhatsApp, chatbot, buyer-call extractions",
+     "before choosing pace, brevity or channel claims", ["F", "J"]),
+    ("peers.md", "Nearby competitors and the same-size peer statistic (all ladder rungs)",
+     "before any competitor or peer line", ["E08", "E11"]),
+    ("candidate_leads.md", "Best-suited live / expired buy leads with order value",
+     "before the money-lead hook", ["E12"]),
+]
+
+
+def _point_md(pid, P):
+    v, src = P.get(pid, (None, ""))
+    if pid in ("E09", "E10", "E11", "E12", "G00"):
+        return None
+    lab = S.LABELS.get(pid, pid)
+    return f"### {pid} {lab}\n*Source:* {src}\n\n{S.render_value(v) if not S.blank(v) else '_no data_'}\n"
+
+
+def _pids_for(prefixes):
+    out = []
+    for p in prefixes:
+        if len(p) == 1:
+            out += [k for k in S.LABELS if k.startswith(p) and k not in S.EXCLUDED]
+        else:
+            out.append(p)
+    return out
+
+
+def _short(v, n=160):
+    s = json.dumps(v, ensure_ascii=False, default=str) if not isinstance(v, str) else v
+    return s if len(s) <= n else s[:n] + "…"
+
+
+def key_facts(P, hist, peer, leads, s_aov, m_aov, cat):
+    """Up to 25 key facts for INDEX.md, each with a source pointer (file#id). Facts only, no advice."""
+    g = lambda pid: (P.get(pid) or (None,))[0]
+    K = []
+
+    def add(text, cite):
+        if text:
+            K.append((f"K{len(K) + 1}", text, cite))
+    h2 = g("H02") or {}
+    c5 = g("C05") or {}
+    add(f"Division: {h2.get('vertical_name')}; plan: {c5.get('paid_free')} ({c5.get('byr_custtype')})", "core.md#H02")
+    add(f"Turnover: {_short(g('C02'))}", "business.md#C02")
+    add(f"Location: {_short(g('B01'))}", "core.md#B01")
+    add(f"Contact designation: {_short(g('A04'))}; recorded gender/salutation: {_short(g('A07')) if g('A07') else 'none'}", "core.md#A04")
+    add(f"Languages seen on calls: {_short(g('B03'))}", "core.md#B03")
+    add(f"Top categories: {_short((g('D01') or {}).get('top'))}", "catalogue.md#D01")
+    add(f"Business type: {_short(g('C01'))}; nature: {_short(g('C03'))}", "business.md#C01")
+    s = (s_aov or {}).get("stats")
+    add(f"Seller AOV (bought leads): " + (f"median Rs {s['median_rs']}, top quarter Rs {s['p75_rs']}, n={s['n_valued']}" if s else "not available"),
+        "buyleads.md#E10")
+    for mid, m in list((m_aov or {}).items())[:2]:
+        st = (m or {}).get("stats")
+        name = next((r["mcat_name"] for r in cat if r["mcat_id"] == mid), mid)
+        if st:
+            add(f"Category AOV {name}: median Rs {st['median_rs']}, top quarter Rs {st['p75_rs']} (last {m['window_days']} d)", "buyleads.md#E10")
+    add(f"Buy leads bought: {_short(g('E04'), 200)}", "buyleads.md#E04")
+    add(f"Credits and lapse: {_short(g('E05'), 200)}", "buyleads.md#E05")
+    add(f"Enquiries: {_short(g('E01'), 200)}", "enquiries.md#E01")
+    add(f"Catalogue quality: {_short(g('D06'), 200)}", "catalogue.md#D06")
+    add(f"Complaints / not satisfied: {_short(g('I01'))}", "core.md#I01")
+    add(f"Executive contact: {_short(g('H01'), 200)}", "core.md#H01")
+    calls = hist.get("calls", [])
+    if calls:
+        c = calls[0]
+        add(f"Last VANI call {c['date']} ({c['days_ago']} d ago): {c['outcome']}; total {hist['n_calls_all_history']} calls, "
+            f"outcomes {hist['outcome_counts_all_history']}", "calls/C01")
+        last7 = sum(1 for c in calls if c["days_ago"] is not None and c["days_ago"] <= 7)
+        last30 = sum(1 for c in calls if c["days_ago"] is not None and c["days_ago"] <= 30)
+        add(f"VANI calls in last 7 d: {last7}; last 30 d: {last30}", "INDEX.md#calls")
+    else:
+        add("No past VANI calls (cold seller)", "INDEX.md#calls")
+    if peer and peer.get("status") == "ok":
+        r = next((x for x in peer["rungs"] if x["allowed"]), None)
+        sl = peer["seller_leads_bought"]
+        add(f"Peers (rung {r['rung']}, {r['geo']}, {r['band_scope']}): {r['peers_bought_in_mcat']} same-size sellers bought "
+            f"{r['leads_bought_total']} leads in {peer['window_days']} d, median {r['median_leads_per_buyer']}, peer AOV Rs {r['peer_aov_median_rs']}; "
+            f"seller bought {sl['main_mcat']} in this MCAT in {sl['window_days']} d" if r else "Peers: no rung has enough same-size peers (no peer line)",
+            "peers.md#E11")
+    if leads:
+        l = leads[0]
+        add(f"Best showcase lead: {l['status']} {l['product']}, {l['quantity'] or ''} {l['unit'] or ''}, {l['order_value_text']}, "
+            f"{l['buyer_city']}, {l['days_ago']} d ago", "candidate_leads.md#CL-1")
+    return K[:25]
+
+
+def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref):
+    base = os.path.join(OUT, glid)
+    os.makedirs(os.path.join(base, "calls"), exist_ok=True)
+    for f in glob.glob(os.path.join(base, "calls", "*.md")):
+        os.remove(f)
+    sizes = {}
+
+    def w(name, text):
+        text = scrub_text(text)
+        with open(os.path.join(base, name), "w", encoding="utf-8") as f:
+            f.write(text)
+        sizes[name] = len(text.encode("utf-8"))
+    for name, title, when, prefixes in FILES_MAP:
+        parts = [f"# {glid}: {title}", "", f"Open when: {when}. Each `###` heading id (e.g. A03) is the citation id.", ""]
+        for pid in _pids_for(prefixes):
+            md = _point_md(pid, P)
+            if md:
+                parts.append(md)
+        if "E09" in prefixes:
+            parts += [render_category(cat), render_aov(s_aov, m_aov, cat)]
+        if "E11" in prefixes:
+            parts.append(render_peer(peer))
+        if "E12" in prefixes:
+            parts.append(render_showcase(leads, ref).replace("| # |", "| CL |"))
+        w(name, "\n".join(parts))
+    rows = []
+    for i, c in enumerate(hist.get("calls", []), 1):
+        cid = f"C{i:02d}"
+        fname = f"calls/{cid}_{c['date'][:10]}.md"
+        one = dict(hist, calls=[c])
+        body = render_history(one).replace("## G. Past VANI calls", f"# {glid}: call {cid}").replace("- Transcript:", "- Transcript (turn ids T1…):")
+        tr = [f"  - {cid}.T{j} {t['speaker']}: {t['text']}" for j, t in enumerate(c.get("transcript") or [], 1)]
+        if tr:
+            body = body.split("- Transcript (turn ids T1…):")[0] + "- Transcript (turn ids T1…):\n" + "\n".join(tr) + "\n"
+        w(fname, body)
+        gist = (c.get("summary") or "")[:110].replace("|", "/")
+        sig = ",".join(k for k, v in c["signals"].items() if v) or "-"
+        rows.append(f"| {cid} | {c['date']} | {c.get('duration_sec')} | {c['outcome']} | {sig} | {gist} | [{fname}]({fname}) |")
+    K = key_facts(P, hist, peer, leads, s_aov, m_aov, cat)
+    with open(os.path.join(base, "context.json"), "w", encoding="utf-8") as f:
+        json.dump(scrub({"glid": glid, "built_at": datetime.now().isoformat(timespec="seconds"),
+                         "sources": {k: len(v) for k, v in sorted(files.items())},
+                         "api_status": {k: r.get("_http") for k, r in sorted(api.items())},
+                         "key_facts": [{"id": i, "fact": t, "cite": c} for i, t, c in K],
+                         "points": {k: {"value": v, "source": s} for k, (v, s) in P.items() if k not in S.EXCLUDED}}), f,
+                  ensure_ascii=False, default=str)
+    sizes["context.json"] = os.path.getsize(os.path.join(base, "context.json"))
+    removed = ["A05", "B02"]  # phone numbers and street address: dropped on purpose (PII)
+    missing = [k for k in S.LABELS if k not in S.EXCLUDED and k not in removed and S.blank((P.get(k) or (None,))[0])]
+    idx = [f"# Seller {glid}: INDEX (read this first)", "",
+           f"> Built {datetime.now():%Y-%m-%d %H:%M}. Files are on this seller only. Read INDEX.md and core.md first; open other files "
+           "when their 'open when' applies. Cite facts by id (K1, A03, E11, CL-1, C03.T5). PII removed: phones, emails, address, ID numbers.", "",
+           "## Key facts", ""] + [f"- **{i}** {t} → `{c}`" for i, t, c in K] + [
+           "", "## Past VANI calls (newest first)", "",
+           "| Id | Date | Sec | Outcome | Signals | Gist | File |", "|---|---|---|---|---|---|---|"] + (rows or ["| – | – | – | – | – | no past calls | – |"]) + [
+           "", "## File map", "", "| File | What | Open when | Size |", "|---|---|---|---|"] + [
+           f"| [{n}]({n}) | {t} | {wh} | {round(sizes.get(n, 0) / 1024, 1)} KB |" for n, t, wh, _ in FILES_MAP] + [
+           f"| calls/ | one file per past call, turns numbered | when a call row above matters | {len(rows)} files |",
+           f"| context.json | full machine copy (all points, key facts) | for scripts / jq only; never read whole | {round(sizes['context.json'] / 1024, 1)} KB |",
+           "", "## Missing", "", (", ".join(f"{k} {S.LABELS[k]}" for k in missing) or "none"),
+           "", "Removed on purpose (PII): A05 phone numbers, B02 street address / pincode / lat-long.", ""]
+    w("INDEX.md", "\n".join(idx))
+    return base, sizes
+
+
 # ---------------------------------------------------------------- build
 def build(glid, use_api=True, refresh=False):
     glid = glid.strip()
-    md, js = os.path.join(OUT, f"{glid}.md"), os.path.join(OUT, f"{glid}.json")
-    if not refresh and os.path.exists(md) and os.path.exists(js):
-        return md, js, "cached"
+    folder = os.path.join(OUT, glid)
+    if not refresh and os.path.exists(os.path.join(folder, "INDEX.md")):
+        return folder, "INDEX.md", "cached"
     files = seller_rows(glid)
     if not files:
         print(f"warning: GLID {glid} not found in any offline file; building from APIs only", file=sys.stderr)
@@ -656,15 +822,13 @@ def build(glid, use_api=True, refresh=False):
     text = text.replace("\n## H. ", "\n" + render_history(hist) + "\n## H. ", 1) if "\n## H. " in text else text + "\n" + render_history(hist)
     text = text.replace("Unmasked (PII handling: legal team).",
                         "PII removed for persona use: phones, emails, pincode, lat/long, street address, ID numbers.")
-    with open(md, "w", encoding="utf-8") as f:
+    folder, sizes = write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref)
+    with open(os.path.join(folder, "all.md"), "w", encoding="utf-8") as f:  # one-file copy for humans; the agent uses the split files
         f.write(scrub_text(text))
-    doc = {"glid": glid, "built_at": datetime.now().isoformat(timespec="seconds"),
-           "sources": {k: len(v) for k, v in sorted(files.items())},
-           "api_status": {k: r.get("_http") for k, r in sorted(api.items())},
-           "points": {k: {"value": v, "source": s} for k, (v, s) in P.items() if k not in S.EXCLUDED}}
-    with open(js, "w", encoding="utf-8") as f:
-        json.dump(doc, f, ensure_ascii=False, default=str)
-    return md, js, "built"
+    for old in (os.path.join(OUT, f"{glid}.md"), os.path.join(OUT, f"{glid}.json")):  # retire the old single-file layout
+        if os.path.exists(old):
+            os.remove(old)
+    return folder, f"INDEX.md {round(sizes['INDEX.md'] / 1024, 1)} KB, {len(hist.get('calls', []))} call files", "built"
 
 
 def main():
@@ -683,7 +847,7 @@ def main():
     else:
         t0 = time.time()
         md, js, how = build(p.glid, not p.no_api, p.refresh)
-        print(f"{how}: {md} and {os.path.basename(js)} ({time.time() - t0:.1f} s)")
+        print(f"{how}: {md} ({js}) ({time.time() - t0:.1f} s)")
 
 
 if __name__ == "__main__":
