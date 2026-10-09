@@ -77,6 +77,14 @@ ENDPOINTS = {
                          "numbers mapped to PNS (GSM/M1/M2/L1/L2) with pns_type, pns_status (office hours), contact_id", "yes"),
     "products_filtercount": ("http://users.imutils.com/wservce/products/productfiltercount/", {"glusrid": "{g}"}, "WORKS",
                              "product counts: visible / without photo, price, spec, category, video …", "no"),
+    "users_profile": ("http://users.imutils.com/wservce/users/profile/glid/{g}/modid/{modid}/token/{token}/type/{type}/AK/{ak}",
+                      {"types": ["ExtProfile", "ExtProfile1", "ExtProfile2", "Infrastructure", "Quality", "Awards", "Testimonial",
+                                 "Custom_Profile", "News", "Jobs", "Media"]}, "WORKS",
+                      "seller-written profile sections (title, description, dates); company-API path-segment GET (pattern from "
+                      "consumer_maxi_hero.go); sparse: about 3 of 12 test sellers have any", "free text (PII)"),
+    "company_detail": ("company_api_base (host not known) /wservce/company/detail/glusrid/{g}/alias/{alias}/cat_link/{link}/token/{token}/req_server/home_server/modid/tdw/",
+                       {}, "BLOCKED", "company page content (home, about-us); the base URL is a config value we do not have; "
+                       "not resolvable on users / seller / indiamart hosts", "free text"),
     "users_minidetail": ("http://users.imutils.com/wservce/users/minidetail/", {}, "BLOCKED",
                          "'Authentication Failed - This AK is not allowed' (users_detail covers it)", "yes"),
     "users_accountmanager": ("http://users.imutils.com/wservce/users/AccountManager/", {}, "BROKEN",
@@ -121,6 +129,8 @@ DATA_POINTS = {
             "API covers every seller"),
     "C06": ("FILE", "gc listing / KYC flags (5K)", [], "-", ""),
     "C07": ("BOTH", "so_sellers (151)", [("users_detail", "glusr_noof_emp_val, glusr_usr_year_of_estb")], "WORKS", "often empty"),
+    "C08": ("API", "-", [("users_profile", "Response.Data[]: GLUSR_PROFILE_TITLE, GLUSR_PROFILE_DESCRIPTION, dates, approval status, per section type")],
+            "WORKS", "sparse; free text the seller wrote"),
     "D01": ("BOTH", "top_category_1/2/3, group", [("mcat_names", "mname, mid, sbl")], "WORKS", ""),
     "D02": ("BOTH", "num_categories", [("mcat_rank", "cnt_mcatid by rank")], "WORKS", ""),
     "D03": ("API", "so_seller_categories (151)", [("category_dtls", "A/B/C/D rank, negative MCATs, negative districts"),

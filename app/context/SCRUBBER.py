@@ -49,7 +49,7 @@ LABELS = {
     "A07": "Gender / salutation", "B01": "City, district, state", "B02": "Pincode, locality, lat/long",
     "B03": "Languages spoken on real calls", "B04": "Seller's script / Hinglish mix on VANI calls", "B05": "Preferred language id",
     "C01": "Business type", "C02": "Annual turnover", "C03": "Nature of business", "C04": "Business vintage",
-    "C05": "Customer type / plan / paid", "C06": "Listing status, KYC flags", "C07": "Employees, year established",
+    "C05": "Customer type / plan / paid", "C06": "Listing status, KYC flags", "C07": "Employees, year established", "C08": "Business profile content (about us, infrastructure, quality, awards …)",
     "D01": "Top categories", "D02": "Number of categories", "D03": "Categories by rank, negative, D-rank",
     "D04": "Product count and recent changes", "D05": "Product list", "D06": "Catalogue quality and gaps",
     "D07": "Active / approved / deactivated products", "E01": "Enquiries received", "E02": "Latest enquiries",
@@ -163,6 +163,28 @@ def fetch(glid, refresh=False):
     out = {}
     for name, (url, body) in api_endpoints().items():
         path = os.path.join(CACHE, name, f"{glid}.json")
+        if name == "users_profile":  # company-API method: path-segment GET, one call per profile section type
+            if not refresh and os.path.exists(path):
+                with open(path, encoding="utf-8") as f:
+                    out[name] = json.load(f)
+                continue
+            if not (ak and tok):
+                out[name] = {"_error": "VANI_AK / VANI_USERS_TOKEN not set"}
+                continue
+            sections, codes = {}, []
+            for typ in body["types"]:
+                u = (url.replace("{g}", glid).replace("{modid}", modid).replace("{type}", typ)
+                     .replace("{token}", urllib.parse.quote(tok, safe="")).replace("{ak}", ak))
+                code, obj = call(f"users_profile_{glid}_{typ}", u, timeout=20, quiet=True)
+                codes.append(code)
+                sections[typ] = obj
+            rec = {"_endpoint": url.split("/glid/")[0], "_http": 200 if 200 in codes else (codes[0] if codes else None),
+                   "_fetched_at": datetime.now().isoformat(timespec="seconds"), "data": sections}
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(rec, f, ensure_ascii=False)
+            out[name] = rec
+            continue
         if not refresh and os.path.exists(path):
             with open(path, encoding="utf-8") as f:
                 out[name] = json.load(f)
@@ -412,6 +434,20 @@ def build_points(glid, files, api, meta, now):
     put("C07", pick({"employees": ud.get("glusr_noof_emp_val"), "year_of_estb": ud.get("glusr_usr_year_of_estb"),
                      "so_employees_id": so.get("employees_id"), "so_year_established": so.get("year_established")},
                     ["employees", "year_of_estb", "so_employees_id", "so_year_established"]) or None, "users_detail · so_sellers")
+
+    # C08 seller-written business profile sections (users/profile, company-API path-segment method)
+    prof = (api.get("users_profile") or {}).get("data") or {}
+    secs = {}
+    for typ, resp in prof.items():
+        r = (resp or {}).get("Response") if isinstance(resp, dict) else None
+        d = r.get("Data") if isinstance(r, dict) else None
+        if isinstance(d, list) and d:
+            secs[typ] = [{"title": x.get("GLUSR_PROFILE_TITLE") or x.get("pc_clnt_feature_sv_title"),
+                          "description": x.get("GLUSR_PROFILE_DESCRIPTION") or x.get("pc_clnt_feature_sv_description"),
+                          "modified": x.get("GLUSR_PROFILE_DATE_MODIFIED"), "added": x.get("GLUSR_PROFILE_DATE_ADDED"),
+                          "approval_status": x.get("GLUSR_PROFILE_APPROVAL_STATUS")} for x in d if isinstance(x, dict)]
+    put("C08", secs or None, "users_profile (Awards, Custom_Profile, ExtProfile 1/2, Infrastructure, Jobs, Media, News, Quality, "
+                             "Testimonial); only sellers who wrote these sections have data")
 
     # D categories and products
     put("D01", {"top": pick(sf, ["top_category_1", "top_category_2", "top_category_3", "top_parent_category", "top_category_group"]),
