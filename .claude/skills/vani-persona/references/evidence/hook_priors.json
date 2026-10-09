@@ -33,7 +33,7 @@
     -0.31,
     6.36
    ],
-   "significant": true,
+   "significant": false,
    "n": 452
   },
   {
@@ -70,7 +70,8 @@
    ],
    "significant": true,
    "n": 18114,
-   "base_rate_pct": 11.47
+   "base_rate_pct": 11.47,
+   "evidence_grade": "MODERATE"
   },
   {
    "segment": "turnover",
@@ -84,7 +85,8 @@
    ],
    "significant": true,
    "n": 3055,
-   "base_rate_pct": 11.47
+   "base_rate_pct": 11.47,
+   "evidence_grade": "MODERATE"
   },
   {
    "segment": "turnover",
@@ -96,9 +98,10 @@
     -1.2,
     1.21
    ],
-   "significant": true,
+   "significant": false,
    "n": 2411,
-   "base_rate_pct": 8.94
+   "base_rate_pct": 8.94,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "turnover",
@@ -110,9 +113,10 @@
     -4.41,
     3.26
    ],
-   "significant": true,
+   "significant": false,
    "n": 501,
-   "base_rate_pct": 8.94
+   "base_rate_pct": 8.94,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "turnover",
@@ -124,9 +128,10 @@
     -3.5,
     2.62
    ],
-   "significant": true,
+   "significant": false,
    "n": 298,
-   "base_rate_pct": 8.97
+   "base_rate_pct": 8.97,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "turnover",
@@ -138,9 +143,10 @@
     -1.59,
     0.18
    ],
-   "significant": true,
+   "significant": false,
    "n": 4606,
-   "base_rate_pct": 9.6
+   "base_rate_pct": 9.6,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "turnover",
@@ -152,9 +158,10 @@
     -3.81,
     2.61
    ],
-   "significant": true,
+   "significant": false,
    "n": 850,
-   "base_rate_pct": 9.6
+   "base_rate_pct": 9.6,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "turnover",
@@ -166,9 +173,10 @@
     -1.63,
     1.67
    ],
-   "significant": true,
+   "significant": false,
    "n": 1308,
-   "base_rate_pct": 8.72
+   "base_rate_pct": 8.72,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "turnover",
@@ -180,9 +188,10 @@
     -6.16,
     3.9
    ],
-   "significant": true,
+   "significant": false,
    "n": 257,
-   "base_rate_pct": 8.72
+   "base_rate_pct": 8.72,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "turnover",
@@ -194,9 +203,10 @@
     -0.35,
     2.34
    ],
-   "significant": true,
+   "significant": false,
    "n": 3767,
-   "base_rate_pct": 18.4
+   "base_rate_pct": 18.4,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "turnover",
@@ -208,9 +218,10 @@
     -8.3,
     1.56
    ],
-   "significant": true,
+   "significant": false,
    "n": 737,
-   "base_rate_pct": 18.4
+   "base_rate_pct": 18.4,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "region",
@@ -222,9 +233,10 @@
     -0.31,
     5.46
    ],
-   "significant": true,
+   "significant": false,
    "n": 550,
-   "base_rate_pct": 13.65
+   "base_rate_pct": 13.65,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "region",
@@ -238,7 +250,8 @@
    ],
    "significant": true,
    "n": 279,
-   "base_rate_pct": 13.65
+   "base_rate_pct": 13.65,
+   "evidence_grade": "MODERATE"
   },
   {
    "segment": "region",
@@ -252,7 +265,8 @@
    ],
    "significant": true,
    "n": 1392,
-   "base_rate_pct": 12.38
+   "base_rate_pct": 12.38,
+   "evidence_grade": "MODERATE"
   },
   {
    "segment": "region",
@@ -264,9 +278,10 @@
     -8.29,
     0.55
    ],
-   "significant": true,
+   "significant": false,
    "n": 476,
-   "base_rate_pct": 12.38
+   "base_rate_pct": 12.38,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "region",
@@ -280,7 +295,8 @@
    ],
    "significant": true,
    "n": 14135,
-   "base_rate_pct": 11.23
+   "base_rate_pct": 11.23,
+   "evidence_grade": "MODERATE"
   },
   {
    "segment": "region",
@@ -292,9 +308,10 @@
     -3.72,
     0.22
    ],
-   "significant": true,
+   "significant": false,
    "n": 2870,
-   "base_rate_pct": 11.23
+   "base_rate_pct": 11.23,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "region",
@@ -306,9 +323,10 @@
     -0.22,
     2.64
    ],
-   "significant": true,
+   "significant": false,
    "n": 4435,
-   "base_rate_pct": 11.97
+   "base_rate_pct": 11.97,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "region",
@@ -320,9 +338,10 @@
     -1.3,
     0.04
    ],
-   "significant": true,
+   "significant": false,
    "n": 9959,
-   "base_rate_pct": 11.68
+   "base_rate_pct": 11.68,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "region",
@@ -334,9 +353,10 @@
     -4.35,
     0.06
    ],
-   "significant": true,
+   "significant": false,
    "n": 1861,
-   "base_rate_pct": 11.68
+   "base_rate_pct": 11.68,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -350,7 +370,8 @@
    ],
    "significant": true,
    "n": 2493,
-   "base_rate_pct": 13.31
+   "base_rate_pct": 13.31,
+   "evidence_grade": "WEAK"
   },
   {
    "segment": "category_group",
@@ -362,9 +383,10 @@
     -4.61,
     7.15
    ],
-   "significant": true,
+   "significant": false,
    "n": 428,
-   "base_rate_pct": 13.31
+   "base_rate_pct": 13.31,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -376,9 +398,10 @@
     -2.76,
     6.34
    ],
-   "significant": true,
+   "significant": false,
    "n": 199,
-   "base_rate_pct": 13.47
+   "base_rate_pct": 13.47,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -390,9 +413,10 @@
     -1.85,
     2.75
    ],
-   "significant": true,
+   "significant": false,
    "n": 744,
-   "base_rate_pct": 10.38
+   "base_rate_pct": 10.38,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -404,9 +428,10 @@
     -7.79,
     5.43
    ],
-   "significant": true,
+   "significant": false,
    "n": 142,
-   "base_rate_pct": 10.38
+   "base_rate_pct": 10.38,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -420,7 +445,8 @@
    ],
    "significant": true,
    "n": 223,
-   "base_rate_pct": 11.6
+   "base_rate_pct": 11.6,
+   "evidence_grade": "WEAK"
   },
   {
    "segment": "category_group",
@@ -432,9 +458,10 @@
     -3.6,
     1.94
    ],
-   "significant": true,
+   "significant": false,
    "n": 388,
-   "base_rate_pct": 11.87
+   "base_rate_pct": 11.87,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -446,9 +473,10 @@
     -0.92,
     1.45
    ],
-   "significant": true,
+   "significant": false,
    "n": 3380,
-   "base_rate_pct": 11.86
+   "base_rate_pct": 11.86,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -460,9 +488,10 @@
     -3.91,
     4.52
    ],
-   "significant": true,
+   "significant": false,
    "n": 584,
-   "base_rate_pct": 11.86
+   "base_rate_pct": 11.86,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -474,9 +503,10 @@
     -3.62,
     0.82
    ],
-   "significant": true,
+   "significant": false,
    "n": 664,
-   "base_rate_pct": 9.52
+   "base_rate_pct": 9.52,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -488,9 +518,10 @@
     -2.34,
     5.58
    ],
-   "significant": true,
+   "significant": false,
    "n": 274,
-   "base_rate_pct": 10.83
+   "base_rate_pct": 10.83,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -502,9 +533,10 @@
     -3.17,
     0.01
    ],
-   "significant": true,
+   "significant": false,
    "n": 1619,
-   "base_rate_pct": 12.16
+   "base_rate_pct": 12.16,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -516,9 +548,10 @@
     -2.64,
     9.46
    ],
-   "significant": true,
+   "significant": false,
    "n": 270,
-   "base_rate_pct": 12.16
+   "base_rate_pct": 12.16,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -530,9 +563,10 @@
     -2.06,
     2.15
    ],
-   "significant": true,
+   "significant": false,
    "n": 972,
-   "base_rate_pct": 11.46
+   "base_rate_pct": 11.46,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -544,9 +578,10 @@
     -12.53,
     0.51
    ],
-   "significant": true,
+   "significant": false,
    "n": 185,
-   "base_rate_pct": 11.46
+   "base_rate_pct": 11.46,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -558,9 +593,10 @@
     -2.86,
     0.99
    ],
-   "significant": true,
+   "significant": false,
    "n": 1087,
-   "base_rate_pct": 11.86
+   "base_rate_pct": 11.86,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -572,9 +608,10 @@
     -10.1,
     4.85
    ],
-   "significant": true,
+   "significant": false,
    "n": 193,
-   "base_rate_pct": 11.86
+   "base_rate_pct": 11.86,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -586,9 +623,10 @@
     -2.16,
     4.91
    ],
-   "significant": true,
+   "significant": false,
    "n": 236,
-   "base_rate_pct": 8.46
+   "base_rate_pct": 8.46,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -600,9 +638,10 @@
     -6.24,
     0.19
    ],
-   "significant": true,
+   "significant": false,
    "n": 238,
-   "base_rate_pct": 10.77
+   "base_rate_pct": 10.77,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -614,9 +653,10 @@
     -2.2,
     3.02
    ],
-   "significant": true,
+   "significant": false,
    "n": 566,
-   "base_rate_pct": 12.54
+   "base_rate_pct": 12.54,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -630,7 +670,8 @@
    ],
    "significant": true,
    "n": 558,
-   "base_rate_pct": 12.56
+   "base_rate_pct": 12.56,
+   "evidence_grade": "WEAK"
   },
   {
    "segment": "category_group",
@@ -644,7 +685,8 @@
    ],
    "significant": true,
    "n": 971,
-   "base_rate_pct": 12.73
+   "base_rate_pct": 12.73,
+   "evidence_grade": "WEAK"
   },
   {
    "segment": "category_group",
@@ -656,9 +698,10 @@
     -0.1,
     4.49
    ],
-   "significant": true,
+   "significant": false,
    "n": 881,
-   "base_rate_pct": 10.74
+   "base_rate_pct": 10.74,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -670,9 +713,10 @@
     -1.77,
     4.51
    ],
-   "significant": true,
+   "significant": false,
    "n": 445,
-   "base_rate_pct": 11.58
+   "base_rate_pct": 11.58,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -684,9 +728,10 @@
     -3.11,
     0.61
    ],
-   "significant": true,
+   "significant": false,
    "n": 1189,
-   "base_rate_pct": 11.6
+   "base_rate_pct": 11.6,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -700,7 +745,8 @@
    ],
    "significant": true,
    "n": 188,
-   "base_rate_pct": 11.6
+   "base_rate_pct": 11.6,
+   "evidence_grade": "WEAK"
   },
   {
    "segment": "category_group",
@@ -712,9 +758,10 @@
     -2.92,
     0.87
    ],
-   "significant": true,
+   "significant": false,
    "n": 978,
-   "base_rate_pct": 9.82
+   "base_rate_pct": 9.82,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -726,9 +773,10 @@
     -5.85,
     5.37
    ],
-   "significant": true,
+   "significant": false,
    "n": 183,
-   "base_rate_pct": 9.82
+   "base_rate_pct": 9.82,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -740,9 +788,10 @@
     -1.85,
     4.67
    ],
-   "significant": true,
+   "significant": false,
    "n": 440,
-   "base_rate_pct": 12.64
+   "base_rate_pct": 12.64,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -754,9 +803,10 @@
     -3.47,
     0.75
    ],
-   "significant": true,
+   "significant": false,
    "n": 911,
-   "base_rate_pct": 11.55
+   "base_rate_pct": 11.55,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -770,7 +820,8 @@
    ],
    "significant": true,
    "n": 112,
-   "base_rate_pct": 11.55
+   "base_rate_pct": 11.55,
+   "evidence_grade": "WEAK"
   },
   {
    "segment": "category_group",
@@ -782,9 +833,10 @@
     -3.78,
     0.01
    ],
-   "significant": true,
+   "significant": false,
    "n": 1022,
-   "base_rate_pct": 11.15
+   "base_rate_pct": 11.15,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -796,9 +848,10 @@
     -2.61,
     13.11
    ],
-   "significant": true,
+   "significant": false,
    "n": 162,
-   "base_rate_pct": 11.15
+   "base_rate_pct": 11.15,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -810,9 +863,10 @@
     -1.31,
     3.22
    ],
-   "significant": true,
+   "significant": false,
    "n": 737,
-   "base_rate_pct": 9.05
+   "base_rate_pct": 9.05,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -824,9 +878,10 @@
     -3.78,
     3.28
    ],
-   "significant": true,
+   "significant": false,
    "n": 305,
-   "base_rate_pct": 10.24
+   "base_rate_pct": 10.24,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -838,9 +893,10 @@
     -3.43,
     1.84
    ],
-   "significant": true,
+   "significant": false,
    "n": 593,
-   "base_rate_pct": 11.56
+   "base_rate_pct": 11.56,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -852,9 +908,10 @@
     -1.47,
     3.78
    ],
-   "significant": true,
+   "significant": false,
    "n": 492,
-   "base_rate_pct": 10.37
+   "base_rate_pct": 10.37,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -866,9 +923,10 @@
     -2.11,
     1.3
    ],
-   "significant": true,
+   "significant": false,
    "n": 1143,
-   "base_rate_pct": 10.38
+   "base_rate_pct": 10.38,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -880,9 +938,10 @@
     -4.39,
     7.16
    ],
-   "significant": true,
+   "significant": false,
    "n": 189,
-   "base_rate_pct": 10.38
+   "base_rate_pct": 10.38,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -894,9 +953,10 @@
     -5.88,
     3.5
    ],
-   "significant": true,
+   "significant": false,
    "n": 177,
-   "base_rate_pct": 13.9
+   "base_rate_pct": 13.9,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -908,9 +968,10 @@
     -4.56,
     1.53
    ],
-   "significant": true,
+   "significant": false,
    "n": 413,
-   "base_rate_pct": 12.2
+   "base_rate_pct": 12.2,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -924,7 +985,8 @@
    ],
    "significant": true,
    "n": 388,
-   "base_rate_pct": 10.53
+   "base_rate_pct": 10.53,
+   "evidence_grade": "WEAK"
   },
   {
    "segment": "category_group",
@@ -936,9 +998,10 @@
     -6.11,
     0.3
    ],
-   "significant": true,
+   "significant": false,
    "n": 267,
-   "base_rate_pct": 9.73
+   "base_rate_pct": 9.73,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -950,9 +1013,10 @@
     -3.06,
     5.75
    ],
-   "significant": true,
+   "significant": false,
    "n": 180,
-   "base_rate_pct": 10.72
+   "base_rate_pct": 10.72,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -964,9 +1028,10 @@
     -1.84,
     4.02
    ],
-   "significant": true,
+   "significant": false,
    "n": 386,
-   "base_rate_pct": 10.81
+   "base_rate_pct": 10.81,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -978,9 +1043,10 @@
     -2.63,
     5.23
    ],
-   "significant": true,
+   "significant": false,
    "n": 226,
-   "base_rate_pct": 10.94
+   "base_rate_pct": 10.94,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -992,9 +1058,10 @@
     -5.5,
     4.24
    ],
-   "significant": true,
+   "significant": false,
    "n": 155,
-   "base_rate_pct": 13.37
+   "base_rate_pct": 13.37,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -1008,7 +1075,8 @@
    ],
    "significant": true,
    "n": 369,
-   "base_rate_pct": 9.96
+   "base_rate_pct": 9.96,
+   "evidence_grade": "WEAK"
   },
   {
    "segment": "category_group",
@@ -1020,9 +1088,10 @@
     -2.34,
     2.76
    ],
-   "significant": true,
+   "significant": false,
    "n": 422,
-   "base_rate_pct": 8.25
+   "base_rate_pct": 8.25,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -1034,9 +1103,10 @@
     -1.22,
     1.99
    ],
-   "significant": true,
+   "significant": false,
    "n": 1905,
-   "base_rate_pct": 13.62
+   "base_rate_pct": 13.62,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -1048,9 +1118,10 @@
     -7.79,
     4.04
    ],
-   "significant": true,
+   "significant": false,
    "n": 322,
-   "base_rate_pct": 13.62
+   "base_rate_pct": 13.62,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -1062,9 +1133,10 @@
     -2.13,
     3.42
    ],
-   "significant": true,
+   "significant": false,
    "n": 728,
-   "base_rate_pct": 16.0
+   "base_rate_pct": 16.0,
+   "evidence_grade": "NOT_SIGNIFICANT"
   },
   {
    "segment": "category_group",
@@ -1076,9 +1148,10 @@
     -11.33,
     10.46
    ],
-   "significant": true,
+   "significant": false,
    "n": 154,
-   "base_rate_pct": 16.0
+   "base_rate_pct": 16.0,
+   "evidence_grade": "NOT_SIGNIFICANT"
   }
  ],
  "evidence_grade_rule": "MODERATE if significant on region or turnover; WEAK if significant only on a category group or not significant; GUESS where no row exists",
