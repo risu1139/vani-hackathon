@@ -48,6 +48,9 @@ GENERIC_WORDS = {"shree", "shri", "india", "indian", "global", "royal", "super",
                  "universal", "standard", "united", "general", "premier", "perfect", "quality", "classic", "golden", "bharat",
                  "hindustan", "techno", "industries", "enterprises", "traders", "trading", "services", "solutions", "systems",
                  "engineering", "engineers", "electricals", "electronics", "steel", "plastic", "plastics", "packaging", "creative"}
+# words of team / vertical names that sit in *_assignedto_name fields ("NSD Top Cities - Channel FSF"); never person names
+ORG_WORDS = {"nsd", "csd", "tmw", "kcd", "fsf", "top", "cities", "city", "channel", "emerging", "markets", "inhouse", "registered",
+             "supplier", "pre", "sales", "support", "tele", "monthly", "welcome", "team", "desk", "vertical", "zone", "region"}
 MIN_LEN = 3  # name parts shorter than this are not replaced on their own (too many false matches)
 
 
@@ -86,8 +89,10 @@ def _walk(o, fn, key=""):
 
 
 def _person_parts(v):
-    parts = [w for w in re.split(r"[\s,;/]+", str(v or "").strip()) if w]
-    return [w.strip(".") for w in parts if w.lower().strip(".") not in SALUTES and len(w.strip(".")) >= MIN_LEN]
+    parts = [w.strip(".()[]") for w in re.split(r"[\s,;/]+", str(v or "").strip()) if w]
+    if any(w.lower() in ORG_WORDS for w in parts) or " - " in str(v):
+        return []  # a team / vertical name, not a person
+    return [w for w in parts if w.lower() not in SALUTES and len(w) >= MIN_LEN]
 
 
 def collect_names(ctx):
