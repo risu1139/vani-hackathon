@@ -11,3 +11,6 @@ Laptop over VPN, OpenRouter Decisions API, one warm keep-alive session, 8 calls 
 - Network is about 26 ms, so **about 450–500 ms is Jev's own processing at TypeSafe**. Fewer questions doesn't make it faster: 6 questions took no longer than 1.
 - Cost is about $0.000018 per call (419 input tokens).
 - Vercel AI Gateway lists the same model (`typesafe-ai/jev`, `POST /v1/decisions`, questions as an array, type `predicate|choice|score`). It refused calls (403) until a credit card is on file, so it was not timed. It routes to the same TypeSafe provider, so the same ~450 ms floor is expected (ASSUMED).
+
+## Parallel test (same day)
+6 single-question calls sent in parallel on 6 warm connections, 8 rounds: total time median **555 ms** (516–591); each single call median 514 ms. Parallel is slightly slower than one 6-question call (476 ms), because the total waits for the slowest of the six. Each call has the same ~450–500 ms floor whatever its size.
