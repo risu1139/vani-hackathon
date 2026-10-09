@@ -13,3 +13,8 @@ app/spike/.daytona_signal_sandbox
 app/spike/.daytona_signal_sandbox
 outputs/voice_override/*.wav
 calls.jsonl
+
+# real seller contexts: keep only under data/
+outputs/seller-context-samples/
+seller_*.md
+seller_*.points.json
