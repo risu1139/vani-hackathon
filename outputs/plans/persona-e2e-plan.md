@@ -163,3 +163,46 @@ Only aggregates go to `raw/` and `wiki/`.
 1. Is the scoreboard score "meeting fixed" now, with "meeting held" added later?
 2. Who approves library and template versions: you, or Rishav?
 3. Are the thresholds in the design file (scale tier, profile strength, bl_usage, enquiry trend) OK as a start?
+
+## 9. Resolution of the adversarial review (2026-10-10)
+
+Review: `outputs/plans/persona-e2e-plan - adversarial review.md`. Each finding has a fix. Status: TODO / DONE / ACCEPTED-RISK.
+
+| # | Fix (what we do) | Where | Status |
+|---|---|---|---|
+| B1 | Critical path with time boxes; the full loops are reduced to a working demo of each loop; one standing Sarvam test budget (user: "don't ask") | §10 below | TODO |
+| B2 | Submission section: one slide, skills.md, README/approach note, agent ID, video script; owners | §11 below | TODO |
+| B3 | Primary demo = live SDK/web session (a person as the seller); switch_log through the analytics API; the phone number is optional | T6 | TODO |
+| B4 | persona.json adds accent, empathy, personalisation, escalation rules, guardrails, objection playbook with responses, per-choice confidence and evidence grade; the validator refuses without them; render `persona_spec.md` | scripts/validate_persona.py, render | TODO |
+| B5 | Content validator on all spoken text: identity line, banned words (AI, bot, branch manager, account manager, personally), raha/rahi agreement with the voice, numbers only from verified_facts, no buyer identity. Clean the NSD reference and the template | validate_persona.py, compile_vars.py, references | TODO |
+| M1 | switch_log rows add the matched cue, directive id, change made, reason | Sarvam tool | TODO |
+| M2 | T6 tests all 5 signals (same turn, 2/2) + 0 false switches on ≥ 10 neutral turns | tests | TODO |
+| M3 | Keyword list extended from Jev labels and PS07 turns; frozen; re-scored offline on the gold set | Sarvam tool + gold set | TODO |
+| M4 | The tool reads `persona_style_id` and `switch_sensitivity`; per-style directive variants; hard word caps | Sarvam tool | TODO |
+| M5 | No Jinja dependency: division text and gendered forms go in variables (`division_block`, `persona_style`); mid-call changes only through the tool's message_to_llm | template | TODO |
+| M6 | Create every variable in the agent; `persona_language` → OnStart `set_initial_language_name`; T6 reads every variable back | Sarvam agent + OnStart | TODO |
+| M7 | One regional-start demo seller (Gujarat); `trait.high_value` defined; identity line per language; STT round-trip check | facts.py, template, T6 | TODO |
+| M8 | hook_priors significance flags regenerated from the CI (61 rows were wrong; 13 of 73 significant); evidence grade per row | references/evidence | DONE |
+| M9 | Each cite has a quote of ≤ 20 words that must match the file text; counter_evidence must cite; Bash reads of the seller folder are logged too; padded-cite stub test | validate_persona.py, gates | TODO |
+| M10 | The script's Thompson draw fixes the arm; P(best) by Monte Carlo is the propensity; the agent's amendments come from a fixed menu and are logged as factors; a full override is logged as a separate arm | prior.py, persona format | TODO |
+| M11 | Holdout: 15% of decisions use P0 (current production style) as the measurement baseline (not a fallback; it is a normal persona arm) | prior.py | TODO |
+| M12 | Hierarchy reduced: all → division → turnover band, plus additive offsets for zone and AOV tier; κ = 20 | prior.py, design §9.2 | TODO |
+| M13 | Voice scoreboard V0 prior asymmetric (female mean 0.6 vs male 0.4) plus tension and rural/Hindi-belt offsets; test asserts P(F) > 0.5 | prior.py | TODO |
+| M14 | money_lead must be in the call plan when eligible, unless a guard is cited | validate_persona.py | TODO |
+| M15 | Peer ladder: ±1-band rungs never "allowed" for a claim; same 30-day window for the seller and the peers; optional AOV 0.5–2× filter | builder peer_stat, key_facts | TODO |
+| M16 | Outcome capture: a `book_meeting` code tool sets `meeting_fixed` + slot; `collect_call.py` pulls the interaction (analytics); `loop2_update.py` CLI | Sarvam tool, scripts | TODO |
+| M17 | Gold set: the scored turns of 2026-10-09 + ~150 PS07 seller turns labelled by Jev and spot-checked; Loop 2 demo replays real PS07 bot-version outcomes | data/gold, scripts | TODO |
+| M18 | Builder `--as-of`: drop records after as_of; API values flagged as_of_unsafe; leakage fixture | builder | TODO |
+| M19 | `export_for_agent.py`: HMAC pseudonym folder; seller, contact and company names → tokens; competitor names → tokens; hard PII gate (export refuses on any hit); tokens filled on-prem in compile_vars | builder/export | TODO |
+| M20 | First-hour smoke tests (Daytona reach, Claude login, Sarvam agent, Redash, AK expiry); pre-cache the demo contexts; laptop → Daytona transfer = copy the exported folder; disclosed laptop cut-over if Daytona fails | §10 | TODO |
+| M21 | facts.py fixtures written and run; distinctness = ≥ 3 audible dimensions differ between sample sellers; anchored 1–5 audio rubric with 2 raters | tests | TODO |
+| M22 | Tests added: reply-start latency (median ≤ 2.1 s), DNC and asked-stop end to end, idempotent retry (no double dial), destination allowlist, bot question, gender agreement, Daytona pre-flight | tests | TODO |
+| M23 | Submit only code written on 9–10 Oct for the core (app/persona, the skill); skills.md states the timeline honestly; earlier spikes listed as research | skills.md | TODO |
+| m1 | One script name list (this file is the source) | — | TODO |
+| m2 | Seller-gender name guess confidence lowered to 0.4; used only for the voice | facts.py | TODO |
+| m3 | Range and catalogue checks for pace, pitch, voice id, language in compile_vars | compile_vars.py | TODO |
+| m4 | Slide shows evidence and cited reasons, never a mapping table | slide | TODO |
+| m5 | switch_log is never put into the LLM context; read through analytics | Sarvam tool | TODO |
+| m6 | Clean up old clones and the relay secret; publish one demo version | Sarvam console | TODO |
+| m7 | Rebuild is stable when the cache is fixed; the cache hash goes into 00_input | builder | TODO |
+| m8 | Business impact: 11.6% baseline + hook CIs; uplift only from the holdout | slide, skills.md | TODO |
