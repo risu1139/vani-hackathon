@@ -60,7 +60,7 @@ LABELS = {
     "F08": "Last seen on IndiaMART", "G01": "VANI call volume", "G02": "VANI outcome history", "G03": "Last VANI call",
     "G04": "Past objections and questions", "G05": "Frustration / bot question / DNC / already-with-executive",
     "G06": "Memory facts (regex baseline)", "G07": "Speech style", "G08": "How past calls ended",
-    "G09": "Bot versions and call triggers heard", "G10": "Recordings", "H01": "Executive calls",
+    "G09": "Bot versions and call triggers heard", "G10": "Recordings", "G11": "Per-call signal rows (dated)", "H01": "Executive calls",
     "H02": "Account managers", "H03": "Meetings", "I01": "Complaints", "I02": "Renewal / payment", "I03": "Churn / risk",
     "I04": "Ratings", "J01": "WhatsApp delivery and reads", "J02": "WhatsApp chatbot conversations",
     "J03": "Buyer-call extractions", "K01": "Call trigger", "K02": "Attempt number", "K03": "Local time / season",
@@ -215,7 +215,40 @@ MEMORY = {
 # Call history is "already known" context, weighted by age; scheduling is owned by another agent.
 RECENT_DAYS = 30      # full detail
 MAX_AGE_DAYS = 90     # older calls are ignored
-SCHED_OUTCOMES = {"Call Later / Busy"}
+SCHED_OUTCOMES = {"Call Later / Busy"}  # kept as outcome + "rushed" signal; only times / slots are dropped
+OUTCOME = {"Meeting Fixed": "meeting_fixed", "Not Interested": "not_interested", "General (talked)": "general",
+           "Call Later / Busy": "call_later_busy"}
+# per-call signal lexicons: romanised + Devanagari (seller turns) and English (summaries)
+SIGNALS = {
+    "rushed": re.compile(r"busy|बिज़ी|बिजी|jaldi|जल्दी|abhi nahi|अभी नहीं|baad me|बाद में|driving|गाड़ी|meeting me|मीटिंग में|"
+                         r"time nahi|टाइम नहीं|call (me )?later|call back|not free|in a hurry|not the right time", re.I),
+    "confused": re.compile(r"samajh nahi|समझ नहीं|kya matlab|क्या मतलब|kaun sa|कौन सा|कौन सी|dobara|दोबारा|phir se|फिर से|"
+                           r"confus|did not understand|didn't understand|unclear", re.I),
+    "frustrated": re.compile(r"pareshan|परेशान|baar baar|बार बार|mat karo|मत करो|dimag|दिमाग|faltu|फालतू|bakwas|बकवास|"
+                             r"frustrat|angry|agitat|irritat|annoy|harass|rude|upset|stop call|do not call|don't call|not to call", re.I),
+    "asked_if_bot": re.compile(r"\bbot\b|robot|रोबोट|machine|मशीन|computer|कंप्यूटर|recorded|रिकॉर्ड|automated|real person|"
+                               r"insaan|इंसान|asked (if|whether) .{0,30}(bot|ai|automated|recorded)", re.I),
+}
+ID_KEY = re.compile(r"gstin|gst_?no|gst_number|\bgst\b$|pan_?no|pan_number|aadha+r|bank|ifsc|acc_?n|account_no|cin_number|"
+                    r"tan_number|iec|fssai|vat|cst_no|service_tax|epf|esi_number|udyam|passport|voter", re.I)
+ID_VALUE = re.compile(r"\b\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]\b|\b[A-Z]{5}\d{4}[A-Z]\b|\b[A-Z]{4}0[A-Z0-9]{6}\b|"
+                      r"\b\d{4}[ -]?\d{4}[ -]?\d{4}\b")
+
+
+def scrub_ids(o):
+    """Remove government / bank ID numbers from LLM-facing output (team data policy). Flags and years stay."""
+    if isinstance(o, dict):
+        out = {}
+        for k, v in o.items():
+            if ID_KEY.search(str(k)) and not isinstance(v, (bool, dict, list)) and not str(k).endswith(("_flag", "_year", "_available")):
+                continue
+            out[k] = scrub_ids(v)
+        return out
+    if isinstance(o, list):
+        return [scrub_ids(x) for x in o]
+    if isinstance(o, str):
+        return ID_VALUE.sub("[ID removed]", o)
+    return o
 SCHED_SUB = re.compile(r"callback|call_back|busy|later|reschedul|voicemail|no_response", re.I)
 SCHED_SENT = re.compile(r"(call ?back|call (him|her|them|me)? ?(later|tomorrow|again)|call later|busy|driving|baad me|kal call|"
                         r"\b\d{1,2}(:\d{2})?\s?(am|pm|baje)\b|tomorrow|next week|reschedul|follow[- ]?up (at|time|call))", re.I)
@@ -471,10 +504,9 @@ def build_points(glid, files, api, meta, now):
     # G previous conversations (already known), weighted by age; scheduling removed
     def conv(r):
         a = age(r)
-        sched = r.get("disposition_label") in SCHED_OUTCOMES
         text, cut, red = drop_scheduling(r.get("lead_call_summary", ""))
         return {"date": r.get("call_start_time"), "days_ago": a, "relevance": "recent" if a <= RECENT_DAYS else "older",
-                "outcome": None if sched else r.get("disposition_label"), "duration_sec": r.get("lead_call_duration"),
+                "outcome": OUTCOME.get(r.get("disposition_label"), r.get("disposition_label")), "duration_sec": r.get("lead_call_duration"),
                 "meeting_fixed": r.get("meeting_fixed") == "1" or None,
                 "what_was_discussed": text if a <= RECENT_DAYS else (text[:300] + (" …" if len(text) > 300 else "")),
                 "scheduling_sentences_dropped": cut or None, "time_words_redacted_in": red or None}
@@ -483,12 +515,16 @@ def build_points(glid, files, api, meta, now):
     put("G01", {"answered_calls_last_90d": len(bots), "of_which_last_30d": sum(1 for c in convs if c["relevance"] == "recent"),
                 "older_calls_ignored": stale or None, "last_call_date": bots[-1].get("call_start_time") if bots else None,
                 "avg_duration_sec": round(sum(durs) / len(durs), 1) if durs else None,
-                "never_reached_by_vani": (not bots_all) or None},
+                "never_reached_by_vani": (not bots_all) or None,
+                "n_prior_calls_all_history": len(bots_all),
+                "first_call_date_all_history": bots_all[0].get("call_start_time") if bots_all else None},
         f"ps07_bot_calls (window {MAX_AGE_DAYS} d; recent = {RECENT_DAYS} d)")
-    put("G02", {"outcomes_last_90d": dict(Counter(r.get("disposition_label") for r in bots
-                                                  if r.get("disposition_label") not in SCHED_OUTCOMES)) or None,
+    put("G02", {"outcome_counts_all_history": dict(Counter(OUTCOME.get(r.get("disposition_label"), r.get("disposition_label"))
+                                                           for r in bots_all)) or None,
+                "outcome_counts_last_90d": dict(Counter(OUTCOME.get(r.get("disposition_label"), r.get("disposition_label"))
+                                                        for r in bots)) or None,
                 "meetings_fixed_last_90d": sum(r.get("meeting_fixed") == "1" for r in bots) or None},
-        "ps07_bot_calls (Call Later / Busy excluded: scheduling)")
+        "ps07_bot_calls (all-history = counts only; call_later_busy kept as an outcome, no times)")
     put("G03", {"last_call": convs[0], "earlier_calls_in_window": convs[1:] or None} if convs else
         ({"note": f"{stale} older call(s) beyond {MAX_AGE_DAYS} days ignored"} if stale else None),
         "ps07_bot_calls.lead_call_summary (scheduling sentences removed)")
@@ -523,14 +559,50 @@ def build_points(glid, files, api, meta, now):
                 "latency_repetition": [{**pick(o.get("latency") or {}, ["p50_sec", "p95_sec", "overlap_count", "seller_had_to_repeat_count"]),
                                         "is_loopy": o.get("is_loopy")} for o in lr] or None} if (seller_turns or lr) else None,
         "ps07_call_turns · evaluator latency_repetition (last 90 d)")
-    put("G08", {"how_calls_ended": dict(Counter(o.get("sub_disposition") for o in dispo
-                                                if o.get("sub_disposition") and not SCHED_SUB.search(o.get("sub_disposition")))) or None,
+    put("G08", {"how_calls_ended": dict(Counter(o.get("sub_disposition") for o in dispo if o.get("sub_disposition"))) or None,
                 "who_ended_call": [pick(o, ["who_ended_call", "seller_tried_after_closure", "explanation"])
                                    for _, o in ev.get("execdrop", [])] or None},
-        "evaluator disposition / execdrop (last 90 d; callback / busy endings excluded)")
+        "evaluator disposition / execdrop (last 90 d)")
     put("G09", {"bot_versions_heard": dict(Counter(r.get("lead_bot_version") for r in bots)) or None}, "ps07_bot_calls (last 90 d)")
     put("G10", [r.get("call_recording_url") for r in bots if not blank(r.get("call_recording_url"))] or None,
         "ps07_bot_calls.call_recording_url (last 90 d)")
+    ev_by_call = defaultdict(dict)
+    for agent, items in ev.items():
+        for aid, o in items:
+            ev_by_call[aid][agent] = o
+    turns_by_call = defaultdict(list)
+    for r in seller_turns:
+        turns_by_call[r.get("attempt_id")].append(r.get("text") or "")
+    rows = []
+    for r in reversed(bots):
+        aid, e = r.get("attempt_id"), ev_by_call.get(r.get("attempt_id"), {})
+        d, x = e.get("disposition") or {}, e.get("execdrop") or {}
+        turn_text, summ = " ".join(turns_by_call.get(aid, [])), r.get("lead_call_summary") or ""
+        sig, src = {}, {}
+        for name, pat in SIGNALS.items():
+            t_hits, s_hits = len(pat.findall(turn_text)), len(pat.findall(summ))
+            sig[name], src[name] = t_hits + s_hits, [f"turns:{t_hits}"] * bool(t_hits) + [f"summary:{s_hits}"] * bool(s_hits)
+        if r.get("disposition_label") == "Call Later / Busy":
+            sig["rushed"] += 1
+            src["rushed"].append("outcome:call_later_busy")
+        sub = str(d.get("sub_disposition") or "")
+        if re.search(r"busy|callback|dropped_mid_pitch", sub):
+            sig["rushed"] += 1
+            src["rushed"].append(f"evaluator:{sub}")
+        ni = r.get("disposition_label") == "Not Interested" or d.get("disposition") == "not_interested"
+        sig["not_interested"], src["not_interested"] = int(ni), (["outcome"] if ni else [])
+        ndm = d.get("disposition") in ("alternate_number_or_not_dm",) or not blank(d.get("alternate_person_designation"))
+        sig["not_decision_maker"], src["not_decision_maker"] = int(ndm), (["evaluator:disposition"] if ndm else [])
+        sig["wrong_number"], src["wrong_number"] = int(d.get("disposition") == "wrong_number"), (
+            ["evaluator:disposition"] if d.get("disposition") == "wrong_number" else [])
+        rows.append({"date": r.get("call_start_time"), "days_ago": age(r),
+                     "outcome": OUTCOME.get(r.get("disposition_label"), r.get("disposition_label")),
+                     "ended_by": x.get("who_ended_call"), "end_pattern": d.get("sub_disposition"),
+                     "duration_sec": num(r.get("lead_call_duration")), "has_transcript": bool(turns_by_call.get(aid)),
+                     "has_evaluator": bool(e), "signals": sig,
+                     "signal_sources": {k: v for k, v in src.items() if v}})
+    put("G11", rows or None, f"ps07_bot_calls + evaluator + seller turns, per answered call in last {MAX_AGE_DAYS} d "
+                             "(lexicon hits + labels; counts, not scores)")
 
     # H human relationship
     ex = [r for r in sorted(files.get("ps07_exec_calls", []), key=lambda r: r.get("call_start_time", ""))
@@ -648,7 +720,7 @@ def run_one(glid, data, meta, use_api, refresh):
     with open(os.path.join(OUT, f"{glid}.md"), "w", encoding="utf-8") as f:
         f.write(render(glid, meta.get(glid, {}), P, files, api))
     with open(os.path.join(OUT, f"{glid}.points.json"), "w", encoding="utf-8") as f:
-        json.dump({k: {"value": v, "source": s} for k, (v, s) in P.items()}, f, ensure_ascii=False, default=str)
+        json.dump(scrub_ids({k: {"value": v, "source": s} for k, (v, s) in P.items()}), f, ensure_ascii=False, default=str)
     filled = sum(1 for k, (v, _) in P.items() if has_value(v) and k not in EXCLUDED)
     api_ok = sum(1 for r in api.values() if r.get("_http") == 200)
     return glid, filled, api_ok, len(api)

@@ -170,6 +170,8 @@ DATA_POINTS = {
     "G08": ("FILE", "evaluator disposition / execdrop", [], "-", ""),
     "G09": ("FILE", "ps07_bot_calls lead_bot_version, redis_bucket", [], "-", ""),
     "G10": ("FILE", "call_recording_url", [], "-", ""),
+    "G11": ("FILE", "ps07_bot_calls + evaluator + seller turns (per call, dated)", [], "-",
+            "signals: rushed, confused, frustrated, asked_if_bot, not_interested, not_decision_maker, wrong_number"),
     "H01": ("BOTH", "ps07/gc executive calls", [("dsr_count", "total/success connect, calls, meet by month")], "WORKS", ""),
     "H02": ("API", "-", [("byr_supply", "GL_DTL.assignedto_*, teleassignedto_* (PII)")], "WORKS", "PII: mask"),
     "H03": ("BOTH", "evaluator se_contact", [("dsr_count", "success_meet, success_video, success_phy"),
