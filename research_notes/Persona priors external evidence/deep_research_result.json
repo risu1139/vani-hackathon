@@ -1,0 +1,241 @@
+{
+ "question": "VANI is IndiaMART's outbound AI voice agent (Sarvam TTS) calling B2B SMB sellers in India in Hindi/Hinglish to book a meeting. Our past-call data has variation only in the opening hook (enquiry-count hook beat an interest hook and a discovery opener), not in voice. We need external evidence to set starting priors and to validate our method. Question 1: What experiments (field experiments first, then lab studies and industry A/B tests, prefer 2020-2026, prefer India/B2B/voice AI) measured the effect on outbound sales/telemarketing/collections/voice-agent outcomes of: agent voice gender (and gender matching with the callee), speaking rate, pitch, formality/politeness, warmth/empathy, Hindi-English code-mixing, regional accent/language match, and opening hook type (value claim vs question vs social proof)? Give effect sizes, sample sizes and transferability. Question 2: Is this the right method: segment-based persona priors (category x seller gender x turnover x region) seeded from that evidence, a script returning top-2 personas with hierarchical back-off, an LLM agent amending per seller with cited evidence, and a between-run loop scoring meetings per (segment, persona) with exploration (Thompson sampling / contextual bandits)? What do industry and research do for cold-start personalisation of calls/messages, and what are the pitfalls (no-overlap off-policy evaluation, small traffic, LLM choices confounding arm attribution and propensity logging, segment explosion, fairness with gender as a key)?",
+ "summary": "The verified evidence says no single AI voice works best everywhere. Two independent field datasets of outbound AI voice calls found that voice-feature effects depend on context: the SSRN persuasion study (Jia et al., 5 RCTs, n=123,946 calls) and the debt-collection studies (Guo et al., ICIS 2020 / MISQ 2025). Voice gender had no main effect in the persuasion study and mattered only together with emotional tone. In collections, a female voice raised the odds of a stated intention to repay by 28.3%, and more so in high-tension calls. That supports weak, segment-conditioned voice priors, not global rules. The best-supported design priors for VANI are about wording rather than voice: state a value claim instead of asking a question, use a gentle or firm tone rather than a flirtatious one, and code-mix lightly, increasing it only when the seller code-mixes back. Nothing about speaking rate, pitch, formality, regional accent or social-proof hooks survived verification. On method, bandit research backs the proposed design if it is built as a hierarchy: segment features set an informative prior and each (segment, persona) cell can deviate from it (hierarchical or meta Thompson sampling). A fixed segment-to-persona rule table is brittle and can produce regret that grows linearly over time. Priors seeded by an LLM or from outside evidence give modest gains, mostly once a little feedback has come in (+8 to 10% CTR in a live A/B test, 14 to 20% less early regret in simulation), and a misaligned prior can turn harmful as data builds up.",
+ "findings": [
+  {
+   "claim": "No AI voice is best everywhere. Voice-feature effects depend on callee gender, price tier, city tier, day of week and how tense the call is at the start, so voice and persona priors should be conditioned on segment and kept weak. The persuasion study also found main effects that held across contexts (see the opener-wording finding), so the best structure is a global baseline plus segment-level deviations.",
+   "confidence": "high",
+   "sources": [
+    "https://papers.ssrn.com/abstract=5202834",
+    "https://aisel.aisnet.org/misq/vol49/iss4/19"
+   ],
+   "evidence": "Jia, Hu, Yu & Liang (SSRN 5202834, 2025, revised 2026): 5 randomized field experiments, 123,946 outbound chatbot calls, 'no evidence of a universally optimal AI voice'. Effects varied by customer gender, product price tier, city level and weekday vs weekend. Guo et al. (MISQ 2025): the female-voice effect is 'more pronounced when service encounters begin with higher tension, such as during weekdays or with initially uncooperative customers.' Two independent primary field datasets, all votes 3-0.",
+   "vote": "3-0 (merged claims 1, 5)"
+  },
+  {
+   "claim": "Voice gender alone is a weak lever, and its direction depends on the setting. In outbound persuasion calls there was no main effect of gender (and none of perceived voice age); gender mattered only together with emotional tone. In AI debt-collection calls, a female voicebot raised the odds of a positive repayment intention by 28.3%, and in the earlier conference version this held for male customers. Whether matching voice gender to callee gender helps is unresolved.",
+   "confidence": "medium",
+   "sources": [
+    "https://papers.ssrn.com/abstract=5202834",
+    "https://aisel.aisnet.org/misq/vol49/iss4/19",
+    "https://aisel.aisnet.org/icis2020/hci_artintel/hci_artintel/20"
+   ],
+   "evidence": "SSRN 5202834: 'Perceived voice age has no overall effect, and voice gender matters only in conjunction with emotional tone.' MISQ 49(4) 2025 (Guo, Liu, Xu, Yin): 'female voicebots increase the odds of a positive repayment intention by 28.3%'. The outcome is stated intention, and the abstract gives neither sample size nor whether gender was randomized. ICIS 2020 (same group, real business data): male customers were more willing to repay with female chatbots. A related claim that female customers showed no preference, read as a cross-gender rather than a matching effect, was refuted 1-2, so the data cannot settle gender matching. Medium confidence: the two contexts point in different directions, and both are Chinese B2C settings.",
+   "vote": "3-0 (merged claims 3, 4, 6)"
+  },
+  {
+   "claim": "Opener wording: affirmative statements persuaded better than questions or rhetorical lines, and gentle or firm (stern) tones beat a flirtatious (coquettish) one. This weakly supports VANI's own finding that the enquiry-count value-claim hook beat question and discovery openers. It tests the grammatical form of the line, not the hook's content (value claim vs social proof).",
+   "confidence": "medium",
+   "sources": [
+    "https://papers.ssrn.com/abstract=5202834"
+   ],
+   "evidence": "'Affirmative illocutionary acts outperform question and rhetorical formulations, and gentle and stern tones outperform coquetry tones' (5 field RCTs, n=123,946). This is a single large primary source, an unreviewed working paper, in what looks like a Chinese B2C setting. A claim that utilitarian framing beat hedonic framing by 16.59%, offered as support for value-claim openers, was refuted 0-3. No verified evidence on social-proof hooks.",
+   "vote": "3-0 (claim 2)"
+  },
+  {
+   "claim": "Code-mixing Hindi and English: bilingual users strongly preferred chatbots that code-mix over ones that never do. Self-reported language proficiency was the strongest predictor of that preference. A 'nudge' policy (light code-mixed cues, more mixing only if the user mixes back) was low-risk, low-gain and acceptable to everyone; 'always code-mix' drew more mixed reactions. For VANI this means a light Hinglish default that mirrors the seller, set by the seller's language profile rather than one global level.",
+   "confidence": "low",
+   "sources": [
+    "https://www.microsoft.com/en-us/research/publication/do-multilingual-users-prefer-chat-bots-that-code-mix-lets-nudge-and-find-out/"
+   ],
+   "evidence": "Bawa et al., MSR India, PACM HCI (CSCW1) 2020: mixed-method user study, N=91 bilingual users, human-in-the-loop text chatbot. Outcomes were naturalness and preference ratings, not sales or meetings. Peer-reviewed, but a single small lab study of text chat, from before LLMs and not about voice.",
+   "vote": "3-0 (merged claims 7, 8, 9)"
+  },
+  {
+   "claim": "AI callers versus humans, and disclosure: in a randomized outbound sales field experiment (more than 6,200 customers), undisclosed voice chatbots sold as well as proficient human callers and 4x better than inexperienced ones. Disclosing the chatbot before the conversation cut purchases by more than 79.7%; late disclosure did less harm. How and when VANI identifies itself may matter more than any voice trait, within whatever disclosure rules apply.",
+   "confidence": "medium",
+   "sources": [
+    "https://pubsonline.informs.org/doi/pdf/10.1287/mksc.2019.1192"
+   ],
+   "evidence": "Luo, Tong, Fang & Qu, Marketing Science 38(6) 2019. A single peer-reviewed field RCT: a Chinese fintech selling loan renewals (B2C), scripted calls from before LLMs. The mechanism was that customers saw the bot as less knowledgeable and less empathetic.",
+   "vote": "3-0 (merged claims 10, 11)"
+  },
+  {
+   "claim": "Interactivity is not automatically better. In a randomized field test with about 90,000 telemarketing recipients, a one-way recorded (monologue) call got an 18.43% higher response rate than an interactive AI dialogue (IVR) call. A long, interactive discovery opening may backfire against a short statement.",
+   "confidence": "low",
+   "sources": [
+    "https://researchportal.hkust.edu.hk/en/publications/monologue-vs-dialogue-a-field-experiment-of-ai-enabled-telemarket/"
+   ],
+   "evidence": "Ma, Han, Lee & Kwon, ICIS 2024. A single conference paper. B2C, IVR rather than an LLM agent, and it is unclear whether 18.43% is a relative lift or a percentage-point gap.",
+   "vote": "3-0 (claim 12)"
+  },
+  {
+   "claim": "Method check: the persona prior should be a feature-guided hierarchical prior in which segment features (category, gender, turnover, region) set each cell's prior and each (segment, persona) cell can deviate from it. Sharing information through the hierarchy reduces regret, and regret depends less on the number of arms, which handles segment explosion. A deterministic rule table from segment to persona is brittle: when features do not explain cell-level variation, Thompson sampling on it can suffer regret that grows linearly over time.",
+   "confidence": "high",
+   "sources": [
+    "https://arxiv.org/pdf/2202.13227",
+    "https://icml.cc/virtual/2022/poster/17191"
+   ],
+   "evidence": "Wan, Ge & Song (arXiv 2202.13227, AISTATS 2023): 'when θi = g(xi) does not hold, the regret is easy to scale linearly with T'. Meta Thompson sampling (MTSS) with θi ~ g(θi|xi,γ) keeps regret sublinear and gives new items an informative prior from their features. Hong, Kveton et al., Deep Hierarchy in Bandits (ICML 2022): HierTS, exact posteriors for Gaussian hierarchies, regret falls as priors become more informative and depends less on the number of actions. The evidence is synthetic or recommendation data, not calls. The exact posterior applies only to Gaussian models, so a Bernoulli meeting-booked outcome needs a Beta-Bernoulli or other approximation.",
+   "vote": "3-0 (merged claims 13, 14, 15, 16, 17)"
+  },
+  {
+   "claim": "Priors seeded by an LLM or from outside evidence speed up early learning modestly; they do not replace exploration. In a live A/B/C test (about 595K users per arm, segment-aware Thompson sampling), LLM-derived Beta priors gave no significant overall CTR gain, and the content prior was harmful (-5.68% CTR). The biggest lifts came after a little feedback (+9.51% and +7.76% CTR at 10-49 impressions), and the content prior turned negative at 200+ impressions. In simulation and on conjoint data, pretraining on LLM-simulated users cut early regret by 14-20%, with diminishing returns that shrank at longer horizons.",
+   "confidence": "medium",
+   "sources": [
+    "https://arxiv.org/pdf/2608.03382",
+    "https://arxiv.org/html/2406.19317v2"
+   ],
+   "evidence": "NAVER WEBTOON (arXiv 2608.03382, Aug 2026): Gender Prior CTR +1.48% (p=0.144). Content Prior CTR -5.68% (p<0.001) and CVR +1.37% (p=0.054). 'Priors act primarily as accelerators of early-stage learning once minimal feedback arrives, rather than as a substitute for initial exploration.' Prior strength was fixed at κ=40 pseudo-impressions. CBLI (arXiv 2406.19317): 14-17% less early regret on a 4-arm outreach-email task, but there GPT-4o was also the ground truth (circular). On the vaccine conjoint with 1,970 real people, about 19-20% (Mistral-small 20.39%±0.38) with 10,000 simulated users and 14.51% with 1,000. Both are preprints, and neither involves voice or B2B.",
+   "vote": "3-0 (merged claims 18, 19, 20, 21)"
+  },
+  {
+   "claim": "Score uplift, not raw bookings. A contextual bandit for marketing can estimate and optimize the incremental (causal) effect of an action. For VANI, that means scoring (segment, persona) cells against a default or baseline persona arm instead of counting raw meetings.",
+   "confidence": "low",
+   "sources": [
+    "https://www.amazon.science/publications/contextual-multi-armed-bandits-for-causal-marketing"
+   ],
+   "evidence": "Sawant et al., Amazon, ICML 2018 workshop-level paper: 'a causal contextual multi-armed bandit approach to automated marketing, where we estimate and optimize the causal (incremental) effects'. Applying it to persona-vs-default scoring is our inference. A true no-call control is probably not practical.",
+   "vote": "3-0 (claim 22)"
+  }
+ ],
+ "caveats": "How confidence was assigned: high means at least two independent primary sources with unanimous votes. Medium means one large primary field study or peer-reviewed paper, or two preprints. Low means one small, lab, conference or workshop source. How well results transfer is the main limit. None of the verified voice studies is set in India, B2B or meeting booking. Most are Chinese B2C (persuasion, loan renewals, debt collection), several are from before LLMs (2019-2020), and two outcomes are stated intentions rather than behaviour. The headline voice study (SSRN 5202834) is an unreviewed working paper, and its abstract was checked only through search snippets because the page returned 403. The MISQ 28.3% figure comes without a sample size or randomization details. No verified evidence covers speaking rate, pitch, formality or politeness, warmth or empathy as a voice trait, regional accent or language match, or social-proof openers, so priors on those should stay flat (uninformative). Two claims were refuted: (a) female customers showed no preference, read as a cross-gender rather than a matching effect (1-2); (b) utilitarian framing beat hedonic by 16.59%, read as support for value-claim openers (0-3). The bandit evidence is synthetic, recommendation or conjoint data. Results that assume correctly specified Gaussian priors may not hold for biased outside priors or Bernoulli meeting outcomes. The LLM-prior results are recent (2024-2026) preprints, one of them with a circular LLM oracle. The verified claims did not cover the pitfalls the question asked about: off-policy evaluation without overlap, logging propensities when an LLM amends the persona, small traffic, and fairness when gender is a key. Those points rest on general reasoning, not on cited evidence here.",
+ "openQuestions": [
+  "How can arms be attributed and propensities logged correctly when an LLM agent changes the bandit-chosen persona per seller? Should the logged action be the final amended persona, with the amendment treated as part of the policy, or should amendments be limited to a fixed set of choices with explicit probabilities?",
+  "Does matching voice gender to the callee's gender (male or female sellers) change meeting rates in Indian B2B calls? Should seller gender be a segment key at all, given fairness concerns, versus learning voice effects only from outcomes?",
+  "Do speaking rate, pitch, formality and regional accent or language match have measurable effects on booking rates in Hindi/Hinglish outbound calls? No verified field evidence exists, so these need VANI's own randomized exploration.",
+  "How strong should outside priors be (pseudo-count κ) given VANI's small call volume, so that a misaligned prior (like NAVER's Content Prior reversal) does not hold back learning in sparse (segment, persona) cells?"
+ ],
+ "refuted": [
+  {
+   "claim": "Female customers showed no difference in repayment intention by chatbot voice gender. This points to a cross-gender interaction (female voice helps with male callees), not a match effect.",
+   "vote": "1-2",
+   "source": "https://aisel.aisnet.org/icis2020/hci_artintel/hci_artintel/20"
+  },
+  {
+   "claim": "Within AI dialogue calls, a message stressing utilitarian (practical-benefit) attributes got a 16.59% higher response rate than one stressing hedonic (enjoyment) attributes. This supports value-claim openers over other hook framings.",
+   "vote": "0-3",
+   "source": "https://researchportal.hkust.edu.hk/en/publications/monologue-vs-dialogue-a-field-experiment-of-ai-enabled-telemarket/"
+  }
+ ],
+ "unverified": [],
+ "sources": [
+  {
+   "url": "https://papers.ssrn.com/abstract=5202834",
+   "quality": "primary",
+   "angle": "Voice gender, pitch, speaking rate in sales/collections calls (field experiments)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://aisel.aisnet.org/misq/vol49/iss4/19",
+   "quality": "primary",
+   "angle": "Voice gender, pitch, speaking rate in sales/collections calls (field experiments)",
+   "claimCount": 4
+  },
+  {
+   "url": "https://aisel.aisnet.org/icis2020/hci_artintel/hci_artintel/20",
+   "quality": "primary",
+   "angle": "Voice gender, pitch, speaking rate in sales/collections calls (field experiments)",
+   "claimCount": 4
+  },
+  {
+   "url": "https://www.trysalient.com/blog/sorry-now-pay-me",
+   "quality": "unreliable",
+   "angle": "Voice gender, pitch, speaking rate in sales/collections calls (field experiments)",
+   "claimCount": 0
+  },
+  {
+   "url": "https://healthland.time.com/?p=33737",
+   "quality": "secondary",
+   "angle": "Voice gender, pitch, speaking rate in sales/collections calls (field experiments)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://www.gong.io/resources/labs/elements-of-effective-sales-conversations/",
+   "quality": "blog",
+   "angle": "Voice gender, pitch, speaking rate in sales/collections calls (field experiments)",
+   "claimCount": 5
+  },
+  {
+   "url": "https://www.microsoft.com/en-us/research/publication/do-multilingual-users-prefer-chat-bots-that-code-mix-lets-nudge-and-find-out/",
+   "quality": "primary",
+   "angle": "India / code-mixing / accent match in voice AI and call centers",
+   "claimCount": 5
+  },
+  {
+   "url": "https://www.gong.io/blog/cold-call-opening-lines",
+   "quality": "blog",
+   "angle": "Opening hook and warmth/politeness in cold calls and AI agents",
+   "claimCount": 4
+  },
+  {
+   "url": "https://pubsonline.informs.org/doi/pdf/10.1287/mksc.2019.1192",
+   "quality": "primary",
+   "angle": "Opening hook and warmth/politeness in cold calls and AI agents",
+   "claimCount": 5
+  },
+  {
+   "url": "https://researchportal.hkust.edu.hk/en/publications/monologue-vs-dialogue-a-field-experiment-of-ai-enabled-telemarket/",
+   "quality": "primary",
+   "angle": "Opening hook and warmth/politeness in cold calls and AI agents",
+   "claimCount": 4
+  },
+  {
+   "url": "https://arxiv.org/pdf/2202.13227",
+   "quality": "primary",
+   "angle": "Cold-start personalisation with hierarchical priors and contextual bandits",
+   "claimCount": 5
+  },
+  {
+   "url": "https://icml.cc/virtual/2022/poster/17191",
+   "quality": "primary",
+   "angle": "Cold-start personalisation with hierarchical priors and contextual bandits",
+   "claimCount": 3
+  },
+  {
+   "url": "https://arxiv.org/html/2406.19317v2",
+   "quality": "primary",
+   "angle": "Cold-start personalisation with hierarchical priors and contextual bandits",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/pdf/2608.03382",
+   "quality": "primary",
+   "angle": "Cold-start personalisation with hierarchical priors and contextual bandits",
+   "claimCount": 5
+  },
+  {
+   "url": "https://www.amazon.science/publications/contextual-multi-armed-bandits-for-causal-marketing",
+   "quality": "primary",
+   "angle": "Cold-start personalisation with hierarchical priors and contextual bandits",
+   "claimCount": 4
+  },
+  {
+   "url": "https://arxiv.org/html/2506.16429v1",
+   "quality": "primary",
+   "angle": "Cold-start personalisation with hierarchical priors and contextual bandits",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/pdf/2305.11812",
+   "quality": "primary",
+   "angle": "Pitfalls: off-policy evaluation, LLM-chosen arms, fairness on gender",
+   "claimCount": 4
+  },
+  {
+   "url": "https://arxiv.org/pdf/2510.17173",
+   "quality": "primary",
+   "angle": "Pitfalls: off-policy evaluation, LLM-chosen arms, fairness on gender",
+   "claimCount": 5
+  },
+  {
+   "url": "https://arxiv.org/pdf/2601.14333",
+   "quality": "primary",
+   "angle": "Pitfalls: off-policy evaluation, LLM-chosen arms, fairness on gender",
+   "claimCount": 5
+  }
+ ],
+ "stats": {
+  "angles": 5,
+  "sourcesFetched": 19,
+  "claimsExtracted": 82,
+  "claimsVerified": 25,
+  "confirmed": 23,
+  "killed": 2,
+  "unverified": 0,
+  "afterSynthesis": 9,
+  "urlDupes": 1,
+  "budgetDropped": 10,
+  "agentCalls": 101
+ }
+}
