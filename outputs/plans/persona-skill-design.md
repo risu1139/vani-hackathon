@@ -125,3 +125,58 @@ In the skill: `.claude/skills/vani-persona/references/formats/`:
 2. Do you agree with the proposed thresholds (scale tier, profile strength, bl_usage, enquiry trend)? They are a start. We tune them with data later.
 3. Are the call-level guards correct? See 5a.
 4. After you agree, the next step is CLAUDE.md (the rules that must never be missed). Then SKILL.md.
+
+## 9. The hierarchy and the learning loops (draft, 2026-10-10)
+
+### 9.1 Two scoreboards, not one
+- **Scoreboard A: persona bundle.** It holds the tone, pace, formality, warmth, sophistication, opening style and hook style. The arms are the personas in the library (about 6).
+- **Scoreboard B: voice gender.** The arms are female and male. It is separate because the evidence says that the best voice depends on the callee's gender, the city tier and the tension, not on the category.
+
+Each scoreboard has its own hierarchy. This keeps each hierarchy small.
+
+### 9.2 Levels of scoreboard A (persona)
+| Level | Key | Example | Why this order |
+|---|---|---|---|
+| L0 | all sellers | — | The base for everything |
+| L1 | division | NSD | The objective is different (new sale vs existing customer) |
+| L2 | + scale tier | NSD, small | Price tier changes what works (field evidence; PS07 turnover result) |
+| L3 | + region zone | NSD, small, North | Region changes the hook result (PS07) |
+| L4 | + category group | NSD, small, North, textiles | The most specific; the least data |
+
+### 9.3 Levels of scoreboard B (voice gender)
+| Level | Key |
+|---|---|
+| V0 | all sellers (start: female) |
+| V1 | seller gender (recorded or guessed, with confidence) |
+| V2 | + city tier (metro / tier-2 / small town or rural) |
+| V3 | + call tension (calm / tense, from the states) |
+
+### 9.4 What each cell stores
+`{"path": [...], "arm": "P3", "calls": 42, "meetings": 7, "prior_mean": 0.12, "prior_weight": 20, "score_mean": ..., "score_low": ..., "score_high": ..., "updated": "..."}`
+
+### 9.5 How learning happens (after each call)
+1. The skill logs the decision: the segment path, the top 2 with their probabilities, the chosen persona, the amendments, the voice, the hook, and the guards.
+2. The call result arrives: meeting fixed (yes/no), and later "meeting held" when the executive confirms it.
+3. The script adds the result to the cell at every level of the path.
+4. The score of a cell = its own results + the score of the level above, weighted as `prior_weight` calls (Beta with partial pooling). With few calls, the level above decides. With many calls, the cell decides.
+5. The next time, Thompson sampling draws from each persona's score. The highest draw is the first choice. A close second gets calls sometimes.
+6. The script scores each persona against the default persona (uplift), not only on raw meetings.
+
+### 9.6 What learning changes, and what it does not
+| Item | Changes automatically? | Who changes it |
+|---|---|---|
+| Scoreboard numbers (A and B) | Yes, after each call | Script |
+| The persona definitions (the library) | No | The agent suggests; a human approves a new version |
+| The amendments that the agent makes | The script counts which amendments go with good results. If one wins many times, it is suggested as a library change | Human approval |
+| The Sarvam prompt template | No. A persona fills **variables** in a fixed template. A new persona needs no prompt edit | Only when a human approves a new template version |
+| Mid-call switch (Loop 1): keyword list, switch directive text, sensitivity | Not automatically | See 9.7 |
+
+### 9.7 Loop 1 (mid-call switching) learning
+1. After each call, the reviewer (frontier model + human) labels each seller turn with the correct signal and compares it with the switch log.
+2. The result: missed signals (no switch) and false switches.
+3. The script proposes changes: new keywords, removed keywords, and changed switch directive text in the prompt-rules section.
+4. A gold set of labelled turns tests each proposal. The change must not make the gold-set score worse.
+5. A human approves. The switch tool and the prompt-rules section get a new version number.
+6. Per-seller sensitivity comes from the states: a seller who is often rushed gets a faster "rushed" switch. This needs no learning step.
+
+So Loop 1 does change the prompt, but only the prompt-rules section, only in a new version, and only after the gold-set test and human approval. Loop 2 changes only the scoreboard numbers automatically. The library and the template change only with human approval.
