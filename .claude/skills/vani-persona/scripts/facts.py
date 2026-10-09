@@ -286,7 +286,8 @@ def build(ctx, today):
     rung = next((r for r in e11.get("rungs", []) if r.get("allowed")), None) if e11.get("status") == "ok" else None
     peer_pos = None
     if rung:
-        own = (e11.get("seller_leads_bought") or {}).get("main_mcat", 0) * (e11.get("window_days", 30) / 90)
+        sb = e11.get("seller_leads_bought") or {}
+        own = (sb.get("main_mcat") or 0) * (e11.get("window_days", 30) / (sb.get("window_days") or e11.get("window_days", 30)))
         med = rung.get("median_leads_per_buyer") or 0
         peer_pos = "ahead" if own > med * 1.2 else "behind" if own < med * 0.8 else "level"
     S.append(item("state", "state.peer_position", {"rung": rung, "seller_vs_peers": peer_pos},

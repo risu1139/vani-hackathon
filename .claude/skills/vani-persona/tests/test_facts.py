@@ -126,7 +126,7 @@ def test_money_lead_needs_value():
 
 
 def test_peer_ahead():
-    e11 = {"status": "ok", "window_days": 30, "seller_leads_bought": {"main_mcat": 30, "window_days": 90},
+    e11 = {"status": "ok", "window_days": 30, "seller_leads_bought": {"main_mcat": 10, "window_days": 30},
            "rungs": [{"rung": 3, "allowed": True, "median_leads_per_buyer": 2}]}
     out, v = run({"E11": e11})
     assert v["state.peer_position"]["seller_vs_peers"] == "ahead"
