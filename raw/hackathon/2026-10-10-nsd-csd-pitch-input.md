@@ -93,3 +93,7 @@ portal is to use, say: "Sir, abhi itne log search kar rahe hain toh aapko
 toh ye count kaafi badh sakta hai."
 5. Let them ask: By showing them the "Gaps" in their free profile versus a
 paid package, make them curious about the paid package.
+
+## Part 3: correction (2026-10-10, same session)
+
+User: "fix-it help or upsell → follow-up. the objective here is also not upsell it getting the meeting in the meeting we upsell." So the CSD call objective is a meeting too; the upsell happens in the meeting.

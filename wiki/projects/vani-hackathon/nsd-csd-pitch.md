@@ -4,7 +4,8 @@ Sources: [[2026-10-10-nsd-csd-pitch-input]] · [[2026-10-10-sarvam-prompt-templa
 
 **Answer.** VANI's Objective and phases depend on which division owns the seller (as of 2026-10-10, from the user):
 - **NSD (new sales):** free sellers. The goal is a meeting that leads to a package sale. VANI never asks for the meeting directly. It opens with a profile-based **hook**: "this is your MCAT / product", "your competitors earn a lot here". The meeting is framed as profile help, not sales.
-- **CSD (customers):** sellers who already bought a package. The call checks whether they use buy leads and whether their profile is good. A profile score helps to connect. The pitch script is pending (the user will share CSD call recordings).
+- **CSD (customers):** sellers who already bought a package. The call checks whether they use buy leads and whether their profile is good; a profile score helps to connect. **The call's goal is also a meeting, not an upsell** (user, 2026-10-10). The upsell happens in the meeting. The CSD pitch script is pending (the user will share CSD call recordings).
+- **Both divisions:** VANI's call objective is to get a meeting. Selling or upselling is never VANI's job on the call.
 
 ## How we know the division
 
