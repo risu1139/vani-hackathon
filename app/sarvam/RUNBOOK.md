@@ -42,6 +42,23 @@ To recompile after a code change, without running the agent again:
 
 Status (2026-10-10): the clone `VANI-person-b8c173ff-b272` still has the 11-variable prompt and the `lex-v1` tools. It is a **draft** (not published).
 
+**Why not the SDK:** `sarvam-conv-ai-sdk` (1.1.1, the latest) is runtime only: conversations, variables, tool classes. It has no create, update, upload or publish calls.
+
+**Authoring API** (what the console calls). Base: `https://apps.sarvam.ai/api/app-authoring/orgs/{org}/workspaces/{ws}/apps`. Auth: the console login (Bearer), not the API key (the API key gets 401).
+
+| Action | Call |
+|---|---|
+| Read config | `GET /{app}?app_version=N&version_filter=specific&legacy=true` |
+| Validate | `POST /validate` body `{app, tools: []}` → `{"detail": []}` when valid |
+| Save draft | `PUT /{app}` body `{app: <config without metadata keys>, app_name}` |
+| Upload tools | `PUT /{app}/tools?forceUpload=false` (multipart form) |
+| Publish version | `POST /{app}/commit` body `{app_version_description}` |
+| Versions | `GET /{app}/versions?legacy=true` |
+
+Metadata keys removed before saving: `org_id, workspace_id, app_id, app_name, app_version, app_version_description, created_by, updated_by, created_at, updated_at, status, channel_provider, is_deployed, is_single_prompt_mode`.
+
+Payload for the section template (built from files): `data/sarvam_backups/clone_update_payload.json`. It sets `states.start.instructions`, adds the 7 `prompt_*` variables and drops the 5 old ones. Validation of this payload passed (2026-10-10). Backup of the config before the change: `data/sarvam_backups/VANI-person-b8c173ff-b272_v1_20261010_before_lexv2.json`.
+
 ## 4. Test (cheap, text only)
 
 Two routes:
