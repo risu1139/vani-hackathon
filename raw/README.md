@@ -61,3 +61,4 @@ Status key: **current** = still the basis for the wiki · **reference** = facts 
 | hackathon/2026-10-10-sarvam-prompt-template-example.md | Sarvam agent prompt template example ('Ananya' B2B discovery): target format our per-seller VANI persona must be translated into | current |
 | hackathon/2026-10-10-nsd-csd-pitch-input.md | User input: NSD (new sales: hook→meeting) vs CSD (paid: BL usage + profile score); NSD enrichment-meeting pitch script verbatim | current |
 | hackathon/2026-10-10-team-decision-vani-identity-line.md | User decision: VANI identity line 'IndiaMART se, profile correct karne ke liye'; never say AI / branch manager / account manager; bot-question handling proposed | current |
+| research/2026-10-10-roleplay-calls-analysis.md | 5 of 30 'AI Roleplay' recordings transcribed (Sarvam, new key): seller-side meeting calls; NSD profile-gap vs CSD buy-lead/grievance pitch; objections; exec mistakes | current |
