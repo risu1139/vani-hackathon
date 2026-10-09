@@ -134,14 +134,20 @@ In the skill: `.claude/skills/vani-persona/references/formats/`:
 
 Each scoreboard has its own hierarchy. This keeps each hierarchy small.
 
-### 9.2 Levels of scoreboard A (persona)
-| Level | Key | Example | Why this order |
+### 9.2 Levels of scoreboard A (persona) - revised 2026-10-10 after user review
+| Level | Key | Example | Why |
 |---|---|---|---|
-| L0 | all sellers | — | The base for everything |
-| L1 | division | NSD | The objective is different (new sale vs existing customer) |
-| L2 | + scale tier | NSD, small | Price tier changes what works (field evidence; PS07 turnover result) |
-| L3 | + region zone | NSD, small, North | Region changes the hook result (PS07) |
-| L4 | + category group | NSD, small, North, textiles | The most specific; the least data |
+| L0 | all sellers | — | The base |
+| L1 | division (NSD / CSD; TMW and KCD as CSD until decided) | NSD | It changes the objective, the hook set and the starting point |
+| L2 | + turnover band (0–40 L / 40 L–1.5 Cr / 1.5–5 Cr / 5 Cr+) | NSD, 40 L–1.5 Cr | Turnover sets the sophistication (formality, numbers vs simple words) |
+| L3 | + AOV tier (seller AOV, else category AOV: low / mid / high, by category percentiles) | NSD, 40 L–1.5 Cr, high AOV | AOV is the price tier. The field evidence shows that the price tier changes which voice and style work |
+| L4 | + zone (North / West / South / East / Central) | … North | The parent of the state, so that small states can use the zone's data |
+| L5 | + state | … Uttar Pradesh | The user wants state-level detail. PS07 shows region effects |
+| L6 | + category group | … textiles | The most specific level, with the least data |
+
+Each level starts from the level above it (partial pooling). A state with few calls uses its zone's score. A zone with few calls uses the score of its AOV tier, and so on up the hierarchy.
+
+**Division in the facts, not only in the hierarchy.** `facts.py` writes `trait.division` into the INDEX key facts, together with the division's objective and its eligible hooks. The agent does not need to read other sections to know the division. The skill has **separate references for each division** (`references/division_nsd.md`, `references/division_csd.md`: objective, hook guide, objection playbook, pitch examples). The **steps in SKILL.md are the same** for both divisions; only the reference that the agent opens changes.
 
 ### 9.3 Levels of scoreboard B (voice gender)
 | Level | Key |
@@ -149,6 +155,7 @@ Each scoreboard has its own hierarchy. This keeps each hierarchy small.
 | V0 | all sellers (start: female) |
 | V1 | seller gender (recorded or guessed, with confidence) |
 | V2 | + city tier (metro / tier-2 / small town or rural) |
+| V2b | + state (Hindi belt or not) |
 | V3 | + call tension (calm / tense, from the states) |
 
 ### 9.4 What each cell stores
