@@ -12,6 +12,8 @@ Secrets come from env vars only, never written to disk:
   VANI_AK            employee AK (JWT) for users SOA
   VANI_USERS_TOKEN   users SOA service token
   VANI_USERS_MODID   users SOA modid (default GLADMIN)
+  VANI_COMPANY_BASE  company page service base URL (default http://34.93.21.191); token = VANI_USERS_TOKEN
+  VANI_COMPANY_SLEEP seconds to sleep before each company-service call (default 1.0; it returns 429 if hit fast)
 
 Run:
   python app/context/SCRUBBER.py --all                 # all GLIDs in data/testset/glids.csv
@@ -27,6 +29,8 @@ import os
 import re
 import statistics
 import sys
+import threading
+import time
 import urllib.parse
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
@@ -37,6 +41,7 @@ from extraction_map import DATA_POINTS, ENDPOINTS  # noqa: E402
 from http_util import call  # noqa: E402
 
 csv.field_size_limit(10**9)
+COMPANY_LOCK = threading.Lock()
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "data"))
 TESTSET = os.path.join(ROOT, "testset")
 CACHE = os.path.join(ROOT, "api_cache")
@@ -49,7 +54,7 @@ LABELS = {
     "A07": "Gender / salutation", "B01": "City, district, state", "B02": "Pincode, locality, lat/long",
     "B03": "Languages spoken on real calls", "B04": "Seller's script / Hinglish mix on VANI calls", "B05": "Preferred language id",
     "C01": "Business type", "C02": "Annual turnover", "C03": "Nature of business", "C04": "Business vintage",
-    "C05": "Customer type / plan / paid", "C06": "Listing status, KYC flags", "C07": "Employees, year established", "C08": "Business profile content (about us, infrastructure, quality, awards …)",
+    "C05": "Customer type / plan / paid", "C06": "Listing status, KYC flags", "C07": "Employees, year established", "C08": "Business profile content (about us, infrastructure, quality, awards …)", "C09": "Company page on IndiaMART (showroom: facts, products, ratings)",
     "D01": "Top categories", "D02": "Number of categories", "D03": "Categories by rank, negative, D-rank",
     "D04": "Product count and recent changes", "D05": "Product list", "D06": "Catalogue quality and gaps",
     "D07": "Active / approved / deactivated products", "E01": "Enquiries received", "E02": "Latest enquiries",
@@ -163,6 +168,49 @@ def fetch(glid, refresh=False):
     out = {}
     for name, (url, body) in api_endpoints().items():
         path = os.path.join(CACHE, name, f"{glid}.json")
+        if name == "company_detail":  # company-API method: resolve alias from GLID, then the home page (empty glusrid + alias)
+            if not refresh and os.path.exists(path):
+                with open(path, encoding="utf-8") as f:
+                    out[name] = json.load(f)
+                continue
+            if not tok:
+                out[name] = {"_error": "VANI_USERS_TOKEN not set"}
+                continue
+            base = os.environ.get("VANI_COMPANY_BASE", "http://34.93.21.191").rstrip("/")
+            qt = urllib.parse.quote(tok, safe="")
+
+            def curl(g, alias, link, label):
+                u = (f"{base}/wservce/company/detail/glusrid/{g}/alias/{alias}/cat_link/{link}/token/{qt}"
+                     f"/req_server/home_server/modid/tdw/")
+                for attempt in range(5):  # the company service rate-limits (HTTP 429): back off and retry
+                    with COMPANY_LOCK:
+                        time.sleep(float(os.environ.get("VANI_COMPANY_SLEEP", "1.0")))  # polite gap: the service rate-limits (429)
+                        code, obj = call(f"company_{glid}_{label}", u, timeout=25, quiet=True)
+                    if code != 429:
+                        break
+                    time.sleep(2 ** attempt)
+                return code, obj
+
+            c1, resolved = curl(glid, "", "index.html", "resolve")
+            ud = (resolved or {}).get("URL_DETAIL") if isinstance(resolved, dict) else None
+            alias = ""
+            for k in ("URL", "FREESHOWROOM_ALIAS"):
+                alias = alias or str((ud or {}).get(k) or "").strip().strip("/")
+            home, c2 = None, None
+            if alias:
+                c2, home = curl("", alias, "index.html", "home")
+            rec = {"_endpoint": base + "/wservce/company/detail", "_http": c2 or c1,
+                   "_fetched_at": datetime.now().isoformat(timespec="seconds"),
+                   "data": {"alias": alias, "url_detail": ud, "home": home}}
+            if (c2 or c1) == 200:  # never cache a failure (429 / timeout): keep any earlier good record
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                with open(path, "w", encoding="utf-8") as f:
+                    json.dump(rec, f, ensure_ascii=False)
+            elif os.path.exists(path):
+                with open(path, encoding="utf-8") as f:
+                    rec = json.load(f)
+            out[name] = rec
+            continue
         if name == "users_profile":  # company-API method: path-segment GET, one call per profile section type
             if not refresh and os.path.exists(path):
                 with open(path, encoding="utf-8") as f:
@@ -448,6 +496,40 @@ def build_points(glid, files, api, meta, now):
                           "approval_status": x.get("GLUSR_PROFILE_APPROVAL_STATUS")} for x in d if isinstance(x, dict)]
     put("C08", secs or None, "users_profile (Awards, Custom_Profile, ExtProfile 1/2, Infrastructure, Jobs, Media, News, Quality, "
                              "Testimonial); only sellers who wrote these sections have data")
+
+    # C09 company showroom page (company/detail home, company-API path-segment method)
+    cd_rec = ((api.get("company_detail") or {}).get("data")) or {}
+    home = cd_rec.get("home") if isinstance(cd_rec, dict) else None
+    hd = (home or {}).get("DATA") if isinstance(home, dict) else None
+    c09 = None
+    if isinstance(hd, dict):
+        cdl = hd.get("COMPANYDETAIL") or {}
+
+        def strip_html(t):
+            return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", t or "")).strip()
+        facts = []
+        for fs_ in hd.get("FACTSHEET") or []:
+            if str(fs_.get("TITLE", "")).lower().startswith("gst"):
+                continue  # GSTIN etc.: not used
+            for x in fs_.get("DATA") or []:
+                if isinstance(x, dict) and str(x.get("DATA") or "").strip() and not ID_VALUE.search(str(x.get("DATA"))):
+                    facts.append(f"{x.get('TITLE')}: {x.get('DATA')}")
+        prods = [{"name": p_.get("ITEM_NAME"), "price": p_.get("PC_ITEM_PRICE_F") or p_.get("PC_ITEM_FOB_PRICE_FORMATTED"),
+                  "description": strip_html(p_.get("ITEM_SDESC"))[:220]} for p_ in (hd.get("PRDSERV") or [])[:8]
+                 if isinstance(p_, dict)]
+        cats = [{"category": n_.get("CAT_NAME"), "products": n_.get("CAT_PRD_COUNT")} for n_ in (hd.get("PRDNAV") or [])[:8]
+                if isinstance(n_, dict)]
+        rt = hd.get("SUPPLIER_RATING") or {}
+        c09 = {"showroom": pick(cd_rec.get("url_detail") or {}, ["URL", "FREE_SHOWROOM_URL", "PAID_SHOWROOM_URL", "FCP_FLAG",
+                                                                 "GLUSR_USR_LISTING_STATUS"]),
+               "company": pick(cdl, ["DIR_SEARCH_COMPANY", "BIZ", "CATNAME", "CATPRODSERV", "YOE", "NUMBEROFEMP_VAL", "LEGALSTATUS",
+                                     "MARKET", "DIR_SEARCH_CITY", "DIR_SEARCH_STATE", "DIR_SEARCH_CONTACTPERSON",
+                                     "DIR_SEARCH_DESIGNATION", "GST_VERIFIED_FLAG", "TS", "PNS_RATIO", "CUSTWT"]),
+               "description": cdl.get("METADESCRIPTION"), "headline": strip_html(hd.get("HOMETOPTEXT"))[:300] or None,
+               "facts": facts or None, "product_count": hd.get("PRD_COUNT"), "products": prods or None, "categories": cats or None,
+               "preferred_countries": hd.get("PREF_COUNTRIES") or None, "top_export_countries": hd.get("TOP_EXPORT_COUNTRIES") or None,
+               "rating": pick(rt, ["OVERALL_RATING", "TOTAL_RATINGS_COUNT"])}
+    put("C09", c09, "company/detail home page (alias resolved from GLID); free text the seller published")
 
     # D categories and products
     put("D01", {"top": pick(sf, ["top_category_1", "top_category_2", "top_category_3", "top_parent_category", "top_category_group"]),

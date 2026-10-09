@@ -82,9 +82,9 @@ ENDPOINTS = {
                                  "Custom_Profile", "News", "Jobs", "Media"]}, "WORKS",
                       "seller-written profile sections (title, description, dates); company-API path-segment GET (pattern from "
                       "consumer_maxi_hero.go); sparse: about 3 of 12 test sellers have any", "free text (PII)"),
-    "company_detail": ("company_api_base (host not known) /wservce/company/detail/glusrid/{g}/alias/{alias}/cat_link/{link}/token/{token}/req_server/home_server/modid/tdw/",
-                       {}, "BLOCKED", "company page content (home, about-us); the base URL is a config value we do not have; "
-                       "not resolvable on users / seller / indiamart hosts", "free text"),
+    "company_detail": ("http://34.93.21.191/wservce/company/detail/glusrid/{g}/alias/{alias}/cat_link/index.html/token/{token}/req_server/home_server/modid/tdw/",
+                       {}, "WORKS", "company showroom page: resolve alias with glusrid + empty alias, then home with empty glusrid + alias "
+                       "(pattern from consumer_maxi_hero.go); base URL via VANI_COMPANY_BASE, token = users token", "free text, contact person, address"),
     "users_minidetail": ("http://users.imutils.com/wservce/users/minidetail/", {}, "BLOCKED",
                          "'Authentication Failed - This AK is not allowed' (users_detail covers it)", "yes"),
     "users_accountmanager": ("http://users.imutils.com/wservce/users/AccountManager/", {}, "BROKEN",
@@ -131,6 +131,8 @@ DATA_POINTS = {
     "C07": ("BOTH", "so_sellers (151)", [("users_detail", "glusr_noof_emp_val, glusr_usr_year_of_estb")], "WORKS", "often empty"),
     "C08": ("API", "-", [("users_profile", "Response.Data[]: GLUSR_PROFILE_TITLE, GLUSR_PROFILE_DESCRIPTION, dates, approval status, per section type")],
             "WORKS", "sparse; free text the seller wrote"),
+    "C09": ("API", "-", [("company_detail", "DATA.COMPANYDETAIL, HOMETOPTEXT, FACTSHEET (Basic), PRDSERV, PRDNAV, SUPPLIER_RATING, URL_DETAIL")],
+            "WORKS", "what the seller published on their IndiaMART page"),
     "D01": ("BOTH", "top_category_1/2/3, group", [("mcat_names", "mname, mid, sbl")], "WORKS", ""),
     "D02": ("BOTH", "num_categories", [("mcat_rank", "cnt_mcatid by rank")], "WORKS", ""),
     "D03": ("API", "so_seller_categories (151)", [("category_dtls", "A/B/C/D rank, negative MCATs, negative districts"),
