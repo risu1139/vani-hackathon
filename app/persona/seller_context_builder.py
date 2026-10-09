@@ -332,6 +332,108 @@ def render_aov(seller, mcats, cat_rows):
     return "\n".join(lines + [""])
 
 
+# ---------------------------------------------------------------- old VANI call history (G)
+RECENT_DAYS, MAX_DAYS = 30, 90
+SIG = {
+    "rushed": re.compile(r"busy|call (me )?later|callback|call back|in a meeting|driving|baad me|abhi nahi|बिज़ी|बिजी|बाद में", re.I),
+    "frustrated": re.compile(r"irritat|annoy|angry|frustrat|harass|rude|don.?t call|stop call|kitni baar|परेशान|बार बार", re.I),
+    "confused": re.compile(r"confus|did not understand|didn.?t understand|samajh nahi|समझ नहीं", re.I),
+    "asked_if_bot": re.compile(r"\bbot\b|robot|recorded|\bAI\b|machine|insaan|इंसान|रोबोट", re.I),
+    "grievance": re.compile(r"complain|grievance|no (response|enquir|inquir|lead)|not getting|fraud|cheat|refund|bad experience|"
+                            r"poor quality|irrelevant|wasted|already paid|शिकायत", re.I),
+}
+
+
+def _j(s):
+    try:
+        return json.loads(s) if isinstance(s, str) else (s or {})
+    except Exception:
+        return {}
+
+
+def call_history(files, now):
+    """Old VANI bot calls, ALL of them, newest first (user, 2026-10-10: give the agent the full information).
+    Per call: full summary, every evaluator agent's output, and the turn-by-turn transcript when one exists.
+    `relevance` (recent <=30 d, older <=90 d, old) is a label for the agent to weigh, not a filter.
+    Signals are counts of text matches per call, dated so B2 can decay them."""
+    calls = files.get("ps07_bot_calls", [])
+    ev = {}
+    for r in files.get("ps07_evaluator", []):
+        ev.setdefault(r.get("attempt_id"), {})[r.get("eval_agent")] = _j(r.get("agent_output"))
+    turns = {}
+    for t in files.get("ps07_call_turns", []):
+        turns.setdefault(t.get("attempt_id"), []).append(t)
+    out = {"n_calls_all_history": len(calls), "outcome_counts_all_history": {}, "objection_categories_all_history": {},
+           "meetings_fixed_all_history": 0, "calls": [], "older_calls_ignored": 0}
+    for c in calls:
+        o = c.get("disposition_label") or "unknown"
+        out["outcome_counts_all_history"][o] = out["outcome_counts_all_history"].get(o, 0) + 1
+        out["meetings_fixed_all_history"] += str(c.get("meeting_fixed")) == "1"
+        for ob in (ev.get(c.get("attempt_id"), {}).get("objections", {}) or {}).get("objection_analysis", []) or []:
+            k = ob.get("category") or "?"
+            out["objection_categories_all_history"][k] = out["objection_categories_all_history"].get(k, 0) + 1
+    for c in sorted(calls, key=lambda c: c.get("call_start_time") or "", reverse=True):
+        d = S.dt(c.get("call_start_time"))
+        days = (now - d).days if d else None
+        e = ev.get(c.get("attempt_id"), {})
+        objs = [{"category": ob.get("category"), "reason": "; ".join(ob.get("reasons") or [])[:200],
+                 "quote": scrub_text("; ".join(ob.get("evidence_quotes") or [])[:200])}
+                for ob in (e.get("objections") or {}).get("objection_analysis", []) or []]
+        disp = e.get("disposition") or {}
+        se = e.get("se_contact") or {}
+        summary = scrub_text(c.get("lead_call_summary") or "")
+        text = " ".join([summary] + [o["reason"] + " " + o["quote"] for o in objs] + [str(se.get("seller_exact_quote") or "")])
+        tr = sorted(turns.get(c.get("attempt_id"), []), key=lambda t: int(S.num(t.get("turn_no"), 0) or 0))
+        out["calls"].append({
+            "date": (c.get("call_start_time") or "")[:16], "days_ago": days,
+            "relevance": "unknown" if days is None else "recent" if days <= RECENT_DAYS else "older" if days <= MAX_DAYS else "old",
+            "outcome": c.get("disposition_label"), "sub_disposition": disp.get("sub_disposition"),
+            "disposition_reason": scrub_text(str(disp.get("reason") or "")) or None, "followup_when": disp.get("followup_when"),
+            "duration_sec": S.num(c.get("lead_call_duration")), "bot_version": c.get("lead_bot_version"),
+            "trigger_bucket": c.get("redis_bucket"), "attempt_count": c.get("call_attempt_count"),
+            "summary": summary,
+            "objections": objs, "exec_contact": se.get("category"),
+            "exec_contact_quote": scrub_text(str(se.get("seller_exact_quote") or "")) or None,
+            "who_ended": (e.get("execdrop") or {}).get("who_ended_call"),
+            "evaluators": {k: scrub(v) for k, v in e.items()},
+            "transcript": [{"speaker": t.get("speaker"), "t": S.num(t.get("start_sec")), "text": scrub_text(t.get("text") or "")} for t in tr],
+            "signals": {k: len(p.findall(text + " " + " ".join(t.get("text") or "" for t in tr if t.get("speaker") != "bot")))
+                        for k, p in SIG.items()},
+        })
+    return out
+
+
+def render_history(h):
+    lines = ["## G. Past VANI calls (built by us from PS07 bot calls + evaluator)", "",
+             f"*All history:* {h['n_calls_all_history']} calls; outcomes {h['outcome_counts_all_history']}; "
+             f"meetings fixed {h['meetings_fixed_all_history']}; objection categories {h['objection_categories_all_history']}. "
+             f"Every call is listed, newest first; weigh recent ones more.", ""]
+    if not h["calls"]:
+        return "\n".join(lines + ["_no past VANI calls (cold seller)_", ""])
+    for c in h["calls"]:
+        sig = ", ".join(f"{k} {v}" for k, v in c["signals"].items() if v) or "none"
+        lines.append(f"### {c['date']} ({c['days_ago']} days ago, {c['relevance']}): {c['outcome']}"
+                     + (f" / {c['sub_disposition']}" if c.get("sub_disposition") else "")
+                     + f" · {c.get('duration_sec')} s · bot {c.get('bot_version')} · trigger {c.get('trigger_bucket')}")
+        lines.append(f"- Summary: {c['summary']}")
+        if c.get("disposition_reason"):
+            lines.append(f"- Outcome reason: {c['disposition_reason']}" + (f" (follow-up: {c['followup_when']})" if c.get("followup_when") else ""))
+        for o in c["objections"]:
+            lines.append(f"- Objection: **{o['category']}**: {o['reason']}" + (f" (\"{o['quote']}\")" if o["quote"] else ""))
+        if c.get("exec_contact"):
+            lines.append(f"- Executive contact: {c['exec_contact']}" + (f" (\"{c['exec_contact_quote']}\")" if c.get("exec_contact_quote") else ""))
+        lines.append(f"- Ended by: {c.get('who_ended') or '?'}; signals: {sig}")
+        for k, v in (c.get("evaluators") or {}).items():
+            if k in ("objections", "se_contact", "disposition"):
+                continue
+            lines.append(f"- Evaluator `{k}`: {json.dumps(v, ensure_ascii=False)[:600]}")
+        if c.get("transcript"):
+            lines.append("- Transcript:")
+            lines += [f"  - {t['speaker']}: {t['text']}" for t in c["transcript"]]
+        lines.append("")
+    return "\n".join(lines)
+
+
 def render_category(rows):
     lines = ["## E09. Category value (unit price spread, bulk share)", "",
              "*Source:* imdwh mcatpriceapi + mcatetoretail, per top MCAT. Unit prices of listed products (not order value); "
@@ -369,6 +471,9 @@ def build(glid, use_api=True, refresh=False):
     os.makedirs(OUT, exist_ok=True)
     text = S.render(glid, meta, P, files, api)
     text = text.replace("\n## F. ", "\n" + render_category(cat) + "\n" + render_aov(s_aov, m_aov, cat) + "\n## F. ", 1)
+    hist = call_history(files, datetime.now())
+    P["G00"] = (hist, "ps07_bot_calls + ps07_evaluator (rebuilt by the persona builder)")
+    text = text.replace("\n## H. ", "\n" + render_history(hist) + "\n## H. ", 1) if "\n## H. " in text else text + "\n" + render_history(hist)
     text = text.replace("Unmasked (PII handling: legal team).",
                         "PII removed for persona use: phones, emails, pincode, lat/long, street address, ID numbers.")
     with open(md, "w", encoding="utf-8") as f:
