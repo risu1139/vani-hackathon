@@ -142,6 +142,213 @@ def scrub_points(P):
     return clean
 
 
+# ---------------------------------------------------------------- category value (E09)
+DWH = "https://imdwh.intermesh.net/api/go/"
+CAT_CACHE = os.path.join(DATA, "api_cache", "category")
+
+
+def _cat_api(name, body, mcat, refresh):
+    """One imdwh category API, cached per MCAT (shared by all sellers in that category). Failures are not cached."""
+    path = os.path.join(CAT_CACHE, name, f"{mcat}.json")
+    if not refresh and os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    code, obj = S.call(f"{name}_{mcat}", DWH + name, body, timeout=25, quiet=True)
+    try:
+        inner = json.loads(obj["response"]) if isinstance(obj, dict) and isinstance(obj.get("response"), str) else None
+    except Exception:
+        inner = None
+    if code != 200 or inner is None:
+        return None
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(inner, f, ensure_ascii=False)
+    return inner
+
+
+def category_value(P, refresh=False, top_n=3):
+    """Price spread, bulk/retail cut-off and bulk share for the seller's top MCATs.
+    Unit prices of listed products, not order values. The boundary value is derived (cut-off x median)."""
+    d01 = (P.get("D01") or (None, ""))[0] or {}
+    mcats = [m for m in (d01.get("mcats_api") or []) if isinstance(m, dict) and m.get("mid")][:top_n]
+    out = []
+    for m in mcats:
+        mid = str(m["mid"])
+        price = _cat_api("mcatpriceapi", {"inmcatid": mid}, mid, refresh) or {}
+        retail = _cat_api("mcatetoretail", {"mcat_id": mid}, mid, refresh) or {}
+        units = price.get("UNIT_STR") or []
+        unit = next((u for u in units if str(u.get("is_recommended")) == "1"), units[0] if units else {})
+        rt = next((r for r in retail.get("tov_str") or [] if str(r.get("unit_id")) == str(unit.get("unit_id"))),
+                  (retail.get("tov_str") or [{}])[0])
+        lt, ge = rt.get("bl_less_than_rt"), rt.get("bl_greater_or_equals_to_rt")
+        med, thr = S.num(unit.get("median")), S.num(rt.get("retail_threshold"))
+        prd = (price.get("PRD_STR") or [{}])[0]
+        out.append({
+            "mcat_id": mid, "mcat_name": m.get("mname") or rt.get("mcat_name"), "unit": unit.get("unit_display_name"),
+            "listed_products": unit.get("prd_cnt"), "products_all_time": prd.get("prd_all"), "products_last_1y": prd.get("prd_1y"),
+            "price_median": med, "price_q1": unit.get("q1"), "price_q3": unit.get("q3"),
+            "price_p05": unit.get("percentile_05"), "price_p95": unit.get("percentile_95"),
+            "retail_threshold_qty": thr,
+            "bl_with_qty_1y": rt.get("bl_count_with_qty"), "bl_bulk_1y": ge, "bl_retail_1y": lt,
+            "bulk_share": round(ge / (ge + lt), 3) if isinstance(ge, (int, float)) and isinstance(lt, (int, float)) and ge + lt else None,
+            "sellers_buying_bulk_1y": rt.get("unique_sold_greater_or_equals_to_rt"),
+            "sellers_buying_retail_1y": rt.get("unique_sold_less_than_rt"),
+            "derived_bulk_boundary_value_rs": round(thr * med) if thr and med else None,
+            "cities": [c.get("district_name") for c in price.get("CITY_STR") or []][:5],
+        })
+    return out
+
+
+# ---------------------------------------------------------------- AOV (E10) via Redash
+AOV_CACHE = os.path.join(DATA, "api_cache", "aov")
+REDASH_BL_DS = 16       # pg-imblr-prod-live: buy-lead report DB (eto_attribute = last ~3 months)
+REDASH_DWH_DS = 8       # im_dwh_rpt (Redshift): dim_glcat_mcat.aov_bucket
+NUM_UNIT = re.compile(r"(\d+(?:\.\d+)?)\s*(crore|cr|lakh|lac|thousand|k)?", re.I)
+SCALE = {"crore": 1e7, "cr": 1e7, "lakh": 1e5, "lac": 1e5, "thousand": 1e3, "k": 1e3}
+
+
+def redash(sql, ds, timeout=120):
+    """Run one ad-hoc query through Redash (key from ~/.redash_env). Returns rows, or None on failure."""
+    import urllib.request
+    env = {}
+    path = os.path.join(os.path.expanduser("~"), ".redash_env")
+    if not os.path.exists(path):
+        return None
+    for line in open(path, encoding="utf-8"):
+        if "=" in line:
+            k, v = line.strip().split("=", 1)
+            env[k] = v.strip().strip('"\'')
+    base, hdr = env["REDASH_URL"].rstrip("/"), {"Authorization": f"Key {env['REDASH_API_KEY']}", "Content-Type": "application/json"}
+
+    def req(url, body=None):
+        r = urllib.request.Request(url, data=json.dumps(body).encode() if body else None, headers=hdr,
+                                   method="POST" if body else "GET")
+        return json.loads(urllib.request.urlopen(r, timeout=60).read().decode())
+    try:
+        job = req(f"{base}/api/query_results", {"data_source_id": ds, "max_age": 0, "query": sql}).get("job", {})
+        t0 = time.time()
+        while time.time() - t0 < timeout:
+            time.sleep(2)
+            j = req(f"{base}/api/jobs/{job['id']}")["job"]
+            if j["status"] == 3:
+                return req(f"{base}/api/query_results/{j['query_result_id']}")["query_result"]["data"]["rows"]
+            if j["status"] == 4:
+                print(f"redash ds{ds} failed: {str(j.get('error'))[:120]}", file=sys.stderr)
+                return None
+    except Exception as e:
+        print(f"redash ds{ds} error: {str(e)[:120]}", file=sys.stderr)
+    return None
+
+
+def pov_value(text):
+    """'Rs. 14,000 - 16,000' -> 15000; 'Rs. Upto 1,000' -> 500; 'Rs. 5 Lakh - 10 Lakh' -> 750000; 'Rs. 200' -> 200."""
+    t = (text or "").lower().replace(",", "")
+    nums = [(float(n), (u or "").lower()) for n, u in NUM_UNIT.findall(t)]
+    if not nums:
+        return None
+    units = [u for _, u in nums if u]
+    vals = [n * SCALE.get(u or (units[-1] if units and n < 1000 else ""), 1) for n, u in nums[:2]]
+    if "upto" in t or "up to" in t or "below" in t or "less than" in t:
+        return vals[0] / 2
+    return sum(vals) / len(vals)
+
+
+def value_stats(rows):
+    """rows of {value_text, n} -> median / p75 / max of the numeric midpoints, plus the commonest ranges."""
+    vals = []
+    for r in rows:
+        v = pov_value(r.get("v"))
+        if v is not None:
+            vals += [v] * int(r.get("n") or 1)
+    if not vals:
+        return None
+    vals.sort()
+    q = lambda p: vals[min(len(vals) - 1, int(p * len(vals)))]
+    top = sorted(rows, key=lambda r: -int(r.get("n") or 0))[:3]
+    return {"n_valued": len(vals), "median_rs": round(q(0.5)), "p75_rs": round(q(0.75)), "max_rs": round(vals[-1]),
+            "mean_rs": round(sum(vals) / len(vals)), "common_ranges": [r.get("v") for r in top]}
+
+
+def _cached(path, fn, refresh):
+    if not refresh and os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    out = fn()
+    if out is not None:  # never cache a failure
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(out, f, ensure_ascii=False)
+    return out
+
+
+def seller_aov(glid, files, refresh=False):
+    """AOV of the buy leads this seller bought: 'Probable Order Value' attribute per lead (buy-lead report DB)."""
+    ids = sorted({str(r.get("buylead_id") or "").split(".")[0] for r in files.get("gc_buyleads_bought", [])} - {""})
+    if not ids:
+        return {"n_bought": 0, "note": "no bought-lead ids in our files (only Global Context sellers have them)"}
+
+    def q():
+        rows = redash("select fk_im_spec_options_desc v, count(*) n from eto_attribute where fk_im_spec_master_desc="
+                      f"'Probable Order Value' and fk_eto_ofr_display_id in ({','.join(i for i in ids if i.isdigit())}) group by 1",
+                      REDASH_BL_DS)
+        return None if rows is None else {"n_bought": len(ids), "stats": value_stats(rows)}
+    return _cached(os.path.join(AOV_CACHE, "seller", f"{glid}.json"), q, refresh)
+
+
+def mcat_aov(mcat_ids, refresh=False, days=30):
+    """Category AOV per MCAT: buy-lead 'Probable Order Value' over the last `days` days, plus the DWH aov_bucket if reachable."""
+    out = {}
+    for mid in [m for m in mcat_ids if str(m).isdigit()]:
+        def q(mid=mid):
+            rows = redash("select fk_im_spec_options_desc v, count(*) n from eto_attribute where date(eto_attribute_mod_date) >= "
+                          f"current_date - {days} and eto_attribute_mcat_id={mid} and fk_im_spec_master_desc='Probable Order Value' "
+                          "group by 1", REDASH_BL_DS, timeout=150)
+            if rows is None:
+                return None
+            b = redash(f"select aov_bucket, aov_bucket_start, aov_bucket_end from im_dwh_rpt.dim_glcat_mcat where glcat_mcat_id={mid}",
+                       REDASH_DWH_DS, timeout=40)
+            return {"window_days": days, "stats": value_stats(rows), "dwh_aov_bucket": (b or [None])[0]}
+        out[str(mid)] = _cached(os.path.join(AOV_CACHE, "mcat", f"{mid}.json"), q, refresh)
+    return out
+
+
+def render_aov(seller, mcats, cat_rows):
+    names = {r["mcat_id"]: r["mcat_name"] for r in cat_rows}
+    rs = lambda s: (f"median Rs {s['median_rs']:,}, top quarter from Rs {s['p75_rs']:,}, highest Rs {s['max_rs']:,} "
+                    f"({s['n_valued']} leads with a value; common: {', '.join(s['common_ranges'])})") if s else "_no values_"
+    lines = ["## E10. Average order value (seller and category)", "",
+             "*Source:* buy-lead 'Probable Order Value' (pg-imblr eto_attribute, via Redash). Each range is turned into its "
+             "midpoint. Seller = leads this seller bought; category = all buy leads in that MCAT in the window.", ""]
+    s = seller or {}
+    lines.append(f"- **Seller AOV** ({s.get('n_bought', 0)} leads bought): "
+                 + (rs(s.get("stats")) if s.get("n_bought") else s.get("note", "_no data_")))
+    for mid, m in (mcats or {}).items():
+        if not m:
+            lines.append(f"- **{names.get(mid, mid)}** (MCAT {mid}): _query failed_")
+            continue
+        b = m.get("dwh_aov_bucket")
+        lines.append(f"- **Category AOV, {names.get(mid, mid)}** (MCAT {mid}, last {m['window_days']} days): {rs(m.get('stats'))}"
+                     + (f"; DWH bucket {b.get('aov_bucket')} (Rs {b.get('aov_bucket_start')}–{b.get('aov_bucket_end')})" if b else ""))
+    return "\n".join(lines + [""])
+
+
+def render_category(rows):
+    lines = ["## E09. Category value (unit price spread, bulk share)", "",
+             "*Source:* imdwh mcatpriceapi + mcatetoretail, per top MCAT. Unit prices of listed products (not order value); "
+             "bulk = buy leads at or above the retail quantity cut-off; boundary value = cut-off x median (derived).", ""]
+    if not rows:
+        return "\n".join(lines + ["_no data_", ""])
+    for r in rows:
+        lines += [f"### {r['mcat_name']} (MCAT {r['mcat_id']}, per {r['unit']})",
+                  f"- Listed price: median Rs {r['price_median']}, middle half Rs {r['price_q1']}–{r['price_q3']}, "
+                  f"5th–95th percentile Rs {r['price_p05']}–{r['price_p95']} ({r['listed_products']} products)",
+                  f"- Bulk cut-off: {r['retail_threshold_qty']} {r['unit']}; last year {r['bl_bulk_1y']} of "
+                  f"{(r['bl_bulk_1y'] or 0) + (r['bl_retail_1y'] or 0)} buy leads were bulk ({r['bulk_share']}); "
+                  f"{r['sellers_buying_bulk_1y']} sellers bought bulk leads, {r['sellers_buying_retail_1y']} bought retail",
+                  f"- Derived bulk boundary value: about Rs {r['derived_bulk_boundary_value_rs']}", ""]
+    return "\n".join(lines)
+
+
 # ---------------------------------------------------------------- build
 def build(glid, use_api=True, refresh=False):
     glid = glid.strip()
@@ -154,8 +361,14 @@ def build(glid, use_api=True, refresh=False):
     meta = {"glid": glid, "stratum": "on-demand", "rich_sources_of_8": "-"}
     api = S.fetch(glid, refresh) if use_api else {}
     P = scrub_points(S.build_points(glid, files, api, meta, datetime.now()))
+    cat = category_value(P, refresh) if use_api else []
+    P["E09"] = (cat, "imdwh mcatpriceapi + mcatetoretail (top MCATs)")
+    s_aov = seller_aov(glid, files, refresh) if use_api else None
+    m_aov = mcat_aov([r["mcat_id"] for r in cat], refresh) if use_api else {}
+    P["E10"] = ({"seller": s_aov, "mcats": m_aov}, "buy-lead Probable Order Value via Redash (pg-imblr), DWH aov_bucket")
     os.makedirs(OUT, exist_ok=True)
     text = S.render(glid, meta, P, files, api)
+    text = text.replace("\n## F. ", "\n" + render_category(cat) + "\n" + render_aov(s_aov, m_aov, cat) + "\n## F. ", 1)
     text = text.replace("Unmasked (PII handling: legal team).",
                         "PII removed for persona use: phones, emails, pincode, lat/long, street address, ID numbers.")
     with open(md, "w", encoding="utf-8") as f:
