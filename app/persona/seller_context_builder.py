@@ -17,29 +17,36 @@ Output stays in git-ignored data/.
 
 Run (from the repo root; tokens VANI_AK / VANI_USERS_TOKEN are read from .env):
   python app/persona/seller_context_builder.py index
-  python app/persona/seller_context_builder.py build --glid 12345678 [--no-api] [--refresh | --rebuild]
+  python app/persona/seller_context_builder.py build --glid 12345678 [--no-api] [--refresh | --rebuild] [--as-of YYYY-MM-DD]
 Output: data/contexts/<glid>/ (INDEX.md, core.md, topic files, calls/, context.json, all.md).
+With --as-of: data/contexts_asof/<date>/<glid>/. Every dated file row after that date is dropped (calls, their turns and
+evaluator rows, enquiries, WhatsApp, exec calls, BTC attempts, purchases, ...). API / Redash values cannot be dated, so
+their points carry `as_of_unsafe: true` in context.json (undated snapshot files carry `as_of_snapshot: true`).
+context.json also carries `cache_hash`: sha256 over the seller's index rows and every cache file the build used.
 """
 import argparse
 import glob
+import hashlib
 import json
 import os
 import re
 import sqlite3
 import sys
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", ".."))
 sys.path.insert(0, os.path.join(REPO, "app", "context"))
 import SCRUBBER as S  # noqa: E402  (peer's builder; reused, not edited)
 from make_testset import FILES, KEYS  # noqa: E402
-from seller_inventory import glid_of, rows  # noqa: E402
+from seller_inventory import SOURCES, glid_of, rows  # noqa: E402
 
 DATA = os.path.join(REPO, "data")
 DB = os.path.join(DATA, "index", "sellers.sqlite")
 OUT = os.path.join(DATA, "contexts")
+OUT_ASOF = os.path.join(DATA, "contexts_asof")
+USED_CACHE = set()  # cache files read or written during the current build (m7 cache_hash)
 
 KEYMAP = {name: "fk_glusr_usr_id" for name in FILES}
 KEYMAP.update({k: v for k, v in KEYS.items() if k.startswith(("gc_", "so_"))})
@@ -152,6 +159,7 @@ CAT_CACHE = os.path.join(DATA, "api_cache", "category")
 def _cat_api(name, body, mcat, refresh):
     """One imdwh category API, cached per MCAT (shared by all sellers in that category). Failures are not cached."""
     path = os.path.join(CAT_CACHE, name, f"{mcat}.json")
+    USED_CACHE.add(path)
     if not refresh and os.path.exists(path):
         with open(path, encoding="utf-8") as f:
             return json.load(f)
@@ -272,6 +280,7 @@ def value_stats(rows):
 
 
 def _cached(path, fn, refresh):
+    USED_CACHE.add(path)
     if not refresh and os.path.exists(path):
         with open(path, encoding="utf-8") as f:
             return json.load(f)
@@ -283,9 +292,10 @@ def _cached(path, fn, refresh):
     return out
 
 
-def seller_aov(glid, files, refresh=False):
-    """AOV of the buy leads this seller bought: 'Probable Order Value' attribute per lead (buy-lead report DB)."""
-    ids = sorted({str(r.get("buylead_id") or "").split(".")[0] for r in files.get("gc_buyleads_bought", [])} - {""})
+def seller_aov(glid, files, refresh=False, tag=""):
+    """AOV of the buy leads this seller bought: 'Probable Order Value' attribute per lead (buy-lead report DB).
+    `tag` separates the cache of an --as-of build (fewer bought leads) from the full one."""
+    ids = sorted(i for i in {str(r.get("buylead_id") or "").split(".")[0] for r in files.get("gc_buyleads_bought", [])} if i.isdigit())
     if not ids:
         return {"n_bought": 0, "note": "no bought-lead ids in our files (only Global Context sellers have them)"}
 
@@ -294,7 +304,7 @@ def seller_aov(glid, files, refresh=False):
                       f"'Probable Order Value' and fk_eto_ofr_display_id in ({','.join(i for i in ids if i.isdigit())}) group by 1",
                       REDASH_BL_DS)
         return None if rows is None else {"n_bought": len(ids), "stats": value_stats(rows)}
-    return _cached(os.path.join(AOV_CACHE, "seller", f"{glid}.json"), q, refresh)
+    return _cached(os.path.join(AOV_CACHE, "seller", f"{glid}{tag}.json"), q, refresh)
 
 
 def mcat_aov(mcat_ids, refresh=False, days=30):
@@ -337,6 +347,8 @@ def render_aov(seller, mcats, cat_rows):
 # ---------------------------------------------------------------- peer statistic (E11), all ladder rungs
 BANDS = ["0 - 40 L", "40 L - 1.5 Cr", "1.5 - 5 Cr", "5 - 25 Cr", "25 - 100 Cr", "100 - 500 Cr", "> 500 Cr"]
 MIN_PEERS = 5
+MIN_AOV_N = 10          # the seller needs at least this many valued leads before the AOV filter is applied
+AOV_RANGE = (0.5, 2.0)  # peers whose own AOV is 0.5-2x the seller's AOV
 
 
 def _median(xs):
@@ -344,19 +356,18 @@ def _median(xs):
     return None if not xs else xs[len(xs) // 2]
 
 
-def peer_stat(glid, cat_rows, refresh=False, days=30):
-    """Same-category, same-size peers at every rung of the fallback ladder, precomputed so the agent can pick offline.
-    Peers = sellers mapped to the seller's main MCAT (pg-imblr glusr_usr_mcat_prd_count) with a GST turnover band.
-    Outcome = buy leads bought in the last `days` days (weberp.eto_lead_pur_hist). Peer AOV = 'Probable Order Value'
-    of the leads they bought in this MCAT. The GST number column is never selected."""
+def peer_raw(glid, cat_rows, refresh=False, days=30):
+    """Raw Redash rows for the peer statistic, cached once per seller, so the ladder rules can change without new queries.
+    Peers = sellers mapped to the seller's main MCAT (pg-imblr glusr_usr_mcat_prd_count) in the seller's band or band ±1.
+    Outcome = buy leads bought in the last `days` days (weberp.eto_lead_pur_hist). The GST number column is never selected."""
     mcats = [r["mcat_id"] for r in cat_rows if str(r.get("mcat_id", "")).isdigit()]
     if not mcats:
         return {"status": "no_mcat"}
 
     def q():
-        mlist = ",".join(mcats)
-        own = redash(f"""select coalesce(eto_ofr_prime_mcat_id, user_matched_mcat_id, search_top_mcat_id) m, count(*) n
-            from weberp.eto_lead_pur_hist where fk_glusr_usr_id={glid} and eto_pur_date >= current_date - 90 group by 1 order by 2 desc""",
+        own = redash(f"""select coalesce(eto_ofr_prime_mcat_id, user_matched_mcat_id, search_top_mcat_id) m,
+            sum(case when eto_pur_date >= current_date - {days} then 1 else 0 end) n_win, count(*) n90
+            from weberp.eto_lead_pur_hist where fk_glusr_usr_id={glid} and eto_pur_date >= current_date - 90 group by 1 order by 3 desc""",
                      REDASH_BL_DS)
         if own is None:
             return None
@@ -367,8 +378,9 @@ def peer_stat(glid, cat_rows, refresh=False, days=30):
                     REDASH_BL_DS) or [{}]
         me = me[0]
         band = me.get("b")
+        base = {"status": "ok", "window_days": days, "main_mcat": main, "band": band, "me": me, "own": own}
         if band not in BANDS:
-            return {"status": "no_band", "main_mcat": main, "band": band}
+            return dict(base, status="no_band")
         bi = BANDS.index(band)
         near = [b for b in BANDS[max(0, bi - 1):bi + 2] if not (bi == 0 and BANDS.index(b) > 1)]
         blist = ",".join(f"'{b}'" for b in near)
@@ -394,45 +406,101 @@ def peer_stat(glid, cat_rows, refresh=False, days=30):
             v = pov_value(r.get("v"))
             if v is not None:
                 pov_by.setdefault(str(r["g"]), []).append(v)
-        own_n = {"any": sum(int(r["n"]) for r in own), "main_mcat": sum(int(r["n"]) for r in own if r.get("m") and str(int(r["m"])) == main)}
-        rungs = []
-        for i, (geo, same_band) in enumerate([("city", True), ("state", True), ("india", True), ("state", False), ("india", False)], 1):
-            sel = [r for r in rows if (r["b"] == band if same_band else True)
-                   and (geo == "india" or (geo == "city" and r["c"] == me.get("c")) or (geo == "state" and r["s"] == me.get("s")))]
-            buyers = [r for r in sel if int(r["n_mcat"]) > 0]
-            aovs = [x for r in buyers for x in pov_by.get(str(r["g"]), [])]
-            rungs.append({
-                "rung": i, "geo": geo, "band_scope": "same band" if same_band else "band ±1 (" + ", ".join(near) + ")",
-                "peers_mapped": len(sel), "peers_bought_in_mcat": len(buyers),
-                "share_bought": round(len(buyers) / len(sel), 3) if sel else None,
-                "leads_bought_total": sum(int(r["n_mcat"]) for r in buyers),
-                "median_leads_per_buyer": _median([int(r["n_mcat"]) for r in buyers]),
-                "peer_aov_median_rs": round(_median(aovs)) if aovs else None, "peer_valued_leads": len(aovs),
-                "allowed": len(buyers) >= MIN_PEERS})
-        first = next((r for r in rungs if r["allowed"]), None)
-        return {"status": "ok", "window_days": days, "main_mcat": main, "band": band, "city_id": me.get("c"), "state_id": me.get("s"),
-                "seller_leads_bought": {"any_mcat": own_n["any"], "main_mcat": own_n["main_mcat"], "window_days": 90},
-                "first_allowed_rung": first["rung"] if first else None, "rungs": rungs,
-                "note": "Peer counts undercount: about 24% of purchases have no MCAT. Never claim what peers earned or closed."}
-    return _cached(os.path.join(AOV_CACHE, "peer", f"{glid}.json"), q, refresh)
+        return dict(base, near=near, rows=rows, pov_by=pov_by)
+    return _cached(os.path.join(AOV_CACHE, "peer_raw", f"{glid}.json"), q, refresh)
+
+
+def seller_aov_ref(raw, glid, seller_aov_stats):
+    """The seller's AOV for the AOV filter: bought-lead AOV (E10) if it has >= MIN_AOV_N valued leads, else the seller's own
+    valued leads in the main MCAT in the peer window. None when neither is big enough."""
+    s = seller_aov_stats or {}
+    if s.get("median_rs") and (s.get("n_valued") or 0) >= MIN_AOV_N:
+        return {"seller_aov_rs": s["median_rs"], "n_valued": s["n_valued"], "source": "E10 seller AOV (bought leads)"}
+    own = (raw.get("pov_by") or {}).get(str(glid)) or []
+    if len(own) >= MIN_AOV_N:
+        return {"seller_aov_rs": round(_median(own)), "n_valued": len(own),
+                "source": f"seller's own valued leads in MCAT {raw.get('main_mcat')}, last {raw.get('window_days')} d"}
+    return None
+
+
+def peer_ladder(raw, glid, seller_aov_stats=None):
+    """Ladder rules (team decision 2026-10-10 peer comparison, review M15):
+    - only SAME-band rungs can be allowed for a claim; band ±1 rungs are shown for context and never allowed;
+    - the seller's own count uses the same window as the peers;
+    - an AOV variant ('1a', '2a', '3a') keeps only peers whose AOV is 0.5-2x the seller's, when the seller has an AOV."""
+    if not raw or raw.get("status") != "ok":
+        return raw if raw is None else {k: v for k, v in raw.items() if k in ("status", "main_mcat", "band")}
+    days, main, band, me, near = raw["window_days"], raw["main_mcat"], raw["band"], raw["me"], raw["near"]
+    rows, pov_by, own = raw["rows"], raw.get("pov_by") or {}, raw.get("own") or []
+    ref = seller_aov_ref(raw, glid, seller_aov_stats)
+    lo, hi = (ref["seller_aov_rs"] * AOV_RANGE[0], ref["seller_aov_rs"] * AOV_RANGE[1]) if ref else (None, None)
+    peer_aov = {g: _median(v) for g, v in pov_by.items()}
+
+    def in_geo(r, geo):
+        return geo == "india" or (geo == "city" and r["c"] == me.get("c")) or (geo == "state" and r["s"] == me.get("s"))
+    plan = []
+    for n, geo in ((1, "city"), (2, "state"), (3, "india")):
+        if ref:
+            plan.append((f"{n}a", geo, True, True))
+        plan.append((str(n), geo, True, False))
+    plan += [("4", "state", False, False), ("5", "india", False, False)]
+    rungs = []
+    for rid, geo, same_band, aov_f in plan:
+        sel = [r for r in rows if (r["b"] == band if same_band else True) and in_geo(r, geo)]
+        buyers = [r for r in sel if int(r["n_mcat"]) > 0]
+        if aov_f:
+            buyers = [r for r in buyers if peer_aov.get(str(r["g"])) is not None and lo <= peer_aov[str(r["g"])] <= hi]
+        aovs = [x for r in buyers for x in pov_by.get(str(r["g"]), [])]
+        enough = len(buyers) >= MIN_PEERS
+        rungs.append({
+            "rung": rid, "geo": geo, "band_scope": "same band" if same_band else "band ±1 (" + ", ".join(near) + ")",
+            "aov_filter": (f"peer AOV Rs {round(lo):,}–{round(hi):,} (0.5–2x seller AOV Rs {ref['seller_aov_rs']:,})" if aov_f else None),
+            "peers_mapped": len(sel), "peers_bought_in_mcat": len(buyers),
+            "share_bought": (round(len(buyers) / len(sel), 3) if sel else None) if not aov_f else None,
+            "leads_bought_total": sum(int(r["n_mcat"]) for r in buyers),
+            "median_leads_per_buyer": _median([int(r["n_mcat"]) for r in buyers]),
+            "peer_aov_median_rs": round(_median(aovs)) if aovs else None, "peer_valued_leads": len(aovs),
+            "allowed": bool(same_band and enough),
+            "why_not_allowed": None if same_band and enough else
+            ("band ±1: shown for context, never used for a claim" if not same_band else f"fewer than {MIN_PEERS} peers who bought")})
+    first = next((r for r in rungs if r["allowed"]), None)
+    own_main = sum(int(r.get("n_win") or 0) for r in own if r.get("m") and str(int(r["m"])) == main)
+    return {"status": "ok", "window_days": days, "main_mcat": main, "band": band, "city_id": me.get("c"), "state_id": me.get("s"),
+            "seller_leads_bought": {"any_mcat": sum(int(r.get("n_win") or 0) for r in own), "main_mcat": own_main, "window_days": days},
+            "aov_filter": ref or {"status": f"not applied: the seller has fewer than {MIN_AOV_N} valued leads"},
+            "first_allowed_rung": first["rung"] if first else None, "rungs": rungs,
+            "note": "Peer counts undercount: about 24% of purchases have no MCAT. Never claim what peers earned or closed. "
+                    "Only same-band rungs can back a claim; band ±1 rungs are context only."}
+
+
+def peer_stat(glid, cat_rows, refresh=False, days=30, seller_aov_stats=None):
+    """Same-category, same-size peers at every rung of the fallback ladder, precomputed so the agent can pick offline."""
+    return peer_ladder(peer_raw(glid, cat_rows, refresh, days), glid, seller_aov_stats)
 
 
 def render_peer(p):
     lines = ["## E11. Peer statistic (same MCAT, same turnover band; fallback ladder)", "",
              "*Source:* pg-imblr glusr_usr_mcat_prd_count + glusr_gst_details + weberp.eto_lead_pur_hist + eto_attribute, via Redash. "
-             f"A rung is allowed only with at least {MIN_PEERS} peers who bought leads in the MCAT. Use the first allowed rung and "
-             "name its geography honestly. Never compare a small seller with a much bigger band.", ""]
+             f"A rung is allowed only when it is the seller's SAME turnover band and has at least {MIN_PEERS} peers who bought leads "
+             "in the MCAT. Rungs 4-5 (band ±1) are shown for context and are never allowed for a claim. Rungs 1a/2a/3a also keep "
+             "only peers whose AOV is 0.5-2x the seller's. Use the first allowed rung and name its geography honestly. "
+             "Seller and peers are counted over the same window.", ""]
     if not p or p.get("status") != "ok":
         return "\n".join(lines + [f"_not available: {(p or {}).get('status', 'query failed')}_", ""])
     s = p["seller_leads_bought"]
+    af = p.get("aov_filter") or {}
     lines.append(f"- Seller: band {p['band']}, main MCAT {p['main_mcat']}; bought {s['main_mcat']} leads in this MCAT "
-                 f"({s['any_mcat']} in all MCATs) in the last {s['window_days']} days. First allowed rung: {p['first_allowed_rung']}.")
+                 f"({s['any_mcat']} in all MCATs) in the last {s['window_days']} days (same window as the peers). "
+                 f"First allowed rung: {p['first_allowed_rung']}.")
+    lines.append("- AOV filter: " + (f"seller AOV Rs {af['seller_aov_rs']:,} from {af['source']} (n={af['n_valued']})"
+                                     if af.get("seller_aov_rs") else af.get("status", "not applied")))
     lines.append("")
-    lines.append("| Rung | Area | Band | Peers mapped | Bought in MCAT | Share | Leads total | Median per buyer | Peer AOV median | Allowed |")
-    lines.append("|---|---|---|---|---|---|---|---|---|---|")
+    lines.append("| Rung | Area | Band | AOV filter | Peers mapped | Bought in MCAT | Share | Leads total | Median per buyer | Peer AOV median | Allowed |")
+    lines.append("|---|---|---|---|---|---|---|---|---|---|---|")
     for r in p["rungs"]:
-        lines.append(f"| {r['rung']} | {r['geo']} | {r['band_scope']} | {r['peers_mapped']} | {r['peers_bought_in_mcat']} | {r['share_bought']} | "
-                     f"{r['leads_bought_total']} | {r['median_leads_per_buyer']} | {r['peer_aov_median_rs']} | {'yes' if r['allowed'] else 'no'} |")
+        lines.append(f"| {r['rung']} | {r['geo']} | {r['band_scope']} | {r.get('aov_filter') or '-'} | {r['peers_mapped']} | "
+                     f"{r['peers_bought_in_mcat']} | {r['share_bought']} | {r['leads_bought_total']} | {r['median_leads_per_buyer']} | "
+                     f"{r['peer_aov_median_rs']} | {'yes' if r['allowed'] else 'no: ' + (r.get('why_not_allowed') or '')} |")
     return "\n".join(lines + ["", p.get("note", ""), ""])
 
 
@@ -801,11 +869,14 @@ def key_facts(P, hist, peer, leads, s_aov, m_aov, cat):
     else:
         add("No past VANI calls (cold seller)", "INDEX.md#calls")
     if peer and peer.get("status") == "ok":
-        r = next((x for x in peer["rungs"] if x["allowed"]), None)
+        r = next((x for x in peer["rungs"] if x["allowed"] and x["band_scope"] == "same band"), None)
         sl = peer["seller_leads_bought"]
-        add(f"Peers (rung {r['rung']}, {r['geo']}, {r['band_scope']}): {r['peers_bought_in_mcat']} same-size sellers bought "
-            f"{r['leads_bought_total']} leads in {peer['window_days']} d, median {r['median_leads_per_buyer']}, peer AOV Rs {r['peer_aov_median_rs']}; "
-            f"seller bought {sl['main_mcat']} in this MCAT in {sl['window_days']} d" if r else "Peers: no rung has enough same-size peers (no peer line)",
+        add(f"Peers (rung {r['rung']}, {r['geo']}, same turnover band {peer['band']}"
+            + (f", {r['aov_filter']}" if r.get("aov_filter") else "")
+            + f"): {r['peers_bought_in_mcat']} same-size sellers bought {r['leads_bought_total']} leads in this MCAT in the last "
+            f"{peer['window_days']} d, median {r['median_leads_per_buyer']} per buyer, peer AOV Rs {r['peer_aov_median_rs']}; "
+            f"this seller bought {sl['main_mcat']} in the same {sl['window_days']} d. Band ±1 rungs are context only, never a claim"
+            if r else "Peers: no same-band rung has enough peers who bought (no peer line; band ±1 rungs are context only)",
             "peers.md#E11")
     if leads:
         l = leads[0]
@@ -814,8 +885,10 @@ def key_facts(P, hist, peer, leads, s_aov, m_aov, cat):
     return K[:25]
 
 
-def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref, other):
-    base = os.path.join(OUT, glid)
+def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref, other, out=OUT, extra=None, flags=None):
+    """extra: top-level keys added to context.json (as_of, cache_hash). flags: {pid: {flag: value}} added to that point."""
+    extra, flags = extra or {}, flags or {}
+    base = os.path.join(out, glid)
     os.makedirs(os.path.join(base, "calls"), exist_ok=True)
     for f in glob.glob(os.path.join(base, "calls", "*.md")):
         os.remove(f)
@@ -858,17 +931,20 @@ def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref,
         rows.append(f"| {cid} | {c['date']} | {c.get('duration_sec')} | {c['outcome']} | {sig} | {gist} | [{fname}]({fname}) |")
     K = key_facts(P, hist, peer, leads, s_aov, m_aov, cat)
     with open(os.path.join(base, "context.json"), "w", encoding="utf-8") as f:
-        json.dump(scrub({"glid": glid, "built_at": datetime.now().isoformat(timespec="seconds"),
+        json.dump(scrub({"glid": glid, "built_at": datetime.now().isoformat(timespec="seconds"), **extra,
                          "sources": {k: len(v) for k, v in sorted(files.items())},
                          "api_status": {k: r.get("_http") for k, r in sorted(api.items())},
                          "key_facts": [{"id": i, "fact": t, "cite": c} for i, t, c in K],
-                         "points": {k: {"value": v, "source": s} for k, (v, s) in P.items() if k not in S.EXCLUDED}}), f,
+                         "points": {k: {"value": v, "source": s, **flags.get(k, {})} for k, (v, s) in P.items()
+                                    if k not in S.EXCLUDED}}), f,
                   ensure_ascii=False, default=str)
     sizes["context.json"] = os.path.getsize(os.path.join(base, "context.json"))
     removed = ["A05", "B02"]  # phone numbers and street address: dropped on purpose (PII)
     missing = [k for k in S.LABELS if k not in S.EXCLUDED and k not in removed and S.blank((P.get(k) or (None,))[0])]
     idx = [f"# Seller {glid}: INDEX (read this first)", "",
-           f"> Built {datetime.now():%Y-%m-%d %H:%M}. Files are on this seller only. Read INDEX.md and core.md first; open other files "
+           f"> Built {datetime.now():%Y-%m-%d %H:%M}"
+           + (f", AS OF {extra['as_of']} (file rows after it dropped; API values are today's, flagged as_of_unsafe in context.json)"
+              if extra.get("as_of") else "") + ". Files are on this seller only. Read INDEX.md and core.md first; open other files "
            "when their 'open when' applies. Cite facts by id (K1, A03, E11, CL-1, C03.T5). PII removed: phones, emails, address, ID numbers.", "",
            "## Key facts", ""] + [f"- **{i}** {t} → `{c}`" for i, t, c in K] + [
            "", "## Past VANI calls (newest first)", "",
@@ -883,33 +959,109 @@ def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref,
     return base, sizes
 
 
+# ---------------------------------------------------------------- as_of (M18) and cache hash (m7)
+# Date column(s) per dated source, from seller_inventory.SOURCES plus a few the inventory does not date.
+DATE_COLS = {name: [col] for name, _, _, col, keep in SOURCES if col and keep is None}
+DATE_COLS.update({"btc_attempts": ["call_start_time", "lead_sent_time"], "gc_enquiry_messages": ["reply_date", "first_read_date"],
+                  "so_locations": ["created_on"], "so_kyc_field_checks": ["entered_on"]})
+CALL_SOURCES = ("ps07_bot_calls", "ps07_recording_sample", "gc_bot_calls")
+VIA_CALL = ("ps07_call_turns", "gc_bot_call_turns", "ps07_evaluator")  # undated rows, dated through their call (attempt_id)
+API_SRC = re.compile(r"users_detail|users_profile|company/detail|byrsupply|blsummary|gl_mcats|category_dtls|cust_scorecard|"
+                     r"queryChart|productfiltercount|prd_mapping|gettopbar|glusr_bl_summary|nsdprepplus|glmisccount|pns_chart|"
+                     r"cust_wh_api|getgldsrcount|getwaconv|imdwh|Redash|pg-imblr", re.I)
+SNAPSHOT_SRC = re.compile(r"ps07 seller file|gc_profile|btc sellers|so_sellers|so_seller_categories|so_products|so_catalog_health|"
+                          r"LEAP calls, onboarding", re.I)
+
+
+def as_of_dt(as_of):
+    """'2026-09-01' -> datetime at the end of that day (records on the day itself are kept)."""
+    return datetime.strptime(as_of, "%Y-%m-%d") + timedelta(days=1, seconds=-1)
+
+
+def filter_as_of(files, as_of):
+    """Drop every dated row after as_of. Rows of a dated source with no readable date are dropped too (they cannot be
+    shown to be before as_of). Turns and evaluator rows follow their call. Returns (files, dropped counts)."""
+    cut = as_of_dt(as_of)
+
+    def ok(r, cols):
+        d = next((x for x in (S.dt(r.get(c)) for c in cols) if x), None)
+        return d is not None and d <= cut
+    out, dropped = {}, {}
+    for name, rs in files.items():
+        out[name] = [r for r in rs if ok(r, DATE_COLS[name])] if name in DATE_COLS else list(rs)
+    kept_calls = {r.get("attempt_id") for n in CALL_SOURCES for r in out.get(n, [])}
+    for name in VIA_CALL:
+        if name in out:
+            out[name] = [r for r in out[name] if r.get("attempt_id") in kept_calls]
+    if "gc_enquiry_messages" in out and "gc_enquiries" in files:  # a message on an enquiry made after as_of goes too
+        late = {r.get("query_id") for r in files["gc_enquiries"]} - {r.get("query_id") for r in out["gc_enquiries"]}
+        out["gc_enquiry_messages"] = [r for r in out["gc_enquiry_messages"] if r.get("query_id") not in late]
+    for name, rs in files.items():
+        if len(rs) != len(out[name]):
+            dropped[name] = len(rs) - len(out[name])
+    return {k: v for k, v in out.items() if v}, dropped
+
+
+def as_of_flags(P):
+    """Points that the as_of filter cannot date: API / Redash values (fetched today) and undated snapshot files."""
+    flags = {}
+    for pid, (_, src) in P.items():
+        if pid in ("E09", "E10", "E11", "E12", "X05") or API_SRC.search(src or ""):
+            flags[pid] = {"as_of_unsafe": True}
+        elif SNAPSHOT_SRC.search(src or ""):
+            flags[pid] = {"as_of_snapshot": True}
+    return flags
+
+
+def cache_hash(glid, files, use_api):
+    """sha256 over the seller's index rows and every cache file this build read or wrote (rebuild stability, review m7)."""
+    paths = set(USED_CACHE)
+    if use_api:
+        paths |= {os.path.join(S.CACHE, n, f"{glid}.json") for n in S.api_endpoints()}
+    h = hashlib.sha256()
+    used = 0
+    for p in sorted(x for x in paths if os.path.exists(x)):
+        h.update(os.path.relpath(p, DATA).replace("\\", "/").encode())
+        with open(p, "rb") as f:
+            h.update(hashlib.sha256(f.read()).digest())
+        used += 1
+    h.update(hashlib.sha256(json.dumps(files, sort_keys=True, ensure_ascii=False, default=str).encode()).digest())
+    return "sha256:" + h.hexdigest(), used
+
+
 # ---------------------------------------------------------------- build
-def build(glid, use_api=True, refresh=False, rebuild=False):
+def build(glid, use_api=True, refresh=False, rebuild=False, as_of=None):
     glid = glid.strip()
-    folder = os.path.join(OUT, glid)
+    out = os.path.join(OUT_ASOF, as_of) if as_of else OUT
+    folder = os.path.join(out, glid)
     if not refresh and not rebuild and os.path.exists(os.path.join(folder, "INDEX.md")):
         return folder, "INDEX.md", "cached"
+    USED_CACHE.clear()
     files = seller_rows(glid)
     if not files:
         print(f"warning: GLID {glid} not found in any offline file; building from APIs only", file=sys.stderr)
+    now, dropped = datetime.now(), {}
+    if as_of:
+        now = as_of_dt(as_of)
+        files, dropped = filter_as_of(files, as_of)
     meta = {"glid": glid, "stratum": "on-demand", "rich_sources_of_8": "-"}
     api = S.fetch(glid, refresh) if use_api else {}
-    P = scrub_points(S.build_points(glid, files, api, meta, datetime.now()))
+    P = scrub_points(S.build_points(glid, files, api, meta, now))
     cat = category_value(P, refresh) if use_api else []
     P["E09"] = (cat, "imdwh mcatpriceapi + mcatetoretail (top MCATs)")
-    s_aov = seller_aov(glid, files, refresh) if use_api else None
+    s_aov = seller_aov(glid, files, refresh, f"_asof{as_of}" if as_of else "") if use_api else None
     m_aov = mcat_aov([r["mcat_id"] for r in cat], refresh) if use_api else {}
     P["E10"] = ({"seller": s_aov, "mcats": m_aov}, "buy-lead Probable Order Value via Redash (pg-imblr), DWH aov_bucket")
-    os.makedirs(OUT, exist_ok=True)
+    os.makedirs(out, exist_ok=True)
     text = S.render(glid, meta, P, files, api)
-    peer = peer_stat(glid, cat, refresh) if use_api else None
+    peer = peer_stat(glid, cat, refresh, seller_aov_stats=(s_aov or {}).get("stats")) if use_api else None
     leads = showcase_leads(cat, peer, (s_aov or {}).get("stats"), refresh) if use_api else []
     P["E11"] = (peer, "pg-imblr peer statistic, all ladder rungs (Redash)")
     P["E12"] = (leads, "pg-imblr live + expired buy leads with order value (Redash)")
     ref = ((s_aov or {}).get("stats") or {}).get("median_rs")
     text = text.replace("\n## F. ", "\n" + render_category(cat) + "\n" + render_aov(s_aov, m_aov, cat) + "\n" + render_peer(peer)
                         + "\n" + render_showcase(leads, ref) + "\n## F. ", 1)
-    hist = call_history(files, datetime.now())
+    hist = call_history(files, now)
     other = other_records(files)
     P["X05"] = (city_tier(peer, refresh) if use_api else None, "pg-imblr gl_city classification")
     P["X00"] = (other, "LEAP calls, onboarding locations, KYC status (persona builder)")
@@ -917,7 +1069,15 @@ def build(glid, use_api=True, refresh=False, rebuild=False):
     text = text.replace("\n## H. ", "\n" + render_history(hist) + "\n## H. ", 1) if "\n## H. " in text else text + "\n" + render_history(hist)
     text = text.replace("Unmasked (PII handling: legal team).",
                         "PII removed for persona use: phones, emails, pincode, lat/long, street address, ID numbers.")
-    folder, sizes = write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref, other)
+    chash, n_cache = cache_hash(glid, files, use_api)
+    extra = {"cache_hash": chash, "cache_files_used": n_cache}
+    flags = {}
+    if as_of:
+        extra.update({"as_of": as_of, "as_of_dropped_rows": dropped,
+                      "as_of_note": "file rows after as_of were dropped; points with as_of_unsafe come from APIs fetched at "
+                                    "build time; as_of_snapshot points come from undated files (Apr-Sep snapshot)"})
+        flags = as_of_flags(P)
+    folder, sizes = write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref, other, out, extra, flags)
     import pii_check  # every build is scanned; leftovers are reported loudly
     left = pii_check.scan(folder)
     if left:
@@ -940,13 +1100,16 @@ def main():
     b.add_argument("--no-api", action="store_true")
     b.add_argument("--refresh", action="store_true", help="re-fetch all APIs and queries")
     b.add_argument("--rebuild", action="store_true", help="rewrite the folder from cached data, no new queries")
+    b.add_argument("--as-of", help="YYYY-MM-DD: drop every dated file row after this day (backtests); writes data/contexts_asof/<date>/")
     p = a.parse_args()
     sys.stdout.reconfigure(encoding="utf-8")
     if p.cmd == "index":
         index()
     else:
         t0 = time.time()
-        md, js, how = build(p.glid, not p.no_api, p.refresh, p.rebuild)
+        if p.as_of:
+            datetime.strptime(p.as_of, "%Y-%m-%d")  # fail fast on a bad date
+        md, js, how = build(p.glid, not p.no_api, p.refresh, p.rebuild, p.as_of)
         print(f"{how}: {md} ({js}) ({time.time() - t0:.1f} s)")
 
 
