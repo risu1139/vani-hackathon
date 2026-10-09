@@ -30,7 +30,7 @@ As of 2026-10-09 (hackathon day 1). Written for the team lead first, then an ext
 
 | Finding | Change made | Section |
 |---|---|---|
-| C1 (part) | Frontier decider kept. Model access in the Daytona sandbox is set up by the team lead (not a plan risk). Data-use ruling requested at the 15:30 day-1 check-in; masking defined as a tested code step; table of every off-premises flow. | §6.3, §14 |
+| C1 (part) | Frontier decider kept. Model access in the Daytona sandbox is set up by the team lead (not a plan risk). Data-sharing policy set by the team lead (§6.4): no GST/PAN/ID numbers to the frontier model; names/address only when a task needs them; Sarvam gets what personalisation needs. ID-number scrub is a tested code step. | §6.4 |
 | C2 | B8 host decision with options and deadline; Jev reachability test from that host; lexicon = switch of record, Jev additive; "phir se" cue fix; Jev Devanagari test; B8 re-tagged | §7.3, §3, §9.3 |
 | C3 | States plainly: voice, pace and pitch are fixed per call. Per-signal text-level change with a measured metric, written to the switch row | §7.4 |
 | C4 | Per-call published-version selection proven today (F0); demo channel chosen by 18:00 day 1 and rehearsed; circular dependency broken with a day-1 base version set; demo freeze 12:00 day 2; backup video by 16:00 day 2 | §7.1, §11 |
@@ -77,7 +77,7 @@ As of 2026-10-09 (hackathon day 1). Written for the team lead first, then an ext
 ```
  SELLER DATA (input)                                  B3 LIBRARY (versioned STARTING POINTS)
  profile · call log · evaluator JSON · summaries ·    P0 control + P1..P4 on shared dimensions
- transcripts (masked) · rolling memory facts          + seed hypotheses + evidence + native-script moves
+ transcripts (ID numbers scrubbed) · rolling memory facts          + seed hypotheses + evidence + native-script moves
         │                                                          │       B4 Scoreboard (type × dimension × level)
         ▼                                                          │                │
  B1 Seller context + memory facts ─► B2 Estimator + seller type (cold path)         │
@@ -120,7 +120,7 @@ As of 2026-10-09 (hackathon day 1). Written for the team lead first, then an ext
 
 | Block | Why | How (choice; rejected) | Input → Output | Feeds | Status |
 |---|---|---|---|---|---|
-| B1 Seller context + memory | D1; FAQ Q6 | As-of script; masked free text from summary **and** evaluator JSON (+ transcript); rolling memory facts; *rej.* last-call memory, seller-file history columns | rows, as_of → `seller_context` | B2, B5 | Leakage-free PROVEN; memory ASSUMED |
+| B1 Seller context + memory | D1; FAQ Q6 | As-of script; free text (ID numbers scrubbed) from summary **and** evaluator JSON (+ transcript); rolling memory facts; *rej.* last-call memory, seller-file history columns | rows, as_of → `seller_context` | B2, B5 | Leakage-free PROVEN; memory ASSUMED |
 | B2 Estimator + seller type | Fit 25 | Beta posteriors, decay, nearest of 7 types; cold path; NI prior from Aug only | → `seller_estimates` | B5, B4 | Recurrence PROVEN; estimator ASSUMED |
 | B3 Library | Distinct 20; voice | Starting points + seed hypotheses + evidence; grows via approved suggestions; *rej.* fixed menu | → `persona_library_vN` | B5, B7 | Levels ASSUMED |
 | B4 Scoreboard | Evidence 15 | Beta per type × dimension × level; *rej.* rule table | → `scoreboard_vN` | B5 | Prior-only |
@@ -148,7 +148,7 @@ A typed memory-fact extractor runs per finished call: `callback_when, contact_pe
 
 **Text overrides a Not-Interested label** when the text shows a specific need (38% of such calls are labelled NI), another contact person (16%) or a temporary constraint (8%) (PROVEN). Then the NI label does not drive the NI prior; the fact drives the plan (who, when, which line). This affects 3.0% of due sellers (PROVEN).
 
-`seller_context = {snapshot_id, as_of, profile{…}, history{n_prior_calls, last_outcome, gap_days, outcome_shares}, signals{…: {k, n}}, observed_language, memory_facts[{family, value, span_id, call_date, durable: bool}], free_text[{span_id, source: S|E|T, text_masked}], flags{dnc, ni_overridden_by_text}, missing_fields[], completeness}`.
+`seller_context = {snapshot_id, as_of, profile{…}, history{n_prior_calls, last_outcome, gap_days, outcome_shares}, signals{…: {k, n}}, observed_language, memory_facts[{family, value, span_id, call_date, durable: bool}], free_text[{span_id, source: S|E|T, text_scrubbed}], flags{dnc, ni_overridden_by_text}, missing_fields[], completeness}`.
 
 ### 4.2 B2 estimator
 
@@ -232,18 +232,18 @@ Frontier model (Claude Code-style agent + persona-composition skill) on a Dayton
 
 **Honest headline.** On PS07 data the agent's main added value is a **scheduling and opening-line memory** ("you asked me to call after Diwali", "is your son available") rather than new persona traits. Language (0.26%) and competitor (0.56%) facts are too rare for their own branches; they are plan-level flags (PROVEN shares; ASSUMED reading).
 
-### 6.4 Rulings, fallback trigger, masking, off-premises flows (C1)
+### 6.4 Data-sharing policy, model access, off-premises flows (C1)
 
-**Rulings.** At the **15:30 day-1 mentor check-in** we ask the organisers two questions: (1) may masked seller data go to a frontier model (and to the reviewer and Jev); (2) does "core agent must be Sarvam" allow a frontier-model decider. Answers are filed in `raw/hackathon/`. Owner: team lead.
+**Data-sharing policy (team lead, 2026-10-09; `raw/hackathon/2026-10-09-team-decision-data-sharing.md`).** (1) GST, PAN and other government ID numbers are **never** sent to the frontier model. (2) Seller name, business name, address and city are shared **only when a task needs them** (e.g., similar-seller lookup, personalisation lines). (3) The decider's default context is business attributes, history, outcomes, objections and free-text facts under a pseudonymous seller key; the key→seller map stays on IndiaMART infra. (4) The **Sarvam voice agent gets what the call needs for personalisation** (name, business name, city, past-call facts) in the opening and plan. Optional: confirm with organisers at the 15:30 check-in that this matches "no customer data leaves the premises"; and whether "core agent must be Sarvam" allows a frontier decider.
 
 **Model access.** The team lead sets up the frontier model's access (login) inside the Daytona sandbox; the plan does not treat it as a risk. Sarvam-105b remains the fallback model only if the model call fails at run time (logged per decision).
 
-**Masking = code step with a test.** Replace phone numbers, GLIDs, emails, seller and company names from profile fields (Latin and Devanagari forms), and contact names after role words, with typed tokens. Test: a fixture file with planted identifiers; zero may survive. Regex alone is not trusted for names in Hinglish text (ASSUMED risk; tested).
+**Scrub = code step with a test.** Remove GST, PAN and other ID numbers (and phone numbers/emails, which no decider task needs) from all text sent to the frontier model; include name/business/address fields only when the requesting tool declares the need (logged per call). Test: a fixture file with planted ID numbers; zero may survive. Regex alone is not trusted for ID numbers inside Hinglish text (ASSUMED risk; tested).
 
 | Off-premises flow | Data | Until ruling |
 |---|---|---|
-| Frontier decider (OpenRouter / LiteLLM) | masked context + free text | synthetic/masked only |
-| Sarvam-105b decider, Sarvam voice agent | masked context; live audio | sanctioned platform |
+| Frontier decider (OpenRouter / LiteLLM) | business context + free text, ID numbers removed; name/address only when a tool needs them | per policy above |
+| Sarvam-105b fallback, Sarvam voice agent | voice agent: name, business name, city, past-call facts for personalisation; live audio | sanctioned platform |
 | Jev (live) | single seller utterance | lexicon of record; Jev additive only if allowed |
 | B9 reviewer LLM | masked transcript | manual review of 1 call |
 | B8 tunnel, if used | tool payloads | see §7.3 |
@@ -427,9 +427,9 @@ Six priority contracts in `app/contracts/` (JSON Schema + example): `seller_cont
 | Member | Owns | Done when |
 |---|---|---|
 | **S — strong dev** (live path) | B7, B7a compiler, version base set + per-call selection test, demo channel, B8 host + Jev test, lexicon fixes, §9.3 test, latency/restart timebox, §9.4 audibility; **after B8 works: B4, B6/freeze** | Live call on a frozen version with ≥ 1 measured text-level switch; requested = played = observed voice |
-| **M — second member** (decision path) | B1 (+ memory extractor, masking + test), B2, B5a gate, B5b on Daytona, B5c, seeded fallback, decision records, §9.1 harness | One command turns sample seller files into validated `persona_decision` JSON; fallback and suggestion proven on fixtures; fallback rate reported |
+| **M — second member** (decision path) | B1 (+ memory extractor, ID-number scrub + test), B2, B5a gate, B5b on Daytona, B5c, seeded fallback, decision records, §9.1 harness | One command turns sample seller files into validated `persona_decision` JSON; fallback and suggestion proven on fixtures; fallback rate reported |
 | **N — non-tech member** | Library cards in native script with seed hypotheses; voice auditions; experiment labels; ≈ 40 gold calls; native-script rating; skills.md draft; demo script | Library v1; labels committed; demo script with lines that avoid mid-sentence pauses |
-| **Team lead** | 15:30 data-use ruling; model access in Daytona sandbox; adjudicator recruited; final sign-off on freeze | Rulings filed in `raw/hackathon/` |
+| **Team lead** | data-sharing policy (set); optional organiser confirmation at 15:30; model access in Daytona sandbox; adjudicator recruited; final sign-off on freeze | Rulings filed in `raw/hackathon/` |
 
 ### 11.3 Timeline and submission checklist (deck)
 
@@ -506,9 +506,9 @@ Six priority contracts in `app/contracts/` (JSON Schema + example): `seller_cont
 
 | # | Question | Who | By |
 |---|---|---|---|
-| 1 | May masked seller data go to a frontier model, reviewer and Jev? | Organisers | D1 15:30 |
+| 1 | (Optional) Do organisers agree the data-sharing policy (§6.4) meets "no customer data leaves the premises"? | Organisers | D1 15:30 |
 | 2 | Does "core agent must be Sarvam" allow a frontier decider? | Organisers | D1 15:30 |
-| 3 | Data-use ruling: may real seller data go to the frontier model? | Organisers (asked by team lead) | D1 15:30 |
+| 3 | (Closed) Data-use: team-lead policy in §6.4 | Team lead | — |
 | 4 | (Closed) Model access from Daytona: handled by the team lead | Team lead | — |
 | 5 | B8 host: Daytona DNS/TLS, laptop + tunnel, or internal box? | S + team lead | D1 17:00 |
 | 6 | Does per-call published-version selection work? Agent-level pace/pitch audible? | S (test) | D1 18:00 |
