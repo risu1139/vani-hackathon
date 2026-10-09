@@ -1,0 +1,1053 @@
+{
+ "base": "main_vani",
+ "outcome": "meeting_fixed on answered bot calls",
+ "n_calls": 269455,
+ "raw_rates": {
+  "arrowhead": {
+   "n": 30676,
+   "meeting_pct": 10.66
+  },
+  "base_vani": {
+   "n": 289,
+   "meeting_pct": 18.34
+  },
+  "last_met_a": {
+   "n": 723,
+   "meeting_pct": 11.89
+  },
+  "last_met_d": {
+   "n": 23046,
+   "meeting_pct": 11.09
+  },
+  "main": {
+   "n": 5573,
+   "meeting_pct": 14.03
+  },
+  "main_vani": {
+   "n": 208605,
+   "meeting_pct": 11.6
+  },
+  "personalis": {
+   "n": 452,
+   "meeting_pct": 14.16
+  },
+  "summary_va": {
+   "n": 91,
+   "meeting_pct": 3.3
+  }
+ },
+ "overall_adjusted": [
+  {
+   "version": "arrowhead",
+   "n_version": 30670,
+   "n_base_matched": 206802,
+   "diff_pts": -0.52,
+   "ci95_pts": [
+    -0.9,
+    -0.14
+   ],
+   "significant": "True"
+  },
+  {
+   "version": "main",
+   "n_version": 5571,
+   "n_base_matched": 18107,
+   "diff_pts": -2.46,
+   "ci95_pts": [
+    -3.81,
+    -1.1
+   ],
+   "significant": "True"
+  },
+  {
+   "version": "personalis",
+   "n_version": 452,
+   "n_base_matched": 4099,
+   "diff_pts": 3.02,
+   "ci95_pts": [
+    -0.31,
+    6.36
+   ],
+   "significant": "False"
+  },
+  {
+   "version": "summary_va",
+   "n_version": 91,
+   "n_base_matched": 3735,
+   "diff_pts": -8.23,
+   "ci95_pts": [
+    -12.01,
+    -4.45
+   ],
+   "significant": "True"
+  },
+  {
+   "version": "base_vani",
+   "n_version": 289,
+   "n_base_matched": 3735,
+   "diff_pts": 6.89,
+   "ci95_pts": [
+    2.32,
+    11.46
+   ],
+   "significant": "True"
+  }
+ ],
+ "by_segment": {
+  "turnover": [
+   {
+    "turnover": "0 - 40 L",
+    "base_rate_pct": 11.47,
+    "version": "arrowhead",
+    "n_version": 18114,
+    "n_base_matched": 124205,
+    "diff_pts": -0.93,
+    "ci95_pts": [
+     -1.42,
+     -0.45
+    ],
+    "significant": "True"
+   },
+   {
+    "turnover": "0 - 40 L",
+    "base_rate_pct": 11.47,
+    "version": "main",
+    "n_version": 3055,
+    "n_base_matched": 10623,
+    "diff_pts": -3.17,
+    "ci95_pts": [
+     -4.92,
+     -1.42
+    ],
+    "significant": "True"
+   },
+   {
+    "turnover": "1.5 - 5 Cr",
+    "base_rate_pct": 8.94,
+    "version": "arrowhead",
+    "n_version": 2411,
+    "n_base_matched": 16308,
+    "diff_pts": 0.01,
+    "ci95_pts": [
+     -1.2,
+     1.21
+    ],
+    "significant": "False"
+   },
+   {
+    "turnover": "1.5 - 5 Cr",
+    "base_rate_pct": 8.94,
+    "version": "main",
+    "n_version": 501,
+    "n_base_matched": 1561,
+    "diff_pts": -0.58,
+    "ci95_pts": [
+     -4.41,
+     3.26
+    ],
+    "significant": "False"
+   },
+   {
+    "turnover": "25 - 100 Cr",
+    "base_rate_pct": 8.97,
+    "version": "arrowhead",
+    "n_version": 298,
+    "n_base_matched": 1438,
+    "diff_pts": -0.44,
+    "ci95_pts": [
+     -3.5,
+     2.62
+    ],
+    "significant": "False"
+   },
+   {
+    "turnover": "40 L - 1.5 Cr",
+    "base_rate_pct": 9.6,
+    "version": "arrowhead",
+    "n_version": 4606,
+    "n_base_matched": 31341,
+    "diff_pts": -0.71,
+    "ci95_pts": [
+     -1.59,
+     0.18
+    ],
+    "significant": "False"
+   },
+   {
+    "turnover": "40 L - 1.5 Cr",
+    "base_rate_pct": 9.6,
+    "version": "main",
+    "n_version": 850,
+    "n_base_matched": 2828,
+    "diff_pts": -0.6,
+    "ci95_pts": [
+     -3.81,
+     2.61
+    ],
+    "significant": "False"
+   },
+   {
+    "turnover": "5 - 25 Cr",
+    "base_rate_pct": 8.72,
+    "version": "arrowhead",
+    "n_version": 1308,
+    "n_base_matched": 7511,
+    "diff_pts": 0.02,
+    "ci95_pts": [
+     -1.63,
+     1.67
+    ],
+    "significant": "False"
+   },
+   {
+    "turnover": "5 - 25 Cr",
+    "base_rate_pct": 8.72,
+    "version": "main",
+    "n_version": 257,
+    "n_base_matched": 764,
+    "diff_pts": -1.13,
+    "ci95_pts": [
+     -6.16,
+     3.9
+    ],
+    "significant": "False"
+   },
+   {
+    "turnover": "unknown",
+    "base_rate_pct": 18.4,
+    "version": "arrowhead",
+    "n_version": 3767,
+    "n_base_matched": 22355,
+    "diff_pts": 0.99,
+    "ci95_pts": [
+     -0.35,
+     2.34
+    ],
+    "significant": "False"
+   },
+   {
+    "turnover": "unknown",
+    "base_rate_pct": 18.4,
+    "version": "main",
+    "n_version": 737,
+    "n_base_matched": 1960,
+    "diff_pts": -3.37,
+    "ci95_pts": [
+     -8.3,
+     1.56
+    ],
+    "significant": "False"
+   }
+  ],
+  "region": [
+   {
+    "region": "Central",
+    "base_rate_pct": 13.65,
+    "version": "arrowhead",
+    "n_version": 550,
+    "n_base_matched": 5162,
+    "diff_pts": 2.57,
+    "ci95_pts": [
+     -0.31,
+     5.46
+    ],
+    "significant": "False"
+   },
+   {
+    "region": "Central",
+    "base_rate_pct": 13.65,
+    "version": "main",
+    "n_version": 279,
+    "n_base_matched": 932,
+    "diff_pts": -6.86,
+    "ci95_pts": [
+     -12.6,
+     -1.13
+    ],
+    "significant": "True"
+   },
+   {
+    "region": "East",
+    "base_rate_pct": 12.38,
+    "version": "arrowhead",
+    "n_version": 1392,
+    "n_base_matched": 14513,
+    "diff_pts": 1.81,
+    "ci95_pts": [
+     0.02,
+     3.59
+    ],
+    "significant": "True"
+   },
+   {
+    "region": "East",
+    "base_rate_pct": 12.38,
+    "version": "main",
+    "n_version": 476,
+    "n_base_matched": 1730,
+    "diff_pts": -3.87,
+    "ci95_pts": [
+     -8.29,
+     0.55
+    ],
+    "significant": "False"
+   },
+   {
+    "region": "North",
+    "base_rate_pct": 11.23,
+    "version": "arrowhead",
+    "n_version": 14135,
+    "n_base_matched": 107998,
+    "diff_pts": -1.16,
+    "ci95_pts": [
+     -1.7,
+     -0.62
+    ],
+    "significant": "True"
+   },
+   {
+    "region": "North",
+    "base_rate_pct": 11.23,
+    "version": "main",
+    "n_version": 2870,
+    "n_base_matched": 9049,
+    "diff_pts": -1.75,
+    "ci95_pts": [
+     -3.72,
+     0.22
+    ],
+    "significant": "False"
+   },
+   {
+    "region": "South",
+    "base_rate_pct": 11.97,
+    "version": "arrowhead",
+    "n_version": 4435,
+    "n_base_matched": 4319,
+    "diff_pts": 1.21,
+    "ci95_pts": [
+     -0.22,
+     2.64
+    ],
+    "significant": "False"
+   },
+   {
+    "region": "West",
+    "base_rate_pct": 11.68,
+    "version": "arrowhead",
+    "n_version": 9959,
+    "n_base_matched": 54234,
+    "diff_pts": -0.63,
+    "ci95_pts": [
+     -1.3,
+     0.04
+    ],
+    "significant": "False"
+   },
+   {
+    "region": "West",
+    "base_rate_pct": 11.68,
+    "version": "main",
+    "n_version": 1861,
+    "n_base_matched": 5851,
+    "diff_pts": -2.15,
+    "ci95_pts": [
+     -4.35,
+     0.06
+    ],
+    "significant": "False"
+   }
+  ],
+  "category_group": [
+   {
+    "category_group": "Apparel, Clothing & Garments",
+    "base_rate_pct": 13.31,
+    "version": "arrowhead",
+    "n_version": 2493,
+    "n_base_matched": 13747,
+    "diff_pts": -3.02,
+    "ci95_pts": [
+     -4.33,
+     -1.7
+    ],
+    "significant": "True"
+   },
+   {
+    "category_group": "Apparel, Clothing & Garments",
+    "base_rate_pct": 13.31,
+    "version": "main",
+    "n_version": 428,
+    "n_base_matched": 1182,
+    "diff_pts": 1.27,
+    "ci95_pts": [
+     -4.61,
+     7.15
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Architectural & Designing Services",
+    "base_rate_pct": 13.47,
+    "version": "arrowhead",
+    "n_version": 199,
+    "n_base_matched": 835,
+    "diff_pts": 1.79,
+    "ci95_pts": [
+     -2.76,
+     6.34
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Automobiles, Spare Parts and Accessories",
+    "base_rate_pct": 10.38,
+    "version": "arrowhead",
+    "n_version": 744,
+    "n_base_matched": 5379,
+    "diff_pts": 0.45,
+    "ci95_pts": [
+     -1.85,
+     2.75
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Automobiles, Spare Parts and Accessories",
+    "base_rate_pct": 10.38,
+    "version": "main",
+    "n_version": 142,
+    "n_base_matched": 513,
+    "diff_pts": -1.18,
+    "ci95_pts": [
+     -7.79,
+     5.43
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Ayurvedic & Herbal Product",
+    "base_rate_pct": 11.6,
+    "version": "arrowhead",
+    "n_version": 223,
+    "n_base_matched": 1524,
+    "diff_pts": -3.53,
+    "ci95_pts": [
+     -7.06,
+     -0.01
+    ],
+    "significant": "True"
+   },
+   {
+    "category_group": "Bags, Handbags, Luggage Bags, Belts, Wallets and Accessories",
+    "base_rate_pct": 11.87,
+    "version": "arrowhead",
+    "n_version": 388,
+    "n_base_matched": 2254,
+    "diff_pts": -0.83,
+    "ci95_pts": [
+     -3.6,
+     1.94
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Building Construction Material, Equipment, Civil Engineering and Real Estate",
+    "base_rate_pct": 11.86,
+    "version": "arrowhead",
+    "n_version": 3380,
+    "n_base_matched": 21646,
+    "diff_pts": 0.27,
+    "ci95_pts": [
+     -0.92,
+     1.45
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Building Construction Material, Equipment, Civil Engineering and Real Estate",
+    "base_rate_pct": 11.86,
+    "version": "main",
+    "n_version": 584,
+    "n_base_matched": 1976,
+    "diff_pts": 0.3,
+    "ci95_pts": [
+     -3.91,
+     4.52
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Chemicals, Dyes & Allied Products",
+    "base_rate_pct": 9.52,
+    "version": "arrowhead",
+    "n_version": 664,
+    "n_base_matched": 3765,
+    "diff_pts": -1.4,
+    "ci95_pts": [
+     -3.62,
+     0.82
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Computers, Software, IT Support & Solutions",
+    "base_rate_pct": 10.83,
+    "version": "arrowhead",
+    "n_version": 274,
+    "n_base_matched": 1117,
+    "diff_pts": 1.62,
+    "ci95_pts": [
+     -2.34,
+     5.58
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Consumer Electronics &  Household Appliances",
+    "base_rate_pct": 12.16,
+    "version": "arrowhead",
+    "n_version": 1619,
+    "n_base_matched": 10376,
+    "diff_pts": -1.58,
+    "ci95_pts": [
+     -3.17,
+     0.01
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Consumer Electronics &  Household Appliances",
+    "base_rate_pct": 12.16,
+    "version": "main",
+    "n_version": 270,
+    "n_base_matched": 915,
+    "diff_pts": 3.41,
+    "ci95_pts": [
+     -2.64,
+     9.46
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Cosmetics, Toiletries & Personal Care Products",
+    "base_rate_pct": 11.46,
+    "version": "arrowhead",
+    "n_version": 972,
+    "n_base_matched": 6620,
+    "diff_pts": 0.05,
+    "ci95_pts": [
+     -2.06,
+     2.15
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Cosmetics, Toiletries & Personal Care Products",
+    "base_rate_pct": 11.46,
+    "version": "main",
+    "n_version": 185,
+    "n_base_matched": 592,
+    "diff_pts": -6.01,
+    "ci95_pts": [
+     -12.53,
+     0.51
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Electrical Equipment and Supplies",
+    "base_rate_pct": 11.86,
+    "version": "arrowhead",
+    "n_version": 1087,
+    "n_base_matched": 7398,
+    "diff_pts": -0.94,
+    "ci95_pts": [
+     -2.86,
+     0.99
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Electrical Equipment and Supplies",
+    "base_rate_pct": 11.86,
+    "version": "main",
+    "n_version": 193,
+    "n_base_matched": 679,
+    "diff_pts": -2.62,
+    "ci95_pts": [
+     -10.1,
+     4.85
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Electronics Components and Supplies",
+    "base_rate_pct": 8.46,
+    "version": "arrowhead",
+    "n_version": 236,
+    "n_base_matched": 1373,
+    "diff_pts": 1.37,
+    "ci95_pts": [
+     -2.16,
+     4.91
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Fashion & Garment Accessories for Men, Women & Kids",
+    "base_rate_pct": 10.77,
+    "version": "arrowhead",
+    "n_version": 238,
+    "n_base_matched": 1492,
+    "diff_pts": -3.02,
+    "ci95_pts": [
+     -6.24,
+     0.19
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Fertilizers, Seeds, Plants, Agro Machines & Tools, Poultry & Animal Husbandry",
+    "base_rate_pct": 12.54,
+    "version": "arrowhead",
+    "n_version": 566,
+    "n_base_matched": 3523,
+    "diff_pts": 0.41,
+    "ci95_pts": [
+     -2.2,
+     3.02
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Furniture, Furniture Supplies & Furniture Hardware",
+    "base_rate_pct": 12.56,
+    "version": "arrowhead",
+    "n_version": 558,
+    "n_base_matched": 3801,
+    "diff_pts": 3.3,
+    "ci95_pts": [
+     0.44,
+     6.16
+    ],
+    "significant": "True"
+   },
+   {
+    "category_group": "Gems, Jewellery, Precious Stones, Vaastu & Astrology",
+    "base_rate_pct": 12.73,
+    "version": "arrowhead",
+    "n_version": 971,
+    "n_base_matched": 3500,
+    "diff_pts": -3.04,
+    "ci95_pts": [
+     -5.31,
+     -0.77
+    ],
+    "significant": "True"
+   },
+   {
+    "category_group": "Gifts, Crafts, Antiques & Handmade Decoratives",
+    "base_rate_pct": 10.74,
+    "version": "arrowhead",
+    "n_version": 881,
+    "n_base_matched": 4780,
+    "diff_pts": 2.2,
+    "ci95_pts": [
+     -0.1,
+     4.49
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Home Furnishings and Home Textiles",
+    "base_rate_pct": 11.58,
+    "version": "arrowhead",
+    "n_version": 445,
+    "n_base_matched": 2384,
+    "diff_pts": 1.37,
+    "ci95_pts": [
+     -1.77,
+     4.51
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Housewares, Home Appliances, Household Decorations & Consumables",
+    "base_rate_pct": 11.6,
+    "version": "arrowhead",
+    "n_version": 1189,
+    "n_base_matched": 7815,
+    "diff_pts": -1.25,
+    "ci95_pts": [
+     -3.11,
+     0.61
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Housewares, Home Appliances, Household Decorations & Consumables",
+    "base_rate_pct": 11.6,
+    "version": "main",
+    "n_version": 188,
+    "n_base_matched": 662,
+    "diff_pts": -9.31,
+    "ci95_pts": [
+     -17.62,
+     -1.0
+    ],
+    "significant": "True"
+   },
+   {
+    "category_group": "Industrial & Engineering Products, Spares and Supplies",
+    "base_rate_pct": 9.82,
+    "version": "arrowhead",
+    "n_version": 978,
+    "n_base_matched": 6057,
+    "diff_pts": -1.02,
+    "ci95_pts": [
+     -2.92,
+     0.87
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Industrial & Engineering Products, Spares and Supplies",
+    "base_rate_pct": 9.82,
+    "version": "main",
+    "n_version": 183,
+    "n_base_matched": 619,
+    "diff_pts": -0.24,
+    "ci95_pts": [
+     -5.85,
+     5.37
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Industrial & Engineering Services, Solutions & Consultancy",
+    "base_rate_pct": 12.64,
+    "version": "arrowhead",
+    "n_version": 440,
+    "n_base_matched": 1816,
+    "diff_pts": 1.41,
+    "ci95_pts": [
+     -1.85,
+     4.67
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Industrial Plants, Machinery & Equipment",
+    "base_rate_pct": 11.55,
+    "version": "arrowhead",
+    "n_version": 911,
+    "n_base_matched": 5151,
+    "diff_pts": -1.36,
+    "ci95_pts": [
+     -3.47,
+     0.75
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Industrial Plants, Machinery & Equipment",
+    "base_rate_pct": 11.55,
+    "version": "main",
+    "n_version": 112,
+    "n_base_matched": 467,
+    "diff_pts": -9.46,
+    "ci95_pts": [
+     -16.88,
+     -2.03
+    ],
+    "significant": "True"
+   },
+   {
+    "category_group": "Kitchen Containers, Utensils, Stove, Cookware, Tableware and Food Choppers",
+    "base_rate_pct": 11.15,
+    "version": "arrowhead",
+    "n_version": 1022,
+    "n_base_matched": 5205,
+    "diff_pts": -1.88,
+    "ci95_pts": [
+     -3.78,
+     0.01
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Kitchen Containers, Utensils, Stove, Cookware, Tableware and Food Choppers",
+    "base_rate_pct": 11.15,
+    "version": "main",
+    "n_version": 162,
+    "n_base_matched": 570,
+    "diff_pts": 5.25,
+    "ci95_pts": [
+     -2.61,
+     13.11
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Mechanical Components & Parts",
+    "base_rate_pct": 9.05,
+    "version": "arrowhead",
+    "n_version": 737,
+    "n_base_matched": 4907,
+    "diff_pts": 0.96,
+    "ci95_pts": [
+     -1.31,
+     3.22
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Media, Advertising, Copywriting & Publishing Services",
+    "base_rate_pct": 10.24,
+    "version": "arrowhead",
+    "n_version": 305,
+    "n_base_matched": 1779,
+    "diff_pts": -0.25,
+    "ci95_pts": [
+     -3.78,
+     3.28
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Metals, Minerals, Ores & Alloys",
+    "base_rate_pct": 11.56,
+    "version": "arrowhead",
+    "n_version": 593,
+    "n_base_matched": 3446,
+    "diff_pts": -0.8,
+    "ci95_pts": [
+     -3.43,
+     1.84
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Operation Theater, Medical Imaging and Pathology Instruments and Hospital Supplies",
+    "base_rate_pct": 10.37,
+    "version": "arrowhead",
+    "n_version": 492,
+    "n_base_matched": 3030,
+    "diff_pts": 1.15,
+    "ci95_pts": [
+     -1.47,
+     3.78
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Packaging Material, Supplies & Machines",
+    "base_rate_pct": 10.38,
+    "version": "arrowhead",
+    "n_version": 1143,
+    "n_base_matched": 7352,
+    "diff_pts": -0.4,
+    "ci95_pts": [
+     -2.11,
+     1.3
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Packaging Material, Supplies & Machines",
+    "base_rate_pct": 10.38,
+    "version": "main",
+    "n_version": 189,
+    "n_base_matched": 729,
+    "diff_pts": 1.38,
+    "ci95_pts": [
+     -4.39,
+     7.16
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Packers & Movers, Clearing Agents & Logistic Services",
+    "base_rate_pct": 13.9,
+    "version": "arrowhead",
+    "n_version": 177,
+    "n_base_matched": 684,
+    "diff_pts": -1.19,
+    "ci95_pts": [
+     -5.88,
+     3.5
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Pen, Pencil, Books, Notebooks, Stationery, Whiteboard & Publications",
+    "base_rate_pct": 12.2,
+    "version": "arrowhead",
+    "n_version": 413,
+    "n_base_matched": 2001,
+    "diff_pts": -1.51,
+    "ci95_pts": [
+     -4.56,
+     1.53
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Pharmaceutical Drugs, Medicines, Vitamins and Other Healthcare Products",
+    "base_rate_pct": 10.53,
+    "version": "arrowhead",
+    "n_version": 388,
+    "n_base_matched": 2853,
+    "diff_pts": -2.83,
+    "ci95_pts": [
+     -5.36,
+     -0.3
+    ],
+    "significant": "True"
+   },
+   {
+    "category_group": "Scientific, Measuring, Laboratory Instruments & Supplies",
+    "base_rate_pct": 9.73,
+    "version": "arrowhead",
+    "n_version": 267,
+    "n_base_matched": 1449,
+    "diff_pts": -2.9,
+    "ci95_pts": [
+     -6.11,
+     0.3
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Security Devices, Safety Systems and Security Services",
+    "base_rate_pct": 10.72,
+    "version": "arrowhead",
+    "n_version": 180,
+    "n_base_matched": 1216,
+    "diff_pts": 1.34,
+    "ci95_pts": [
+     -3.06,
+     5.75
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Sports Goods, Games, Toys & Accessories",
+    "base_rate_pct": 10.81,
+    "version": "arrowhead",
+    "n_version": 386,
+    "n_base_matched": 2838,
+    "diff_pts": 1.09,
+    "ci95_pts": [
+     -1.84,
+     4.02
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Stationery and Paper Products",
+    "base_rate_pct": 10.94,
+    "version": "arrowhead",
+    "n_version": 226,
+    "n_base_matched": 1082,
+    "diff_pts": 1.3,
+    "ci95_pts": [
+     -2.63,
+     5.23
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Stones, Marble & Granite Supplies",
+    "base_rate_pct": 13.37,
+    "version": "arrowhead",
+    "n_version": 155,
+    "n_base_matched": 697,
+    "diff_pts": -0.63,
+    "ci95_pts": [
+     -5.5,
+     4.24
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Textiles, Yarn, Fabrics & Allied Industries",
+    "base_rate_pct": 9.96,
+    "version": "arrowhead",
+    "n_version": 369,
+    "n_base_matched": 2235,
+    "diff_pts": -2.66,
+    "ci95_pts": [
+     -5.3,
+     -0.02
+    ],
+    "significant": "True"
+   },
+   {
+    "category_group": "Tools, Machine Tools, Power Tools & Hand Tools",
+    "base_rate_pct": 8.25,
+    "version": "arrowhead",
+    "n_version": 422,
+    "n_base_matched": 2423,
+    "diff_pts": 0.21,
+    "ci95_pts": [
+     -2.34,
+     2.76
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Vegetables, Fruits, Grains, Dairy Products & Other FMCG and Grocery Items",
+    "base_rate_pct": 13.62,
+    "version": "arrowhead",
+    "n_version": 1905,
+    "n_base_matched": 11625,
+    "diff_pts": 0.38,
+    "ci95_pts": [
+     -1.22,
+     1.99
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "Vegetables, Fruits, Grains, Dairy Products & Other FMCG and Grocery Items",
+    "base_rate_pct": 13.62,
+    "version": "main",
+    "n_version": 322,
+    "n_base_matched": 1003,
+    "diff_pts": -1.87,
+    "ci95_pts": [
+     -7.79,
+     4.04
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "unknown",
+    "base_rate_pct": 16.0,
+    "version": "arrowhead",
+    "n_version": 728,
+    "n_base_matched": 4702,
+    "diff_pts": 0.64,
+    "ci95_pts": [
+     -2.13,
+     3.42
+    ],
+    "significant": "False"
+   },
+   {
+    "category_group": "unknown",
+    "base_rate_pct": 16.0,
+    "version": "main",
+    "n_version": 154,
+    "n_base_matched": 464,
+    "diff_pts": -0.43,
+    "ci95_pts": [
+     -11.33,
+     10.46
+    ],
+    "significant": "False"
+   }
+  ]
+ }
+}
