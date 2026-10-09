@@ -2,7 +2,8 @@
 
 Refuses unless <run>/validation.json says pass (review B5: Sarvam variables are written only from a validated persona).
 Fills name tokens ({SELLER_NAME}, {COMPANY}) on premises from the export map (never sent to the frontier model).
-Range and catalogue checks (review m3). Division text goes in the `division_block` variable (no Jinja, review M5).
+Range and catalogue checks (review m3). The prompt text is built by render_prompt.py as section variables prompt_*;
+writes 06_sarvam_prompt.md (the full prompt this seller's call will use).
 
 Usage: python3 compile_vars.py --run <run dir> [--names <map json>] [--city <city>]
 Writes <run>/05_sarvam_vars.json.
@@ -11,6 +12,10 @@ import argparse
 import json
 import os
 import re
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import render_prompt as R  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REF = os.path.join(HERE, "..", "references")
@@ -22,18 +27,29 @@ LANGS = {"hi": "HINDI", "hindi": "HINDI", "gu": "GUJARATI", "gujarati": "GUJARAT
          "ta": "TAMIL", "tamil": "TAMIL", "te": "TELUGU", "telugu": "TELUGU", "kn": "KANNADA", "kannada": "KANNADA",
          "ml": "MALAYALAM", "malayalam": "MALAYALAM", "bn": "BENGALI", "bengali": "BENGALI", "pa": "PUNJABI", "punjabi": "PUNJABI",
          "or": "ODIA", "odia": "ODIA", "en": "ENGLISH", "english": "ENGLISH"}
-STYLE = {
-    "formality": {"low": "Friendly, informal respect.", "medium": "Polite and direct.", "high": "Formal and respectful."},
-    "warmth": {"medium": "Calm and pleasant.", "high": "Warm and caring; sound genuinely glad to help."},
-    "sophistication": {"simple": "Very simple words; no jargon.", "practical": "Practical, everyday business words.",
-                       "numbers_first": "Lead with one concrete number when you have one from the facts."},
-    "code_mix": {"regional_only": "Speak only the seller's regional language.", "light_hinglish": "Hindi with a few common English words.",
-                 "hinglish": "Natural Hinglish.", "english_heavy": "Mostly English with light Hindi."},
-}
-
-
 def val(p, d):
     return ((p.get("dimensions") or {}).get(d) or {}).get("value")
+
+
+SUFFIX = re.compile(r"\s*(pvt\.?|private|ltd\.?|limited|llp|inc\.?|co\.)(\s|$).*$", re.I)
+
+
+def load_names(path):
+    """Export map {tokens: {token: [variants]}} -> {token: the one spoken form}. On premises only."""
+    m = json.load(open(path, encoding="utf-8"))
+    out = {}
+    for tok, vs in (m.get("tokens") or m).items():
+        vs = [v for v in (vs if isinstance(vs, list) else [vs]) if isinstance(v, str) and v.strip()]
+        if not vs:
+            continue
+        longest = max(vs, key=len)
+        if tok == "{SELLER_NAME}":
+            out[tok] = longest.split()[0].title()  # first name + "ji" in speech
+        elif tok in ("{COMPANY}",) or tok.startswith("{COMPETITOR_") and not tok.endswith("_ID}"):
+            out[tok] = SUFFIX.sub("", longest).strip() or longest
+        else:
+            out[tok] = longest
+    return out
 
 
 def fill(text, names):
@@ -42,16 +58,19 @@ def fill(text, names):
     return text
 
 
-def division_block(div):
-    path = os.path.join(REF, f"division_{div.lower()}.md")
-    if not os.path.exists(path):
+def seller_city(run):
+    """City is not PII: from the seller folder named in turn.json (B01, else X05)."""
+    try:
+        folder = json.load(open(os.path.join(run, "turn.json"), encoding="utf-8"))["folder"]
+        pts = json.load(open(os.path.join(folder, "context.json"), encoding="utf-8"))["points"]
+        b1, x5 = (pts.get("B01") or {}).get("value") or {}, (pts.get("X05") or {}).get("value") or {}
+        return str(b1.get("city_name") or b1.get("seller_city") or x5.get("city") or "").strip().title()
+    except (OSError, KeyError, ValueError, AttributeError):
         return ""
-    t = open(path, encoding="utf-8").read()
-    m = re.search(r"<!-- sarvam_block -->(.*?)<!-- /sarvam_block -->", t, re.S)
-    return (m.group(1) if m else "").strip()
 
 
 def compile_vars(run, names=None, city=None):
+    city = city or seller_city(run)
     v = json.load(open(os.path.join(run, "validation.json"), encoding="utf-8"))
     if not v.get("pass"):
         raise SystemExit("REFUSED: persona not validated (validation.json pass=false)")
@@ -66,33 +85,23 @@ def compile_vars(run, names=None, city=None):
         (str(val(p, "language_start")).upper() if str(val(p, "language_start")).upper() in LANGS.values() else None)
     if not lang:
         raise SystemExit(f"REFUSED: language {val(p, 'language_start')} not supported")
-    style = " ".join(x for x in [
-        STYLE["formality"].get(val(p, "formality"), ""), STYLE["warmth"].get(val(p, "warmth"), ""),
-        STYLE["sophistication"].get(val(p, "sophistication"), ""), STYLE["code_mix"].get(val(p, "code_mix"), ""),
-        f"At most {int(val(p, 'words_per_turn') or 15)} words per reply. One question at a time. Address the seller as 'ji'.",
-        f"Empathy: {val(p, 'empathy')}." if val(p, "empathy") else "",
-        "Speak as a woman (use feminine first-person forms: 'kar rahi hoon')." if g == "F" else "Speak as a man (use masculine first-person forms: 'kar raha hoon')."]
-        if x)
-    plan = []
-    for s in p.get("call_plan") or []:
-        plan.append(f"{s.get('step')}. {s.get('goal')}: {s.get('say')}")
-    plan.append("Objections (in this order):")
-    for o in p.get("objection_playbook") or []:
-        plan.append(f"- If the seller says \"{o.get('objection')}\": {o.get('response')}")
-    plan.append("Escalation: " + "; ".join(p.get("escalation_rules") or []))
-    out = {
+    sec = R.sections(p)
+    base = {
         "decision_id": p["decision_id"],
         "persona_voice_id": VOICES[g]["id"], "persona_voice_gender": g,
         "persona_pace": f"{pace:.2f}", "persona_pitch": f"{pitch:.2f}", "persona_language": lang,
         "persona_opening": fill(p["opening"], names), "identity_line": fill(p["identity_line"], names),
         "persona_style_id": (p.get("prior") or {}).get("chosen") if not (p.get("prior") or {}).get("override") else "COMPOSED",
-        "persona_style": style, "division_block": division_block(p["division"]),
-        "call_plan": fill("\n".join(plan), names),
-        "verified_facts": "\n".join(f"- {x.get('say')}" for x in p.get("verified_facts") or []),
-        "guardrails_extra": "\n".join(f"- {x}" for x in (p.get("guardrails") or []) + [g2.get("action") for g2 in p.get("guards_ack") or [] if g2.get("action")]),
         "switch_sensitivity": json.dumps(p.get("switch_sensitivity") or {}),
         "seller_name": (names or {}).get("{SELLER_NAME}", ""), "company_name": (names or {}).get("{COMPANY}", ""), "city": city or "",
     }
+    # Sarvam fills variables in one pass: resolve @refs inside the sections here, before sending.
+    inner = {k: base[k] for k in ("identity_line", "persona_opening", "seller_name", "company_name", "city")}
+    for k, text in sec.items():
+        for name in sorted(inner, key=len, reverse=True):
+            text = text.replace("@" + name, inner[name] or ("the seller" if name == "seller_name" else "their company" if name == "company_name" else ""))
+        sec[k] = fill(text, names)
+    out = {**base, **sec}
     contract = json.load(open(os.path.join(HERE, "..", "..", "..", "..", "app", "contracts", "sarvam_vars.contract.json"), encoding="utf-8")) \
         if os.path.exists(os.path.join(HERE, "..", "..", "..", "..", "app", "contracts", "sarvam_vars.contract.json")) else None
     if contract:
@@ -104,6 +113,10 @@ def compile_vars(run, names=None, city=None):
         raise SystemExit(f"REFUSED: unfilled name tokens in {left}")
     with open(os.path.join(run, "05_sarvam_vars.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=1)
+    text, unfilled = R.render(out)
+    if unfilled:
+        raise SystemExit(f"REFUSED: skeleton variables not produced {unfilled}")
+    open(os.path.join(run, "06_sarvam_prompt.md"), "w", encoding="utf-8").write(text)
     return out
 
 
@@ -113,9 +126,9 @@ def main():
     a.add_argument("--names")
     a.add_argument("--city")
     p = a.parse_args()
-    names = json.load(open(p.names, encoding="utf-8")) if p.names else None
+    names = load_names(p.names) if p.names else None
     out = compile_vars(p.run, names, p.city)
-    print(json.dumps({k: (v[:60] + "…" if isinstance(v, str) and len(v) > 60 else v) for k, v in out.items()}, ensure_ascii=False, indent=1))
+    print(json.dumps({k: len(v) if isinstance(v, str) else v for k, v in out.items()}))  # sizes only: values hold names
 
 
 if __name__ == "__main__":

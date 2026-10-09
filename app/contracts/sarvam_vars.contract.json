@@ -1,5 +1,5 @@
 {
- "_doc": "Contract between compile_vars.py (skill) and the Sarvam agent (template + code tools). Every variable listed here MUST be defined in the Sarvam agent (undefined variables are dropped by Sarvam). Written 2026-10-10. Values are strings unless noted.",
+ "_doc": "Contract between compile_vars.py (skill) and the Sarvam agent (template + code tools). Every variable listed here MUST be defined in the Sarvam agent (undefined variables are dropped by Sarvam). Written 2026-10-10. Values are strings unless noted. 2026-10-10 rev: the prompt text is per seller, in the Sarvam template sections (render_prompt.py); the skeleton app/sarvam/vani_prompt.md holds only fixed rules.",
  "set_before_call": {
   "decision_id": "run id; written into every switch_log row",
   "persona_voice_id": "Bulbul v4 speaker UUID (catalogue-checked)",
@@ -10,15 +10,17 @@
   "persona_opening": "first line spoken (initial bot message); native script; gender-agreed",
   "identity_line": "how VANI introduces itself if asked who is calling (per language, gender-agreed); never says AI/bot/branch manager/account manager",
   "persona_style_id": "P0..P6 or COMPOSED; the switch tool picks directive variants by it",
-  "persona_style": "Speaking Style text: formality, warmth, sophistication, code-mix, words per turn, salutation",
-  "division_block": "objective + division-specific rules text (NSD or CSD); replaces Jinja {% if %}",
-  "call_plan": "numbered steps: hook, ask, objection playbook with responses, close",
-  "verified_facts": "the ONLY numbers/claims VANI may say (hook claim + fact values), each one line",
-  "guardrails_extra": "seller-specific guardrails (e.g. acknowledge earlier calls; do not ask for a new meeting)",
   "switch_sensitivity": "JSON string, e.g. {\"rushed\":\"high\",\"confused\":\"normal\",...}",
   "seller_name": "name token filled on premises (first name + ji) - never sent to the frontier model",
   "company_name": "company token filled on premises",
-  "city": "seller city"
+  "city": "seller city",
+  "prompt_persona": "Persona section: who VANI is for this seller (gender forms, style card, tone, empathy, identity line)",
+  "prompt_environment": "Environment & Situation: seller, company, city, what we know (personalisation), guards to respect",
+  "prompt_objective": "Objective: division block (NSD/CSD) + this seller's hook and backup",
+  "prompt_style": "Speaking Style: language, code-mix, words, words per reply, pace, gender forms, preserve-as-is terms",
+  "prompt_facts": "Facts: the ONLY numbers/claims VANI may say (verified_facts) + never-say rules",
+  "prompt_phases": "Conversation Guidelines: Phases 1-9 (identity, hook steps, ask, objections, book, close, callback, wrong person, escalation)",
+  "prompt_guardrails": "Guardrails: seller-specific + standard"
  },
  "set_during_call_by_tools": {
   "seller_mode": "neutral | rushed | frustrated | confused | interested | bot_question | opt_out | language_switch",

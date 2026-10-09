@@ -34,7 +34,7 @@ from sarvam_conv_ai_sdk import (SarvamOnStartTool, SarvamOnStartToolContext, Sar
 from sarvam_conv_ai_sdk.tool import SarvamToolLanguageName, SpeechSettings, TextToSpeechConfig
 
 LOG_ROWS = 25
-LEXICON_VERSION = "lex-v1-20261010"
+LEXICON_VERSION = "lex-v2-20261010"
 PACE_RANGE = (0.85, 1.25)
 PITCH_RANGE = (-0.3, 0.3)
 
@@ -112,7 +112,7 @@ def norm(text):
     """Lower case, NFD, drop nukta / anusvara / chandrabindu, punctuation -> space, map common romanised variants."""
     t = unicodedata.normalize("NFD", (text or "").lower())
     t = "".join(ch for ch in t if ord(ch) not in _STRIP)
-    t = re.sub(r"[^\wऀ-ॿ઀-૿஀-௿]+", " ", t)
+    t = re.sub("[^\\wऀ-ൿ]+", " ", t)  # keep every Indic block, Devanagari..Malayalam (vowel signs are not \w)
     return " " + " ".join(_TOKEN_MAP.get(w, w) for w in t.split()) + " "
 
 
@@ -134,27 +134,41 @@ LEXICON = [
         "call mat", "phone mat", "call na kare*", "phone na kare*", "number hata*", "number delete", "number block",
         "list se hata*", "dnd", "do not call", "don't call", "dont call", "stop calling", "unsubscribe",
         "कॉल मत", "फोन मत", "call मत", "नंबर हटा", "नंबर डिलीट", "नंबर ब्लॉक", "लिस्ट से हटा",
-        "ફોન ન કર", "કોલ ન કર", "કૉલ ન કર", "ફોન મત", "નંબર હટાવ")),
+        "ફોન ન કર", "કોલ ન કર", "કૉલ ન કર", "ફોન મત", "નંબર હટાવ",
+        # Marathi, Bengali, Telugu, Tamil, Kannada, Malayalam (v2, 2026-10-10)
+        "फोन करू नका", "कॉल करू नका", "ফোন করবেন না", "কল করবেন না", "కాల్ చేయకండి", "ఫోన్ చేయకండి", "నంబర్ తీసేయ",
+        "கால் பண்ணாதீங்க", "போன் பண்ணாதீங்க", "ಕಾಲ್ ಮಾಡಬೇಡಿ", "ಫೋನ್ ಮಾಡಬೇಡಿ", "വിളിക്കരുത്", "വിളിക്കണ്ട")),
     ("frustrated", "strong", (
         "kitni baar", "baar baar", "pareshan", "disturb", "faltu", "bakwas", "roz phone", "roz call", "har roz",
         "roz roz", "phone rakh", "warna phone", "dimag mat", "dimag kharab", "irritate*", "band karo", "how many times",
         "कितनी बार", "बार बार", "परेशान", "डिस्टर्ब", "फालतू", "बकवास", "रोज फोन", "रोज कॉल", "हर रोज", "रोज रोज",
         "फोन रख", "वरना फोन", "दिमाग मत", "दिमाग खराब", "बंद करो",
-        "કેટલી વાર", "વારંવાર", "હેરાન", "ફાલતુ")),
+        "કેટલી વાર", "વારંવાર", "હેરાન", "ફાલતુ",
+        "किती वेळा", "त्रास देऊ", "কতবার", "বিরক্ত", "ఎన్ని సార్లు", "మళ్ళీ మళ్ళీ", "విసుగు", "చిరాకు",
+        "எத்தனை தடவை", "தொந்தரவு", "திரும்ப திரும்ப", "ಎಷ್ಟು ಸಲ", "ತೊಂದರೆ", "ಪದೇ ಪದೇ", "എത്ര തവണ", "ശല്യം")),
     ("bot_question", "strong", (
         "bot ho", "bot hai", "bot se", "robot", "aap machine", "machine ho", "machine se baat", "recorded",
         "recording hai kya", "aap insaan", "insaan ho", "insaan hai", "insaan se baat", "computer bol*",
         "computer se baat", "real person", "are you human", "are you a bot", "ai ho", "ai hai kya", "artificial",
         "बॉट", "रोबोट", "आप मशीन", "मशीन हो", "मशीन से बात", "रिकॉर्डेड", "रिकॉर्डिंग है क्या", "आप इंसान",
         "इंसान हो", "इंसान है", "इंसान से बात", "कंप्यूटर बोल", "कंप्यूटर से बात",
-        "રોબોટ", "માણસ છો", "રેકોર્ડ")),
+        "રોબોટ", "માણસ છો", "રેકોર્ડ", "bot",
+        "माणूस आहात", "রোবট", "মানুষ নাকি", "రోబో", "మనిషేనా", "మనిషా", "కంప్యూటర్ మాట్లాడ", "ரோபோ", "மனுஷனா",
+        "மனிதரா", "ರೋಬೋ", "ಮನುಷ್ಯರಾ", "റോബോട്ട്", "മനുഷ്യനാണോ")),
     ("rushed", "strong", (
         "busy", "time nahi", "driving", "drive kar*", "gaadi chala*", "meeting me hu", "meeting me baitha",
         "baad me call", "baad me baat", "baad me phone", "jaldi bolo", "jaldi batao", "call back", "callback",
         "call later", "no time", "baat nahi kar sak*",
         "बिजी", "बिज़ी", "टाइम नही", "समय नही", "ड्राइव", "गाडी चला", "मीटिंग मे हू", "बाद मे कॉल", "बाद मे बात", "बाद मे फोन",
         "जल्दी बोलो", "जल्दी बताओ", "बात नही कर सक",
-        "બિઝી", "સમય નથી", "ટાઈમ નથી", "પછી વાત", "પછી ફોન", "પછી કોલ")),
+        "બિઝી", "સમય નથી", "ટાઈમ નથી", "પછી વાત", "પછી ફોન", "પછી કોલ",
+        "नंतर बोल", "नंतर फोन", "वेळ नाही", "घाईत आहे", "ব্যস্ত", "বিজি", "পরে কথা", "পরে ফোন", "সময় নেই",
+        "బిజీ", "త్వరగా చెప్ప", "తర్వాత మాట్లాడ", "తర్వాత కాల్", "తర్వాత ఫోన్", "టైం లేదు", "సమయం లేదు", "డ్రైవింగ్",
+        "பிஸி", "நேரம் இல்லை", "அப்புறம் பேச", "அப்புறம் கால்", "சீக்கிரம் சொல்", "டிரைவிங்",
+        "ಬ್ಯುಸಿ", "ಬಿಜಿ", "ಸಮಯ ಇಲ್ಲ", "ಆಮೇಲೆ ಮಾತಾಡ", "ಆಮೇಲೆ ಕಾಲ್", "ಬೇಗ ಹೇಳಿ",
+        "ബിസി", "സമയം ഇല്ല", "പിന്നെ വിളിക്ക", "പിന്നെ സംസാരിക്ക",
+        "tarvata call", "time ledu", "twaraga cheppandi", "appuram pesu*", "neram illa*", "amele call", "pinne vilikk*",
+        "nantar bol*", "pore kotha")),
     ("rushed", "weak", (
         "abhi nahi", "baad me", "thodi der", "kaam me", "bahar hu", "jaldi", "later",
         "अभी नही", "बाद मे", "थोडी देर", "काम मे", "बाहर हू", "जल्दी",
@@ -165,7 +179,11 @@ LEXICON = [
         "didn't understand", "don't understand", "dont understand", "what do you mean", "pardon", "say again",
         "समझ नही", "समझ मे नही", "नही समझ", "समझा नही", "समझी नही", "क्या मतलब", "मतलब क्या", "क्या कहा",
         "दोबारा बोलि", "फिर से बोलि", "आवाज नही", "सुनाई नही",
-        "સમજાયુ નહી", "સમજ ન પડી", "સમજાતુ નથી", "શુ કહ્યુ", "ફરીથી બોલો")),
+        "સમજાયુ નહી", "સમજ ન પડી", "સમજાતુ નથી", "શુ કહ્યુ", "ફરીથી બોલો",
+        "समजलं नाही", "समजले नाही", "पुन्हा सांगा", "বুঝলাম না", "বুঝতে পারছি না", "আবার বলুন",
+        "అర్థం కాలేదు", "అర్థం కావట్లేదు", "మళ్ళీ చెప్పండి", "ఏమన్నారు", "వినిపించట్లేదు",
+        "புரியல", "புரியவில்லை", "மறுபடியும் சொல்", "என்ன சொன்னீங்க", "ಅರ್ಥ ಆಗಲಿಲ್ಲ", "ಮತ್ತೆ ಹೇಳಿ",
+        "മനസ്സിലായില്ല", "വീണ്ടും പറയ", "artham kaledu", "puriyala")),
     ("confused", "weak", (
         "kya bol rahe", "kya bola", "phir se bata*", "kaise boli*",
         "क्या बोल रहे", "क्या बोला", "फिर से बता", "कैसे बोलि")),
@@ -179,7 +197,11 @@ LEXICON = [
         "कितना लगेगा", "प्राइस क्या", "एग्जैक्ट प्राइस", "कैसे काम करता", "कैसे काम करेगा", "कब आएगे", "कब आओगे",
         "कब मिलेगे", "मीटिंग कब", "कितने बजे", "मिल लेते", "आ जाइए", "आ जाइये", "डिटेल्स भेज", "डिटेल भेज",
         "कैसे मिलेगे", "कैसे आएगे",
-        "મીટિંગ ક્યારે", "કેટલા પૈસા", "કેટલો ચાર્જ", "ક્યારે આવશો", "વિગત મોકલ")),
+        "મીટિંગ ક્યારે", "કેટલા પૈસા", "કેટલો ચાર્જ", "ક્યારે આવશો", "વિગત મોકલ",
+        "किती खर्च", "कधी येणार", "मीटिंग कधी", "কত খরচ", "কবে আসবেন", "মিটিং কবে",
+        "ఎంత ఖర్చు", "ఎప్పుడు వస్తారు", "మీటింగ్ ఎప్పుడు", "ఎలా పని చేస్తుంది", "వివరాలు పంప",
+        "எப்போ வருவீங்க", "மீட்டிங் எப்போ", "எப்படி வேலை செய்யும்", "ಯಾವಾಗ ಬರ್ತೀರಾ", "ಮೀಟಿಂಗ್ ಯಾವಾಗ",
+        "എപ്പോൾ വരും", "മീറ്റിംഗ് എപ്പോൾ")),
     ("interested", "weak", (
         "price batao", "kaise hoga", "batao kaise", "aa jao", "kya fayda",
         "प्राइस बताओ", "कैसे होगा", "बताइए कैसे", "आ जाओ", "क्या फायदा",
@@ -188,7 +210,8 @@ LEXICON = [
 _COMPILED = [(mode, strength, cue, _cue_re(cue)) for mode, strength, cues in LEXICON for cue in cues]
 PRIORITY = ["opt_out", "frustrated", "bot_question", "rushed", "confused", "interested"]
 ALWAYS_NOW = {"opt_out", "frustrated", "bot_question"}
-_LATER = re.compile(r"(?<![a-z])(baad|kal|shaam|later|tomorrow|evening)(?![a-z])|बाद|कल|शाम|પછી|કાલે")
+_LATER = re.compile(r"(?<![a-z])(baad|kal|shaam|later|tomorrow|evening|tarvata|appuram|amele|pinne|nantar)(?![a-z])|"
+                    r"बाद|कल|शाम|પછી|કાલે|नंतर|পরে|తర్వాత|రేపు|அப்புறம்|நாளை|ಆಮೇಲೆ|ನಾಳೆ|പിന്നെ|നാളെ")
 _NOT_WANTED = re.compile(r"(?<![a-z])(nahi chahiye|interest nahi|not interested|zarurat nahi)(?![a-z])|नही चाहिए|"
                          r"इंटरेस्ट नही|जरूरत नही|નથી જોઈએ")
 
@@ -229,6 +252,11 @@ LANG_SCRIPT = {"Hindi": "deva", "Marathi": "deva", "Konkani": "deva", "Bengali":
                "Kannada": "knda", "Malayalam": "mlym", "English": "latn"}
 
 
+# English function words: a Latin-script turn is English only if it uses them (romanised Telugu / Hindi is not English)
+_EN_FUNC = set("the a an is are am was i you we it this that what why how when where can could will would do does did "
+               "not please to of in on for with my your me and or but be have has there here now just so if".split())
+
+
 def script_of(text):
     """Dominant script of an utterance. Latin counts as English only with >= 3 latin words and >= 70% latin letters
     (ASR writes code-mixed English words in Latin inside Hindi turns)."""
@@ -248,7 +276,9 @@ def script_of(text):
         return "none"
     best = max(counts, key=counts.get)
     if best == "latn":
-        if len(re.findall(r"[A-Za-z]{2,}", text or "")) < 3 or counts["latn"] < 0.7 * total:
+        words = re.findall(r"[a-z']+", (text or "").lower())
+        english = sum(w in _EN_FUNC for w in words)
+        if len(re.findall(r"[A-Za-z]{2,}", text or "")) < 3 or counts["latn"] < 0.7 * total or english < max(2, 0.25 * len(words)):
             others = {k: v for k, v in counts.items() if k != "latn" and v}
             return max(others, key=others.get) if others else "none"
     return best

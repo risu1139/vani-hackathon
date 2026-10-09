@@ -178,4 +178,12 @@ def test_compile_refuses_unvalidated_and_fills(tmp_path):
     (run / "04_persona.json").write_text(json.dumps(p), encoding="utf-8")
     out = C.compile_vars(str(run), {"{SELLER_NAME}": "Ravi", "{COMPANY}": "X"}, "Surat")
     assert out["persona_opening"].startswith("Namaste Ravi ji") and out["persona_language"] == "GUJARATI"
-    assert out["persona_voice_gender"] == "F" and "feminine" in out["persona_style"]
+    assert out["persona_voice_gender"] == "F" and "feminine" in out["prompt_style"] and "Gujarati" in out["prompt_style"]
+    assert "Surat se 200 piece" in out["prompt_phases"] and "200 piece, Rs 10,000 - 11,000, Surat" in out["prompt_facts"]
+    assert "Kal Surat se 200 piece" in out["prompt_objective"]  # the hook drives the objective
+    assert "@" not in out["prompt_persona"] + out["prompt_phases"]  # nested refs resolved before sending
+    text = (run / "06_sarvam_prompt.md").read_text(encoding="utf-8")
+    for head in ("# Persona", "# Environment & Situation", "# Objective", "# Speaking Style", "# Facts",
+                 "# Conversation Guidelines", "# Guardrails", "# Date resolution"):
+        assert head in text
+    assert "@prompt_" not in text and "@identity_line" not in text
