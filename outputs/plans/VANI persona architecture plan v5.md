@@ -46,7 +46,7 @@ As of 2026-10-09 (hackathon day 1). Written for the team lead first, then an ext
 | M10 | B4 and B6 move to S after B8 works; experiment 2 arms × 2 reps × 20 sellers; gold ≈ 40 calls; external adjudicator; N's load cut | §9.1, §11 |
 | M11 | Protect-and-cut order adopted | §11.4 |
 | M12 | Production P0 pace read first; agent-level pace/pitch measured on 2 versions; bands defined relative to P0; demo contrast widened | §5.2, §9.4 |
-| M13 | Voice-gender exploration: while gender cells are prior-only, code draws gender (Thompson, flat prior, logged p); agent's own pick is logged to detect collapse. No quotas | §5.3 |
+| M13 | Not applied as proposed: team lead decided (2026-10-09) the **agent chooses voice gender** like any other dimension; no code draw, no flag or collapse alarm | §5.3 |
 | M14 | Explicit cold-seller path; one cold seller in the demo | §4.3 |
 | M15 | Manifest holds version tool URL + base-prompt hash; stable B8 hostname; re-cook off for frozen demo sellers; pre-demo checklist | §7.1, §10 |
 | M16 | Failure-behaviour table for live dependencies; Sept relabelling handled (NI prior from Aug only; reward = meeting booked) | §7.5, §4.2 |
@@ -88,7 +88,7 @@ As of 2026-10-09 (hackathon day 1). Written for the team lead first, then an ext
  │     → composed spec: each dimension {value, citations, confidence, origin}                   │
  │ B5c GUARD + SETTLE (code): schema · citations · FAQ Q5 (digits, number words, prices) ·      │
  │     FAQ Q6 · native-script ratio · DNC → ≥2 runs pass, agree on BUCKETED audible bundle      │
- │     → settle rest; code picks style voice; gender draw while prior-only; evidence_tier       │
+ │     → settle rest; code picks style voice; evidence_tier                                     │
  │     playability: requested → nearest playable version (log both)                             │
  │     fail → seeded code path with real reasons · far from library → suggestion_row            │
  │ B6 Spec store (frozen for demo sellers)                                                       │
@@ -126,7 +126,7 @@ As of 2026-10-09 (hackathon day 1). Written for the team lead first, then an ext
 | B4 Scoreboard | Evidence 15 | Beta per type × dimension × level; *rej.* rule table | → `scoreboard_vN` | B5 | Prior-only |
 | B5a Context + gate | D2; cost | DNC; gate agent to free-text or low-confidence sellers | → `agent_input` / code path | B5b, B5c | Gate share PROVEN; rule ASSUMED |
 | B5b Agent composer | D2; fit | Frontier + skill on Daytona, k = 3, read-only tools; Sarvam-105b on trigger; *rej.* select-only | → `agent_output` ×3 | B5c | Route blocked; flat schema PROVEN |
-| B5c Guard, settle | Evidence; FAQ Q5/Q6 | Validators; bucketed agreement; code voice pick; gender draw; evidence tier; seeded fallback; suggestion | → `persona_decision`, `suggestion_row` | B6, B11, B12 | ASSUMED |
+| B5c Guard, settle | Evidence; FAQ Q5/Q6 | Validators; bucketed agreement; code voice pick; evidence tier; seeded fallback; suggestion | → `persona_decision`, `suggestion_row` | B6, B11, B12 | ASSUMED |
 | B6 Spec store | Fresh spec | Batch + freeze for demo; staleness check | → ready spec | B7a | ASSUMED |
 | **B7a Directive compiler** | Distinct 20; fit | Template, length budget, golden examples | `persona_decision` → `call_config`, directive strings | B7, B8 | ASSUMED |
 | B7 Compile + Sarvam | D3; voice | Published version per call + per-language voice; native opening | → start payload | Sarvam | Per-language route PROVEN; version selection untested |
@@ -189,11 +189,11 @@ The dimension enumeration is frozen in the hour 0–2 contract. Plan dimensions 
 
 **Voice facts.** SDK per-call TTS override is ignored (PROVEN). Per-language voices + `initial_language_name` select the voice per call (PROVEN). Pace/pitch PROVEN only via the TTS API; agent-level pace and pitch are **untested**. Code Tools on-start is not enabled for us (requested 2026-10-09). Native script for all spoken text (DOCUMENTED).
 
-### 5.3 B4 scoreboard and gender exploration
+### 5.3 B4 scoreboard
 
 Beta counts per seller type × dimension × level, 10–25 pseudo-call priors (seeded from the seed hypotheses, which decision 2 allows as starting values), forgetting λ ≈ 0.8/month (ASSUMED). Only explored and holdout traffic supports a "works better" claim. Every cell is prior-only today.
 
-**Voice gender (M13, decision 7).** An earlier test collapsed gender to female for every language (PROVEN, `Persona generator architecture.md`). While a type's gender cells are prior-only, **code draws gender** by Thompson sampling over the gender cell (flat prior → near 50/50 at first), logs the propensity, and keeps the agent's proposed gender and reason in the record so collapse is visible. As outcomes arrive, the draw follows the data: a better gender is used more. No quota, no skew alarm, seller gender and age never inferred. Demo sellers are exempt (gender set for contrast, logged).
+**Voice gender (decision 7, team lead 2026-10-09).** The agent chooses voice gender like any other dimension, from the seller's data and the scoreboard. There is no code draw, no quota and no flag or alarm. When outcome data arrives, the agent reads it through the scoreboard tool and uses the better-working gender more. Seller gender and age are never inferred.
 
 ### 5.4 Evidence tier per setting (M2)
 
@@ -251,14 +251,14 @@ Frontier model (Claude Code-style agent + persona-composition skill) on a Dayton
 ### 6.5 B5c Guard and settle
 
 1. **Guard each run.** Schema. Citation validator (cited field/span/cell exists, quoted value matches on re-read). **FAQ Q5:** no digits, **no number words** (Hindi, English, Gujarati list, e.g. "do", "teen", "paanch", "hazaar", "two", "be" near price or time context), no price words, product claims or internal labels; greet-and-confirm-owner first; human-on-request kept; fixed fact layer untouched. **FAQ Q6:** confidence ≤ completeness; personalisation only from present fields. **Native-script ratio** of spoken text ≥ 0.9 for Indic languages (ASSUMED cut); one repair call, else the run fails. Sarvam-105b produced Hinglish in Roman script 3/3 (PROVEN); neither model is PROVEN on native script.
-2. **Agree.** At least **2 runs must pass**, else fallback. Accept when ≥ 2 passing runs match on the **bucketed audible bundle** {gender, pace band, pitch band, start language} and on ≥ 2 of 3 key plan choices {opening move id or `new:<family>`, first objection, promoted branches}. Gender here is the code draw (§5.3) where it applies.
+2. **Agree.** At least **2 runs must pass**, else fallback. Accept when ≥ 2 passing runs match on the **bucketed audible bundle** {gender, pace band, pitch band, start language} and on ≥ 2 of 3 key plan choices {opening move id or `new:<family>`, first objection, promoted branches}. Gender is the agent's choice.
 3. **Settle.** Categorical by majority, ordinal by median. **Code picks the style voice** deterministically from the playable set for the bucket (best audition rank). Plan text comes from a run **inside the agreeing majority**, then is re-validated against the settled values.
 4. **Playability.** Map the bucket to the nearest published version (language first, then gender, pace band, pitch band); log `requested`, `played`, distance.
 5. **Evidence tier** per setting (§5.4).
 
 ### 6.6 Explore and suggest
 
-**Exploration during the event is design only** (m1, m9): no real traffic, demo sellers excluded, real-seller holdout needs business approval. The log fields stay (`agent_value, played_value, explored, propensity, seed`). Corrected formula for later: P(agent value on dimension d) = (1 − h)(1 − ε/D) + h·1[P0_d = agent_d]. The only active draw is gender (§5.3).
+**Exploration during the event is design only** (m1, m9): no real traffic, demo sellers excluded, real-seller holdout needs business approval. The log fields stay (`agent_value, played_value, explored, propensity, seed`). Corrected formula for later: P(agent value on dimension d) = (1 − h)(1 − ε/D) + h·1[P0_d = agent_d]. No dimension is drawn by code during the event.
 
 **Suggest (one trigger).** Write a `suggestion_row` when **≥ 2 audible dimensions differ** from the nearest library persona (an audible gap is what needs a new Sarvam version; ASSUMED). The distance score is logged, not a trigger. Weekly clustering (TnT-LLM/Clio pattern) + human approval is kept as design; during the event one clustering run is a recorded artefact, expected to propose nothing on PS07 patterns.
 
@@ -406,7 +406,7 @@ Read production VANI pace. On 2 published versions measure agent-level pace (spe
 | Record | Key | Must hold |
 |---|---|---|
 | `seller_snapshot` | snapshot_id | B1 output incl. span ids, memory facts, missing fields |
-| `decision` | decision_id | versions; model id per run; gate reason; 3 runs; validator results; agreement; per-dimension agent vs played value, `evidence_tier`, explored, propensity; gender draw p; path; frozen flag |
+| `decision` | decision_id | versions; model id per run; gate reason; 3 runs; validator results; agreement; per-dimension agent vs played value, `evidence_tier`, explored, propensity; path; frozen flag |
 | `suggestion_row` | decision_id | spec; nearest library; audible diffs; reasons |
 | `call` | call_id | voice requested vs played vs observed (F0); switch log incl. `change` metric; latency; restarts |
 | `outcome` / `review` | decision_id | meeting booked; two-key labels |
@@ -490,7 +490,7 @@ Six priority contracts in `app/contracts/` (JSON Schema + example): `seller_cont
 ## 13. Devil's advocate
 
 1. **The frontier decider may never touch real data during the event.** Then D1/D2 ship from Sarvam-105b running our skill. That is acceptable; the slide says which model produced the shown specs.
-2. **Code drawing gender bends "agent composes".** It is exploration until data exists (decision 7), logged with p, and the agent's pick is kept. If the team lead objects, the alternative is a skill instruction plus a collapse check — weaker.
+2. **The agent may favour one voice gender.** An earlier test chose female for every language (PROVEN). By team-lead decision the agent still chooses gender with no flag; the scoreboard will show over time whether the choice works.
 3. **Gating means the agent touches only ~40% of sellers.** That is the honest size of its value on PS07; the rest gets a seeded code persona with real reasons.
 4. **Composing still increases variance.** Bucketed agreement reduces it; the fallback rate is measured today, not assumed.
 5. **Text-level switches may not sound like a switch.** Measured words/reply and pause tests make the change visible; if punctuation does not create pauses, confusion relies on shorter sentences and a check question only.
