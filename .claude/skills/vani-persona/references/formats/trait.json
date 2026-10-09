@@ -1,0 +1,24 @@
+{
+  "_doc": "Format of ONE trait in facts.json. Part A is filled by scripts/facts.py before the agent starts. Part B is filled by the agent after it probes the seller folder. The stop gate checks Part B.",
+  "id": "trait.scale_tier",
+  "kind": "trait",
+  "A_script": {
+    "value": "mid",
+    "detail": {"turnover_band": "40 L - 1.5 Cr", "seller_aov_rs": 1200, "category_aov_rs": 6300},
+    "evidence": [
+      {"cite": "business.md#C02", "field": "C02.annual_turnover", "value": "40 L - 1.5 Cr", "date": "2026-10-10", "source": "ps07_seller_file"},
+      {"cite": "buyleads.md#E10", "field": "E10.seller.stats.median_rs", "value": 1200, "date": "2026-10-10", "source": "pg-imblr"}
+    ],
+    "confidence": 0.8,
+    "rule": "small < 40 L; mid 40 L-5 Cr; large > 5 Cr; one step up if seller AOV > 2 x category AOV",
+    "missing_inputs": []
+  },
+  "B_agent": {
+    "accepted": true,
+    "corrected_value": null,
+    "probe": {"files_read": ["business.md", "buyleads.md"], "cites": ["business.md#C02", "buyleads.md#E10"]},
+    "note": "what the agent learned in the files that the number does not show",
+    "relevance": "high | medium | low",
+    "implication_for_persona": "e.g. plain, practical tone; small-ticket examples"
+  }
+}

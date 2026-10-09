@@ -1,0 +1,21 @@
+{
+  "_doc": "Format of ONE hook in facts.json. Part A: scripts/facts.py (eligibility only, never a ranking). Part B: the agent's decision after probing. Every eligible hook needs a Part B. The stop gate refuses the turn if a decision has no probe of the hook's probe_files.",
+  "id": "hook.unused_credits",
+  "kind": "hook",
+  "A_script": {
+    "eligible": true,
+    "because": [{"cite": "buyleads.md#E05", "fact": "13 credits lapsed, 8 left"}],
+    "blockers": [],
+    "division_fit": ["CSD", "TMW", "KCD"],
+    "probe_files": ["buyleads.md", "calls/"],
+    "facts_for_claim": {"credits_lapsed": 13, "balance": 8}
+  },
+  "B_agent": {
+    "decision": "primary | backup | rejected",
+    "reason": "why this hook fits (or does not fit) THIS seller now",
+    "probe": {"files_read": ["buyleads.md", "calls/C01_2026-09-21.md"], "cites": ["buyleads.md#E05", "buyleads.md#E07", "calls/C01#C01.T4"]},
+    "counter_evidence": "facts that argue against this hook, and why they do not change the decision",
+    "claim_draft": "Aapke 13 credits lapse ho gaye, 8 abhi bache hain...",
+    "claim_fact_ids": ["buyleads.md#E05"]
+  }
+}

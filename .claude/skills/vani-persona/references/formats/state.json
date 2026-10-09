@@ -1,0 +1,25 @@
+{
+  "_doc": "Format of ONE state in facts.json. Part A: scripts/facts.py. Part B: the agent, after probing. A state has a date and a weight that decreases with age.",
+  "id": "state.bl_usage",
+  "kind": "state",
+  "A_script": {
+    "value": "lapsed",
+    "detail": {"credits_allotted": 15, "credits_lapsed": 13, "balance": 8, "last_consumed": "2026-10-08"},
+    "as_of": "2026-10-10",
+    "half_life_days": 30,
+    "weight": 0.95,
+    "evidence": [
+      {"cite": "buyleads.md#E05", "field": "E05.bl_credit_lapsed", "value": 13, "date": "2026-10-10", "source": "api:byr_supply"}
+    ],
+    "confidence": 0.9,
+    "rule": "lapsed if lapsed > 0; unused if allotted > 0 and no use in 30 d; low_use if used < 30%; none if no credits",
+    "missing_inputs": []
+  },
+  "B_agent": {
+    "still_true_now": "yes | no | unclear",
+    "probe": {"files_read": ["buyleads.md", "calls/C01_2026-09-21.md"], "cites": ["buyleads.md#E05", "calls/C01#C01.T4"]},
+    "note": "e.g. the seller said on the last call that leads are not relevant, so the credits lapsed for a reason",
+    "relevance": "high | medium | low",
+    "implication_for_persona": "e.g. lead with lead quality, not with unused credits"
+  }
+}

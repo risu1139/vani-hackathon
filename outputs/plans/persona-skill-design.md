@@ -77,6 +77,40 @@ For each hook, the script writes `eligible: true/false`, `because` (the facts an
 
 **Call-level guard facts (script):** `do_not_call` (DNC flag), `asked_stop_calling`, `met_exec_in_last_3_days`, `vani_calls_last_7d ≥ 3`. If one of these is true, the skill tells the agent first. The agent can then decide not to pitch, or to only apologise and close.
 
+## 5a. The four call-level guards (explained)
+
+A guard is a fact that can make a pitch wrong for this call. The script sets each guard to true or false, with its evidence. If a guard is true, the agent must deal with it before it chooses a hook.
+
+| Guard | What it means | Where the data comes from | What the agent must do |
+|---|---|---|---|
+| 1. `do_not_call` | The seller asked IndiaMART not to call (the DNC flag). | ps07 seller file `do_not_call_requested`; a "stop calling" request in calls | Stop. The skill writes status "do_not_call", and no persona and no Sarvam variables. This is a compliance rule, not a choice. |
+| 2. `asked_stop_calling` | On a past VANI call, the seller said "don't call" or "update your system", but no DNC flag is set. | Summaries and quotes in calls/ | Default: no pitch. The persona is only "apologise, confirm, close". The agent can override only with a newer call where the seller agreed to be called. |
+| 3. `met_exec_recently` | An IndiaMART executive met or called the seller in the last 3 days. | H01.last, H03, executive contact in calls/ | Do not ask for a new meeting. Example: seller 93557756 met an executive, and then VANI called 7 times in one week. The agent can change the objective to "follow up on the meeting" or decide not to call. |
+| 4. `call_fatigue` | VANI called the seller 3 or more times in the last 7 days. | Call dates in calls/ | Make the call short and acknowledge the earlier calls. Never repeat the last pitch. The agent can recommend "skip this call". |
+
+## 5b. The agent's choice is gated (it must probe; it cannot just pick)
+
+Each hook has `probe_files` (written by the script). Before the agent decides about a hook, it must read those files. A gate checks the following. If a check fails, the turn does not end and the agent gets one message with all the failures.
+
+1. **Every eligible hook has a decision** in Part B: primary, backup or rejected, with a reason. A "rejected" hook also needs a reason.
+2. **The probe happened.** For each decision, the files in `probe_files` appear in the read log. A PostToolUse hook records every file that the agent reads. The agent cannot write this log.
+3. **The citations are real.** Each cite (e.g. `buyleads.md#E05`, `calls/C01#C01.T4`) exists in the folder.
+4. **There is enough evidence.** The primary hook has at least 3 cites, and these come from at least 2 different files. One cite must come from calls/ if the seller had a VANI call in the last 90 days.
+5. **Counter-evidence is considered.** The primary hook has a `counter_evidence` text that is not empty.
+6. **The guards are acknowledged.** Each true guard has an agent note before any hook decision.
+7. **The traits and states that the agent uses are reviewed.** A trait or a state that the persona cites must have a Part B with `relevance` and `implication_for_persona`.
+
+The gate checks that the agent probed and cited. It does not check that the choice is "right": that is the agent's judgement.
+
+## 5c. Where the three formats are stored
+
+In the skill: `.claude/skills/vani-persona/references/formats/`:
+- `trait.json`: Part A (script: value, detail, evidence, confidence, rule, missing inputs) and Part B (agent: accepted or corrected, probe, note, relevance, implication for the persona).
+- `state.json`: the same, plus `as_of`, `half_life_days` and `weight`, and the agent's `still_true_now`.
+- `hook.json`: Part A (script: eligible, because, blockers, division fit, probe_files, facts for the claim) and Part B (agent: decision, reason, probe, counter-evidence, claim draft, claim fact ids).
+
+`scripts/facts.py` writes Part A of every trait, state and hook into `facts.json`. The agent fills Part B. The next design step is how Part B becomes the persona.
+
 ## 6. What the agent decides (judgement)
 
 - Which eligible hook to use first, and the backup hook.
@@ -89,5 +123,5 @@ For each hook, the script writes `eligible: true/false`, `because` (the facts an
 
 1. Do you agree with the split: the script calculates the facts and the hook eligibility; the agent selects?
 2. Do you agree with the proposed thresholds (scale tier, profile strength, bl_usage, enquiry trend)? They are a start. We tune them with data later.
-3. Are the call-level guards correct (DNC, "stop calling", executive met in the last 3 days, 3 or more VANI calls in 7 days)?
+3. Are the call-level guards correct? See 5a.
 4. After you agree, the next step is CLAUDE.md (the rules that must never be missed). Then SKILL.md.
