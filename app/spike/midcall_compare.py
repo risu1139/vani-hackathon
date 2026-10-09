@@ -66,6 +66,13 @@ SCEN["B_gujarati"] = [("Leads ki zarurat nahi hai, pehle se bahut aa rahi hain."
                       ("સારું, બલ્ક બાયર્સ જોઈએ છે. મીટિંગ ક્યારે કરશો?", "gu-IN", "interested"),
                       ("કાલે સવારે દસ વાગ્યે.", "gu-IN", "after_gu")]
 
+SCEN["MIN"] = [OPENER, ("ओके ओके", "hi-IN", "neutral"),
+               ("अच्छा, ये कैसे काम करता है? कितना चार्ज है?", "hi-IN", "interested"),
+               ("समझ नहीं आया, क्या मतलब मीटिंग?", "hi-IN", "confused"),
+               ("कितनी बार कॉल करोगे, परेशान कर दिया है", "hi-IN", "frustrated"),
+               ("ગુજરાતીમાં વાત કરો ને, મને હિન્દી ઓછું ફાવે છે.", "gu-IN", "gujarati"),
+               ("अभी बिज़ी हूँ यार, जल्दी बोलो क्या है", "hi-IN", "rushed")]
+
 GUJ = r"[઀-૿]"
 CHECKS = {  # does a reply show the adaptation for this signal?
     "rushed": lambda r: len(r.split()) <= 16 and bool(re.search(r"बाद|baad|later|call|कॉल|समय|time|कब|बजे|मिनट", r, re.I)),
@@ -142,7 +149,7 @@ def analytics_vars(app, iid):
 
 async def run_call(opt, app, scen, idx, audio, probe_plan=None):
     turns = SCEN[scen]
-    frames, events, onsets = [], [], []
+    frames, events, onsets, bursts = [], [], [], []
     state = {"last": 0.0, "mode": "neutral", "agent_text": "", "lang": "hindi"}
     decisions, push_tasks = [], []
     t0 = time.time()
@@ -190,6 +197,9 @@ async def run_call(opt, app, scen, idx, audio, probe_plan=None):
             now = time.time()
             if now - state["last"] > 0.6:
                 onsets.append(now)
+                bursts.append([now, now])
+            elif bursts:
+                bursts[-1][1] = now
             state["last"] = now
 
     async def on_transcript(msg):
@@ -207,6 +217,8 @@ async def run_call(opt, app, scen, idx, audio, probe_plan=None):
                  "switch_log": "[]"}
     if opt in ("O2c", "O6"):  # relay copy: the tool reads the classifier choice from net_probe
         init_vars["net_probe"] = "sarvam" if opt == "O6" else "jev"
+    if opt in ("W1", "W2", "W3"):  # warm-relay test: the tool reads the variant from net_probe
+        init_vars["net_probe"] = "w3" if opt == "W3" else "w1"
     cfg = InteractionConfig(org_id=ORG, workspace_id=WS, app_id=app, version=1, interaction_type=InteractionType.CALL,
                             user_identifier_type=UserIdentifierType.CUSTOM,
                             user_identifier=f"cmp-{opt}-{scen}-{int(time.time())}-{idx}", sample_rate=SR,
@@ -277,6 +289,7 @@ async def run_call(opt, app, scen, idx, audio, probe_plan=None):
         dec = [d for d in decisions if a <= d.get("t_heard", 0) < b]
         tr = {"seller": text, "signal": sig, "asr": heard, "reply": reply, "words": len(reply.split()),
               "reply_onset_s": round(on[0] - ends[k], 2) if on else None, "server_events": ev,
+              "bursts_rel": [[round(b0 - ends[k], 2), round(b1 - ends[k], 2)] for b0, b1 in bursts if ends[k] - 0.5 <= b0 < b],
               "checks": {s: CHECKS[s](reply) for s in SIGNALS}}
         if dec:
             tr["jev"] = [{"utt": d["utt"], "jev_ms": d.get("jev_ms"), "scores": d.get("scores"), "lang": d.get("lang"),
@@ -322,7 +335,13 @@ async def main(opt, app, scens, runs):
         SCEN["probe"] = PROBE_TURNS
         scens = ["probe"]
     for scen in scens:
-        audio = [tts(t, lang) for t, lang, _ in SCEN[scen]]
+        cache = OUT / f"tts-cache-{scen}.pcm.json"  # reuse seller audio across variants (saves TTS calls)
+        if cache.exists():
+            audio = [base64.b64decode(a) for a in json.loads(cache.read_text())]
+        else:
+            audio = [tts(t, lang) for t, lang, _ in SCEN[scen]]
+            if scen == "MIN":
+                cache.write_text(json.dumps([base64.b64encode(a).decode() for a in audio]))
         for i in range(runs):
             r = await run_call(opt, app, scen, i, audio, PROBE_PLAN if opt == "probe" else None)
             res.append(r)

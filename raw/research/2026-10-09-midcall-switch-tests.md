@@ -218,3 +218,53 @@ Not done, each needing a decision:
 - O2b (needs our OpenRouter key in Sarvam plus the allowlist; refused by policy);
 - the T2 config write;
 - the T3 LID-off variant (moot).
+
+## Warm relay, filler and hybrid (2026-10-09, 17:58–18:24 IST)
+
+**Setup**
+- Code tool on the clone "relay copy" (`VANI-midcal-37a2191c-332d`) → cloudflared quick tunnel → laptop relay → Jev.
+- **Relay** (`app/spike/midcall_relay.py`): one persistent keep-alive session to OpenRouter, warmed with a dummy Jev call at start and every 20 s. 74/74 warm pings succeeded, 507 ms median; the first, cold ping took 1,165 ms.
+- **Auth:** HMAC-SHA256 over `{ts}.{interaction_id}.{utterance}`. Requests with a bad signature or older than 30 s were rejected, checked from the laptop. The key sat in the workspace secret `VANI_RELAY_HMAC_TEST`, which the user created.
+- **Tool** (`app/spike/code_tools/vani_clone_warm_template.py`): one module-level `httpx.AsyncClient`.
+- **Secret lookup lesson:** the first upload read the secret through a constant and got `ValueError` (secret not found) on every turn. With the literal `context.get_secret("VANI_RELAY_HMAC_TEST")` it worked. The uploader seems to wire up only secrets named literally in the code.
+
+**Runs.** Sarvam credits ran low and testing was stopped by the user, so the runs are smaller than planned:
+- **W1:** 2 runs of the 7-scenario set.
+- **W2 and W3:** 1 session each of a single 7-turn script (opener, "ओके ओके", interested, confused, frustrated, Gujarati switch, rushed). W3 also has one earlier session that ended at "ओके ओके": the agent took it as agreement to a call-back and hung up.
+- **Baseline:** the earlier O2h numbers (hardened keyword tool, no relay); it was not re-run.
+
+**Not measured.** Relay round trip and client reuse as seen inside Sarvam live in the tool's `switch_log`, which can only be read through the analytics API. All further Sarvam calls were forbidden, so these come only from the relay's own log (Jev time) and from reply start. Scoring was done offline (`MIDCALL_OFFLINE=1 midcall_analyze.py`).
+
+| | W1 warm relay, Jev every turn (1.5 s cap) | W2 = W1 + filler "जी…" | W3 hybrid (keyword first, Jev ≤ 400 ms on ambiguous turns) | baseline O2h (keyword only) | earlier O2c (cold relay) |
+|---|---|---|---|---|---|
+| sessions / seller turns | 14 / 44 | 1 / 7 | 2 / 12 | 9 / 31 | 14 / 44 |
+| reply start, median (p95) | 2.52 s (3.06) | 2.32 s (2.82), first audio | 1.92 s (2.24) | 1.98 s (2.64) | 2.86 s (3.27) |
+| added vs O2h, median | **+0.54 s** | +0.34 s (n=7) | −0.06 s (no real Jev, see below) | – | +0.88 s |
+| Jev time at the relay, median (p95) | 495 ms (578) | 494 ms (505) | 481 ms (494) | – | about 500 ms |
+| relay round trip inside Sarvam, cold vs warm | not readable (needs analytics); the O2c→W1 drop in reply start (−0.34 s) is the warm-relay gain | not readable | not readable | – | 1,002 ms median, 1,519 ms max, a new connection on every call (44/44) |
+| HTTP client reused across turns | unknown (not readable) | unknown | unknown | – | no (O2c) |
+| relay calls | 79 on 44 turns, all different utterances: the tool was also called on partial ASR text (about 1.8 calls per turn) | 4 on 7 turns | 4 on 12 turns = **33%** of turns called Jev | – | 44 on 44 |
+| W3 timeouts | – | – | **4/4 likely timed out**: Jev alone took 457–606 ms, over the 400 ms cap before tunnel time, so the keyword result stood on every turn | – | – |
+| Jev mode accuracy (relay log vs script) | 55/57 (the two misses: "अच्छा, ठीक है।", a partial of the price line, labelled neutral) | 2/2 | 1/1 (opener) | 21/24 keyword | 34/34 |
+| same-turn switch: rushed / frustrated / confused / interested / Gujarati / opt-out | 4/4 · 4/4 · 2/2 · 4/4 · 2/2 · call ended, reply not captured offline | 0/1 · 1/1 · 1/1 · 1/1 · 1/1 · not in script | 1/2 · 2/2 · 2/2 · 1/1 · 1/1 · not in script | 2/2 · 2/2 · 1/1 · 5/5 · 2/2 · 1/1 | 4/4 · 4/4 · 2/2 · 4/4 · 2/2 · 2/2 |
+| false switches on neutral turns | 0/18 | 0/2 | 0/4 | 0/13 | 0/18 |
+
+**Notes**
+- **W2 filler not heard.** The audio shows no short "जी…" burst before replies. The first burst on each turn is a full sentence (0.9–5 s long), with the same burst pattern as W1. With `pre_run_message` set as a class default (SDK 1.1.1 has no per-call setter), the filler did not play, or was too short or too quiet to register. That means no filler-to-reply gap could be measured. W2 also hit the relay on only 4 of 7 turns, and why cannot be checked without the switch log. **Inconclusive, n=1.**
+- **The rushed miss in W2 and W3** is the last turn, a Hindi "अभी बिज़ी हूँ यार…" spoken right after the switch to Gujarati. The agent kept pitching in Gujarati. This is an ordering effect of the short script, not a relay result.
+- **W3 as built is the keyword tool plus wasted calls.** With Jev at about 480 ms, a 400 ms cap can never be met over the tunnel. A useful hybrid needs a cap of about 700–800 ms (adding about 0.5 s on the 33% of turns it gates), or a faster classifier.
+- **The tunnel and relay** were stopped by the coordinator at the end.
+
+**Sarvam usage for this test**
+- 17 scored sessions, 12.5 min of session time: W1 14 sessions (8.5 min), W3 2 (2.2 min), W2 1 (1.4 min).
+- Plus about 5 short sessions before the secret fix (tool failed at `get_secret`; aborted) and 1 check session.
+- Seller TTS for about 35 lines; the minimal script was cached and reused for W2.
+
+**Left as is (console use was forbidden at the end)**
+- The relay copy still carries the W2 tool file. It points at the dead tunnel URL and reads `VANI_RELAY_HMAC_TEST`.
+- It should be reset to `app/spike/code_tools/vani_clone_onstart_only.py`. The user will delete the secret.
+
+Evidence:
+- `outputs/midcall_tests/W1-*.json`, `W2-MIN-*.json`, `W3-MIN-*.json` and the `*-scored-W*.json` copies;
+- `outputs/midcall_tests/warm-relay-summary.json`;
+- `outputs/midcall_tests/relay-log-20261009.jsonl` (warm pings and `/decide` calls with Jev time).

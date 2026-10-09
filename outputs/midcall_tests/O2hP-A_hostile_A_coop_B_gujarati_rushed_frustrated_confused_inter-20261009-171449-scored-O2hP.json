@@ -48,6 +48,7 @@
   "neutral_examples": [],
   "reply_onset_median_s": 2.11,
   "reply_onset_p90_s": 2.46,
+  "reply_onset_p95_s": 2.62,
   "restarted_replies": "0/31",
   "server_avg_agent_response_s_median": 0.85,
   "tool": {
@@ -61,6 +62,14 @@
    "relay_err": 0,
    "relay_used": 0,
    "conn_new": 0,
+   "relay_called": 0,
+   "relay_timeouts": 0,
+   "rows": 31,
+   "relay_ms_p95": null,
+   "relay_ms_newconn_median": null,
+   "relay_ms_reused_median": null,
+   "n_newconn": 0,
+   "n_reused": 0,
    "relay_ms_median": null,
    "relay_ms_max": null
   }

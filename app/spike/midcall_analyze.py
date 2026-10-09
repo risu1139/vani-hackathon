@@ -115,12 +115,14 @@ def main(files, label):
         if r.get("interaction_id"):
             by_app[r["app"]].add(r["interaction_id"])
     avs = {}
-    for app, ids in by_app.items():
-        avs.update(fetch_vars(app, ids))
+    if not os.environ.get("MIDCALL_OFFLINE"):  # offline = score from local files only (no Sarvam API calls)
+        for app, ids in by_app.items():
+            avs.update(fetch_vars(app, ids))
     table = defaultdict(lambda: {"n": 0, "same": 0, "next": 0, "either": 0, "replies": []})
     neutral = {"n": 0, "false": 0, "examples": []}
     onsets, tool_stats = [], {"turns": 0, "calls": 0, "dups": 0, "missed": 0, "double": 0, "wrong_mode": 0, "mode_checked": 0,
-                              "relay_ms": [], "relay_err": 0, "relay_used": 0, "conn_new": 0}
+                              "relay_ms": [], "relay_err": 0, "relay_used": 0, "conn_new": 0,
+                  "relay_called": 0, "relay_timeouts": 0, "rows": 0, "ms_new": [], "ms_reused": []}
     restarts, nturns = 0, 0
     server_rt = []
     per_run = []
@@ -133,10 +135,11 @@ def main(files, label):
         except Exception:
             log = []
         turns = r["turns"]
-        try:
-            fill_from_transcript(r["app"], r)
-        except Exception:
-            pass
+        if not os.environ.get("MIDCALL_OFFLINE"):
+            try:
+                fill_from_transcript(r["app"], r)
+            except Exception:
+                pass
         for t in turns:
             t["reply_dd"], t["restarted"] = dedupe(t.get("reply") or "")
             t["checks_dd"] = {s: CHECKS[s](t["reply_dd"]) for s in CHECKS} if t.get("reply") else {}
@@ -161,6 +164,13 @@ def main(files, label):
                 tool_stats["missed"] += not rows
                 tool_stats["double"] += len(rows) > 1
                 for x in rows:
+                    if x.get("dup"):
+                        continue
+                    tool_stats["rows"] += 1
+                    tool_stats["relay_called"] += bool(x.get("relay_called", "relay_ms" in x))
+                    tool_stats["relay_timeouts"] += x.get("relay_err") == "timeout"
+                    if "relay_ms" in x:
+                        (tool_stats["ms_new"] if x.get("conn_new") else tool_stats["ms_reused"]).append(x["relay_ms"])
                     if "relay_ms" in x:
                         tool_stats["relay_ms"].append(x["relay_ms"])
                         tool_stats["relay_err"] += bool(x.get("relay_err"))
@@ -197,9 +207,14 @@ def main(files, label):
         "neutral_false_switch": f"{neutral['false']}/{neutral['n']}", "neutral_examples": neutral["examples"],
         "reply_onset_median_s": round(statistics.median(onsets), 2) if onsets else None,
         "reply_onset_p90_s": round(sorted(onsets)[int(0.9 * (len(onsets) - 1))], 2) if onsets else None,
+        "reply_onset_p95_s": round(sorted(onsets)[int(0.95 * (len(onsets) - 1))], 2) if onsets else None,
         "restarted_replies": f"{restarts}/{nturns}",
         "server_avg_agent_response_s_median": round(statistics.median(server_rt), 2) if server_rt else None,
-        "tool": {**{k: v for k, v in tool_stats.items() if k != "relay_ms"},
+        "tool": {**{k: v for k, v in tool_stats.items() if k not in ("relay_ms", "ms_new", "ms_reused")},
+                 "relay_ms_p95": sorted(tool_stats["relay_ms"])[int(0.95 * (len(tool_stats["relay_ms"]) - 1))] if tool_stats["relay_ms"] else None,
+                 "relay_ms_newconn_median": statistics.median(tool_stats["ms_new"]) if tool_stats["ms_new"] else None,
+                 "relay_ms_reused_median": statistics.median(tool_stats["ms_reused"]) if tool_stats["ms_reused"] else None,
+                 "n_newconn": len(tool_stats["ms_new"]), "n_reused": len(tool_stats["ms_reused"]),
                  "relay_ms_median": statistics.median(tool_stats["relay_ms"]) if tool_stats["relay_ms"] else None,
                  "relay_ms_max": max(tool_stats["relay_ms"]) if tool_stats["relay_ms"] else None},
     }

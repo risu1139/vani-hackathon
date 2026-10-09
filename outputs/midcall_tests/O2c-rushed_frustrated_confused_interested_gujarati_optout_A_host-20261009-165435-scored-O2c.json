@@ -48,6 +48,7 @@
   "neutral_examples": [],
   "reply_onset_median_s": 2.86,
   "reply_onset_p90_s": 3.16,
+  "reply_onset_p95_s": 3.27,
   "restarted_replies": "0/44",
   "server_avg_agent_response_s_median": 1.9,
   "tool": {
@@ -61,6 +62,14 @@
    "relay_err": 1,
    "relay_used": 43,
    "conn_new": 44,
+   "relay_called": 44,
+   "relay_timeouts": 0,
+   "rows": 44,
+   "relay_ms_p95": 1344,
+   "relay_ms_newconn_median": 1002.5,
+   "relay_ms_reused_median": null,
+   "n_newconn": 44,
+   "n_reused": 0,
    "relay_ms_median": 1002.5,
    "relay_ms_max": 1519
   }

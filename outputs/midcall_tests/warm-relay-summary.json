@@ -1,0 +1,80 @@
+{
+ "W1": {
+  "files": [
+   "W1-rushed_frustrated_confused_interested_gujarati_optout_A_host-20261009-181741.json"
+  ],
+  "sessions": 14,
+  "seller_turns_heard": 44,
+  "relay_calls": 79,
+  "jev_ms_median": 495,
+  "jev_ms_p95": 578,
+  "jev_ms_over_300": 79,
+  "mode_right": 55,
+  "mode_wrong": 2,
+  "wrong": [
+   [
+    "अच्छा, ठीक है।",
+    "interested",
+    "neutral"
+   ],
+   [
+    "अच्छा, ठीक है।",
+    "interested",
+    "neutral"
+   ]
+  ],
+  "relay_calls_by_utt": null
+ },
+ "W2": {
+  "files": [
+   "W2-MIN-20261009-182419.json"
+  ],
+  "sessions": 1,
+  "seller_turns_heard": 7,
+  "relay_calls": 4,
+  "jev_ms_median": 494.0,
+  "jev_ms_p95": 505,
+  "jev_ms_over_300": 4,
+  "mode_right": 2,
+  "mode_wrong": 0,
+  "wrong": [],
+  "relay_calls_by_utt": null
+ },
+ "W3": {
+  "files": [
+   "W3-MIN-20261009-181927.json",
+   "W3-MIN-20261009-182133.json"
+  ],
+  "sessions": 2,
+  "seller_turns_heard": 12,
+  "relay_calls": 4,
+  "jev_ms_median": 481.0,
+  "jev_ms_p95": 494,
+  "jev_ms_over_300": 4,
+  "mode_right": 1,
+  "mode_wrong": 0,
+  "wrong": [],
+  "relay_calls_by_utt": [
+   [
+    "हाँ जी बोलिए।",
+    "neutral",
+    468
+   ],
+   [
+    "हाँ जी।",
+    "neutral",
+    457
+   ],
+   [
+    "हाँ जी, बोलिए।",
+    "neutral",
+    606
+   ],
+   [
+    "हाँ जी, बोलिए, कौन बोल रहा है?",
+    "neutral",
+    494
+   ]
+  ]
+ }
+}

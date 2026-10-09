@@ -5,12 +5,17 @@ utterance (or @Call Transcript) plus a random shared token; every model key stay
 
   POST /decide?clf=jev|sarvam   {"utt": "...", "last_agent": "..."}          -> {"mode","directive","scores","ms"}
   POST /decide_transcript?clf=  {"transcript": <@Call Transcript>, ...}      -> same (last user turn is classified)
-Header: X-Relay-Token: <token> on every request. Every request is appended to outputs/midcall_tests/relay-log-<date>.jsonl
+Auth (warm-relay test): headers X-Ts (unix seconds) and X-Sig = hex HMAC-SHA256(secret, f"{ts}.{interaction_id}.{utt}").
+Requests with a bad signature or older than 30 s are rejected. The secret comes from RELAY_TOKEN.
+Keep-warm: one persistent requests.Session to OpenRouter (keep-alive); a dummy Jev call at start and every 20 s. Every request is appended to outputs/midcall_tests/relay-log-<date>.jsonl
 (utterance text is made-up test speech only).
 
 Usage: RELAY_TOKEN=... python app/spike/midcall_relay.py [port]
 """
+import hashlib
+import hmac
 import json
+import threading
 import os
 import re
 import sys
@@ -26,6 +31,33 @@ from midcall_compare import DIRECTIVES, PRIORITY, QUESTIONS
 ROOT = jev_spike.ROOT
 LOG = ROOT / "outputs" / "midcall_tests" / f"relay-log-{time.strftime('%Y%m%d')}.jsonl"
 TOKEN = os.environ["RELAY_TOKEN"]
+MAX_AGE_S = 30
+WARM_EVERY_S = 20
+
+
+def _warm_loop():
+    while True:
+        t0 = time.perf_counter()
+        try:
+            clf_jev("हाँ जी", "नमस्ते")
+            ok = True
+        except Exception:
+            ok = False
+        with open(LOG, "a", encoding="utf-8") as f:
+            f.write(json.dumps({"t": round(time.time(), 3), "path": "warm", "ok": ok,
+                                "ms": round((time.perf_counter() - t0) * 1000)}) + "\n")
+        time.sleep(WARM_EVERY_S)
+
+
+def sig_ok(headers, utt, iid):
+    try:
+        ts = float(headers.get("X-Ts") or 0)
+    except ValueError:
+        return False, "bad ts"
+    if abs(time.time() - ts) > MAX_AGE_S:
+        return False, "stale"
+    want = hmac.new(TOKEN.encode(), f"{headers.get('X-Ts')}.{iid or ''}.{utt}".encode("utf-8"), hashlib.sha256).hexdigest()
+    return hmac.compare_digest(want, headers.get("X-Sig") or ""), "sig"
 SARVAM_MODEL = os.environ.get("SARVAM_CLF_MODEL", "sarvam-105b")
 SARVAM_SESSION = requests.Session()
 LABELS = ["neutral", "rushed", "frustrated", "confused", "interested", "opt_out", "bot_question"]
@@ -97,12 +129,13 @@ class H(BaseHTTPRequestHandler):
     def do_POST(self):
         t_in = time.time()
         u = urlparse(self.path)
-        if self.headers.get("X-Relay-Token") != TOKEN:
-            return self._send(401, {"error": "bad token"})
         try:
             body = json.loads(self.rfile.read(int(self.headers.get("Content-Length") or 0)) or b"{}")
         except Exception:
             body = {}
+        ok, why = sig_ok(self.headers, body.get("utt", ""), body.get("interaction_id"))
+        if not ok:
+            return self._send(401, {"error": why})
         clf = (parse_qs(u.query).get("clf") or ["jev"])[0]
         if u.path == "/decide_transcript":
             utt, last_agent = last_user_turn(body.get("transcript"))
@@ -126,5 +159,6 @@ class H(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8787
+    threading.Thread(target=_warm_loop, daemon=True).start()
     print(f"relay on 127.0.0.1:{port}, log {LOG}", flush=True)
     ThreadingHTTPServer(("127.0.0.1", port), H).serve_forever()
