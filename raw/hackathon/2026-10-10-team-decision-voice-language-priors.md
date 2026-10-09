@@ -23,3 +23,8 @@ pg-imblr `gl_city.gl_city_classification`:
 - empty = 21,547 places (mostly villages and very small towns).
 
 Proxy: classification 3 or empty = small town / rural. Hindi belt = the state is in UP, Bihar, MP, Rajasthan, Haryana, Jharkhand, Chhattisgarh, Uttarakhand, Himachal Pradesh or Delhi. The builder must add the seller's city classification to the context. This is a proxy, not a census rural flag.
+
+## Later in the same session (user, who identified as Rishav)
+- Scoreboard outcome: "meeting fixed" now; "meeting held" is added later.
+- Rishav approves new versions of the persona library and the Sarvam template.
+- The "AI Roleplay" recordings have real salespeople on the IndiaMART side (not AI). Use them to build the CSD pitch reference. NSD follows the enrichment-meeting principles; test that the agent follows them.
