@@ -59,3 +59,4 @@ Status key: **current** = still the basis for the wiki · **reference** = facts 
 | 2026-10-09-jev-latency-floor.md | Jev latency floor: network 26 ms, Jev processing ~450-500 ms regardless of 1 or 6 questions; Vercel gateway needs a card | current |
 | hackathon/2026-10-09-team-decision-seller-gender.md | User decision: seller gender (recorded, else name/voice guess) may pick VANI's voice gender only; updates persona-agent item 7 | current |
 | hackathon/2026-10-10-sarvam-prompt-template-example.md | Sarvam agent prompt template example ('Ananya' B2B discovery): target format our per-seller VANI persona must be translated into | current |
+| hackathon/2026-10-10-nsd-csd-pitch-input.md | User input: NSD (new sales: hook→meeting) vs CSD (paid: BL usage + profile score); NSD enrichment-meeting pitch script verbatim | current |
