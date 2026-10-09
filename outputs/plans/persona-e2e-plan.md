@@ -76,7 +76,9 @@ Division-specific text is inside `{% if division == "NSD" %}` blocks.
 
 | Variable | Filled from | Used by |
 |---|---|---|
-| `persona_voice_id`, `persona_pace`, `persona_pitch` | persona.voice / pace / pitch | OnStart tool (call start) |
+| `persona_voice_id`, `persona_pace`, `persona_pitch` | persona.voice / pace / pitch | OnStart tool (call start): voice gender + voice, pace, pitch (PROVEN) |
+| `persona_voice_gender` | persona.voice.gender | template blocks for gendered Hindi grammar ("kar rahi / raha hoon") |
+| `persona_language` | persona.language.start (regional unless high value) | OnStart `set_initial_language_name` (seen in the SDK; to test). Sarvam's built-in switch handles mid-call changes |
 | `persona_opening` | persona.opening | OnStart → first line |
 | `persona_style` | persona formality, warmth, sophistication, language, words per turn | Speaking Style section (never changed by the switch tool) |
 | `call_plan` | persona.call_plan + objection_order | Phases section |
@@ -86,7 +88,9 @@ Division-specific text is inside `{% if division == "NSD" %}` blocks.
 | `seller_mode`, `persona_directive`, `switch_log` | the switch tool, during the call | Live adaptation section |
 | `decision_id` | the run | every log row |
 
-**2.3** A new persona never needs a new prompt. Only the variables change. The template changes only in a new version that a human approves.
+**2.3 Every decided persona dimension stays per seller.** The template is fixed only as text structure. Voice gender, voice, pace, pitch, starting language, gendered grammar, formality, warmth, sophistication, code-mix, salutation, opening, hook, call plan and switch wording all change per call through the variables above. This follows the team decision "per-call persona values go through agent variables only" and the production buyer-side prompt pattern (variable-switched sections).
+
+**2.4** A new persona never needs a new prompt. Only the variables change. The template changes only in a new version that a human approves.
 
 ## 3. In-call switching (S7)
 
