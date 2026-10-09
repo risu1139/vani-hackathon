@@ -16,7 +16,7 @@ Sources: [[2026-10-10-sarvam-prompt-template-example]] · [[2026-10-09-new-data-
 | **Speaking Style** | Words per turn (<30), one question at a time, re-asks shorter, salutation, register and code-mix, terms kept as-is, "hmm/haan/ok = engagement, not an answer", paraphrase when unclear | Brevity, language mix, salutation, filler rules; mid-call switch directives change these |
 | **Facts** | What the call is and isn't; internal-only variables; ask limits (budget nudges = 2) | `verified_facts` (what VANI may say), category value / AOV lines, ask limits |
 | **Conversation Guidelines** | Phases 1–9: identity → discovery → fit and next step → graceful close → callback → wrong person → escalation (DND, mental health, legal, hostile, deceased, supervisor) | Call plan: identity → hook → objection playbook → meeting ask → close; same exit phases |
-| **Guardrails** | No pricing or promises; summarise before the next step; booking only after a tool confirms; keep internal data private | Same, plus no human or "branch manager" claim, no unverifiable claims |
+| **Guardrails** | No pricing or promises; summarise before the next step; booking only after a tool confirms; keep internal data private | Same, plus the VANI identity rule (never volunteer AI, sidestep once, "virtual assistant" if pressed, never claim human; no manager titles), no unverifiable claims |
 | **Date Resolution** | Resolve relative dates against `current_date` and confirm | Same, for callback and meeting times |
 
 ## Variables in the example

@@ -1,6 +1,6 @@
 # NSD vs CSD: two different VANI pitches
 
-Sources: [[2026-10-10-nsd-csd-pitch-input]] · [[2026-10-10-sarvam-prompt-template-example]]
+Sources: [[2026-10-10-nsd-csd-pitch-input]] · [[2026-10-10-team-decision-vani-identity-line]] · [[2026-10-10-sarvam-prompt-template-example]]
 
 **Answer.** VANI's Objective and phases depend on which division owns the seller (as of 2026-10-10, from the user):
 - **NSD (new sales):** free sellers. The goal is a meeting that leads to a package sale. VANI never asks for the meeting directly. It opens with a profile-based **hook**: "this is your MCAT / product", "your competitors earn a lot here". The meeting is framed as profile help, not sales.
@@ -22,7 +22,7 @@ The seller-context `vertical_name` / `tele_vertical` fields (H02) name the ownin
 
 ## Changes needed before VANI can use it
 
-- **VANI is an AI.** It can't say "main aapka dedicated Account Manager hoon" or "main personally aakar". It must say an IndiaMART executive or account manager will visit. The AI disclosure and the "never claim human" rules stay ([[sarvam-prompt-template]]).
+- **Identity** ([[2026-10-10-team-decision-vani-identity-line]]): "Main IndiaMART se baat kar rahi hoon, aapke IndiaMART profile ko correct karne ke liye call kiya hai." Never say AI, bot, branch manager or account manager, and never "main personally aaungi"; the meeting is with "hamare IndiaMART executive". If asked whether it's a bot or human: sidestep once, say "virtual assistant" if pressed, never claim to be human.
 - **Every claim must be true for this seller.** The catalogue gap, "only 500 selected companies", and competitors' years and amounts must come from `verified_facts`, or be dropped. The data for gaps exists: CQS, catalogue health, missing photos/prices, profile sections (C08), category value and AOV (E09/E10), nearby competitors (E08).
 - **"Sir" is hard-coded.** Use "ji" unless a salutation is recorded.
 - **Meeting time:** VANI may propose a slot, but scheduling belongs to the scheduling agent.

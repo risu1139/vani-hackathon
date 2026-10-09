@@ -14,3 +14,6 @@ Source: the user, in the planning session on 2026-10-10.
    - first, sidestep without the word AI and return to the reason for the call;
    - if pressed, say "IndiaMART ki virtual assistant" and offer a callback from a person;
    - never claim to be human.
+
+## Confirmation (2026-10-10, same session)
+The user confirmed rule 3 ("yes"): never volunteer "AI"; sidestep once; say "virtual assistant" if pressed; never claim to be human. Rule 3 is now a decision, not a proposal.
