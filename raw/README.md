@@ -62,3 +62,4 @@ Status key: **current** = still the basis for the wiki · **reference** = facts 
 | hackathon/2026-10-10-nsd-csd-pitch-input.md | User input: NSD (new sales: hook→meeting) vs CSD (paid: BL usage + profile score); NSD enrichment-meeting pitch script verbatim | current |
 | hackathon/2026-10-10-team-decision-vani-identity-line.md | User decision: VANI identity line 'IndiaMART se, profile correct karne ke liye'; never say AI / branch manager / account manager; bot-question handling proposed | current |
 | research/2026-10-10-roleplay-calls-analysis.md | 5 of 30 'AI Roleplay' recordings transcribed (Sarvam, new key): seller-side meeting calls; NSD profile-gap vs CSD buy-lead/grievance pitch; objections; exec mistakes | current |
+| hackathon/2026-10-10-team-decision-peer-comparison.md | User decision: competitor/social-proof hook only vs peers of same turnover band + similar AOV + MCAT (+city); needs a data-backed peer statistic | current |
