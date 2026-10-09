@@ -34,7 +34,7 @@ As of 2026-10-09 (hackathon day 1). For the team lead, then an external reviewer
 | Batch cook, gate (agent only for ~40% of sellers), spec store, freeze engine | **One skill, one trigger** per seller, end to end; nightly batch = production section only | Decision one-skill §1–2 |
 | Published Sarvam version per audible bundle; per-call version selection untested | **OnStart code tool + defined agent variables** sets voice, pace, pitch, opening per call | PROVEN 2026-10-09 |
 | Separate directive-compiler block | "Compile Sarvam variables" is one step of the skill; prompt uses **variable-switched sections** (production pattern) | New buyer-side prompt evidence |
-| Code seeded fallback from seed hypotheses | Fallback = P0 control persona + memory facts, low confidence, reason stated | No rule table (decision 2) |
+| Code seeded fallback from seed hypotheses | No fallback persona (team lead, 2026-10-09). A failed or disagreeing spec is repaired by re-running the agent with the validator errors | No rule table; agent stays the decider |
 | Jev Devanagari untested | Jev native script **49/51, tricky 10/10, ~500 ms** | PROVEN 2026-10-09 |
 | Review format undefined | **Fatal / Non-Fatal** labels mirroring the VANI QA matrix | New data file |
 
@@ -160,13 +160,13 @@ States also set per-seller switch sensitivity in B8. **Status.** ASSUMED.
 
 ### B5 Guard + settle
 
-**Why.** FAQ Q5 (delivery, never facts/prices/compliance), FAQ Q6 (confidence ≤ completeness), Robustness 20, Evidence 15. **How.** Code only, enforced by hooks the agent cannot edit: schema; citation exists and matches; no digits / number words / prices / product claims in spoken text; native-script ratio; DNC; ID-number scrub verified; ≥ 2 runs pass and agree on the bucketed audible bundle {gender, pace band, pitch band, language}; code sets `evidence_tier` per setting; playability (voice exists for the language). Far from every library persona → `suggestion_row`. Failure → P0 control + memory-fact personalisation, low confidence, stated reason. **What.**
+**Why.** FAQ Q5 (delivery, never facts/prices/compliance), FAQ Q6 (confidence ≤ completeness), Robustness 20, Evidence 15. **How.** Code only, enforced by hooks the agent cannot edit: schema; citation exists and matches; no digits / number words / prices / product claims in spoken text; native-script ratio; DNC; ID-number scrub verified; ≥ 2 runs pass and agree on the bucketed audible bundle {gender, pace band, pitch band, language}; code sets `evidence_tier` per setting; playability (voice exists for the language). Far from every library persona → `suggestion_row`. Failure → the agent re-runs once with the validator errors. If runs still disagree, the per-dimension majority of the agent's own runs is used and flagged. There is no fallback persona, and the call is placed only with a valid spec. **What.**
 
 ```json
 {"decision_id":"…","glid":"…","snapshot_ref":"…","versions":{"skill":"…","libraries":"…","validators":"…"},
  "persona":{"<dimension>":{"value":…,"reason":"…","cites":[…],"confidence":0.0,"evidence_tier":"…"}},
  "plan":{…},"switch_sensitivity":{"rush":0.0,"confusion":0.0,…},
- "path":"composed|fallback","runs":[{"run":1,"passed":true,"fails":[]}],"propensity":null}
+ "path":"composed|repaired","runs":[{"run":1,"passed":true,"fails":[]}],"propensity":null}
 ```
 
 **Status.** ASSUMED. Number-word slips and Roman-script Hinglish seen earlier (PROVEN) are why these checks exist.
@@ -258,7 +258,7 @@ Rule: only variables **defined in the agent** reach the tool (undefined SDK vari
 | Evidence 15 | B1, B5, B9, B10, B11 | evidence tier; PS07 recurrence; PS07 personalisation trials 0 for 3 cited honestly |
 | Deck: Business Impact 25 | slide | rush calls book 13.6% vs 26.0% (PROVEN, observational); projection labelled |
 | Deck: Completeness 20 | all | D1–D5 end to end from one trigger |
-| Deck: Robustness 20 | B5, B8, B9 | hooks, validators, fallback, Fatal/Non-Fatal review, real-data validation |
+| Deck: Robustness 20 | B5, B8, B9 | hooks, validators, repair re-run, Fatal/Non-Fatal review, real-data validation |
 | Deck: Voice Experience 20 | Sarvam, B8 | latency (~2.1 s) and restart rate (~17%) measured and worked on |
 | Deck: Demo & skills.md 15 | all | frozen demo, backup video, skills.md with numbers |
 
@@ -285,7 +285,7 @@ Rule: only variables **defined in the agent** reach the tool (undefined SDK vari
 1. **The live switch may not sound like a persona change.** Voice and pace are fixed per call; PS04's own example is "slows down when confused". Mitigation: text-level change with a measured number (words per sentence before/after); test #6 might allow a real pace change.
 2. **"Core agent must be Sarvam" vs frontier decider.** If organisers object, B4 runs Sarvam-105b with the same skill and guards (flat schema PROVEN, Roman-script slips PROVEN, so guards matter). The slide states which model produced each spec.
 3. **The peer data agent is a dependency we do not control.** Late or changed schema blocks B2. Mitigation: freeze the contract early; fixtures; B2 tolerates missing fields (FAQ Q6).
-4. **Composing adds variance; agreement is not correctness.** Mitigation: 2-of-3 bucketed agreement, citation checks, labelled fixtures; fallback rate measured, not assumed.
+4. **Composing adds variance; agreement is not correctness.** Mitigation: 2-of-3 bucketed agreement, citation checks, labelled fixtures; disagreement and repair rates measured, not assumed.
 5. **Personalisation may not lift meetings.** Three PS07 script-personalisation trials went 0 for 3 (PROVEN). Claim fit and adaptation, not lift; lift needs holdout after the event.
 6. **Live path fragility**: signal-server host, Jev reachability, ~17% restarted replies, ~2.1 s latency. Mitigation: lexicon works alone; health check before each demo call; freeze 12:00 D2; backup video 16:00 D2.
 
@@ -333,3 +333,52 @@ Rule: only variables **defined in the agent** reach the tool (undefined SDK vari
 | Phone number | Parked (rent from Sarvam later). | — |
 | Data agent schema | `app/contracts/seller_context.schema.json` v0.1 drafted and shared; the data agent owns it. | B1 contract fixed for parallel work. |
 | Peer facts in raw/ | Filed: raw/hackathon/2026-10-09-peer-briefs.md. | Citations available. |
+
+---
+
+## What can change during the call, and fit with PS04 and the deck (2026-10-09)
+
+**Before the call (OnStart, per seller): all PROVEN**
+- voice (gender + style voice): female 269 Hz vs male 94 Hz;
+- pace: 0.9 vs 1.3, about 21% faster;
+- pitch: 239 / 267 / 286 Hz;
+- starting language;
+- opening line (spoken verbatim);
+- call plan (`call_plan` variable).
+
+**During the call:**
+
+| Change | Possible? | How | Evidence |
+|---|---|---|---|
+| Wording, tone, warmth, empathy, formality | Yes | `persona_directive` set by the in-Sarvam switcher each turn | PROVEN: rushed → ≤ 12 words + callback; confused → simple + check; bot question → honest |
+| Brevity / length of replies | Yes | directive ("ONE short sentence") | PROVEN (10–13 words when rushed) |
+| Plan step / branch (callback, escalate, skip pitch) | Yes | directive + `call_plan` branches | PROVEN (plan followed 19/20) |
+| Language | Yes | Sarvam built-in switch (and `change_language` in a code tool) | PROVEN 6/6 (Gujarati). The voice stays the same voice. |
+| End the call / speak an exact line | Yes | code tool `set_end_conversation`, `message_to_user` | DOCUMENTED (SDK) |
+| Voice (speaker) | **No** | fixed at call start; per-language voices are also fixed at start | DOCUMENTED (UI text, SDK) |
+| Pace | **No** | the during-call tool context has no TTS config | DOCUMENTED (SDK 1.1.1) |
+| Pitch | **No** | same as pace | DOCUMENTED (SDK 1.1.1) |
+
+**Alignment check against the PS04 doc and deck slides 13–15:**
+
+| Requirement (verbatim source) | Our design | Status |
+|---|---|---|
+| "Before each call, build the VANI persona that fits that seller from their seller data" (§2, slide 13) | agent composes per seller from the seller-context JSON + traits/states | Meets |
+| Voice: "gender, accent, pitch and pace" (§3.2, slide 14) | set per call via OnStart: gender + style voice, accent = voice language tag, pitch, pace | Meets (all four PROVEN pre-call) |
+| Language "Hinglish mix and formality"; tone "warmth and empathy" (§3.2) | composed dimensions → prompt sections + directive | Meets |
+| "Reason for each choice … tied to the seller data" (§3.2, deliverable 2) | per-setting citation to seller-context fields, checked by validators | Meets (design) |
+| Conversation plan "opening; personalisation; objection playbook; escalation rules; guardrails" (§3.3) | `persona_opening` + `call_plan` + base-prompt guardrails | Meets |
+| Evidence from past calls, "be clear about how strong the evidence is" (§3.4) | evidence tier per setting; scoreboard; PS07 aggregates | Meets (design) |
+| Live adaptation for frustration, confusion, interest, language switch, rush (§3.5, FAQ Q4) | in-Sarvam switcher + built-in language switch | Meets (all 5 detected; Jev native-script 49/51) |
+| "slows down and simplifies when confused" (§3.5 example) | **simplifies: yes; slows down: wording only** (shorter sentences, one idea, check understanding); TTS pace cannot change mid-call | **Partial.** State it plainly in the demo. Possible mitigation: shorter, comma-separated sentences sound slower (ASSUMED, untested) |
+| "shortens and gets to the point when rushed" (§3.5) | directive: ≤ 12 words + callback | Meets (PROVEN) |
+| "switches language when the seller does" (§3.5) | built-in switch | Meets (PROVEN) |
+| "Every switch is written to a switch log: the signal detected, the change made and the reason" (§3.5, deliverable 4) | `switch_log` variable written by the in-Sarvam tool (signal, from → to, utterance) | Meets (the reason text is the directive; retrieval of the variable after the call is still to be wired) |
+| Voice demo on Sarvam, 2–3 contrasting sellers, ≥ 1 live switch, natural in 2+ languages (§3.6, deliverable 3, FAQ Q3) | OnStart sets contrasting voice/pace/pitch/language; a live human speaker; Hindi + Gujarati shown | Meets on SDK/web now; the phone path waits for a rented number |
+| Persona per seller, no fixed library (FAQ Q1) | library = starting points; agent composes per seller | Meets |
+| Personas never change facts/pricing/compliance (FAQ Q5) | facts in the base prompt; no-price / no-number validators | Meets (PROVEN: no amounts in 0/16 price turns) |
+| Missing fields → defaults, lower confidence (FAQ Q6) | missing_fields / completeness → confidence per setting | Meets (design) |
+| One-slide presentation (deliverable 5) | from this architecture | To do |
+| Deck rules: Sarvam Agent ID; all build in 2 days; no pre-built | the voice agent is Sarvam; the skill and code are written in the event | Meets / process |
+
+**The single gap vs the problem statement:** an audible *pace* change mid-call ("slows down when confused") isn't possible on Sarvam today. Everything else in PS04 §3 and the deck's PS04 slides is covered.
