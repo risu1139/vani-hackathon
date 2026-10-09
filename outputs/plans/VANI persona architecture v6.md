@@ -38,7 +38,7 @@ As of 2026-10-09 (hackathon day 1). For the team lead, then an external reviewer
 | Jev Devanagari untested | Jev native script **49/51, tricky 10/10, ~500 ms** | PROVEN 2026-10-09 |
 | Review format undefined | **Fatal / Non-Fatal** labels mirroring the VANI QA matrix | New data file |
 
-Kept from v5: frontier decider; agent composes, library = starting points; voice gender chosen from data, no quotas; code guards only guardrails and playability; ≥ 2 of 3 runs agree on the audible bundle; lexicon = switch of record; text-level live switches; two between-run loops; data-sharing policy and ID scrub; evidence tier per setting; freeze 12:00 D2 and backup video 16:00 D2.
+Kept from v5: frontier decider; agent composes, library = starting points; voice gender chosen from data, no quotas (update 2026-10-09: seller gender, recorded or else a name/voice guess with confidence, may pick VANI's voice gender only; raw/hackathon/2026-10-09-team-decision-seller-gender.md); code guards only guardrails and playability; ≥ 2 of 3 runs agree on the audible bundle; lexicon = switch of record; text-level live switches; two between-run loops; data-sharing policy and ID scrub; evidence tier per setting; freeze 12:00 D2 and backup video 16:00 D2.
 
 ---
 
