@@ -160,3 +160,22 @@ def test_dnc_blocks_persona(tmp_path):
 
 def test_identity_line_names_indiamart(tmp_path):
     bad(tmp_path, lambda p, r: p.__setitem__("identity_line", "Main aapke profile ke liye call kar rahi hoon"), "must name IndiaMART")
+
+
+def test_compile_refuses_unvalidated_and_fills(tmp_path):
+    import compile_vars as C
+    make(tmp_path)
+    run = tmp_path / "run"
+    (run / "validation.json").write_text(json.dumps({"pass": False}), encoding="utf-8")
+    try:
+        C.compile_vars(str(run))
+        assert False, "should refuse"
+    except SystemExit as e:
+        assert "REFUSED" in str(e)
+    (run / "validation.json").write_text(json.dumps({"pass": True}), encoding="utf-8")
+    p = json.loads((run / "04_persona.json").read_text(encoding="utf-8"))
+    p["opening"] = "Namaste {SELLER_NAME} ji, main IndiaMART se baat kar rahi hoon."
+    (run / "04_persona.json").write_text(json.dumps(p), encoding="utf-8")
+    out = C.compile_vars(str(run), {"{SELLER_NAME}": "Ravi", "{COMPANY}": "X"}, "Surat")
+    assert out["persona_opening"].startswith("Namaste Ravi ji") and out["persona_language"] == "GUJARATI"
+    assert out["persona_voice_gender"] == "F" and "feminine" in out["persona_style"]
