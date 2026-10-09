@@ -36,3 +36,7 @@ Status key: **current** = still the basis for the wiki · **reference** = facts 
 | 2026-10-08-plan-stress-spike.md | Measured: plan under hostile/off-plan sellers, plan-delivery route (every turn vs start only), Gujarati switch, restarted replies | current |
 | 2026-10-08-voice-override-spike.md | Measured: per-call voice/pace/pitch override via SDK is ignored; initial_language_name works; voice UUIDs + on_start route | current |
 | 2026-10-08-sarvam-on-start-options-check.md | Console + docs check: on-start HTTP hook is self-serve (variables only); Python Code Tools (needed for per-call voice) are on request | current |
+| 2026-10-09-last30days-agents-refine-personas-segments.md | Scan: 2026 agents that build/refine personas and segments; Etsy LLM profiles at 90M scale; PersonaAgent; TnT-LLM | reference |
+| 2026-10-09-last30days-voice-persona-expressive-tech.md | Scan: 2026 expressive/steerable voice tech; Sarvam Bulbul v4 persona voices (pace only, pitch v2 only); ElevenLabs/LiveKit expressive mode | current |
+| 2026-10-09-sarvam-voice-recheck.md | Day-1 re-check: pace+pitch work on v3/v4 (API); per-call SDK override still ignored; per-language voices route; native script advice | current |
+| 2026-10-09-per-language-voice-spike.md | Measured: per-call voice via Per-language voices + initial_language_name works (Hindi→female 286 Hz, English→male 140 Hz); reverted | current |
