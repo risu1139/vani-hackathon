@@ -12,7 +12,7 @@ As of 2026-10-09 (hackathon day 1). Written for the team lead first, then an ext
 2. A VANI persona is VANI's voice, speed, pitch, language, tone and call plan.
 3. Seller data is the input. It is not the persona.
 4. An AI agent reads the data of each seller who gets a call. The agent composes that seller's persona and gives a reason for each part.
-5. The agent runs on a frontier model. If the data ruling or the network path is not ready by 17:00 today, we run the same agent skill on Sarvam-105b. Then the deliverables do not stop.
+5. The agent runs on a frontier model in a Daytona sandbox. The team lead sets up model access (login) in the sandbox.
 6. The agent runs only for sellers with useful free text or with low code confidence. Code makes the persona for all other sellers. About 3 in 10 returning sellers have useful free text.
 7. Most useful free text is about time: "call me after Diwali", "I am travelling". Only about 1 in 10 sellers has a fact that lasts, such as "my son handles this".
 8. Code checks facts, prices, compliance, the do-not-call list, native script and number words. Code checks each reason against the real data.
@@ -30,7 +30,7 @@ As of 2026-10-09 (hackathon day 1). Written for the team lead first, then an ext
 
 | Finding | Change made | Section |
 |---|---|---|
-| C1 (part) | Frontier decider kept. Dated fallback trigger: Sarvam-105b runs the same skill on real sample files if rulings or the network path are open at 17:00 day 1. Both organiser rulings requested at the 15:30 day-1 check-in. Masking defined as a tested code step. Table of every off-premises flow. | §6.3, §6.4, §14 |
+| C1 (part) | Frontier decider kept. Model access in the Daytona sandbox is set up by the team lead (not a plan risk). Data-use ruling requested at the 15:30 day-1 check-in; masking defined as a tested code step; table of every off-premises flow. | §6.3, §14 |
 | C2 | B8 host decision with options and deadline; Jev reachability test from that host; lexicon = switch of record, Jev additive; "phir se" cue fix; Jev Devanagari test; B8 re-tagged | §7.3, §3, §9.3 |
 | C3 | States plainly: voice, pace and pitch are fixed per call. Per-signal text-level change with a measured metric, written to the switch row | §7.4 |
 | C4 | Per-call published-version selection proven today (F0); demo channel chosen by 18:00 day 1 and rehearsed; circular dependency broken with a day-1 base version set; demo freeze 12:00 day 2; backup video by 16:00 day 2 | §7.1, §11 |
@@ -64,7 +64,7 @@ As of 2026-10-09 (hackathon day 1). Written for the team lead first, then an ext
 
 ### 1.2 Not applied / needs team-lead decision
 
-1. **C1: "make Sarvam-105b the default decider from hour 0".** Reviewer's argument: the frontier decider is barred from real seller data until a ruling, and its network route is blocked (OpenRouter 403 from Daytona; LiteLLM untested), so D1/D2 on the real sample files would come from a non-chosen path; Sarvam is sanctioned, cheap (₹0.16, 4.2 s) and PROVEN on the flat schema. **Conflicts with binding decision 5** (decider runs on a frontier model). v5 keeps the frontier decider and adds only the dated 17:00 fallback trigger (§6.4). Team lead to decide whether to go further.
+1. **C1: "make Sarvam-105b the default decider from hour 0".** Reviewer's argument: the frontier decider may be barred from real seller data until a ruling, and its network route was untested; Sarvam is sanctioned, cheap and PROVEN on the flat schema. **Conflicts with binding decision 5** (decider runs on a frontier model). v5 keeps the frontier decider and adds only the dated 17:00 fallback trigger (§6.4). Team lead to decide whether to go further.
 2. **C5: pre-event spike code and the "all build during the 2 days / pre-built" rules.** Not addressed in this plan, on the team lead's instruction. Not in fixes or the work split.
 3. **M17 / §9.1 / §5 of the review: "select-only" as a fallback framing.** Reviewer's fix already avoids this; any variant that makes the agent select-only **conflicts with binding decision 3** (agent composes). v5 never reverts to select-only. A select-only arm is not run (cut with the 4-arm experiment).
 
@@ -84,7 +84,7 @@ As of 2026-10-09 (hackathon day 1). Written for the team lead first, then an ext
  ┌──────┴─ BATCH: sellers due a call ──────────────────────────────┴────────────────┴────────────┐
  │ B5a CONTEXT + GATE (code): DNC → no call · free-text fact OR low code confidence → agent;    │
  │                      else → code path · pre-fetch evidence, library, scoreboard, voices       │
- │ B5b AGENT COMPOSER: frontier model on Daytona ×3 (Sarvam-105b if 17:00 trigger fires)        │
+ │ B5b AGENT COMPOSER: frontier model on Daytona ×3                      │
  │     → composed spec: each dimension {value, citations, confidence, origin}                   │
  │ B5c GUARD + SETTLE (code): schema · citations · FAQ Q5 (digits, number words, prices) ·      │
  │     FAQ Q6 · native-script ratio · DNC → ≥2 runs pass, agree on BUCKETED audible bundle      │
@@ -236,7 +236,7 @@ Frontier model (Claude Code-style agent + persona-composition skill) on a Dayton
 
 **Rulings.** At the **15:30 day-1 mentor check-in** we ask the organisers two questions: (1) may masked seller data go to a frontier model (and to the reviewer and Jev); (2) does "core agent must be Sarvam" allow a frontier-model decider. Answers are filed in `raw/hackathon/`. Owner: team lead.
 
-**Fallback trigger (dated).** If **at 17:00 on day 1** either ruling is open, or the Daytona → model path (OpenRouter allowlist for 35.234.211.110, or LiteLLM from Daytona) does not work, M runs **the same agent skill with Sarvam-105b** on the real sample files, so D1/D2 are not blocked. The frontier model stays the decider of record; once both clear, it re-runs and its outputs replace the Sarvam ones (both logged, `model_id` per run). Until the ruling, the frontier model sees synthetic or masked data only.
+**Model access.** The team lead sets up the frontier model's access (login) inside the Daytona sandbox; the plan does not treat it as a risk. Sarvam-105b remains the fallback model only if the model call fails at run time (logged per decision).
 
 **Masking = code step with a test.** Replace phone numbers, GLIDs, emails, seller and company names from profile fields (Latin and Devanagari forms), and contact names after role words, with typed tokens. Test: a fixture file with planted identifiers; zero may survive. Regex alone is not trusted for names in Hinglish text (ASSUMED risk; tested).
 
@@ -330,7 +330,7 @@ The slide says it once: "voice is fixed per call by the platform; VANI adapts wh
 |---|---|
 | B8 down or slow (tool max wait 2 s) | Base prompt holds a safe plan summary; test what the variable holds after a tool error; health check before each demo call |
 | Jev unreachable | Lexicon only; log `source=lexicon, jev=unavailable` |
-| Decider route blocked | 17:00 trigger → Sarvam-105b (§6.4) |
+| Decider model call fails at run time | retry once, then Sarvam-105b fallback for that seller (logged) |
 | `decision_id` not echoed | Map the agent variable to a tool-body field ("Agent variable" option); fallback: single active-call registry for the demo |
 | Runs disagree | Seeded fallback with real reasons (§6.7) |
 | Sarvam ignores composed plan | Plan re-sent every turn; re-test with **compiled** text, not hand-written |
@@ -427,16 +427,16 @@ Six priority contracts in `app/contracts/` (JSON Schema + example): `seller_cont
 | Member | Owns | Done when |
 |---|---|---|
 | **S — strong dev** (live path) | B7, B7a compiler, version base set + per-call selection test, demo channel, B8 host + Jev test, lexicon fixes, §9.3 test, latency/restart timebox, §9.4 audibility; **after B8 works: B4, B6/freeze** | Live call on a frozen version with ≥ 1 measured text-level switch; requested = played = observed voice |
-| **M — second member** (decision path) | B1 (+ memory extractor, masking + test), B2, B5a gate, B5b on Daytona + 17:00 trigger, B5c, seeded fallback, decision records, §9.1 harness | One command turns sample seller files into validated `persona_decision` JSON; fallback and suggestion proven on fixtures; fallback rate reported |
+| **M — second member** (decision path) | B1 (+ memory extractor, masking + test), B2, B5a gate, B5b on Daytona, B5c, seeded fallback, decision records, §9.1 harness | One command turns sample seller files into validated `persona_decision` JSON; fallback and suggestion proven on fixtures; fallback rate reported |
 | **N — non-tech member** | Library cards in native script with seed hypotheses; voice auditions; experiment labels; ≈ 40 gold calls; native-script rating; skills.md draft; demo script | Library v1; labels committed; demo script with lines that avoid mid-sentence pauses |
-| **Team lead** | 15:30 rulings; 17:00 trigger call; adjudicator recruited; final sign-off on freeze | Rulings filed in `raw/hackathon/` |
+| **Team lead** | 15:30 data-use ruling; model access in Daytona sandbox; adjudicator recruited; final sign-off on freeze | Rulings filed in `raw/hackathon/` |
 
 ### 11.3 Timeline and submission checklist (deck)
 
 | When | What | Owner |
 |---|---|---|
 | D1 15:30 | Both organiser rulings asked | Team lead |
-| D1 17:00 | Decider trigger check; B8 host decided | Team lead, M, S |
+| D1 17:00 | B8 host decided | Team lead, M, S |
 | D1 18:00 | Demo channel chosen; per-call version selection proven | S |
 | D1 night | Experiment (240 runs); §9.3 test | M, S |
 | D2 12:00 | **Freeze** demo decisions + versions | S, team lead |
@@ -452,7 +452,7 @@ Six priority contracts in `app/contracts/` (JSON Schema + example): `seller_cont
 
 **Protect:** (1) live demo call on frozen versions with ≥ 1 lexicon switch; (2) switch log; (3) specs for every sample seller with real reasons and evidence tiers; (4) natural voice in 2 auditioned languages; (5) video, slide, README, skills.md, Agent ID; (6) switch precision table; (7) frontier composer on real data if rulings allow.
 
-**Cut first:** (1) weekly clustering (one artefact); (2) propensity sampler and holdout (log fields only); (3) experiment beyond 2 arms × 2 reps; (4) gold calls beyond ~40; (5) Jev wording loop; (6) B9 automation (one manual review); (7) k = 3 → k = 1 + guards, labelled; (8) frontier → Sarvam-105b run of the same skill (already the 17:00 trigger).
+**Cut first:** (1) weekly clustering (one artefact); (2) propensity sampler and holdout (log fields only); (3) experiment beyond 2 arms × 2 reps; (4) gold calls beyond ~40; (5) Jev wording loop; (6) B9 automation (one manual review); (7) k = 3 → k = 1 + guards, labelled.
 
 ---
 
@@ -508,8 +508,8 @@ Six priority contracts in `app/contracts/` (JSON Schema + example): `seller_cont
 |---|---|---|---|
 | 1 | May masked seller data go to a frontier model, reviewer and Jev? | Organisers | D1 15:30 |
 | 2 | Does "core agent must be Sarvam" allow a frontier decider? | Organisers | D1 15:30 |
-| 3 | Go beyond the 17:00 trigger and make Sarvam-105b default (review C1)? | Team lead | D1 17:00 |
-| 4 | OpenRouter allowlist for 35.234.211.110, or LiteLLM from Daytona? | Key owner / M | D1 17:00 |
+| 3 | Data-use ruling: may real seller data go to the frontier model? | Organisers (asked by team lead) | D1 15:30 |
+| 4 | (Closed) Model access from Daytona: handled by the team lead | Team lead | — |
 | 5 | B8 host: Daytona DNS/TLS, laptop + tunnel, or internal box? | S + team lead | D1 17:00 |
 | 6 | Does per-call published-version selection work? Agent-level pace/pitch audible? | S (test) | D1 18:00 |
 | 7 | Does Sarvam echo `decision_id`; variable length limit? | S (test) | D1 |
