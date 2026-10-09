@@ -1,0 +1,29 @@
+[
+ {
+  "case": "default",
+  "speech_span_s": 10.68,
+  "active_speech_s": 3.18,
+  "f0_median_hz": 122.1,
+  "voiced_frames": 249,
+  "stt_lang": "hi-IN",
+  "transcript": "नमस्ते, मैं इंडिया मार्ट से बोल रहा हूँ। क्या आपके पास दो मिनट हैं? नमस्ते, क्या आप अभी भी कॉल कर रहे हैं?"
+ },
+ {
+  "case": "aarti_f_p0.85",
+  "speech_span_s": 10.68,
+  "active_speech_s": 3.18,
+  "f0_median_hz": 122.1,
+  "voiced_frames": 249,
+  "stt_lang": "hi-IN",
+  "transcript": "नमस्ते, मैं इंडिया मार्ट से बोल रहा हूँ। क्या आपके पास दो मिनट हैं? नमस्ते, क्या आप अभी भी कॉल कर रहे हैं?"
+ },
+ {
+  "case": "aarti_f_p1.25",
+  "speech_span_s": 10.68,
+  "active_speech_s": 3.18,
+  "f0_median_hz": 122.1,
+  "voiced_frames": 249,
+  "stt_lang": "hi-IN",
+  "transcript": "नमस्ते, मैं इंडिया मार्ट से बोल रहा हूँ। क्या आपके पास दो मिनट हैं? नमस्ते, क्या आप अभी भी कॉल कर रहे हैं?"
+ }
+]

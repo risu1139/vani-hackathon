@@ -1,0 +1,11 @@
+[
+ {
+  "case": "after_revert_hindi",
+  "speech_span_s": 10.06,
+  "active_speech_s": 2.76,
+  "f0_median_hz": 115.9,
+  "voiced_frames": 223,
+  "stt_lang": "hi-IN",
+  "transcript": "नमस्ते, मैं इंडिया मार्ट से बोल रहा हूँ। क्या आपके पास 2 मिनट हैं? नमस्ते।"
+ }
+]
