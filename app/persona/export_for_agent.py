@@ -210,12 +210,24 @@ def _drop_gap(o):
     return o
 
 
+def _drop_urls(o):
+    """catalog_url holds the competitor's company name as a slug; VANI never says URLs."""
+    if isinstance(o, dict):
+        return {k: _drop_urls(v) for k, v in o.items() if k != "catalog_url"}
+    if isinstance(o, list):
+        return [_drop_urls(x) for x in o]
+    return o
+
+
+CATALOG_URL_TEXT = re.compile(r',?\s*"catalog_url":\s*"[^"]*"')
+
+
 def strip_sources(ctx):
     """The agent must not see where data came from (files, tables, APIs): it runs in a sandbox that has none of them."""
     out = {k: v for k, v in ctx.items() if k not in SOURCE_KEYS}
     out["points"] = {pid: {k: v for k, v in (pt.items() if isinstance(pt, dict) else []) if k != "source"}
                      for pid, pt in (ctx.get("points") or {}).items()}
-    return _drop_gap(out)
+    return _drop_urls(_drop_gap(out))
 
 
 # ---------------------------------------------------------------- gate
@@ -267,7 +279,7 @@ def export(glid, src=None, dst=None, maps=None, key=None):
                     json.dump(replace_json(strip_sources(ctx), fn, glid, pseudo), w, ensure_ascii=False, default=str)
             elif f.endswith(".md"):
                 with open(target, "w", encoding="utf-8") as w:
-                    w.write(re.sub(r"(?m)^- \*\*gap:\*\*.*\n?", "", fn(open(path, encoding="utf-8").read())))
+                    w.write(CATALOG_URL_TEXT.sub("", re.sub(r"(?m)^- \*\*gap:\*\*.*\n?", "", fn(open(path, encoding="utf-8").read()))))
             # any other file type is not exported
     hits = gate(out, glid, names)
     if hits:

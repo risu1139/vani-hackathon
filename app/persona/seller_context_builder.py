@@ -704,6 +704,32 @@ def plan_check(plan, vertical):
     return f"{plan['plan']} seller; division {vertical}: " + ("consistent" if ok else f"MISMATCH (a {vertical} seller should be {expected})")
 
 
+def custtype_paid_map(refresh=False):
+    """{custtype_name: 'paid' | 'free'} from the custtype table (55 rows, static). paid = -1 means PAID, everything else FREE."""
+    def q():
+        rows = redash("SELECT custtype_name AS n, paid AS p FROM custtype", REDASH_MESH_DS)
+        if rows is None:
+            return None
+        return {"status": "ok", "map": {r["n"]: ("paid" if r.get("p") is not None and int(float(r["p"])) == -1 else "free")
+                                        for r in rows if r.get("n")}}
+    return _cached(os.path.join(AOV_CACHE, "custtype_paid.json"), q, refresh)
+
+
+def tidy_competitors(P, refresh=False):
+    """E08 competitors: drop catalog_url (VANI never says URLs and a slug leaks the company name) and add plan = paid | free
+    from the competitor's custtype_name (custtype.paid = -1 is paid; user rule 2026-10-10)."""
+    e08 = (P.get("E08") or (None,))[0]
+    comps = ((e08.get("competitors") or {}).get("competitors") if isinstance(e08, dict) and isinstance(e08.get("competitors"), dict) else None) or []
+    if not comps:
+        return
+    cm = (custtype_paid_map(refresh) or {}).get("map") or {}
+    for c in comps:
+        if isinstance(c, dict):
+            c.pop("catalog_url", None)
+            if c.get("custtype_name") in cm:
+                c["plan"] = cm[c["custtype_name"]]
+
+
 GST_STATE_CODES = {  # statutory GST state codes (first 2 digits of a GSTIN); a code list, not a language mapping
     "01": "Jammu and Kashmir", "02": "Himachal Pradesh", "03": "Punjab", "04": "Chandigarh", "05": "Uttarakhand", "06": "Haryana",
     "07": "Delhi", "08": "Rajasthan", "09": "Uttar Pradesh", "10": "Bihar", "11": "Sikkim", "12": "Arunachal Pradesh",
@@ -1185,6 +1211,8 @@ def build(glid, use_api=True, refresh=False, rebuild=False, as_of=None):
     hist = call_history(files, now)
     other = other_records(files)
     P["X05"] = (city_tier(peer, refresh) if use_api else None, "pg-imblr gl_city classification")
+    if use_api:
+        tidy_competitors(P, refresh)
     P["D08"] = (top_mcats(glid, refresh) if use_api else None, "pg-meshr active products per MCAT")
     P["X07"] = (plan_class(glid, refresh) if use_api else None, "pg-meshr custtype.paid (-1 = paid, else free)")
     P["X06"] = (gst_location(glid, refresh) if use_api else None, "pg-imblr glusr_gst_details (state code only)")
