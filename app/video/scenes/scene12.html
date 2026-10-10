@@ -1,0 +1,116 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#fff}canvas{display:block}</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script>
+// Scenes 1-2 of the VANI explainer. Each beat draws itself from local progress p (0..1) and local time lt (s).
+// Beat durations are placeholders until the voice-over exists; then each one is set to its voice line's length.
+const c = document.getElementById('c'), x = c.getContext('2d');
+const NAVY = '#002060', RED = '#C00000', TEAL = '#2EA896', ORANGE = '#E08A00', PURPLE = '#5B3E96', GREY = '#9aa3b2', INK = '#262626';
+const TPL = new Image(); TPL.src = '../assets/template_bg.jpg';
+window.READY = new Promise(r => { TPL.onload = r; TPL.onerror = r; });
+
+// ---------- easing and helpers
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const ease = p => { p = clamp(p); return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; };
+const back = p => { p = clamp(p); const s = 1.7; return 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2); };
+const seg = (lt, a, b) => ease((lt - a) / (b - a));
+const lerp = (a, b, p) => a + (b - a) * p;
+function mix(c1, c2, p) { const h = s => [1, 3, 5].map(i => parseInt(s.slice(i, i + 2), 16)); const A = h(c1), B = h(c2);
+  return '#' + A.map((v, i) => Math.round(lerp(v, B[i], p)).toString(16).padStart(2, '0')).join(''); }
+function alpha(a, fn) { if (a <= 0) return; x.save(); x.globalAlpha *= clamp(a); fn(); x.restore(); }
+function scaled(cx, cy, s, fn) { if (s <= 0) return; x.save(); x.translate(cx, cy); x.scale(s, s); x.translate(-cx, -cy); fn(); x.restore(); }
+
+function bg() { x.fillStyle = '#fff'; x.fillRect(0, 0, 1920, 1080); if (TPL.naturalWidth) x.drawImage(TPL, 0, 0, 1920, 1080); }
+function txt(s, px, py, size, color = INK, align = 'center', bold = false) { size = Math.max(size, 48); x.font = `${bold ? 'bold ' : ''}${size}px Arial`; x.textAlign = align; x.textBaseline = 'middle';
+  x.save(); x.strokeStyle = '#fff'; x.lineWidth = 12; x.lineJoin = 'round'; x.strokeText(s, px, py); x.restore(); x.fillStyle = color; x.fillText(s, px, py); }
+function emoji(s, px, py, size) { x.font = `${size}px "Segoe UI Emoji"`; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = INK; x.fillText(s, px, py); }
+function rr(px, py, w, h, r, fill, stroke, lw = 4) { x.beginPath(); x.roundRect(px, py, w, h, r); if (fill) { x.fillStyle = fill; x.fill(); } if (stroke) { x.strokeStyle = stroke; x.lineWidth = lw; x.stroke(); } }
+function ln(a, b, c2, d, color, w = 5, dash, p = 1) { if (p <= 0) return; x.save(); x.strokeStyle = color; x.lineWidth = w; x.lineCap = 'round'; if (dash) x.setLineDash(dash);
+  x.beginPath(); x.moveTo(a, b); x.lineTo(lerp(a, c2, p), lerp(b, d, p)); x.stroke(); x.restore(); }
+// a travelling wave; amp may vary along the line (vary > 0) for a "living" voice
+function wave(x0, y0, len, amp, color, w, freq, phase, vary = 0, p = 1) { if (p <= 0) return; x.save(); x.strokeStyle = color; x.lineWidth = w; x.lineCap = 'round'; x.beginPath();
+  for (let i = 0; i <= len * p; i += 4) { const a = amp * (vary ? (0.45 + 0.55 * Math.abs(Math.sin(i * 0.011 + vary + phase * 0.3))) : 1); x.lineTo(x0 + i, y0 + Math.sin(i * freq - phase) * a); }
+  x.stroke(); x.restore(); }
+function title(s, a = 1) { alpha(a, () => { x.fillStyle = NAVY; x.font = 'bold 66px Arial'; x.textAlign = 'left'; x.textBaseline = 'middle'; x.fillText(s, 80, 95); x.fillStyle = RED; x.fillRect(80, 138, 160, 7); }); }
+
+const CARDS = [[150, 250], [150, 470], [150, 690]];
+const COLORS = [NAVY, TEAL, PURPLE];
+function card(px, py, color, dots = 1, w = 340, h = 170, label = 'Seller') {
+  rr(px, py, w, h, 18, '#fff', color, 6); emoji('🏪', px + 70, py + h / 2, 72); txt(label, px + 210, py + h / 2 - 24, 48, color, 'center', true);
+  [0, 1, 2].forEach(i => { const s = back(clamp(dots * 3 - i)); if (s > 0) { x.fillStyle = [ORANGE, TEAL, RED][i]; x.beginPath(); x.arc(px + 170 + i * 40, py + h / 2 + 36, 12 * s, 0, 6.3); x.fill(); } }); }
+function meeting(px = 1600, py = 545, r = 120, s = 1) { scaled(px, py, s, () => { x.beginPath(); x.arc(px, py, r, 0, 6.3); x.fillStyle = '#eaf7f4'; x.fill(); x.strokeStyle = TEAL; x.lineWidth = 6; x.stroke();
+  emoji('🤝', px, py - 10, r * .9); }); alpha(s, () => txt('Meeting', px, py + r + 50, 52, TEAL, 'center', true)); }
+function stopwatch(px, py, s) { scaled(px, py, s, () => emoji('⏱️', px, py, 80)); }
+
+// ---------- Scene 1: the gap
+function b1(p, lt) { title('The gap', seg(lt, 0, .6));
+  CARDS.forEach(([a, b], i) => { const s = back((lt - .4 - i * .45) / .6); scaled(a + 170, b + 85, s, () => card(a, b, COLORS[i], clamp((lt - 2.2 - i * .3) / .8))); }); }
+function b2(p, lt) { title('The gap'); CARDS.forEach(([a, b], i) => card(a, b, COLORS[i]));
+  meeting(1600, 545, 120, back(lt / .8));
+  CARDS.forEach(([a, b], i) => ln(a + 360, b + 85, 1460, 545, GREY, 5, [14, 14], seg(lt, 1 + i * .3, 2.4 + i * .3))); }
+function flatWaves(lt, from = 0) { CARDS.forEach(([a, b], i) => wave(a + 380, b + 85, 680, 24, GREY, 7, .05, lt * 4, 0, seg(lt, from + i * .25, from + 1.2 + i * .25))); }
+function b3(p, lt) { title('The gap'); CARDS.forEach(([a, b], i) => card(a, b, COLORS[i])); meeting();
+  alpha(1 - seg(lt, 0, .6), () => CARDS.forEach(([a, b]) => ln(a + 360, b + 85, 1460, 545, GREY, 5, [14, 14])));
+  flatWaves(lt, .4); alpha(seg(lt, 2.4, 3.2), () => txt('same voice · same style', 860, 935, 56, GREY, 'center', true)); }
+function b4(p, lt, T) { title('The gap'); const red = seg(lt, .3, .9), pulse = .5 + .5 * Math.sin(lt * 9);
+  CARDS.forEach(([a, b], i) => { if (i === 1) { scaled(a + 170, b + 85, 1 + .04 * red * pulse, () => card(a, b, mix(TEAL, RED, red))); } else card(a, b, COLORS[i]); });
+  CARDS.forEach(([a, b]) => wave(a + 380, b + 85, 680, 24, GREY, 7, .05, (T) * 4));
+  stopwatch(600, 450, back((lt - .5) / .5)); alpha(seg(lt, .9, 1.5), () => txt('rush', 600, 680, 60, RED, 'center', true)); meeting(); }
+function b5(p, lt) { title('The gap'); const bx = 640, by = 860, bw = 220, k = 22;
+  const hL = 26 * k * seg(lt, .2, 1.0), hR = lerp(26, 14, seg(lt, 1.4, 2.4)) * k * seg(lt, .5, 1.2);
+  rr(bx, by - hL, bw, Math.max(hL, 1), 10, '#d7deea'); rr(bx + 380, by - hR, bw, Math.max(hR, 1), 10, RED);
+  alpha(seg(lt, .8, 1.2), () => { txt('26%', bx + bw / 2, by - 26 * k - 60, 96, NAVY, 'center', true); txt('no rush', bx + bw / 2, by + 50, 54, INK, 'center', true); txt('rush', bx + 380 + bw / 2, by + 50, 54, RED, 'center', true); });
+  alpha(seg(lt, 1.2, 1.6), () => txt(`${Math.round(lerp(26, 14, seg(lt, 1.4, 2.4)))}%`, bx + 380 + bw / 2, by - hR - 60, 96, RED, 'center', true));
+  ln(bx + 250, by - 400, bx + 360, by - 260, RED, 8, null, seg(lt, 2.2, 2.7)); }
+function b6(p, lt, T) { title('The gap'); const m = seg(lt, .8, 2.6);
+  CARDS.forEach(([a, b], i) => { card(a, b, COLORS[i]); wave(a + 380, b + 85, 680, lerp(24, 28, m), mix('#9aa3b2', COLORS[i], m), 7, lerp(.05, .03 + i * .03, m), T * 4, m * (i + 1)); });
+  meeting(); scaled(930, 560, back((lt - .2) / .7), () => { rr(620, 490, 620, 140, 70, '#fff', RED, 9); txt('Persona', 930, 560, 80, RED, 'center', true); }); }
+
+// ---------- Scene 2: rich context, no personal data
+const ORBIT = [['🏭', 'Business'], ['📦', 'Catalogue'], ['🔥', 'Buy leads'], ['⚔️', 'Competitors'], ['📞', 'Past calls']];
+const OP = ORBIT.map((_, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / 5; return [960 + Math.cos(a) * 470, 545 + Math.sin(a) * 290]; });
+function icon(i, px, py, s = 1, ring = ORANGE, label = true) { scaled(px, py, s, () => { x.beginPath(); x.arc(px, py, 80, 0, 6.3); x.fillStyle = '#fff'; x.fill(); x.strokeStyle = ring; x.lineWidth = 6; x.stroke(); emoji(ORBIT[i][0], px, py - 6, 76); });
+  if (label) alpha(s, () => txt(ORBIT[i][1], px, py + 120, 50, INK, 'center', true)); }
+function b7(p, lt) { title('Rich context', seg(lt, 0, .5)); const mv = seg(lt, 0, 1);
+  card(lerp(150, 790, mv), lerp(470, 470, mv), NAVY);
+  alpha(seg(lt, .8, 1.2), () => { txt(String(Math.round(62 * seg(lt, 1, 2.6))), 960, 320, 200, RED, 'center', true); txt('data points', 960, 780, 64, INK, 'center', true); }); }
+function b8(p, lt) { title('Rich context'); const cy = lerp(470, 455, seg(lt, 0, .5)); card(790, cy, NAVY);
+  alpha(1 - seg(lt, 0, .5), () => { txt('62', 960, 320, 200, RED, 'center', true); txt('data points', 960, 780, 64, INK, 'center', true); });
+  OP.forEach(([a, b], i) => { const q = seg(lt, .6 + i * 1.05, 1.5 + i * 1.05); icon(i, lerp(960, a, q), lerp(540, b, q), back((lt - .6 - i * 1.05) / .7)); }); }
+function b9(p, lt) { title('Rich context');
+  OP.forEach(([a, b], i) => ln(a, b, 1690, 830, TEAL, 5, null, seg(lt, .4 + i * .15, 1.4 + i * .15))); card(790, 455, NAVY);
+  OP.forEach(([a, b], i) => icon(i, a, b, 1, mix(ORANGE, TEAL, seg(lt, .8 + i * .15, 1.6 + i * .15)))); meeting(1690, 800, 90, back(lt / .6)); }
+function shieldShape(cx, cy, s, fill) { x.beginPath(); x.moveTo(cx, cy - s); x.lineTo(cx + s * .8, cy - s * .6); x.lineTo(cx + s * .7, cy + s * .3); x.quadraticCurveTo(cx + s * .4, cy + s * .85, cx, cy + s); x.quadraticCurveTo(cx - s * .4, cy + s * .85, cx - s * .7, cy + s * .3); x.lineTo(cx - s * .8, cy - s * .6); x.closePath(); x.fillStyle = fill; x.fill(); x.strokeStyle = NAVY; x.lineWidth = 8; x.stroke(); }
+function chip(i, cx, cy, s = 1) { scaled(cx, cy, s, () => { rr(cx - 220, cy - 55, 440, 110, 55, '#fff', ORANGE, 5); emoji(ORBIT[i][0], cx - 150, cy, 56); txt(ORBIT[i][1], cx - 100, cy, 48, INK, 'left', true); }); }
+function b10(p, lt) { const tt = seg(lt, 0, .6); title(tt < .5 ? 'Rich context' : 'No personal data', Math.abs(1 - 2 * tt));
+  ORBIT.forEach((_, i) => { const q = seg(lt, .2 + i * .1, 1.2 + i * .1), cy = 260 + i * 140; chip(i, lerp(OP[i][0], 310, q), lerp(OP[i][1], cy, q), lerp(.6, 1, q));
+    ln(545, cy, 760, 540, GREY, 4, [10, 10], seg(lt, 2.2 + i * .1, 2.8 + i * .1)); });
+  scaled(960, 540, back((lt - 1.2) / .8), () => { shieldShape(960, 540, 230, '#eef2f8'); emoji('🔒', 960, 520, 140); });
+  ln(1200, 540, 1450, 540, TEAL, 8, null, seg(lt, 3.0, 3.6));
+  alpha(seg(lt, 3.4, 3.9), () => { rr(1460, 460, 340, 160, 20, '#fff', TEAL, 6); txt('Persona', 1630, 515, 52, TEAL, 'center', true); txt('model', 1630, 570, 52, TEAL, 'center', true); }); }
+function b11(p, lt) { title('No personal data'); const sx = lerp(960, 860, seg(lt, 0, .6));
+  scaled(sx, 540, lerp(1, .87, seg(lt, 0, .6)), () => { shieldShape(sx, 540, 230, '#eef2f8'); emoji('🔒', sx, 520, 140); });
+  [['Seller name', '{SELLER}', 300], ['Company', '{COMPANY}', 420], ['Competitor', '{COMPETITOR}', 540]].forEach(([a, b, y], i) => {
+    ln(1110, y, 1200, y, TEAL, 6, null, seg(lt, .8 + i * .3, 1.2 + i * .3));
+    const f = seg(lt, 1.2 + i * .3, 1.7 + i * .3); x.save(); x.translate(1470, y); x.scale(1, Math.abs(1 - 2 * f) || .01); x.translate(-1470, -y);
+    alpha(seg(lt, .2 + i * .2, .7 + i * .2), () => txt(f < .5 ? a : b, 1470, y, 56, f < .5 ? INK : TEAL, 'center', true)); x.restore(); });
+  [['📱', 'Phone', 330], ['🧾', 'GST', 470], ['🪪', 'PAN', 610]].forEach(([e, s, y], i) => { const st = seg(lt, 2.4 + i * .35, 2.8 + i * .35), fall = clamp((lt - 3.0 - i * .35) / .9);
+    alpha(seg(lt, .2, .7) * (1 - fall), () => { const yy = y + 420 * fall * fall; emoji(e, 200, yy, 64); txt(s, 270, yy, 56, INK, 'left', true); ln(150, yy, 430, yy, RED, 8, null, st); }); });
+  alpha(seg(lt, 3.8, 4.4), () => { txt('never leaves', 1450, 760, 60, RED, 'center', true); txt('IndiaMART', 1450, 835, 60, RED, 'center', true); }); }
+
+// ---------- timeline
+// base: the length each beat's animation was designed at; dur: its length in the cut (each scene ~20 s).
+// The animation clock is stretched by base/dur, so a shorter beat plays the same motion faster.
+const BEATS = [
+  { n: 1, base: 5.5, dur: 4.0, draw: b1 }, { n: 2, base: 4.5, dur: 3.4, draw: b2 }, { n: 3, base: 6.0, dur: 4.4, draw: b3 }, { n: 4, base: 3.5, dur: 2.8, draw: b4 },
+  { n: 5, base: 3.0, dur: 2.4, draw: b5 }, { n: 6, base: 4.5, dur: 3.0, draw: b6 },
+  { n: 7, base: 3.5, dur: 3.0, draw: b7 }, { n: 8, base: 6.5, dur: 5.6, draw: b8 }, { n: 9, base: 3.0, dur: 2.6, draw: b9 }, { n: 10, base: 4.5, dur: 4.0, draw: b10 }, { n: 11, base: 5.5, dur: 4.8, draw: b11 },
+];
+function layout() { let acc = 0; BEATS.forEach(b => { b.start = acc; acc += b.dur; });
+  window.BEATS = BEATS.map(({ n, dur, start }) => ({ n, dur, start })); window.DURATION = acc; }
+layout();
+// set each beat's length from its voice line (seconds, in beat order)
+window.setDurs = ds => { ds.forEach((d, i) => { if (BEATS[i]) BEATS[i].dur = d; }); layout(); };
+window.renderFrame = T => { const b = BEATS.find(b => T < b.start + b.dur) || BEATS[BEATS.length - 1]; const k = b.base / b.dur, lt = (T - b.start) * k; bg(); b.draw(clamp(lt / b.base), lt, T * k); };
+window.renderFrame(0);
+</script></body></html>

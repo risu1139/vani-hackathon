@@ -1,0 +1,159 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#0e1116}canvas{display:block}</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script>
+// Scene 3: traits and states. renderFrame(t) draws the frame at t seconds; pure function of t.
+const DURATION = 32;
+const c = document.getElementById('c'), x = c.getContext('2d');
+const W = 1920, H = 1080;
+// IndiaMART deck template palette (VANI_Persona_Design_Deck_v2_visual.pptx)
+const BG = '#ffffff', GREY = '#9aa3b2', WHITE = '#262626', BLUE = '#002060', YELLOW = '#E08A00', GREEN = '#2EA896', RED = '#C00000', PURPLE = '#5B3E96';
+const SERIF = 'Arial, Helvetica, sans-serif';
+const TPL = new Image(); TPL.src = '../assets/template_bg.jpg';
+window.READY = new Promise(r => { TPL.onload = r; TPL.onerror = r; });
+
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const ease = p => { p = clamp(p); return p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2; };
+const prog = (t, a, b) => ease((t - a) / (b - a));
+const lerp = (a, b, p) => a + (b - a) * p;
+
+// seeded random so every frame sees the same cloud
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const DOTS = Array.from({ length: 62 }, (_, i) => ({ x: 960 + (rnd() - .5) * 760, y: 560 + (rnd() - .5) * 420, ph: rnd() * 6.28, r: 5 + rnd() * 4 }));
+
+// timeline axis
+const AX0 = 330, AX1 = 1640, AY = 860, DAYS = 120;
+const dayX = d => AX0 + (AX1 - AX0) * d / DAYS;
+
+const TRAITS = [{ name: 'business size', y: 310, src: 3 }, { name: 'division', y: 370, src: 11 }, { name: 'language', y: 430, src: 27 }];
+// states: event day, amplitude (px), half-life 30 days
+const STATES = [{ name: 'buy-lead use', ev: 18, amp: 80, src: 40, lane: 580 }, { name: 'call mood', ev: 64, amp: 80, src: 50, lane: 680 }, { name: 'enquiry flow', ev: 92, amp: 80, src: 58, lane: 780 }];
+const HL = 30;
+const stateY = (s, d) => d < s.ev ? 0 : s.amp * Math.pow(.5, (d - s.ev) / HL);
+
+function text(str, px, py, size, color, alpha = 1, align = 'center', italic = false) {
+  x.save(); x.globalAlpha = alpha; x.fillStyle = color; x.textAlign = align; x.textBaseline = 'middle';
+  x.font = `${italic ? 'italic ' : ''}${size}px ${SERIF}`; x.fillText(str, px, py); x.restore();
+}
+// "write" reveal: text uncovered left to right
+function writeText(str, px, py, size, color, p, align = 'center', italic = false, alpha = 1) {
+  if (p <= 0) return;
+  x.save(); x.font = `${italic ? 'italic ' : ''}${size}px ${SERIF}`;
+  const w = x.measureText(str).width, left = align === 'center' ? px - w / 2 : align === 'right' ? px - w : px;
+  x.beginPath(); x.rect(left - 4, py - size, (w + 8) * p, size * 2); x.clip();
+  text(str, px, py, size, color, alpha, align, italic); x.restore();
+}
+function dot(px, py, r, color, alpha = 1) { x.save(); x.globalAlpha = alpha; x.fillStyle = color; x.beginPath(); x.arc(px, py, r, 0, 6.283); x.fill(); x.restore(); }
+function line(x1, y1, x2, y2, color, w = 3, alpha = 1, dash = null) {
+  x.save(); x.globalAlpha = alpha; x.strokeStyle = color; x.lineWidth = w; x.lineCap = 'round'; if (dash) x.setLineDash(dash);
+  x.beginPath(); x.moveTo(x1, y1); x.lineTo(x2, y2); x.stroke(); x.restore();
+}
+
+function parked(d, py, t) {  // a used dot drifts from the cloud to the left edge of its lane while it waits
+  const p = prog(t, 6.5, 8.2);
+  return [lerp(d.x + Math.sin(t * 1.3 + d.ph) * 6 * (1 - p), AX0 - 40, p), lerp(d.y + Math.cos(t * 1.1 + d.ph) * 6 * (1 - p), py, p)];
+}
+function renderFrame(t) {
+  x.fillStyle = BG; x.fillRect(0, 0, W, H);
+  if (TPL.complete && TPL.naturalWidth) x.drawImage(TPL, 0, 0, W, H);
+  // template title: bold navy, red underline
+  x.save(); x.fillStyle = BLUE; x.font = 'bold 58px Arial'; x.textBaseline = 'middle'; x.fillText('Traits and States', 90, 92); x.restore(); x.fillStyle = RED; x.fillRect(90, 130, 150, 6);
+
+  // 0-6 objective, centred; then it shrinks to a header
+  const objOut = prog(t, 5.4, 6.4);
+  writeText('Objective', 960, 330, 44, RED, prog(t, .3, 1.2), 'center', false, 1 - objOut);
+  writeText('Raw data  →  facts a persona can use', 960, 410, 60, BLUE, prog(t, .8, 2.6), 'center', false, 1 - objOut);
+
+  // 2-7 raw data cloud; dots that become traits/states fly away later
+  const cloudIn = prog(t, 2.2, 3.6), cloudOut = prog(t, 6.5, 8);
+  const used = new Set([...TRAITS.map(a => a.src), ...STATES.map(a => a.src)]);
+  DOTS.forEach((d, i) => {
+    if (used.has(i)) return;
+    const jx = Math.sin(t * 1.3 + d.ph) * 6, jy = Math.cos(t * 1.1 + d.ph) * 6;
+    dot(d.x + jx, d.y + jy, d.r * cloudIn, GREY, (1 - cloudOut) * .8);
+  });
+  if (t < 8) writeText('62 data points', 960, 830, 40, GREY, prog(t, 3, 4) * (1 - cloudOut));
+
+  // header swap
+  if (t > 6) {
+    const hp = prog(t, 6.2, 7.2);
+    text('Raw data → facts a persona can use', 1830, 190, 28, GREY, hp * (1 - prog(t, 27, 28)), 'right');
+  }
+
+  // 7-9 axis
+  const ax = prog(t, 7, 8.6), axOut = prog(t, 27, 28);
+  line(AX0, AY, lerp(AX0, AX1, ax), AY, WHITE, 3, 1 - axOut);
+  if (ax > .95) {
+    text('time →', AX1 + 70, AY, 32, WHITE, 1 - axOut, 'center', true);
+    for (let d = 0; d <= DAYS; d += 30) { line(dayX(d), AY - 8, dayX(d), AY + 8, WHITE, 2, 1 - axOut); text(`${d} d`, dayX(d), AY + 34, 24, GREY, 1 - axOut); }
+  }
+
+  // 9-14 traits: dot flies, then stretches into a flat line
+  TRAITS.forEach((tr, i) => {
+    const s = 9 + i * .5, fly = prog(t, s, s + 1.2), stretch = prog(t, s + 1.2, s + 2.4), out = prog(t, 27, 28);
+    const d = DOTS[tr.src], [qx, qy] = parked(d, tr.y, t), px = lerp(qx, AX0, fly), py = lerp(qy, tr.y, fly);
+    if (t < s) { dot(qx, qy, d.r * cloudIn, GREY, .8); return; }
+    dot(px, py, lerp(d.r, 8, fly), BLUE, 1 - out);
+    if (stretch > 0) { line(AX0, tr.y, lerp(AX0, AX1, stretch), tr.y, BLUE, 6, 1 - out); text(tr.name, AX0 - 24, tr.y, 30, BLUE, stretch * (1 - out), 'right'); }
+  });
+  writeText('Traits  ·  stable', 960, 235, 48, BLUE, prog(t, 11.5, 13) * (1 - prog(t, 14, 14.6)));
+  text('Traits', AX1 + 70, 370, 34, BLUE, prog(t, 14, 15) * (1 - prog(t, 27, 28)));
+
+  // 14.5-21 states: event spike then half-life decay
+  STATES.forEach((st, i) => {
+    const s = 14.5 + i * .5, fly = prog(t, s, s + 1), draw = prog(t, s + 1, s + 4), out = prog(t, 27, 28);
+    const d = DOTS[st.src];
+    const [qx, qy] = parked(d, st.lane, t), base = st.lane;
+    if (t < s) { dot(qx, qy, d.r * cloudIn, GREY, .8); return; }
+    const ex = dayX(st.ev), ey = base - st.amp;
+    if (fly < 1) dot(lerp(qx, ex, fly), lerp(qy, ey, fly), lerp(d.r, 9, fly), YELLOW);
+    line(AX0, base, AX1, base, GREY, 1.5, prog(t, s, s + 1) * .45 * (1 - out), [6, 8]);
+    text(st.name, AX0 - 24, base, 30, YELLOW, prog(t, s + 1, s + 2) * (1 - out), 'right');
+    if (draw > 0) {
+      x.save(); x.globalAlpha = 1 - out; x.strokeStyle = YELLOW; x.lineWidth = 5; x.beginPath();
+      const end = lerp(st.ev, DAYS, draw);
+      x.moveTo(ex, base); x.lineTo(ex, ey);
+      for (let dd = st.ev; dd <= end; dd += .5) x.lineTo(dayX(dd), base - stateY(st, dd));
+      x.stroke(); x.restore();
+      dot(ex, ey, 9, YELLOW, 1 - out);
+    }
+  });
+  writeText('States  ·  fade with time', 960, 235, 48, YELLOW, prog(t, 16, 17.5) * (1 - prog(t, 20.5, 21.2)));
+  text('States', AX1 + 70, 680, 34, YELLOW, prog(t, 18, 19) * (1 - prog(t, 27, 28)));
+
+  // 19.5-22 half-life marker on "call mood"
+  const hlp = prog(t, 19.5, 21) * (1 - prog(t, 23, 23.6));
+  if (hlp > 0) {
+    const st = STATES[1], base = st.lane, x0 = dayX(st.ev), x1 = dayX(st.ev + HL), y1 = base - st.amp / 2;
+    line(x1, base, x1, y1, WHITE, 2, hlp, [6, 6]); line(x0, y1, x1, y1, WHITE, 2, hlp, [6, 6]);
+    dot(x1, y1, 8, WHITE, hlp);
+    text('½ in 30 days', x1 + 18, y1 - 30, 30, WHITE, hlp, 'left', true);
+  }
+
+  // 21.5-26 "today" sweep: read current values
+  const sw = prog(t, 21.5, 25), swOut = prog(t, 27, 28);
+  if (sw > 0) {
+    const today = lerp(0, DAYS, sw), tx = dayX(today);
+    line(tx, 300, tx, AY, GREEN, 3, 1 - swOut);
+    text('today', tx, AY + 70, 30, GREEN, 1 - swOut, 'center', true);
+    TRAITS.forEach(tr => dot(tx, tr.y, 9, GREEN, 1 - swOut));
+    STATES.forEach(st => { const v = stateY(st, today); if (v > 1) dot(tx, st.lane - v, 6 + 10 * v / st.amp, GREEN, 1 - swOut); });
+  }
+  writeText('Recent counts more', 960, 235, 48, GREEN, prog(t, 22.5, 24) * (1 - prog(t, 26.3, 27)));
+
+  // 27.5-32 meaning + determinism
+  const fin = prog(t, 27.6, 28.8);
+  if (fin > 0) {
+    // left: two cards
+    x.save(); x.globalAlpha = fin;
+    x.strokeStyle = BLUE; x.lineWidth = 3; x.strokeRect(260, 380, 620, 200);
+    x.strokeStyle = YELLOW; x.strokeRect(1040, 380, 620, 200); x.restore();
+    text('Traits', 570, 430, 44, BLUE, fin); text('who the seller is', 570, 510, 38, WHITE, fin, 'center', true);
+    text('States', 1350, 430, 44, YELLOW, fin); text('what is happening now', 1350, 510, 38, WHITE, fin, 'center', true);
+    const f2 = prog(t, 29.3, 30.5);
+    writeText('Same data  →  same facts', 960, 730, 52, RED, f2);
+  }
+}
+window.renderFrame = renderFrame; window.DURATION = DURATION;
+renderFrame(0);
+</script></body></html>

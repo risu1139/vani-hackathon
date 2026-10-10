@@ -1,0 +1,106 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  body{margin:0;background:#f3f5f9;font-family:Arial,Helvetica,sans-serif;color:#262626}
+  .page{width:1920px;padding:40px 56px 48px;box-sizing:border-box}
+  h1{margin:0;font-size:46px;color:#002060}
+  .bar{width:120px;height:6px;background:#C00000;margin:12px 0 10px}
+  .meta{font-size:22px;color:#595959;margin-bottom:28px}
+  .scene{font-size:26px;font-weight:bold;color:#002060;margin:18px 0 12px}
+  .row{display:grid;grid-template-columns:repeat(2,1fr);gap:28px}
+  .panel{background:#fff;border:1px solid #d9dee8;border-radius:10px;padding:10px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  canvas{width:100%;border-radius:6px;display:block;border:1px solid #eef2f8}
+  .t{font-size:26px;font-weight:bold;margin:10px 0 4px}
+  .t span{color:#C00000;margin-right:8px}
+  .vo{font-size:22px;font-style:italic;color:#262626;margin-bottom:6px;line-height:1.3}
+  .s{font-size:20px;color:#595959;line-height:1.35}
+</style></head>
+<body><div class="page">
+<h1>VANI explainer: storyboard, scenes 1–2</h1><div class="bar"></div>
+<div class="meta">~50 s · 1920×1080 · IndiaMART template · math-style motion · 11 beats. Thumbs up or down by panel number.</div>
+<div id="rows"></div>
+</div>
+<script>
+const NAVY = '#002060', RED = '#C00000', TEAL = '#2EA896', ORANGE = '#E08A00', PURPLE = '#5B3E96', GREY = '#9aa3b2', INK = '#262626';
+const TPL = new Image(); TPL.src = '../assets/template_bg.jpg';
+
+const BEATS = [
+  { scene: 'Scene 1 · The gap', n: 1, t: '0.0s', title: 'Sellers, each with data', vo: 'IndiaMART knows a lot about each seller. Business, categories, past calls.',
+    sound: 'a quiet pad', move: 'cards pop in one by one; small data dots attach', draw: sellers },
+  { n: 2, t: '5.5s', title: 'One objective', vo: 'Every call has one objective: a meeting with an IndiaMART executive.',
+    sound: 'one soft chime', move: 'the meeting icon writes on; dashed paths reach it', draw: objective },
+  { n: 3, t: '10.0s', title: 'One voice for all', vo: 'But today, VANI speaks to every seller in the same voice and the same style, for the full call.',
+    sound: 'a flat, constant hum', move: 'one grey wave copies itself to every card', draw: sameWave },
+  { n: 4, t: '16.0s', title: 'Rush, no change', vo: 'When a seller is in a rush, VANI does not change.',
+    sound: 'a low buzz on the red card', move: 'one card pulses red; the wave stays flat', draw: rush },
+  { n: 5, t: '19.5s', title: 'Meetings fall by half', vo: 'In these calls, meetings fall by half.',
+    sound: 'a falling pluck', move: 'the bar shrinks 26 → 14', draw: halve },
+  { n: 6, t: '22.5s', title: 'The persona bridge', vo: 'We close this gap with a persona for each seller.',
+    sound: 'a rising chord', move: 'a bridge snaps across the gap; waves turn colourful', draw: bridge },
+  { scene: 'Scene 2 · Rich context, no personal data', n: 7, t: '27.0s', title: '62 data points', vo: 'For each seller, we read 62 data points.',
+    sound: 'ticks while the counter runs', move: 'one card moves to the centre; 62 counts up', draw: count62 },
+  { n: 8, t: '30.5s', title: 'Five kinds of data', vo: 'Their business. Their catalogue. Live buy leads. Their competitors. How past calls went.',
+    sound: 'a pluck per word', move: 'five icons orbit in, one per word', draw: orbit },
+  { n: 9, t: '37.0s', title: 'Each one: a reason to meet', vo: 'Each one gives VANI a reason to meet.',
+    sound: 'a warm swell', move: 'lines glow from each icon to the meeting', draw: reasons },
+  { n: 10, t: '40.0s', title: 'The privacy shield', vo: 'Before the model sees anything, personal data is removed.',
+    sound: 'a soft lock click', move: 'a shield draws; the icons pass through it', draw: shield },
+  { n: 11, t: '44.5s', title: 'Names become tokens', vo: 'Names become tokens. Phone, GST and PAN never leave IndiaMART.',
+    sound: 'three short drops, then silence', move: 'names flip to {TOKEN}; ID icons fall away', draw: tokens },
+];
+
+// ---------- drawing helpers (canvas is 1920x1080, scaled down by CSS)
+let x;
+function bg() { x.fillStyle = '#fff'; x.fillRect(0, 0, 1920, 1080); if (TPL.naturalWidth) x.drawImage(TPL, 0, 0, 1920, 1080); }
+function txt(s, px, py, size, color = INK, align = 'center', bold = false) { size = Math.max(size, 48); x.fillStyle = color; x.font = `${bold ? 'bold ' : ''}${size}px Arial`; x.textAlign = align; x.textBaseline = 'middle'; x.fillText(s, px, py); }
+function emoji(s, px, py, size) { x.font = `${size}px "Segoe UI Emoji"`; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(s, px, py); }
+function rr(px, py, w, h, r, fill, stroke, lw = 4) { x.beginPath(); x.roundRect(px, py, w, h, r); if (fill) { x.fillStyle = fill; x.fill(); } if (stroke) { x.strokeStyle = stroke; x.lineWidth = lw; x.stroke(); } }
+function ln(a, b, c, d, color, w = 5, dash) { x.save(); x.strokeStyle = color; x.lineWidth = w; x.lineCap = 'round'; if (dash) x.setLineDash(dash); x.beginPath(); x.moveTo(a, b); x.lineTo(c, d); x.stroke(); x.restore(); }
+function wave(x0, y0, len, amp, color, w = 6, freq = 0.05, vary = 0) { x.save(); x.strokeStyle = color; x.lineWidth = w; x.beginPath();
+  for (let i = 0; i <= len; i += 4) { const a = amp * (vary ? (0.5 + 0.5 * Math.sin(i * 0.013 + vary)) : 1); x.lineTo(x0 + i, y0 + Math.sin(i * freq) * a); } x.stroke(); x.restore(); }
+const CARDS = [[150, 250], [150, 470], [150, 690]];
+const COLORS = [NAVY, TEAL, PURPLE];
+function card(px, py, color, w = 340, h = 170, label = 'Seller') { rr(px, py, w, h, 18, '#fff', color, 6); emoji('🏪', px + 70, py + h / 2, 72); txt(label, px + 210, py + h / 2 - 24, 48, color, 'center', true);
+  [0, 1, 2].forEach(i => { x.fillStyle = [ORANGE, TEAL, RED][i]; x.beginPath(); x.arc(px + 170 + i * 40, py + h / 2 + 36, 12, 0, 6.3); x.fill(); }); }
+function meeting(px = 1600, py = 545, r = 120) { x.beginPath(); x.arc(px, py, r, 0, 6.3); x.fillStyle = '#eaf7f4'; x.fill(); x.strokeStyle = TEAL; x.lineWidth = 6; x.stroke(); emoji('🤝', px, py - 10, 110); txt('Meeting', px, py + r + 50, 52, TEAL, 'center', true); }
+function title(s) { x.fillStyle = NAVY; x.font = 'bold 66px Arial'; x.textAlign = 'left'; x.textBaseline = 'middle'; x.fillText(s, 80, 95); x.fillStyle = RED; x.fillRect(80, 138, 160, 7); }
+
+// ---------- beats
+function sellers() { title('The gap'); CARDS.forEach(([a, b], i) => card(a, b, COLORS[i])); }
+function objective() { sellers(); meeting(); CARDS.forEach(([a, b]) => ln(a + 360, b + 85, 1460, 545, GREY, 5, [14, 14])); }
+function sameWave() { title('The gap'); CARDS.forEach(([a, b], i) => { card(a, b, COLORS[i]); wave(a + 380, b + 85, 680, 24, GREY, 7); }); meeting(); txt('same voice · same style', 860, 935, 56, GREY, 'center', true); }
+function rush() { title('The gap'); CARDS.forEach(([a, b], i) => { card(a, b, i === 1 ? RED : COLORS[i]); wave(a + 380, b + 85, 680, 24, GREY, 7); });
+  emoji('⏱️', 600, 450, 80); txt('rush', 600, 680, 60, RED, 'center', true); meeting(); }
+function halve() { title('The gap'); const bx = 640, by = 860, bw = 220;
+  rr(bx, by - 26 * 22, bw, 26 * 22, 10, '#d7deea'); rr(bx + 380, by - 14 * 22, bw, 14 * 22, 10, RED);
+  txt('26%', bx + bw / 2, by - 26 * 22 - 60, 96, NAVY, 'center', true); txt('14%', bx + 380 + bw / 2, by - 14 * 22 - 60, 96, RED, 'center', true);
+  txt('no rush', bx + bw / 2, by + 50, 54, INK, 'center', true); txt('rush', bx + 380 + bw / 2, by + 50, 54, RED, 'center', true); ln(bx + 250, by - 400, bx + 360, by - 260, RED, 8); }
+function bridge() { title('The gap'); CARDS.forEach(([a, b], i) => { card(a, b, COLORS[i]); wave(a + 380, b + 85, 680, 28, COLORS[i], 7, 0.03 + i * 0.03, i + 1); }); meeting();
+  rr(620, 490, 620, 140, 70, '#fff', RED, 9); txt('Persona', 930, 560, 80, RED, 'center', true); }
+function count62() { title('Rich context'); card(790, 470, NAVY); txt('62', 960, 320, 200, RED, 'center', true); txt('data points', 960, 780, 64, INK, 'center', true); }
+const ORBIT = [['🏭', 'Business'], ['📦', 'Catalogue'], ['🔥', 'Buy leads'], ['⚔️', 'Competitors'], ['📞', 'Past calls']];
+function orbitPts() { return ORBIT.map((_, i) => { const a = -Math.PI / 2 + i * 2 * Math.PI / 5; return [960 + Math.cos(a) * 470, 545 + Math.sin(a) * 290]; }); }
+function orbit(glow) { title('Rich context'); card(790, 455, NAVY); orbitPts().forEach(([a, b], i) => { x.beginPath(); x.arc(a, b, 80, 0, 6.3); x.fillStyle = '#fff'; x.fill(); x.strokeStyle = glow ? TEAL : ORANGE; x.lineWidth = 6; x.stroke(); emoji(ORBIT[i][0], a, b - 6, 76); txt(ORBIT[i][1], a, b + 120, 50, INK, 'center', true); }); }
+function reasons() { title('Rich context'); orbitPts().forEach(([a, b]) => ln(a, b, 1690, 830, TEAL, 5)); orbit(true); meeting(1690, 800, 90); }
+function shieldShape(cx, cy, s, fill) { x.beginPath(); x.moveTo(cx, cy - s); x.lineTo(cx + s * .8, cy - s * .6); x.lineTo(cx + s * .7, cy + s * .3); x.quadraticCurveTo(cx + s * .4, cy + s * .85, cx, cy + s); x.quadraticCurveTo(cx - s * .4, cy + s * .85, cx - s * .7, cy + s * .3); x.lineTo(cx - s * .8, cy - s * .6); x.closePath(); x.fillStyle = fill; x.fill(); x.strokeStyle = NAVY; x.lineWidth = 8; x.stroke(); }
+function shield() { title('No personal data'); ORBIT.forEach((o, i) => { const b = 260 + i * 140; rr(90, b - 55, 440, 110, 55, '#fff', ORANGE, 5); emoji(o[0], 160, b, 56); txt(o[1], 210, b, 48, INK, 'left', true); ln(545, b, 760, 540, GREY, 4, [10, 10]); });
+  shieldShape(960, 540, 230, '#eef2f8'); emoji('🔒', 960, 520, 140); ln(1200, 540, 1450, 540, TEAL, 8); rr(1460, 460, 340, 160, 20, '#fff', TEAL, 6); txt('Persona', 1630, 515, 52, TEAL, 'center', true); txt('model', 1630, 570, 52, TEAL, 'center', true); }
+function tokens() { title('No personal data'); shieldShape(860, 540, 200, '#eef2f8'); emoji('🔒', 860, 520, 120);
+  [['Seller name', '{SELLER}', 290], ['Company', '{COMPANY}', 410], ['Competitor', '{COMPETITOR}', 530]].forEach(([a, b, y]) => { txt(a, 330, y, 52, INK, 'center', true); txt(b, 1450, y, 56, TEAL, 'center', true); ln(1100, y, 1190, y, TEAL, 6); });
+  [['📱 Phone', 700], ['🧾 GST', 790], ['🪪 PAN', 880]].forEach(([s, y]) => { x.font = 'bold 52px "Segoe UI Emoji", Arial'; x.fillStyle = INK; x.textAlign = 'center'; x.fillText(s, 330, y); ln(200, y, 460, y, RED, 7); });
+  txt('never leaves', 1450, 760, 60, RED, 'center', true); txt('IndiaMART', 1450, 835, 60, RED, 'center', true); }
+
+// ---------- layout
+const rows = document.getElementById('rows'); let row;
+TPL.onload = TPL.onerror = () => {
+  BEATS.forEach(b => {
+    if (b.scene) { const h = document.createElement('div'); h.className = 'scene'; h.textContent = b.scene; rows.appendChild(h); row = document.createElement('div'); row.className = 'row'; rows.appendChild(row); }
+    const p = document.createElement('div'); p.className = 'panel';
+    const c = document.createElement('canvas'); c.width = 1920; c.height = 1080; x = c.getContext('2d'); bg(); b.draw();
+    p.appendChild(c);
+    p.insertAdjacentHTML('beforeend', `<div class="t"><span>${b.n}</span>${b.t} · ${b.title}</div><div class="vo">“${b.vo}”</div><div class="s">sound: ${b.sound}<br>→ ${b.move}</div>`);
+    row.appendChild(p);
+  });
+  window.DONE = true;
+};
+</script></body></html>
