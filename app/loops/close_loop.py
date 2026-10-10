@@ -42,7 +42,11 @@ def main():
         raise SystemExit("no run with 06_call.json / 07_outcome.json")
     review = [PY, os.path.join(ROOT, "app", "loops", "review_call.py"), "--run", run] + (["--names", p.names] if p.names else [])
     step("review", review)
-    step("loop2", [PY, os.path.join(SKILL, "loop2_update.py"), "--run", run])
+    # test chats (console playground) never touch the real scoreboards
+    import json
+    test = json.load(open(os.path.join(run, "06_call.json"), encoding="utf-8")).get("channel") == "playground_text"
+    boards = os.path.join(ROOT, "data", "scoreboards_test" if test else "scoreboards")
+    step("loop2", [PY, os.path.join(SKILL, "loop2_update.py"), "--run", run, "--scoreboards", boards])
     step("loop1", [PY, os.path.join(ROOT, "app", "loops", "loop1_propose.py")])
 
 

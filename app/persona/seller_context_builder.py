@@ -817,8 +817,22 @@ def _pids_for(prefixes):
 
 
 def _short(v, n=160):
-    s = json.dumps(v, ensure_ascii=False, default=str) if not isinstance(v, str) else v
-    return s if len(s) <= n else s[:n] + "…"
+    """Short text for a key fact. Never cuts inside a value (a cut "13000" read as "1300" once): dicts and lists are cut
+    at whole fields with a count of what was left out; strings at a word boundary."""
+    val = lambda x: x if isinstance(x, str) else json.dumps(x, ensure_ascii=False, default=str)
+    if isinstance(v, (dict, list)):
+        items = [f"{k}: {val(x)}" for k, x in v.items()] if isinstance(v, dict) else [val(x) for x in v]
+        out = []
+        for it in items:
+            if out and len("; ".join(out + [it])) > n:
+                return "; ".join(out) + f"; … (+{len(items) - len(out)} more, see source)"
+            out.append(it)
+        return "; ".join(out)
+    s = val(v)
+    if len(s) <= n:
+        return s
+    cut = s[:n].rsplit(" ", 1)[0] if " " in s[:n] else s[:n]
+    return cut + " … (see source)"
 
 
 def key_facts(P, hist, peer, leads, s_aov, m_aov, cat):

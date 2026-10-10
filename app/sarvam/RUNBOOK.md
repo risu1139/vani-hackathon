@@ -65,10 +65,10 @@ Two routes:
 
 | Route | Needs | Works on a draft? | Command |
 |---|---|---|---|
-| A. SDK text session | `SARVAM_AGENTS_API_KEY` (in `.env`) | **no**: the runtime returns 404 until the version is published | `python app/spike/persona_text_smoke.py --run data/runs/<id>` |
+| A. SDK session | `SARVAM_AGENTS_API_KEY` (in `.env`) | needs a committed version | our agent is a voice (v2v) agent: the runtime gives a signed URL for `interaction_type=call` only; `chat` returns 404 "App not found for the interaction type". So route A = audio CALL sessions (costs TTS/STT), as in `app/spike/midcall_compare.py` |
 | B. Console playground endpoint | the console login (browser) | yes | in the logged-in console page: POST `{runtime}/channels/text-chat/orgs/{org}/workspaces/{ws}/apps/{app}/text-chat?app_version=N` with `{text, start_interaction, interaction_id, override_agent_variable_values, initial_language_name, debug: true}` |
 
-Route A is the repeatable one: publish the clone version once, then the smoke runs from files with the API key.
+Route B (text, cheapest) is for prompt and switch checks. Route A (audio call) is for voice, pace and latency checks, and anything the phone path needs.
 Route B needs the console token, which must stay in the browser (saving it to a file is blocked as credential handling).
 
 The smoke test checks:

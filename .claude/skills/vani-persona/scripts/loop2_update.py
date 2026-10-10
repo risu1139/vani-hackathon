@@ -64,11 +64,12 @@ def main():
     win = bool(outcome.get("meeting_held") if outcome.get("meeting_held") is not None else outcome.get("meeting_fixed"))
     start = persona.get("prior", {}).get("chosen")
     arm = start if start in prior["persona"]["top2"] else "COMPOSED"
-    apply(p.scoreboards, prior["persona"]["path"], arm, persona["voice"]["gender"], prior["voice"]["inputs"], win, p.dry_run)
+    voice = ((persona.get("dimensions") or {}).get("voice_gender") or {}).get("value") or (persona.get("voice") or {}).get("gender")
+    apply(p.scoreboards, prior["persona"]["path"], arm, voice, prior["voice"]["inputs"], win, p.dry_run)
     with open(os.path.join(p.scoreboards, "amendments.jsonl"), "a", encoding="utf-8") as f:
         f.write(json.dumps({"decision_id": prior["decision_id"], "arm": arm, "path": prior["persona"]["path"],
                             "amendments": persona.get("amendments", []), "meeting": win}) + "\n")
-    print(json.dumps({"arm": arm, "voice": persona["voice"]["gender"], "meeting": win}))
+    print(json.dumps({"arm": arm, "voice": voice, "meeting": win, "scoreboards": p.scoreboards}))
 
 
 if __name__ == "__main__":
