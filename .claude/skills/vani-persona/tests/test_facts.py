@@ -160,3 +160,27 @@ def test_call_mood_decays():
 def test_rural_city_tier():
     _, v = run({"X05": {"status": "ok", "tier": "village_or_unclassified", "rural_proxy": True, "hindi_belt": True, "state": "Bihar"}})
     assert v["trait.city_tier"] == "village_or_unclassified"
+
+
+# ---------------------------------------------------------------- start rules (user decision 2026-10-10: deterministic)
+def test_start_rules_female_seller_voice():
+    out, _ = run({"A07": {"glusr_usr_gender": "Female"}})
+    assert out["start_rules"]["voice_gender"]["value"] == "F"
+
+
+def test_start_rules_grievance_voice_and_empathy():
+    out, _ = run({"I01": {"cmplnts_cnt": 2, "closed_cmplnts": 1}, "A07": {"glusr_usr_gender": "Male"}})
+    r = out["start_rules"]
+    assert r["voice_gender"]["value"] == "F" and any("complaint" in a["text"] for a in r["empathy_add"])
+
+
+def test_start_rules_no_rule_keeps_card():
+    out, _ = run({"A07": {"glusr_usr_gender": "Male"}})
+    assert out["start_rules"]["voice_gender"] is None  # the card's voice applies
+
+
+def test_start_rules_language():
+    out, _ = run({"B01": {"seller_state": "Telangana"}})
+    assert out["start_rules"]["language_start"]["value"] == "TELUGU"
+    out, _ = run({"C02": {"annual_turnover": "5 - 25 Cr"}, "B01": {"seller_state": "Telangana"}})
+    assert out["start_rules"]["language_start"]["value"] == "ENGLISH"

@@ -352,7 +352,47 @@ def build(ctx, today):
     hook("hook.resolve_grievance", ["CSD", "NSD"], st["state.open_grievance"] == "yes",
          [{"cite": cite("I01"), "fact": f"open complaints {open_c}, grievance calls {len(griev)}"}], [], ["core.md", "calls/"], {})
     return {"glid": ctx.get("glid"), "today": str(today), "division": div, "traits": T, "states": S, "guards": G, "hooks": H,
-            "true_guards": [x["id"] for x in G if x["value"]], "eligible_hooks": [h["id"] for h in H if h["A_script"]["eligible"]]}
+            "true_guards": [x["id"] for x in G if x["value"]], "eligible_hooks": [h["id"] for h in H if h["A_script"]["eligible"]],
+            "start_rules": start_rules(T, S, G)}
+
+
+LANG_NAME = {"hi": "HINDI", "gu": "GUJARATI", "mr": "MARATHI", "ta": "TAMIL", "kn": "KANNADA", "ml": "MALAYALAM", "te": "TELUGU",
+             "bn": "BENGALI", "or": "ODIA", "pa": "PUNJABI", "as": "HINDI"}
+
+
+def start_rules(T, S, G):
+    """The state rules that set a field's start value at delivery (deterministic, never drawn). The selected card gives
+    voice_gender and empathy; these rules change them when a state says so. language_start comes from the rules only.
+    Sources: team decisions 2026-10-09 (seller gender -> VANI voice) and 2026-10-10 (female lean for tense calls and the
+    rural Hindi belt; regional language unless high value; acknowledge grievances first)."""
+    v = {x["id"]: x["A_script"] for x in T + S}
+    val = lambda i: (v.get(i) or {}).get("value")
+    det = lambda i: (v.get(i) or {}).get("detail") or {}
+    mood = val("state.call_mood") or {}
+    grievance = val("state.open_grievance") == "yes"
+    tense = grievance or (mood.get("frustrated") or 0) >= 0.5
+    rural_hb = bool(det("trait.city_tier").get("rural_proxy") and det("trait.city_tier").get("hindi_belt"))
+    voice = None
+    if val("trait.seller_gender") == "F":
+        voice = {"value": "F", "rule": "seller is female (recorded or name guess): female voice", "evidence": ["trait.seller_gender"]}
+    elif tense:
+        voice = {"value": "F", "rule": "tense seller (frustrated on calls or open grievance): female voice", "evidence": ["state.call_mood", "state.open_grievance"]}
+    elif rural_hb:
+        voice = {"value": "F", "rule": "rural Hindi-belt seller: female voice", "evidence": ["trait.city_tier"]}
+    lang = val("trait.language") or {}
+    if val("trait.high_value"):
+        language = {"value": "ENGLISH", "rule": "high-value seller (5 Cr+ or high AOV): English with light Hindi", "evidence": ["trait.high_value"]}
+    else:
+        code = (lang.get("regional") if isinstance(lang, dict) else None) or "hi"
+        language = {"value": LANG_NAME.get(code, "HINDI"), "rule": f"regional language of the seller's state ({code})", "evidence": ["trait.language"]}
+    adds = []
+    if grievance:
+        adds.append({"text": "acknowledge the open complaint first, in one sentence", "rule": "state.open_grievance = yes"})
+    if (mood.get("frustrated") or 0) >= 0.5:
+        adds.append({"text": "apologise briefly for the earlier calls", "rule": "state.call_mood.frustrated >= 0.5"})
+    if (mood.get("rushed") or 0) >= 0.5 or any(g["id"] == "guard.call_fatigue" and g["value"] for g in G):
+        adds.append({"text": "respect their time: keep it short, offer a callback", "rule": "rushed mood or call fatigue"})
+    return {"voice_gender": voice, "language_start": language, "empathy_add": adds}
 
 
 def main():

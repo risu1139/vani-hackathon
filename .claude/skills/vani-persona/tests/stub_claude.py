@@ -56,7 +56,7 @@ def good_flow(run):
         out = tool("probe", "--field", f, "--json").stdout.strip().splitlines()
         hits = json.loads(out[-1])["hits"][:3] if out else []
         spec = h["fields"][f]
-        v = PT.start_value(f, card, prior)
+        v = PT.start_value(f, card, facts)
         if v is None and isinstance(spec.get("value_groups"), list):
             v = spec["value_groups"][0]
         args = ["decide", "--field", f, "--value", str(v), "--type", "start_persona", "--reason", "stub card value",

@@ -84,7 +84,7 @@ def _load(run, name, folder, fallback):
     return json.load(open(q, encoding="utf-8")) if os.path.exists(q) else {}
 
 
-def check_fields(folder, run, persona, h, prior, fails):
+def check_fields(folder, run, persona, h, prior, fails, facts=None):
     """Rule 6: every field is a decision with a checkable reason (content only; the search is re-run here)."""
     dims = persona.get("dimensions") or {}
     types = (h.get("reason_types") or {}).get("order") or ["seller_evidence", "hierarchy", "start_persona"]
@@ -135,7 +135,7 @@ def check_fields(folder, run, persona, h, prior, fails):
                     fails.append(f"{w}: hierarchy data does not match the brief in 03_prior.json")
                 elif PT.group_of(spec, v) != hi.get("value_group"):
                     fails.append(f"{w}: value {v!r} is not in the cited group {hi.get('value_group')!r}")
-            sv = PT.start_value(f, card, prior) if rt == "start_persona" else None
+            sv = PT.start_value(f, card, facts) if rt == "start_persona" else None
             if rt == "start_persona" and sv is None:
                 fails.append(f"{w}: start_persona but there is no start value for {f}")
             elif rt == "start_persona" and v != sv:
@@ -299,7 +299,7 @@ def validate(folder, run):
     if pr.get("chosen") not in allowed and not (pr.get("override") and not h):
         fails.append(f"prior.chosen {pr.get('chosen')!r} is not one of {allowed} (03_prior.json)")
     if h:
-        check_fields(folder, run, persona, h, prior, fails)
+        check_fields(folder, run, persona, h, prior, fails, facts)
         check_text(folder, persona, fails)
     else:
         for d in REQ_DIMS_OLD:

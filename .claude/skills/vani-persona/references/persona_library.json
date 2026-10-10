@@ -87,7 +87,9 @@
    "best_hooks": [
     "hook.category_demand"
    ],
-   "style_text": "Natural Hinglish. Polite, direct. At most 2 sentences per reply. Address the seller as 'ji'."
+   "style_text": "Natural Hinglish. Polite, direct. At most 2 sentences per reply. Address the seller as 'ji'.",
+   "voice_gender": "F",
+   "empathy": "polite and neutral; thank the seller for their time"
   },
   {
    "id": "P1",
@@ -106,7 +108,9 @@
     "hook.peer_usage",
     "hook.unused_credits"
    ],
-   "style_text": "Lead with one concrete number (an order value, a lead count, a quantity). Confident and specific. No vague claims. One question at a time. Address the seller as 'ji'."
+   "style_text": "Lead with one concrete number (an order value, a lead count, a quantity). Confident and specific. No vague claims. One question at a time. Address the seller as 'ji'.",
+   "voice_gender": "F",
+   "empathy": "brief acknowledgement, then the facts"
   },
   {
    "id": "P2",
@@ -125,7 +129,9 @@
     "hook.category_demand",
     "hook.money_lead"
    ],
-   "style_text": "Speak like a helpful person from the seller's own region, in their language. Simple words, no English jargon. Warm and respectful. Frame the meeting as help for their business. Address the seller with the polite form of their language ('ji', 'garu', 'avare')."
+   "style_text": "Speak like a helpful person from the seller's own region, in their language. Simple words, no English jargon. Warm and respectful. Frame the meeting as help for their business. Address the seller with the polite form of their language ('ji', 'garu', 'avare').",
+   "voice_gender": "F",
+   "empathy": "warm: praise the seller's work and products before asking"
   },
   {
    "id": "P3",
@@ -143,7 +149,9 @@
     "hook.profile_gap",
     "hook.category_demand"
    ],
-   "style_text": "Short phrases separated by commas. One idea per reply. Check understanding often ('samajh aaya ji?'). Never hurry the seller."
+   "style_text": "Short phrases separated by commas. One idea per reply. Check understanding often ('samajh aaya ji?'). Never hurry the seller.",
+   "voice_gender": "F",
+   "empathy": "patient: reassure, check understanding, never rush"
   },
   {
    "id": "P4",
@@ -161,7 +169,9 @@
     "hook.money_lead",
     "hook.unused_credits"
    ],
-   "style_text": "One short sentence per reply (at most 12 words). The value first, then the ask. Offer a short meeting or a callback at once. Acknowledge earlier calls."
+   "style_text": "One short sentence per reply (at most 12 words). The value first, then the ask. Offer a short meeting or a callback at once. Acknowledge earlier calls.",
+   "voice_gender": "F",
+   "empathy": "one-line acknowledgement, then straight to the point"
   },
   {
    "id": "P5",
@@ -179,7 +189,9 @@
     "hook.resolve_grievance",
     "hook.lead_quality_fix"
    ],
-   "style_text": "Acknowledge the problem first, once, sincerely. Do not argue. Offer the meeting as the way to fix it. Calm and steady. Never repeat the old pitch."
+   "style_text": "Acknowledge the problem first, once, sincerely. Do not argue. Offer the meeting as the way to fix it. Calm and steady. Never repeat the old pitch.",
+   "voice_gender": "F",
+   "empathy": "acknowledge the problem or a bad past experience first, then the fix"
   },
   {
    "id": "P6",
@@ -197,7 +209,9 @@
     "hook.peer_usage",
     "hook.money_lead"
    ],
-   "style_text": "Business-like and respectful, mostly English with light Hindi. Talk about market share and high-value buyers. Brief, never pushy."
+   "style_text": "Business-like and respectful, mostly English with light Hindi. Talk about market share and high-value buyers. Brief, never pushy.",
+   "voice_gender": "F",
+   "empathy": "respectful: acknowledge the seller's experience and standing"
   }
  ],
  "seed_leans": {
@@ -254,5 +268,12 @@
     ]
    }
   }
- }
+ },
+ "changes": [
+  {
+   "date": "2026-10-10",
+   "by": "persona session (user request)",
+   "what": "every card defines voice_gender (F, team female default) and empathy; state rules in facts.py start_rules change them at delivery"
+  }
+ ]
 }

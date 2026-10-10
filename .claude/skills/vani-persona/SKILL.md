@@ -44,7 +44,7 @@ Names are tokens (`{SELLER_NAME}`, `{COMPANY}`). Keep the tokens in your text.
 4. **Decide every field** with `decide`. Choose the reason type in this order:
    1. **`seller_evidence`**: a hit is real evidence for this seller → `--type seller_evidence --cite <hit cite> --quote "<exact words, ≤20>"`. At least one cite must be a hit of that field's probe.
    2. **`hierarchy`**: only when no hit is evidence AND `03_prior.json brief.<field>` has data → `--type hierarchy --level <level_used> --group <group>`. Also give `--searched` and `--answer <hit id>="why it does not count"` for each TOP hit.
-   3. **`start_persona`**: neither → keep the selected card's value. `--type start_persona --searched "..." --answer ...` for each TOP hit.
+   3. **`start_persona`**: neither → keep the start value: the selected card's value, as changed by the state rules in `$VANI_RUN/01_facts.json` → `start_rules` (voice, language, empathy). `status` and `decide` tell you the exact value. `--type start_persona --searched "..." --answer ...` for each TOP hit.
    - Voice gender: the voice for VANI, from seller gender, city tier and tension (`voice_and_language.md`). Never mention the seller's gender.
    - Language start: the seller's regional language from the location facts, unless the seller is high value. It is a suggestion, so cite the facts.
    - `decide` refuses a wrong value, a range error, a quote that is not in the file, or a missing answer. Read the refusal and fix it.

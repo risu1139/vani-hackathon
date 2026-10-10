@@ -92,7 +92,7 @@ def test_quote_too_short_refused(env):
 
 
 def test_start_value_for_fields_without_card(env):
-    """Review fix 3: voice_gender starts from the voice draw (F in the fixture), not a free value."""
+    """voice_gender starts from the card + state rules (the fixture's rule says F), never a free value."""
     run, e = env
     ready(e)
     args = ["decide", "--field", "voice_gender", "--value", "M", "--type", "start_persona", "--reason", "x", "--searched", "s"]

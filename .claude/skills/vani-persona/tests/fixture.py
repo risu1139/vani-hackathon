@@ -34,7 +34,9 @@ FILES = {
     f"calls/C01_{CALL_DAY}.md": ("# call C01\n### a call\n- Summary: seller was busy\n"
                                  "  - C01.T1 bot: Namaste ji\n  - C01.T2 seller: abhi busy hoon baad me call karo\n"),
 }
-FACTS = {"division": "NSD", "true_guards": [], "eligible_hooks": ["hook.profile_gap"], "hooks": [], "traits": [], "states": []}
+FACTS = {"division": "NSD", "true_guards": [], "eligible_hooks": ["hook.profile_gap"], "hooks": [], "traits": [], "states": [],
+         "start_rules": {"voice_gender": {"value": "F", "rule": "seller is female"},
+                         "language_start": {"value": "TELUGU", "rule": "regional language (te)"}, "empathy_add": []}}
 PRIOR = {"decision_id": "t1", "persona": {"top2": ["P2", "P4"], "holdout": False, "path": {}}, "brief": {},
          "voice": {"chosen": "F"}}
 TEXT = {"personalisation": [], "hook": {"id": None, "claim": "", "fact_ids": [], "backup": None},

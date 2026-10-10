@@ -231,19 +231,20 @@ def search(folder, spec, as_of):
     return hits
 
 
-# Start values for fields the cards do not define (review fix 3: start_persona never accepts a free value).
-# voice_gender starts from the voice scoreboard's draw (03_prior.json voice.chosen); the rest from VANI's current default.
-START_DEFAULTS = {"language_start": "HINDI", "empathy": "plain courtesy: thank the seller for their time"}
-
-
-def start_value(field, card, prior_doc):
-    """The value a start_persona decision must keep, or None if there is none."""
-    if field in (card or {}):
-        return card[field]
+def start_value(field, card, facts_doc):
+    """The value a start_persona decision must keep: the selected card's value, changed only by the deterministic
+    state rules in 01_facts.json start_rules (user decision 2026-10-10: no random draw, no ad-hoc defaults).
+    voice_gender = rule if one fired, else the card; language_start = the rule; empathy = the card + rule additions."""
+    r = (facts_doc or {}).get("start_rules") or {}
+    card = card or {}
     if field == "voice_gender":
-        v = ((prior_doc or {}).get("voice") or {}).get("chosen")
-        return {"female": "F", "male": "M"}.get(str(v).lower(), v)
-    return START_DEFAULTS.get(field)
+        return ((r.get("voice_gender") or {}).get("value")) or card.get("voice_gender")
+    if field == "language_start":
+        return (r.get("language_start") or {}).get("value")
+    if field == "empathy":
+        adds = [a["text"] for a in r.get("empathy_add") or []]
+        return "; ".join([card["empathy"]] + adds) if card.get("empathy") else None
+    return card.get(field)
 
 
 def card_of(persona_id):
@@ -448,11 +449,11 @@ def check_decision(run, h, field, value, rtype, cites, answers, level, group, se
             elif group_of(spec, value) != group:
                 probs.append(f"value {value!r} is not in the group {group!r} you cite")
         if rtype == "start_persona" and sel:
-            sv = start_value(field, sel.get("card") or {}, prior(run))
+            sv = start_value(field, sel.get("card") or {}, facts(run))
             if sv is None:
                 probs.append(f"no start value for {field}: use seller_evidence or hierarchy")
             elif value != sv:
-                probs.append(f"start_persona keeps the start value: {field} = {sv!r} (card {sel.get('persona')}, voice draw or default)")
+                probs.append(f"start_persona keeps the start value: {field} = {sv!r} (card {sel.get('persona')} + the state rules in 01_facts.json start_rules)")
     return probs
 
 
