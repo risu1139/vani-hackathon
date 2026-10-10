@@ -61,7 +61,11 @@ def fill(text, names):
 def seller_city(run):
     """City is not PII: from the seller folder named in turn.json (B01, else X05)."""
     try:
-        folder = json.load(open(os.path.join(run, "turn.json"), encoding="utf-8"))["folder"]
+        t = json.load(open(os.path.join(run, "turn.json"), encoding="utf-8"))
+        folder = t["folder"]
+        if not os.path.isfile(os.path.join(folder, "context.json")) and t.get("source"):
+            # a run fetched from Daytona: its folder path is the sandbox's; use the local export with the same pseudonym
+            folder = os.path.join(R.REPO, "data", "agent_export", os.path.basename(t["source"].rstrip("/\\")))
         pts = json.load(open(os.path.join(folder, "context.json"), encoding="utf-8"))["points"]
         b1, x5 = (pts.get("B01") or {}).get("value") or {}, (pts.get("X05") or {}).get("value") or {}
         return str(b1.get("city_name") or b1.get("seller_city") or x5.get("city") or "").strip().title()
