@@ -141,8 +141,11 @@ def main():
     rc, out = run([PY, "app/sarvam/voice_smoke.py", "--run", rdir], timeout=600)
     iid = next((ln.split()[-1] for ln in out.splitlines() if ln.startswith("INTERACTION")), None)
     step("call", rc == 0 and iid not in (None, "None"), f"interaction {iid}" if iid else out[-400:])
-    time.sleep(30)  # post-call labels are written after the interaction ends
-    rc, out = run([PY, "app/sarvam/collect_call.py", "--interaction-id", iid, "--hours", "2", "--out", os.path.join(ROOT, "data", "runs_daytona")])
+    for attempt in range(8):  # analytics lists the call (and its post-call labels) some time after it ends
+        time.sleep(30)
+        rc, out = run([PY, "app/sarvam/collect_call.py", "--interaction-id", iid, "--hours", "2", "--out", os.path.join(ROOT, "data", "runs_daytona")])
+        if rc == 0:
+            break
     step("collect", rc == 0, out.strip().splitlines()[-1][:160] if out.strip() else "")
     rc, out = run([PY, "app/loops/close_loop.py", "--run", rdir, "--test", "--names",
                    os.path.join(ROOT, "data", "agent_export_maps", f"{pseudo}.json")], timeout=1200)
