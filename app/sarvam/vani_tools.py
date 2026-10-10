@@ -210,6 +210,13 @@ LEXICON = [
         "एग्जीक्यूटिव का", "एग्जीक्यूटिव कौन", "मेरा एग्जीक्यूटिव", "कौन आएगा", "अकाउंट कौन",
         "executive कौन", "कोण येणार", "एक्झिक्युटिव्ह कोण", "ఎవరు వస్తారు", "ఎగ్జిక్యూటివ్ ఎవరు", "யார் வருவாங்க",
         "ಯಾರು ಬರುತ್ತಾರೆ", "ആരാണ് വരുന്നത്", "કોણ આવશે", "কে আসবে", "ਕੌਣ ਆਵੇਗਾ")),
+    ("ask_more", "strong", (
+        # R7 (2026-10-10 Morbi call): "what else besides buy-leads?" -> the next topic from 'Other topics', never "no other info"
+        "iske alawa", "iske alava", "iske siva", "ke alawa", "aur kya", "aur kya doge", "aur kya hai", "what else", "anything else",
+        "besides this", "other than this", "apart from",
+        "इसके अलावा", "के अलावा", "और क्या", "और क्या है", "इसके सिवा", "दूसरा क्या",
+        "याशिवाय", "आणखी काय", "अजून काय", "ఇది కాకుండా", "ఇంకా ఏమి", "ఇంకేమి", "இது இல்லாம", "வேற என்ன", "இதைத் தவிர",
+        "ಇದನ್ನು ಬಿಟ್ಟು", "ಬೇರೆ ಏನು", "ഇതല്ലാതെ", "വേറെ എന്ത്", "આ સિવાય", "બીજું શું", "এছাড়া", "আর কী", "ਇਸ ਤੋਂ ਇਲਾਵਾ", "ਹੋਰ ਕੀ")),
     ("question", "weak", (
         # R1 (plan 5f): a question by question words per language (STT often drops the "?")
         "kya", "kaun", "kab", "kitna", "kitni", "kitne", "kaise", "kyun", "kahan", "kaunsa", "kaun se", "kis", "kiska", "kisko",
@@ -300,10 +307,11 @@ LEXICON = [
         "કેવી રીતે")),
 ]
 _COMPILED = [(mode, strength, cue, _cue_re(cue)) for mode, strength, cues in LEXICON for cue in cues]
-PRIORITY = ["opt_out", "frustrated", "ask_handler", "declined", "bot_question", "rushed", "confused", "interested", "question"]
+PRIORITY = ["opt_out", "frustrated", "ask_handler", "ask_more", "declined", "bot_question", "rushed", "confused", "interested", "question"]
 ALWAYS_NOW = {"opt_out", "frustrated", "bot_question"}
 _LATER = re.compile(r"(?<![a-z])(baad|kal|shaam|later|tomorrow|evening|tarvata|appuram|amele|pinne|nantar)(?![a-z])|"
                     r"बाद|कल|शाम|પછી|કાલે|नंतर|পরে|తర్వాత|రేపు|அப்புறம்|நாளை|ಆಮೇಲೆ|ನಾಳೆ|പിന്നെ|നാളെ")
+_NO_MORE = re.compile(r"(?<![a-z])(nahi|nahin|no|nothing|bas)(?![a-z])|नहीं|नही|बस|नाही|లేదు|இல்ல|ಇಲ್ಲ|ഇല്ല|ના|না|ਨਹੀਂ", re.I)
 _NOT_WANTED = re.compile(r"(?<![a-z])(nahi chahiye|interest nahi|not interested|zarurat nahi)(?![a-z])|नही चाहिए|"
                          r"इंटरेस्ट नही|जरूरत नही|નથી જોઈએ")
 
@@ -344,6 +352,8 @@ def classify(text):
         # "abhi call mat karo, baad me karna" = a callback request, not an opt-out (PS07 lesson)
         hits = [h for h in hits if h[0] != "opt_out"] + [("rushed", "strong", "call mat + later")]
         note = "opt-out phrase with a later time = callback"
+    if any(m == "ask_more" for m, _, _ in hits) and _NO_MORE.search(t):
+        hits = [h for h in hits if h[0] != "ask_more"]
     if _NOT_WANTED.search(t):
         hits = [h for h in hits if h[0] != "interested"]
     for strength in ("strong", "weak"):  # a strong cue of a lower-priority signal beats a weak cue
@@ -421,7 +431,7 @@ def script_of(text):
 # ---------------------------------------------------------------- directives (per mode x persona style)
 STYLE_WPT = {"P0": 20, "P1": 18, "P2": 15, "P3": 14, "P4": 10, "P5": 16, "P6": 20, "COMPOSED": 18}
 MODE_CAP = {"neutral": 20, "rushed": 12, "frustrated": 18, "confused": 20, "interested": 20, "bot_question": 20,
-            "opt_out": 15, "declined": 20, "language_switch": 20, "question": 30, "ask_handler": 30}
+            "opt_out": 15, "declined": 20, "language_switch": 20, "question": 30, "ask_handler": 30, "ask_more": 30}
 _D = {  # mode -> style -> (word cap, text); "*" = any style without its own variant. {cap} is filled in.
     "rushed": {
         "*": (12, "Seller is busy. ONE short sentence, max {cap} words: the value in a few words, then ask when to call back."),
@@ -455,6 +465,11 @@ _D = {  # mode -> style -> (word cap, text); "*" = any style without its own var
     "question": {
         "*": (30, "Seller asked a question. Answer it fully and truthfully from the facts and 'About this seller'. If the answer "
                   "is not there, say so plainly once, never with the same words twice. Max {cap} words."),
+    },
+    "ask_more": {
+        "*": (30, "Seller asked what else there is. Give the NEXT topic from 'Other topics' in 'About this seller' now: ONE "
+                  "topic with its fact (e.g. lapsed credits, rising enquiries, catalogue gaps). Never say you have no other "
+                  "information while 'Other topics' has entries. Max {cap} words."),
     },
     "ask_handler": {
         "*": (30, "Seller asked who handles the account or who will come. Say this, in the seller's language, and nothing "
@@ -508,13 +523,14 @@ def directive(mode, style_id, lang="", handler="", retry=""):
 
 TEAM_HANDLER_LINE = ("our IndiaMART team handles your account; the executive will introduce themselves when they call")
 ASK_GAP = 2  # R2 (user 2026-10-10: "let the agent decide, but do not irritate"): never two asks in a row; VANI decides when
-OVERLAY_MODES = {"question", "ask_handler"}
-NO_ASK_MODES = {"question", "ask_handler", "declined", "frustrated", "opt_out", "confused", "bot_question"}
+OVERLAY_MODES = {"question", "ask_handler", "ask_more"}
+NO_ASK_MODES = {"ask_more", "question", "ask_handler", "declined", "frustrated", "opt_out", "confused", "bot_question"}
 _CHANGE = {"neutral": "default persona style", "rushed": "brevity + callback offer", "frustrated": "apology, pitch stopped",
            "confused": "simplify: short comma phrases + check", "interested": "move to meeting day/time",
            "bot_question": "identity sidestep", "bot_question_pressed": "virtual-assistant line + human callback",
            "opt_out": "apology + end call", "declined": "acknowledge, keep the line open", "language_switch": "reply language",
-           "question": "answer fully, no meeting ask", "ask_handler": "handler line, word for word"}
+           "question": "answer fully, no meeting ask", "ask_handler": "handler line, word for word",
+           "ask_more": "next topic from Other topics"}
 
 OPT_OUT_LINE = {
     "Hindi": "माफ़ कीजिए, अब आपको हमारी तरफ से कॉल नहीं आएगा। धन्यवाद।",

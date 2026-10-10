@@ -31,6 +31,12 @@ ELSE = re.compile(r"anything else|something else|any other|"
                   r"(?:(?:aur|koi aur)|और|दूसरी|अजून|आणखी|ఇంకా|ఇంకే|வேறு|ಬೇರೆ|മറ്റ്|બીજ|আর|ਹੋਰ)[^.!?।]{0,25}"
                   r"(?:(?:help|madad|kuch|cheez)|मदद|help|चीज़|चीज|कुछ|काही|मदत|ఏమైనా|సహాయ|ஏதாவது|உதவி|ಏನಾದರೂ|ಸಹಾಯ|"
                   r"എന്തെങ്കിലും|സഹായ|કંઈ|મદદ|কিছু|সাহায্য|ਕੁਝ|ਮਦਦ)", re.I)
+# the seller ends THIS call ("call rakho", "bye"): R5's 'anything else' is not owed
+END_REQ = re.compile(r"(?<![a-z])(call|phone) rakh|(?<![a-z])(bye|goodbye|hang up)(?![a-z])|कॉल रख|फोन रख|फ़ोन रख|बाय|"
+                     r"फोन ठेव|कॉल ठेव|ఫోన్ పెట్టేయ|போன வைங்க|ಫೋನ್ ಇಡಿ|ફોન મૂક|ফোন রাখ|ਫੋਨ ਰੱਖ", re.I)
+NO_INFO = re.compile(r"no (other|more) information|nothing else|(और|कोई|दूसरी)\s*(कोई\s*)?जानकारी\s*(मेरे पास\s*)?(अभी\s*)?नहीं|"
+                     r"(और|कोई) जानकारी नहीं|मेरे पास (अभी )?(कोई )?और जानकारी नहीं|आणखी माहिती नाही|వేరే సమాచారం లేదు|"
+                     r"வேற தகவல் இல்ல|ಬೇರೆ ಮಾಹಿತಿ ಇಲ್ಲ", re.I)
 COVERED = {"hindi", "english", "marathi", "telugu", "tamil", "kannada", "gujarati", "bengali", "punjabi"}
 NUM = re.compile(r"\d[\d,]*")
 
@@ -97,7 +103,8 @@ def check(call):
     ended = call.get("ended_by")
     hostile = any(r.get("to") == "frustrated" for r in log[-2:])
     nudged_out = len(tr) >= 2 and tr[-1]["role"] == "assistant" and tr[-2]["role"] == "assistant"  # no seller reply at the end
-    seller_end = any(VT.classify(m.get("content") or "")[0] == "opt_out" for m in tr[-3:] if m["role"] == "user")
+    seller_end = any(VT.classify(m.get("content") or "")[0] == "opt_out" or END_REQ.search(m.get("content") or "")
+                     for m in tr[-3:] if m["role"] == "user")
     if opted or seller_end or hostile or nudged_out or ended != "AGENT_ENDS":
         why = "opt-out" if opted or seller_end else "hostile/legal" if hostile else "nudges unanswered" if nudged_out else f"ended_by={ended}"
         out["R5"] = {"result": "pass", "why": "exception: " + why}
@@ -107,6 +114,11 @@ def check(call):
         answered = any(any(x["role"] == "user" for x in tr[i + 1:]) for i in idx)
         out["R5"] = {"result": "pass" if answered else ("fail" if covered else "unknown"), "booked": booked,
                      "asked_anything_else_at": idx}
+    # R7: VANI says it has no other information while the seller block had 'Other topics'
+    has_more = "Other topics" in str((call.get("agent_variables") or {}).get("prompt_seller") or "")
+    said = [i for i, m in enumerate(tr) if m["role"] == "assistant" and NO_INFO.search(m.get("content") or "")]
+    out["R7"] = {"result": "fail" if has_more and said else ("pass" if covered or not said else "unknown"),
+                 "said_no_info_at": said, "had_other_topics": has_more}
     for k in out:
         out[k]["language"] = lang or "?"
     return out

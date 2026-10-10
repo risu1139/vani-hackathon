@@ -1,6 +1,6 @@
 {
  "_doc": "Call-behaviour rules (plan 5f). ONE place: render_prompt.py writes every 'say' into the prompt (Call rules), the live tool read_seller_signal enforces R1/R2/R4 per turn, validate_persona.py runs each 'pre_check' on the call plan, app/loops/rule_checks.py runs each 'post_check' on the transcript (pass|fail|unknown + language). Add new rules here only, with the call that showed the fault.",
- "version": "2026-10-10.2",
+ "version": "2026-10-10.3",
  "rules": [
   {
    "id": "R1",
@@ -73,6 +73,16 @@
     "the seller explicitly asks to end the call"
    ],
    "evidence": "user rule 2026-10-10 after call 20261010/a42b9cf6-20:22:57 (declined, then interested)",
+   "added": "2026-10-10"
+  },
+  {
+   "id": "R7",
+   "name": "never-nothing-else",
+   "say": "When the seller asks what else there is, give the next topic from 'Other topics' in 'About this seller', one at a time with its fact. Never say you have no other information while 'Other topics' has entries.",
+   "pre_check": null,
+   "post_check": "auto:R7",
+   "exceptions": [],
+   "evidence": "call 20261010/bb1cd6a2-21:43:29: asked 'buy-leads ke alawa kya doge?', VANI said it had no other information while lapsed credits, rising enquiries and catalogue gaps were in its seller block",
    "added": "2026-10-10"
   }
  ]

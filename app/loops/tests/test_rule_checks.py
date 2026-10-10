@@ -53,3 +53,12 @@ def test_one_restatement_after_a_language_switch_is_not_a_repeat():
               ("assistant", "आपकी category में 26 requirements आई हैं।"), ("user", "ठीक है"),
               ("assistant", "और कुछ मदद कर सकती हूँ?"), ("user", "नहीं")], "Hindi")
     assert RC.check(c)["R3"]["result"] == "pass"
+
+
+def test_r7_no_info_while_other_topics_fails():
+    c = call([("assistant", "Jamnagar se requirement hai."), ("user", "buy leads ke alawa kya doge?"),
+              ("assistant", "इसके अलावा मेरे पास अभी कोई और जानकारी नहीं है।"), ("user", "ok bye")], "Hindi", ended="USER_ENDS")
+    c["agent_variables"]["prompt_seller"] = "About this seller ...\nOther topics (only if ...):\n- catalogue gaps: 6"
+    assert RC.check(c)["R7"]["result"] == "fail"
+    c["transcript"][2]["content"] = "आपके 12 buy-lead credits lapse हुए हैं, 9 बचे हैं।"
+    assert RC.check(c)["R7"]["result"] == "pass"

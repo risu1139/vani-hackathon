@@ -377,3 +377,17 @@ def test_marathi_yes_is_not_hindi():
     ctx = _ctx(persona_language="MARATHI")
     out, row = _say(ctx, "हो, बोला।", "marathi")
     assert "Reply in Hindi" not in out.message_to_llm and row["to"] != "language_switch"
+
+
+@pytest.mark.parametrize("utt,lang", [("बाय लीड्स के अलावा क्या दोगे हमें?", "hindi"), ("iske alawa aur kya hai", "hinglish"),
+                                      ("What else can you give me?", "english"), ("ఇది కాకుండా ఇంకా ఏమి ఉంది", "telugu"),
+                                      ("याशिवाय आणखी काय आहे?", "marathi")])
+def test_r7_ask_more_gives_next_topic(utt, lang):
+    ctx = _ctx()
+    out, row = _say(ctx, utt, lang)
+    assert row.get("overlay") == "ask_more" and "Other topics" in out.message_to_llm and "Do NOT ask" in out.message_to_llm
+
+
+@pytest.mark.parametrize("utt", ["नहीं, और कुछ नहीं, बस इतना ही", "nahi aur kuch nahi", "no, nothing else"])
+def test_nothing_more_is_not_ask_more(utt):
+    assert vt.classify(utt)[0] != "ask_more"
