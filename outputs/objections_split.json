@@ -1,0 +1,208 @@
+{
+ "_meta": {
+  "date": "2026-10-10",
+  "source": "PS07 bot calls with seller turns (about 11,800 calls, 1 Apr to 30 Sep 2026)",
+  "division_rule": "PAID (CSD and every other paid division) when custtype.paid = -1; every other seller is FREE (NSD). Two classes only (user rule, 2026-10-10). Joined through glusr_usr.glusr_usr_custtype_id on the production database; per-seller status was held in memory and not saved.",
+  "method": "Objections are found by regex on the seller's turns (approximate). The patterns were re-created for this split, so shares differ from objections.json (for example busy 19.0% here vs 16.7% there). Compare NSD with CSD inside this file, not with objections.json.",
+  "caution": "CSD has only 546 calls (4.6% of calls). A rate is shown only when an objection has at least 20 calls; others are null. The outcome labels are noisy (4 of the first 20 calls contradicted the transcript).",
+  "key": "nsd = free sellers, csd = paid sellers (CSD, KCD, TMW and other paid divisions)"
+ },
+ "all": {
+  "calls": 11832,
+  "meeting_rate": 0.2344,
+  "objections": {
+   "obj.busy": {
+    "calls": 2254,
+    "share": 0.1905,
+    "meeting_rate": 0.134
+   },
+   "obj.not_interested": {
+    "calls": 778,
+    "share": 0.0658,
+    "meeting_rate": 0.0797
+   },
+   "obj.confused": {
+    "calls": 739,
+    "share": 0.0625,
+    "meeting_rate": 0.203
+   },
+   "obj.price": {
+    "calls": 555,
+    "share": 0.0469,
+    "meeting_rate": 0.3333
+   },
+   "obj.phone_online_pref": {
+    "calls": 654,
+    "share": 0.0553,
+    "meeting_rate": 0.263
+   },
+   "obj.already_met": {
+    "calls": 185,
+    "share": 0.0156,
+    "meeting_rate": 0.1676
+   },
+   "obj.decision_maker_elsewhere": {
+    "calls": 113,
+    "share": 0.0096,
+    "meeting_rate": 0.2212
+   },
+   "obj.bot_question": {
+    "calls": 280,
+    "share": 0.0237,
+    "meeting_rate": 0.2536
+   },
+   "obj.repeated_calls": {
+    "calls": 132,
+    "share": 0.0112,
+    "meeting_rate": 0.1212
+   },
+   "obj.wrong_number": {
+    "calls": 54,
+    "share": 0.0046,
+    "meeting_rate": 0.0
+   },
+   "obj.distrust": {
+    "calls": 28,
+    "share": 0.0024,
+    "meeting_rate": 0.3214
+   },
+   "obj.no_enquiries": {
+    "calls": 39,
+    "share": 0.0033,
+    "meeting_rate": 0.2564
+   }
+  }
+ },
+ "nsd": {
+  "calls": 11261,
+  "meeting_rate": 0.2273,
+  "objections": {
+   "obj.busy": {
+    "calls": 2168,
+    "share": 0.1925,
+    "meeting_rate": 0.1315
+   },
+   "obj.not_interested": {
+    "calls": 751,
+    "share": 0.0667,
+    "meeting_rate": 0.0732
+   },
+   "obj.confused": {
+    "calls": 696,
+    "share": 0.0618,
+    "meeting_rate": 0.1954
+   },
+   "obj.price": {
+    "calls": 529,
+    "share": 0.047,
+    "meeting_rate": 0.3176
+   },
+   "obj.phone_online_pref": {
+    "calls": 601,
+    "share": 0.0534,
+    "meeting_rate": 0.2446
+   },
+   "obj.already_met": {
+    "calls": 168,
+    "share": 0.0149,
+    "meeting_rate": 0.1726
+   },
+   "obj.decision_maker_elsewhere": {
+    "calls": 106,
+    "share": 0.0094,
+    "meeting_rate": 0.217
+   },
+   "obj.bot_question": {
+    "calls": 261,
+    "share": 0.0232,
+    "meeting_rate": 0.2414
+   },
+   "obj.repeated_calls": {
+    "calls": 128,
+    "share": 0.0114,
+    "meeting_rate": 0.1172
+   },
+   "obj.wrong_number": {
+    "calls": 53,
+    "share": 0.0047,
+    "meeting_rate": 0.0
+   },
+   "obj.distrust": {
+    "calls": 28,
+    "share": 0.0025,
+    "meeting_rate": 0.3214
+   },
+   "obj.no_enquiries": {
+    "calls": 34,
+    "share": 0.003,
+    "meeting_rate": 0.2059
+   }
+  }
+ },
+ "csd": {
+  "calls": 571,
+  "meeting_rate": 0.373,
+  "objections": {
+   "obj.busy": {
+    "calls": 86,
+    "share": 0.1506,
+    "meeting_rate": 0.1977
+   },
+   "obj.not_interested": {
+    "calls": 27,
+    "share": 0.0473,
+    "meeting_rate": 0.2593
+   },
+   "obj.confused": {
+    "calls": 43,
+    "share": 0.0753,
+    "meeting_rate": 0.3256
+   },
+   "obj.price": {
+    "calls": 26,
+    "share": 0.0455,
+    "meeting_rate": 0.6538
+   },
+   "obj.phone_online_pref": {
+    "calls": 53,
+    "share": 0.0928,
+    "meeting_rate": 0.4717
+   },
+   "obj.already_met": {
+    "calls": 17,
+    "share": 0.0298,
+    "meeting_rate": null
+   },
+   "obj.decision_maker_elsewhere": {
+    "calls": 7,
+    "share": 0.0123,
+    "meeting_rate": null
+   },
+   "obj.bot_question": {
+    "calls": 19,
+    "share": 0.0333,
+    "meeting_rate": null
+   },
+   "obj.repeated_calls": {
+    "calls": 4,
+    "share": 0.007,
+    "meeting_rate": null
+   },
+   "obj.wrong_number": {
+    "calls": 1,
+    "share": 0.0018,
+    "meeting_rate": null
+   },
+   "obj.distrust": {
+    "calls": 0,
+    "share": 0.0,
+    "meeting_rate": null
+   },
+   "obj.no_enquiries": {
+    "calls": 5,
+    "share": 0.0088,
+    "meeting_rate": null
+   }
+  }
+ }
+}

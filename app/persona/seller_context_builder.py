@@ -673,6 +673,37 @@ def render_top_mcats(t):
     return "\n".join(lines + [""])
 
 
+PLAN_SQL = """SELECT c.paid AS paid, c.custtype_name AS custtype
+    FROM glusr_usr u JOIN custtype c ON c.custtype_id = u.glusr_usr_custtype_id WHERE u.glusr_usr_id = {glid}"""
+
+
+def plan_class(glid, refresh=False):
+    """X07: free or paid. custtype.paid = -1 means PAID; everything else is a FREE seller (user rule, 2026-10-10).
+    Free = NSD; every other division (CSD, KCD, TMW, ...) is paid. Redash pg-meshr, one row, cached."""
+    def q():
+        rows = redash(PLAN_SQL.format(glid=int(glid)), REDASH_MESH_DS)
+        if rows is None:
+            return None
+        if not rows:
+            return {"status": "no_plan"}
+        r = rows[0]
+        paid = r.get("paid")
+        return {"status": "ok", "plan": "paid" if paid is not None and int(float(paid)) == -1 else "free", "custtype": r.get("custtype")}
+    return _cached(os.path.join(AOV_CACHE, "plan_class", f"{int(glid)}.json"), q, refresh)
+
+
+def plan_check(plan, vertical):
+    """Cross-check the plan class against the division text (H02 vertical name). Returns a short sentence."""
+    if not plan or plan.get("status") != "ok":
+        return "plan class not available"
+    v = (vertical or "").upper()
+    if not v.strip():
+        return f"{plan['plan']} seller (division not available, so the plan class is the division signal: free = NSD, paid = any other division)"
+    expected = "free" if "NSD" in v else "paid"
+    ok = expected == plan["plan"]
+    return f"{plan['plan']} seller; division {vertical}: " + ("consistent" if ok else f"MISMATCH (a {vertical} seller should be {expected})")
+
+
 GST_STATE_CODES = {  # statutory GST state codes (first 2 digits of a GSTIN); a code list, not a language mapping
     "01": "Jammu and Kashmir", "02": "Himachal Pradesh", "03": "Punjab", "04": "Chandigarh", "05": "Uttarakhand", "06": "Haryana",
     "07": "Delhi", "08": "Rajasthan", "09": "Uttar Pradesh", "10": "Bihar", "11": "Sikkim", "12": "Arunachal Pradesh",
@@ -706,7 +737,7 @@ def render_other(o):
     return "\n".join(lines + [""])
 
 
-def render_kyc(o, ct=None, gl=None):
+def render_kyc(o, ct=None, gl=None, pl=None, vertical=None):
     f = o.get("seller_flags") or {}
     lines = ["### X04 Seller flags (undated snapshot, Apr–Sep)", "",
              f"- do_not_call_requested: {f.get('do_not_call_requested')}; already_in_touch_with_executive: {f.get('already_in_touch_with_executive')}; "
@@ -716,6 +747,9 @@ def render_kyc(o, ct=None, gl=None):
               f"rural proxy {ct.get('rural_proxy')}; Hindi belt {ct.get('hindi_belt')}" if ct and ct.get("status") == "ok" else "_not available_"), "",
              "### X06 GST registered location (state only)", "",
              (f"- GST registration state: {gl.get('state')}" if gl and gl.get("status") == "ok" else "_not available_"), "",
+             "### X07 Seller plan class (free or paid)", "",
+             (f"- plan class: {pl.get('plan')}" + (f" (customer type {pl.get('custtype')})" if pl.get("custtype") else "") + f"; check: {plan_check(pl, vertical)}"
+              if pl and pl.get("status") == "ok" else "_not available_"), "",
              "### X02 Onboarding locations (city level only)", ""]
     lines += [f"- {l['city']}, {l['state']} (rank {l['cluster_rank']}, {l['source']}, {l['created_on']})" for l in o["onboarding_locations"]] or ["_no data_"]
     lines += ["", "### X03 KYC status (no document paths, no ID values)", ""]
@@ -859,7 +893,7 @@ FILES_MAP = [
 
 def _point_md(pid, P):
     v, src = P.get(pid, (None, ""))
-    if pid in ("E09", "E10", "E11", "E12", "G00", "X00", "X05", "X06"):
+    if pid in ("E09", "E10", "E11", "E12", "G00", "X00", "X05", "X06", "X07"):
         return None
     lab = S.LABELS.get(pid, pid)
     return f"### {pid} {lab}\n\n{S.render_value(v) if not S.blank(v) else '_no data_'}\n"
@@ -903,8 +937,11 @@ def key_facts(P, hist, peer, leads, s_aov, m_aov, cat):
         if text:
             K.append((f"K{len(K) + 1}", text, cite))
     h2 = g("H02") or {}
+    pl = g("X07") or {}
     c5 = g("C05") or {}
     add(f"Division: {h2.get('vertical_name')}; plan: {c5.get('paid_free')} ({c5.get('byr_custtype')})", "core.md#H02")
+    if pl.get("status") == "ok":
+        add("Plan: " + plan_check(pl, h2.get("vertical_name")), "core.md#X07")
     add(f"Turnover: {_short(g('C02'))}", "business.md#C02")
     ct = g("X05") or {}
     if ct.get("status") == "ok":
@@ -991,7 +1028,8 @@ def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref,
         if "E11" in prefixes:
             parts.append(render_peer(peer))
         if name == "core.md":
-            parts.append(render_kyc(other, P.get("X05", (None,))[0], P.get("X06", (None,))[0]))
+            parts.append(render_kyc(other, P.get("X05", (None,))[0], P.get("X06", (None,))[0], P.get("X07", (None,))[0],
+                                    ((P.get("H02") or (None,))[0] or {}).get("vertical_name")))
         if name == "catalogue.md":
             parts.append(render_top_mcats(P.get("D08", (None,))[0]))
         if name == "channels.md":
@@ -1089,7 +1127,7 @@ def as_of_flags(P):
     """Points that the as_of filter cannot date: API / Redash values (fetched today) and undated snapshot files."""
     flags = {}
     for pid, (_, src) in P.items():
-        if pid in ("E09", "E10", "E11", "E12", "X05", "X06", "D08") or API_SRC.search(src or ""):
+        if pid in ("E09", "E10", "E11", "E12", "X05", "X06", "X07", "D08") or API_SRC.search(src or ""):
             flags[pid] = {"as_of_unsafe": True}
         elif SNAPSHOT_SRC.search(src or ""):
             flags[pid] = {"as_of_snapshot": True}
@@ -1148,6 +1186,7 @@ def build(glid, use_api=True, refresh=False, rebuild=False, as_of=None):
     other = other_records(files)
     P["X05"] = (city_tier(peer, refresh) if use_api else None, "pg-imblr gl_city classification")
     P["D08"] = (top_mcats(glid, refresh) if use_api else None, "pg-meshr active products per MCAT")
+    P["X07"] = (plan_class(glid, refresh) if use_api else None, "pg-meshr custtype.paid (-1 = paid, else free)")
     P["X06"] = (gst_location(glid, refresh) if use_api else None, "pg-imblr glusr_gst_details (state code only)")
     P["X00"] = (other, "LEAP calls, onboarding locations, KYC status (persona builder)")
     P["G00"] = (hist, "ps07_bot_calls + ps07_evaluator (rebuilt by the persona builder)")
