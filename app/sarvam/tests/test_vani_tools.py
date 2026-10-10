@@ -359,3 +359,13 @@ def test_question_from_the_models_flag_in_any_language():
 def test_booking_reply_asks_anything_else_and_does_not_close():
     out = asyncio.run(vt.BookMeeting(slot="kal shaam 4 baje").run(_ctx()))
     assert "anything" in out.message_to_llm and "Do not end the call" in out.message_to_llm and "close the call" not in out.message_to_llm
+
+
+def test_r6_hook_first_then_one_topic_per_no():
+    ctx = _ctx()
+    texts = []
+    for u in ("नहीं चाहिए", "नहीं चाहिए भाई", "बोला ना नहीं चाहिए", "नहीं चाहिए"):
+        out, row = _say(ctx, u)
+        texts.append(out.message_to_llm)
+    assert all("MAIN hook" in t for t in texts[:2]) and all("ONE other topic" in t for t in texts[2:])
+    assert not ctx.end_conversation

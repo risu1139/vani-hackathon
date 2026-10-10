@@ -79,9 +79,11 @@ def check(call):
                 was = vani_lang.get(first[n]) or ("", "")
                 # a real change of language: another script, or Hindi <-> Marathi when both turns are identified
                 switched = n not in restated and (lang_i[0] != was[0] or (lang_i[1] and was[1] and lang_i[1] != was[1]))
+                prev_seller = next((x.get("content") or "" for x in reversed(tr[:i]) if x["role"] == "user"), "")
+                after_no = VT.classify(prev_seller)[0] == "declined"  # R6: the hook again after a 'no' is allowed
                 if switched:
                     restated.add(n)
-                elif n not in nums(between):
+                elif not after_no and n not in nums(between):
                     rep.append({"number": n, "turns": [first[n], i]})
             first.setdefault(n, i)
         vani_lang[i] = lang_i

@@ -470,7 +470,7 @@ _D = {  # mode -> style -> (word cap, text); "*" = any style without its own var
         "*": (15, "Seller does not want calls. Apologise, confirm they will not be called again, thank them, end the call. No pitch. Max {cap} words."),
     },
     "declined": {
-        "*": (20, "Seller is not interested now. Do NOT end the call. Acknowledge briefly, then ONE reason from the facts. "
+        "*": (20, "Seller is not interested now. Do NOT end the call. Acknowledge briefly, then {retry}. "
                   "End only if they clearly ask to end the call. Max {cap} words."),
     },
     "language_switch": {
@@ -482,7 +482,18 @@ _D = {  # mode -> style -> (word cap, text); "*" = any style without its own var
 }
 
 
-def directive(mode, style_id, lang="", handler=""):
+HOOK_TRIES = 2  # R6 (user 2026-10-10): the main hook first, in new words, this many times before any other topic
+
+
+def decline_retry(n):
+    """R6: what VANI says on the n-th 'no' of the call: the main hook first, then ONE other topic per 'no'."""
+    if n <= HOOK_TRIES:
+        return "say the MAIN hook again in new, shorter words (not another topic)"
+    return ("give ONE other topic from 'About this seller' (the next one you have not used), only that one; "
+            "never several at once")
+
+
+def directive(mode, style_id, lang="", handler="", retry=""):
     """(directive_id, word cap, text) for a mode and persona style. Neutral uses the persona's words per turn."""
     style = (style_id or "").strip().upper() or "COMPOSED"
     variants = _D[mode]
@@ -491,7 +502,7 @@ def directive(mode, style_id, lang="", handler=""):
     if mode == "neutral":
         cap = min(STYLE_WPT.get(style, 18), MODE_CAP["neutral"])
     return f"{mode}.{key if key != '*' else 'base'}.v1", cap, text.format(cap=cap, lang=lang or "the seller's language",
-                                                                          handler=handler or TEAM_HANDLER_LINE)
+                                                                          handler=handler or TEAM_HANDLER_LINE, retry=retry)
 
 
 TEAM_HANDLER_LINE = ("our IndiaMART team handles your account; the executive will introduce themselves when they call")
@@ -648,7 +659,13 @@ class ReadSellerSignal(SarvamTool):
                 dmode = "bot_question_pressed"
         if overlay:
             dmode = overlay
-        did, cap, text = directive(dmode, style, new_lang, _var(context, "handler_line"))
+        retry = ""
+        if dmode == "declined":
+            n_no = int(_ivar(context, "decline_n") or 0) + 1
+            context.set_internal_variable("decline_n", n_no)
+            retry = decline_retry(n_no)
+            row["decline_n"] = n_no
+        did, cap, text = directive(dmode, style, new_lang, _var(context, "handler_line"), retry)
         if lang_switch and dmode != "language_switch":
             text += f" Reply in {new_lang}."
         if lang_switch:
