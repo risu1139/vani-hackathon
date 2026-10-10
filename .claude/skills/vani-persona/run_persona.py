@@ -201,6 +201,7 @@ def main():
         prompt = (f"Use the vani-persona skill: read {os.path.join(skill, 'SKILL.md')} first and follow its steps exactly. "
                   f"Run directory ($VANI_RUN): {run}. Seller folder: {seller}. "
                   f"The only way to write the persona is \"$VANI_PY\" {tool} (start with: status).")
+        assert env["VANI_RUN"] and os.path.isfile(os.path.join(env["VANI_RUN"], "turn.json")), "VANI_RUN is not set up"
         args = base_args(skill, sfile, mcp, MODEL, run, p.max_turns)
         args.insert(1, prompt)
         t0 = time.time()
@@ -237,10 +238,12 @@ def main():
             problems.append("the frozen seller copy changed during the turn")
         p04 = os.path.join(run, "04_persona.json")
         if "guard.do_not_call" in facts.get("true_guards", []):
+            note = "guard.do_not_call (01_facts.json): no call, no variables"
             if os.path.exists(p04):
-                problems.append("do_not_call is true but a persona was written")
+                os.replace(p04, os.path.join(run, "04_persona.discarded.json"))
+                note += "; a persona was written anyway and was discarded"
             if not problems:
-                status.update(status="do_not_call", reason="guard.do_not_call (01_facts.json): no persona, no variables")
+                status.update(status="do_not_call", reason=note)
             else:
                 status["reason"] = "; ".join(problems)
             rc_launcher = 0

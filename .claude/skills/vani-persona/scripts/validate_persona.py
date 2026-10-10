@@ -12,6 +12,11 @@ Checks:
   4. Spoken text: banned words; first-person forms agree with the voice gender; numbers above 60 only from
      verified_facts; the identity line names IndiaMART.
   5. do_not_call (from 01_facts.json) means no persona may exist.
+  7. Hierarchy mode, the text: verified_facts {id, quote, say} quote-checked, numbers in 'say' only from the quote;
+     hook.fact_ids are verified_facts ids; personalisation has cites; every call_plan step and objection answer has a
+     basis (evidence: cite+quote; persona: a decided field; division: an O<n> / hook / obj.* id); words per item
+     within caps from words_per_turn; scripts fit language_start (+ Latin, + Devanagari); no promises; no other
+     seller's tokens.
   6. Hierarchy mode (references/hierarchy.json; user decision 2026-10-10, plan §5a): every field is a decision:
      - reason_type is seller_evidence, hierarchy or start_persona (in that order of preference);
      - seller_evidence: quoted cites, at least one of them a hit of the field's probe search (re-run here);
@@ -51,9 +56,12 @@ def norm(t):
     return re.sub(r"\s+", " ", (t or "").lower()).strip()
 
 
+STRICT = {"on": True}  # hierarchy mode = strict quotes bound to the cited span; old mode = whole-file match
+
+
 def check_cite(folder, c, fails, where):
     cid, quote = (c.get("id") if isinstance(c, dict) else c), (c.get("quote") if isinstance(c, dict) else None)
-    e = PT.quote_ok(folder, cid or "", quote)
+    e = PT.quote_ok(folder, cid or "", quote, strict=STRICT["on"])
     if e:
         fails.append(f"{where}: {e}")
         return None if "does not exist" in e else cid.split("#")[0]
@@ -109,8 +117,10 @@ def check_fields(folder, run, persona, h, prior, fails):
                 fails.append(f"{w}: seller_evidence needs quoted cites")
             for c in cites:
                 check_cite(folder, c, fails, w)
-            if cites and not any((c.get("id") if isinstance(c, dict) else c) in {k["cite"] for k in hits} for c in cites):
-                fails.append(f"{w}: no cite is a hit of the field's probe search (probe --field {f})")
+            hc = {k["cite"] for k in hits} | {k["id"] for k in hits}
+            if cites and not any(isinstance(c, dict) and c.get("id") in hc and PT.quote_in_hit(c.get("quote"), hits, {c.get("id")})
+                                 for c in cites):
+                fails.append(f"{w}: no cite quotes a hit line of the field's probe search (probe --field {f})")
         else:
             if not x.get("searched"):
                 fails.append(f"{w}: {rt} needs a 'searched' note")
@@ -125,10 +135,140 @@ def check_fields(folder, run, persona, h, prior, fails):
                     fails.append(f"{w}: hierarchy data does not match the brief in 03_prior.json")
                 elif PT.group_of(spec, v) != hi.get("value_group"):
                     fails.append(f"{w}: value {v!r} is not in the cited group {hi.get('value_group')!r}")
-            if rt == "start_persona" and f in card and v != card[f]:
-                fails.append(f"{w}: start_persona must keep the card value {card[f]!r} of {chosen}")
-        if x.get("confidence") is not None and x["confidence"] > (persona.get("completeness") or 1) + 1e-9:
-            fails.append(f"{w}: confidence {x['confidence']} > completeness {persona.get('completeness')}")
+            sv = PT.start_value(f, card, prior) if rt == "start_persona" else None
+            if rt == "start_persona" and sv is None:
+                fails.append(f"{w}: start_persona but there is no start value for {f}")
+            elif rt == "start_persona" and v != sv:
+                fails.append(f"{w}: start_persona must keep the start value {sv!r}")
+        cf = x.get("confidence")
+        if cf is not None and (not isinstance(cf, (int, float)) or not 0 <= cf <= 1):
+            fails.append(f"{w}: confidence {cf!r} must be within 0-1")
+        elif cf is not None and cf > (persona.get("completeness") or 1) + 1e-9:
+            fails.append(f"{w}: confidence {cf} > completeness {persona.get('completeness')}")
+
+
+# ---------------------------------------------------------------- rule 7: the spoken text is evidenced (plan 5a, Q1)
+SCRIPTS = {"deva": (0x0900, 0x097F), "beng": (0x0980, 0x09FF), "guru": (0x0A00, 0x0A7F), "gujr": (0x0A80, 0x0AFF),
+           "orya": (0x0B00, 0x0B7F), "taml": (0x0B80, 0x0BFF), "telu": (0x0C00, 0x0C7F), "knda": (0x0C80, 0x0CFF),
+           "mlym": (0x0D00, 0x0D7F)}
+LANG_SCRIPT = {"HINDI": "deva", "MARATHI": "deva", "GUJARATI": "gujr", "TELUGU": "telu", "TAMIL": "taml", "KANNADA": "knda",
+               "MALAYALAM": "mlym", "BENGALI": "beng", "PUNJABI": "guru", "ODIA": "orya", "ENGLISH": None}
+ALWAYS_SCRIPTS = {"deva"}  # Latin is always allowed (transliterated speech); Devanagari = the Hindi fallback
+PROMISE = re.compile(r"(guarantee[ds]?|guaranteed|pakka (order|lead|business)|100 ?%|sure ?shot|गारंटी|पक्का ऑर्डर|"
+                     r"zaroor (milenge|milega|aayenge)|ज़रूर मिलेंगे)", re.I)
+NEGATION = re.compile(r"(nahi|nahin|nhi|नहीं|नही|not|no |cannot|can't|won't|never|ఇవ్వను|కాదు|லை|ಇಲ್ಲ|ഇല്ല|না|ના|નહીં)", re.I)
+OTHER_SELLER = re.compile(r"\{(COMPETITOR_\d+(_ID)?|BUYER_COMPANY|EXEC_NAME)\}")
+
+
+def scripts_in(text):
+    out = set()
+    for ch in text or "":
+        o = ord(ch)
+        for s, (lo, hi) in SCRIPTS.items():
+            if lo <= o <= hi:
+                out.add(s)
+                break
+    return out
+
+
+def _nums(t):
+    out = set()
+    for n in NUM.findall(t or ""):
+        v = n.replace(",", "")
+        out.add(v[:-2] if v.endswith(".0") else v)
+    return out
+
+
+def division_refs(division):
+    """Ids the text may name as basis=division: O<n> objections and hook headings in the division file, plus
+    objections.json ids (obj.*) when the repo copy is reachable."""
+    refs = set()
+    ref = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "references",
+                       f"division_{'nsd' if division == 'NSD' else 'csd'}.md")
+    if os.path.exists(ref):
+        t = open(ref, encoding="utf-8").read()
+        refs |= {f"O{m}" for m in re.findall(r"\*\*O(\d+)\.", t)}
+        refs |= set(re.findall(r"^###\s+(hook\.[a-z_]+)", t, re.M))
+    oj = os.path.join(os.environ.get("VANI_REPO") or os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", ".."),
+                      "outputs", "objections.json")
+    if os.path.exists(oj):
+        try:
+            refs |= {o.get("id") for o in json.load(open(oj, encoding="utf-8")).get("objections", []) if o.get("id")}
+        except (ValueError, AttributeError):
+            pass
+    return refs
+
+
+def check_text(folder, persona, fails):
+    """Facts and claims carry cites + quotes; plan steps and objection answers carry a basis; text fits the persona."""
+    dims = persona.get("dimensions") or {}
+    lang = str((dims.get("language_start") or {}).get("value") or "").upper()
+    wpt = (dims.get("words_per_turn") or {}).get("value")
+    wpt = wpt if isinstance(wpt, (int, float)) else None
+    allowed = {LANG_SCRIPT[lang]} if LANG_SCRIPT.get(lang) else set()
+    allowed |= ALWAYS_SCRIPTS
+    vf_ids = set()
+    for i, v in enumerate(persona.get("verified_facts") or []):
+        w = f"verified_facts[{i}]"
+        if not (v.get("id") and v.get("quote") and v.get("say")):
+            fails.append(f"{w}: needs id (cite), quote and say")
+            continue
+        vf_ids.add(v["id"])
+        e = PT.quote_ok(folder, v["id"], v["quote"])
+        if e:
+            fails.append(f"{w}: {e}")
+        extra = _nums(v["say"]) - _nums(v["quote"])
+        if extra:
+            fails.append(f"{w}: numbers {sorted(extra)} in 'say' are not in the quote")
+    hk = persona.get("hook") or {}
+    if hk.get("id") and hk.get("claim"):
+        fids = hk.get("fact_ids") or []
+        if not fids or not set(fids) <= vf_ids:
+            fails.append(f"hook.fact_ids {fids} must be ids of verified_facts {sorted(vf_ids)}")
+    for i, x in enumerate(persona.get("personalisation") or []):
+        if not x.get("cites"):
+            fails.append(f"personalisation[{i}]: needs cites")
+        for c in x.get("cites") or []:
+            check_cite(folder, c, fails, f"personalisation[{i}]")
+    refs = division_refs(persona.get("division"))
+    items = [(f"call_plan[{i}]", s, s.get("say")) for i, s in enumerate(persona.get("call_plan") or [])]
+    items += [(f"objection[{i}]", o, o.get("response")) for i, o in enumerate(persona.get("objection_playbook") or [])]
+    for w, item, _ in items:
+        b = item.get("basis") or {}
+        bt = b.get("type")
+        if bt == "evidence":
+            e = PT.quote_ok(folder, b.get("cite") or "", b.get("quote"))
+            if e:
+                fails.append(f"{w}.basis: {e}")
+        elif bt == "persona":
+            if b.get("ref") not in dims:
+                fails.append(f"{w}.basis: persona ref {b.get('ref')!r} is not a decided field {sorted(dims)}")
+        elif bt == "division":
+            if b.get("ref") not in refs:
+                fails.append(f"{w}.basis: division ref {b.get('ref')!r} not found (e.g. {sorted(refs)[:6]})")
+        else:
+            fails.append(f"{w}: needs basis {{type: evidence|persona|division, ...}}")
+    steps = persona.get("call_plan") or []
+    total = sum(len(str(s.get("say") or "").split()) for s in steps)
+    if len(steps) > 12 or total > 300:
+        fails.append(f"call_plan too long: {len(steps)} steps, {total} words (max 12 steps, 300 words)")
+    spoken_items = [("opening", persona.get("opening"), max(30, 2 * (wpt or 15))), ("identity_line", persona.get("identity_line"), 40),
+                    ("hook.claim", hk.get("claim"), max(40, 3 * (wpt or 15)))]
+    spoken_items += [(w, t, max(20, 2 * (wpt or 15)) if w.startswith("call_plan") else max(40, 3 * (wpt or 15))) for w, _, t in items]
+    for w, t, cap in spoken_items:
+        if not t:
+            continue
+        n = len(str(t).split())
+        if wpt and n > cap:
+            fails.append(f"{w}: {n} words, more than {cap} for words_per_turn {wpt}")
+        foreign = scripts_in(t) - allowed
+        if lang and foreign:
+            fails.append(f"{w}: script {sorted(foreign)} does not fit language_start {lang}")
+        for sent in re.split(r"[.!?।\n]", str(t)):
+            if PROMISE.search(sent) and not NEGATION.search(sent):
+                fails.append(f"{w}: promise '{PROMISE.search(sent).group(0)}' (never promise leads, orders or results)")
+        if OTHER_SELLER.search(str(t)):
+            fails.append(f"{w}: names another seller / buyer / executive ({OTHER_SELLER.search(str(t)).group(0)}); peers only as aggregates")
 
 
 def validate(folder, run):
@@ -136,6 +276,7 @@ def validate(folder, run):
     facts = _load(run, "01_facts.json", folder, "facts.json")
     prior = _load(run, "03_prior.json", folder, "prior.json")
     h = PT.load_hierarchy()
+    STRICT["on"] = bool(h)
     dnc = "guard.do_not_call" in facts.get("true_guards", [])
     ppath = os.path.join(run, "04_persona.json")
     if dnc:
@@ -159,6 +300,7 @@ def validate(folder, run):
         fails.append(f"prior.chosen {pr.get('chosen')!r} is not one of {allowed} (03_prior.json)")
     if h:
         check_fields(folder, run, persona, h, prior, fails)
+        check_text(folder, persona, fails)
     else:
         for d in REQ_DIMS_OLD:
             x = dims.get(d)

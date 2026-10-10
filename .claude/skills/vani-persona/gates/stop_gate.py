@@ -27,8 +27,7 @@ def failures(run):
     facts = json.load(open(os.path.join(run, "01_facts.json"), encoding="utf-8"))
     p04, p02 = os.path.join(run, "04_persona.json"), os.path.join(run, "02_review.json")
     if "guard.do_not_call" in facts.get("true_guards", []):
-        return ["guard.do_not_call is true: delete nothing, write no persona; write status.json {\"status\": \"do_not_call\"}"] \
-            if os.path.exists(p04) else []
+        return ["guard.do_not_call is true: leave the files as they are and write $VANI_RUN/status.json = {\"status\": \"do_not_call\"}; the launcher discards the persona and makes no call"] if os.path.exists(p04) else []
     fin = None
     lp = os.path.join(run, "ledger.jsonl")
     if os.path.exists(lp):
@@ -46,7 +45,7 @@ def failures(run):
     if sha(p04) != fin.get("sha04") or sha(p02) != fin.get("sha02"):
         out.append(f"04_persona.json / 02_review.json changed after finalize. Run {fix} finalize again (never edit them by hand)")
     r = subprocess.run([sys.executable, os.path.join(SKILL, "scripts", "validate_persona.py"), "--folder", turn["folder"],
-                        "--run", run], capture_output=True, text=True, encoding="utf-8")
+                        "--run", run], capture_output=True, text=True, encoding="utf-8", timeout=150)
     if r.returncode != 0:
         out += [ln[2:] for ln in r.stdout.splitlines() if ln.startswith("- ")] or [r.stdout[-500:] or r.stderr[-500:]]
     return out

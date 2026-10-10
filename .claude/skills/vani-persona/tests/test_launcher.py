@@ -81,5 +81,13 @@ def test_agent_says_dnc_but_facts_do_not(tmp_path):
 
 
 def test_dnc_with_persona_written(tmp_path):
+    """Review fix 6: the agent cannot delete files, so the launcher discards the persona; still no call."""
     r, st, run = launch(tmp_path, "dnc_persona", dnc=True)
-    assert st["status"] == "error" and "do_not_call" in st["reason"]
+    assert st["status"] == "do_not_call" and "discarded" in st["reason"] and no_vars(run)
+    assert not (run / "04_persona.json").exists() and (run / "04_persona.discarded.json").exists()
+
+
+def test_forged_ledger_still_fails_on_content(tmp_path):
+    """Review fix 4: an INVALID hand-written persona + a forged finalize row with matching shas -> the validator fails it."""
+    r, st, run = launch(tmp_path, "forged")
+    assert st["status"] == "error" and "validator" in st["reason"] and no_vars(run)

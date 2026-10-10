@@ -73,10 +73,10 @@ def test_stop_gate_allows_finalized_and_catches_hand_edit(tmp_path):
     t("select", "--persona", "P2", "--reason", "x")
     for f in ("pace", "formality", "voice_gender", "language_start"):
         t("probe", "--field", f)
-    t("decide", "--field", "pace", "--value", "1.1", "--type", "seller_evidence", "--reason", "x", "--cite", "calls/C01#C01.T2", "--quote", "busy hoon")
+    t("decide", "--field", "pace", "--value", "1.1", "--type", "seller_evidence", "--reason", "x", "--cite", "calls/C01#C01.T2", "--quote", "abhi busy hoon baad me")
     t("decide", "--field", "formality", "--value", "medium", "--type", "seller_evidence", "--reason", "x", "--cite", "core.md#A04", "--quote", "Proprietor")
     t("decide", "--field", "voice_gender", "--value", "F", "--type", "seller_evidence", "--reason", "x", "--cite", "core.md#A07", "--quote", "Female")
-    t("decide", "--field", "language_start", "--value", "TELUGU", "--type", "seller_evidence", "--reason", "x", "--cite", "core.md#B01", "--quote", "Telangana")
+    t("decide", "--field", "language_start", "--value", "TELUGU", "--type", "seller_evidence", "--reason", "x", "--cite", "core.md#B01", "--quote", "Hyderabad, Telangana")
     t("probe", "--hook", "hook.profile_gap")
     t("hook", "--id", "hook.profile_gap", "--decision", "rejected", "--reason", "x")
     (run / "draft_text.json").write_text(json.dumps(F.TEXT), encoding="utf-8")

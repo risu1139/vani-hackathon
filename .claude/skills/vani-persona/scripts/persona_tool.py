@@ -17,7 +17,12 @@ Commands (all need $VANI_RUN; run them with "$VANI_PY" <skill>/scripts/persona_t
   finalize                                writes 02_review.json + 04_persona.json, runs the validator, logs the sha
 
 Hit ranking (top-3), stated so it can be checked: score = number of distinct search terms on the line; ties go to the
-newer call file, then to the order of probe_files, then to the line number.
+newer call file, then to the order of probe_files, then to the line number. Section hits (core.md#B03 ...) have no
+date, so with the same score they rank AFTER every dated call hit: what the seller did on a call outranks profile text.
+
+Trust: the ledger is agent-writable through Bash. The finalize sha means "the tool was used", not a security
+boundary; the validator re-checks every content rule from 04/02 + the frozen inputs. Parity is a rule: any
+write-time check that matters must also be in validate_persona.py.
 """
 import argparse
 import datetime
@@ -57,10 +62,59 @@ def decide_fields(h):
 
 
 def nq(t):
-    """Normalise text for quote matching: NFC, casefold, straight quotes, one space, no line breaks."""
+    """Normalise text for quote matching: NFC, casefold, straight quotes, plain dashes and ellipsis, no zero-width
+    characters, no markdown emphasis (* _ `), one space, no line breaks."""
     t = unicodedata.normalize("NFC", t or "").casefold()
     t = t.replace("‘", "'").replace("’", "'").replace("“", '"').replace("”", '"')
+    t = re.sub("[‐‑‒–—−]", "-", t).replace("…", "...")
+    t = re.sub("[​‌‍﻿]", "", t)
+    t = re.sub(r"[*_`]", "", t)
     return re.sub(r"\s+", " ", t).strip()
+
+
+MIN_WORDS, MIN_CHARS = 4, 15
+
+
+def span_lines(folder, cite):
+    """The lines a cite points at (review fix 1): '<cite>:L<n>' = that line; 'calls/Cnn#Cnn.Tk' = that turn (to the
+    next turn); 'file#SEC' = that section; another '#ID' = from the line with the id to the next heading;
+    'calls/Cnn#Cnn' = the whole call file. Returns (path, [(line_no, text)]) or (None, [])."""
+    m = re.match(r"^(.*):L(\d+)$", cite or "")
+    base, line = (m.group(1), int(m.group(2))) if m else (cite or "", None)
+    f = file_for(folder, base)
+    if not f:
+        return None, []
+    lines = list(enumerate(read(f).splitlines(), 1))
+    if line is not None:
+        return f, [x for x in lines if x[0] == line]
+    anchor = base.split("#", 1)[1] if "#" in base else None
+    if not anchor:
+        return f, lines
+    tm = re.match(r"^(C\d+)\.T\d+$", anchor)
+    if tm:
+        out, on = [], False
+        for ln, t in lines:
+            if re.search(rf"\b{re.escape(anchor)}\b", t):
+                on = True
+            elif on and re.search(rf"\b{tm.group(1)}\.T\d+\b", t):
+                break
+            if on:
+                out.append((ln, t))
+        return f, out
+    if base.startswith("calls/") and re.fullmatch(r"C\d+", anchor):
+        return f, lines
+    sec = section_lines(f, anchor)
+    if sec:
+        return f, sec
+    out, on = [], False
+    for ln, t in lines:
+        if not on and anchor in t:
+            on = True
+        elif on and re.match(r"^#{1,6}\s", t):
+            break
+        if on:
+            out.append((ln, t))
+    return f, out
 
 
 def read(path):
@@ -76,22 +130,38 @@ def file_for(folder, cite):
     return p if os.path.isfile(p) else None
 
 
-def quote_ok(folder, cite, quote):
-    """'' if the cite resolves and the quote (<= 20 words) is in that file after normalising, else the problem."""
-    f = file_for(folder, cite or "")
+def quote_ok(folder, cite, quote, strict=True):
+    """'' if the quote is inside the span the cite points at, else the problem. strict (hierarchy mode): the quote has
+    >= 4 words (or >= 15 characters in an Indic script) unless it is a whole line of the span (review fix 2).
+    strict=False keeps the earlier whole-file rule for the pre-hierarchy tests."""
+    f, span = span_lines(folder, cite or "")
     if not f:
         return f"cite '{cite}' does not exist in the seller folder"
-    text = read(f)
-    anchor = cite.split("#", 1)[1] if "#" in cite else None
-    if anchor and anchor not in text:
-        return f"cite '{cite}': id '{anchor}' not found in {os.path.basename(f)}"
     if not quote:
         return f"cite '{cite}' has no quote"
     if len(quote.split()) > 20:
         return f"cite '{cite}': quote is longer than 20 words"
-    if nq(quote) not in nq(text):
-        return f"cite '{cite}': quote not found in {os.path.basename(f)} (copy the words exactly)"
+    if not strict:
+        text = read(f)
+        anchor = cite.split(":L")[0].split("#", 1)[1] if "#" in cite else None
+        if anchor and anchor not in text:
+            return f"cite '{cite}': id '{anchor}' not found in {os.path.basename(f)}"
+        return "" if nq(quote) in nq(text) else f"cite '{cite}': quote not found in {os.path.basename(f)} (copy the words exactly)"
+    if not span:
+        return f"cite '{cite}': the id was not found in {os.path.basename(f)}"
+    if nq(quote) not in nq("\n".join(t for _, t in span)):
+        return f"cite '{cite}': quote not found in that turn/section/line (copy the words exactly from the cited place)"
+    q = nq(quote)
+    whole_line = any(nq(t).strip(" -:") == q.strip(" -:") for _, t in span)
+    if not whole_line and len(q.split()) < MIN_WORDS and (q.isascii() or len(q) < MIN_CHARS):
+        return f"cite '{cite}': quote too short (at least {MIN_WORDS} words, or a whole line)"
     return ""
+
+
+def quote_in_hit(quote, hits, cites):
+    """seller_evidence: the quote must sit on a line the field's search hit (review fix 1)."""
+    q = nq(quote)
+    return any(q in nq(x.get("full") or x["text"]) for x in hits if x["cite"] in cites or x["id"] in cites)
 
 
 def section_lines(path, section):
@@ -156,9 +226,24 @@ def search(folder, spec, as_of):
             else:
                 cite = base
             hits.append({"id": f"{cite}:L{ln}", "cite": cite, "line": ln, "terms": matched, "score": len(matched),
-                         "text": text.strip()[:200], "_rank": (-len(matched), -(d.toordinal() if d else 0), order, ln)})
+                         "text": text.strip()[:200], "full": text.strip(), "_rank": (-len(matched), -(d.toordinal() if d else 0), order, ln)})
     hits.sort(key=lambda x: x.pop("_rank"))
     return hits
+
+
+# Start values for fields the cards do not define (review fix 3: start_persona never accepts a free value).
+# voice_gender starts from the voice scoreboard's draw (03_prior.json voice.chosen); the rest from VANI's current default.
+START_DEFAULTS = {"language_start": "HINDI", "empathy": "plain courtesy: thank the seller for their time"}
+
+
+def start_value(field, card, prior_doc):
+    """The value a start_persona decision must keep, or None if there is none."""
+    if field in (card or {}):
+        return card[field]
+    if field == "voice_gender":
+        v = ((prior_doc or {}).get("voice") or {}).get("chosen")
+        return {"female": "F", "male": "M"}.get(str(v).lower(), v)
+    return START_DEFAULTS.get(field)
 
 
 def card_of(persona_id):
@@ -337,7 +422,7 @@ def check_decision(run, h, field, value, rtype, cites, answers, level, group, se
     if isinstance(groups, list) and groups and group_of(spec, value) is None:
         probs.append(f"value {value!r} is in no value group {groups}")
     hits = search(folder, spec, as_of(run))
-    hit_cites = {x["cite"] for x in hits}
+    hit_cites = {x["cite"] for x in hits} | {x["id"] for x in hits}
     if rtype == "seller_evidence":
         if not cites:
             probs.append("seller_evidence needs at least one --cite with --quote")
@@ -345,8 +430,9 @@ def check_decision(run, h, field, value, rtype, cites, answers, level, group, se
             e = quote_ok(folder, c, q)
             if e:
                 probs.append(e)
-        if cites and not any(c in hit_cites for c, _ in cites):
-            probs.append(f"at least one cite must be a hit of probe --field {field} (hits: {sorted(hit_cites)[:6]})")
+        if cites and not any(c in hit_cites and quote_in_hit(q, hits, {c}) for c, q in cites):
+            probs.append(f"at least one cite must be a hit of probe --field {field} AND quote that hit's line "
+                         f"(hits: {sorted(x['id'] for x in hits)[:6]})")
     elif rtype in ("hierarchy", "start_persona"):
         if not searched:
             probs.append("--searched is required: what you looked for in the probe hits and why it is not evidence")
@@ -362,9 +448,11 @@ def check_decision(run, h, field, value, rtype, cites, answers, level, group, se
             elif group_of(spec, value) != group:
                 probs.append(f"value {value!r} is not in the group {group!r} you cite")
         if rtype == "start_persona" and sel:
-            card = sel.get("card") or {}
-            if field in card and value != card[field]:
-                probs.append(f"start_persona keeps the selected card's value: {field} = {card[field]!r}")
+            sv = start_value(field, sel.get("card") or {}, prior(run))
+            if sv is None:
+                probs.append(f"no start value for {field}: use seller_evidence or hierarchy")
+            elif value != sv:
+                probs.append(f"start_persona keeps the start value: {field} = {sv!r} (card {sel.get('persona')}, voice draw or default)")
     return probs
 
 
@@ -390,7 +478,7 @@ def cmd_decide(a, run, h):
     row = {"kind": "decide", "field": a.field, "value": value, "type": a.type, "reason": a.reason,
            "cites": [{"id": c, "quote": q} for c, q in cites], "answers": answers, "searched": a.searched,
            "hierarchy": {"level": a.level, "value_group": a.group} if a.type == "hierarchy" else None,
-           "confidence": a.confidence if a.confidence is not None else CONF[a.type]}
+           "confidence": min(1.0, max(0.0, a.confidence)) if a.confidence is not None else CONF[a.type]}
     log(run, row)
     print(f"OK {a.field} = {value!r} ({a.type})")
 
@@ -441,6 +529,14 @@ def cmd_text(a, run, h):
     extra = sorted(set(doc) - TEXT_KEYS)
     if extra:
         refuse([f"the text file may hold only {sorted(TEXT_KEYS)}; remove {extra} (fields are set with decide)"])
+    rows = ledger(run) + [{"kind": "text", "doc": doc}]
+    persona, _ = assemble(run, h, rows)
+    sys.path.insert(0, HERE)
+    import validate_persona as V
+    probs = []
+    V.check_text(turn(run)["folder"], persona, probs)
+    if probs:
+        refuse(probs, ["fix draft_text.json and run text again (decide the fields first, so the caps and scripts apply)"])
     log(run, {"kind": "text", "doc": doc, "sha": hashlib.sha256(json.dumps(doc, sort_keys=True).encode()).hexdigest()})
     print("OK text stored")
 

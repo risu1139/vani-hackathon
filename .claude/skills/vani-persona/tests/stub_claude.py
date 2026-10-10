@@ -56,7 +56,7 @@ def good_flow(run):
         out = tool("probe", "--field", f, "--json").stdout.strip().splitlines()
         hits = json.loads(out[-1])["hits"][:3] if out else []
         spec = h["fields"][f]
-        v = card.get(f, defaults.get(f))
+        v = PT.start_value(f, card, prior)
         if v is None and isinstance(spec.get("value_groups"), list):
             v = spec["value_groups"][0]
         args = ["decide", "--field", f, "--value", str(v), "--type", "start_persona", "--reason", "stub card value",
@@ -71,8 +71,8 @@ def good_flow(run):
     text = {"personalisation": [], "hook": {"id": None, "claim": "", "fact_ids": [], "backup": None},
             "opening": "Namaste ji, main IndiaMART se baat kar rahi hoon. Do minute milenge?",
             "identity_line": "Main IndiaMART se baat kar rahi hoon, aapke profile ke liye call kiya hai.",
-            "call_plan": [{"step": 1, "goal": "ask", "say": "Kya kal milna theek rahega ji?"}],
-            "objection_playbook": [{"objection": "busy", "response": "Ji, kab call karun?"}],
+            "call_plan": [{"step": 1, "goal": "ask", "say": "Kya kal milna theek rahega ji?", "basis": {"type": "persona", "ref": "words_per_turn"}}],
+            "objection_playbook": [{"objection": "busy", "response": "Ji, kab call karun?", "basis": {"type": "division", "ref": "O1"}}],
             "escalation_rules": ["opt-out: end"], "guardrails": ["never volunteer AI"], "verified_facts": [],
             "switch_sensitivity": {"rushed": "high"},
             "guards_ack": [{"guard": g, "action": "stub", "cites": []} for g in facts.get("true_guards", [])],
@@ -116,7 +116,15 @@ def main():
         return 0
     if mode == "crash":
         return 3
-    if mode == "bypass":
+    if mode == "forged":
+        import hashlib
+        p04, p02 = os.path.join(run, "04_persona.json"), os.path.join(run, "02_review.json")
+        json.dump({"dimensions": {}, "opening": "x"}, open(p04, "w"))
+        json.dump({"hooks": []}, open(p02, "w"))
+        h = lambda p: hashlib.sha256(open(p, "rb").read()).hexdigest()
+        with open(os.path.join(run, "ledger.jsonl"), "a") as f:
+            f.write(json.dumps({"kind": "finalize", "sha04": h(p04), "sha02": h(p02)}) + "\n")
+    elif mode == "bypass":
         subprocess.run([sys.executable, "-c", "import json,sys; json.dump({'dimensions': {}}, open(sys.argv[1], 'w')); "
                         "json.dump({'hooks': []}, open(sys.argv[2], 'w'))", os.path.join(run, "04_persona.json"),
                         os.path.join(run, "02_review.json")])

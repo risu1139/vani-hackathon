@@ -73,6 +73,36 @@ def test_seller_evidence_needs_a_hit_and_a_real_quote(env):
     assert rc == 1 and "must be a hit" in out
 
 
+def test_quote_from_another_turn_refused(env):
+    """Review fix 1: the cite C01.T2 is a hit, but the quote comes from C01.T1."""
+    run, e = env
+    ready(e)
+    rc, out = t(e, "decide", "--field", "pace", "--value", "1.1", "--type", "seller_evidence", "--reason", "x",
+                "--cite", "calls/C01#C01.T2", "--quote", "C01.T1 bot: Namaste ji")
+    assert rc == 1 and "not found in that turn" in out
+
+
+def test_quote_too_short_refused(env):
+    """Review fix 2: a 2-word quote that is not a whole line."""
+    run, e = env
+    ready(e)
+    rc, out = t(e, "decide", "--field", "pace", "--value", "1.1", "--type", "seller_evidence", "--reason", "x",
+                "--cite", "calls/C01#C01.T2", "--quote", "busy hoon")
+    assert rc == 1 and "too short" in out
+
+
+def test_start_value_for_fields_without_card(env):
+    """Review fix 3: voice_gender starts from the voice draw (F in the fixture), not a free value."""
+    run, e = env
+    ready(e)
+    args = ["decide", "--field", "voice_gender", "--value", "M", "--type", "start_persona", "--reason", "x", "--searched", "s"]
+    args += [f"--answer={i}=no" for i in top_ids(e, "voice_gender")]
+    rc, out = t(e, *args)
+    assert rc == 1 and "keeps the start value" in out
+    args[4] = "F"
+    assert t(e, *args)[0] == 0
+
+
 def test_quote_normalised(env):
     run, e = env
     ready(e)
@@ -85,7 +115,7 @@ def test_start_persona_keeps_card_value_and_answers_top_hits(env):
     run, e = env
     ready(e)
     rc, out = t(e, "decide", "--field", "pace", "--value", "1.1", "--type", "start_persona", "--reason", "x", "--searched", "s")
-    assert rc == 1 and "keeps the selected card's value" in out and "answer the top hit" in out
+    assert rc == 1 and "keeps the start value" in out and "answer the top hit" in out
     args = ["decide", "--field", "pace", "--value", "0.95", "--type", "start_persona", "--reason", "card", "--searched", "busy words"]
     for i in top_ids(e, "pace"):
         args += ["--answer", f"{i}=old call, seller was fine later"]
@@ -116,7 +146,7 @@ def test_range_and_group(env):
     run, e = env
     ready(e)
     rc, out = t(e, "decide", "--field", "pace", "--value", "2.0", "--type", "seller_evidence", "--reason", "x",
-                "--cite", "calls/C01#C01.T2", "--quote", "busy hoon")
+                "--cite", "calls/C01#C01.T2", "--quote", "abhi busy hoon baad me")
     assert rc == 1 and "outside" in out
     rc, out = t(e, "decide", "--field", "formality", "--value", "posh", "--type", "seller_evidence", "--reason", "x",
                 "--cite", "core.md#A04", "--quote", "Proprietor")
