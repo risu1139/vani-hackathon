@@ -26,8 +26,11 @@ MEET = re.compile(r"(?<![a-z])(meeting|milein|milna|milte|mil sakte|executive|to
                   r"మీటింగ్|రేపు|ఉదయం|సాయంత్రం|மீட்டிங்|நாளை|காலை|மாலை|ಮೀಟಿಂಗ್|ನಾಳೆ|ಬೆಳಿಗ್ಗೆ|ಸಂಜೆ|"
                   r"મીટિંગ|કાલે|সকাল|মিটিং|ਮੀਟਿੰਗ|ਕੱਲ੍ਹ", re.I)
 ASKISH = re.compile(r"[?？]|(?<![a-z])(kya|ya|or|which)(?![a-z])|या|किंवा|లేదా|அல்லது|ಅಥವಾ|અથવા|নাকি|ਜਾਂ", re.I)
-ELSE = re.compile(r"anything else|aur kuch|aur koi|और कुछ|और कोई|अजून काही|आणखी काही|ఇంకేమైనా|ఇంకా ఏమైనా|வேறு ஏதாவது|"
-                  r"ಬೇರೆ ಏನಾದರೂ|മറ്റെന്തെങ്കിലും|બીજું કંઈ|আর কিছু|ਹੋਰ ਕੁਝ", re.I)
+# 'anything else?' in any wording: an "other / more" word near a "help / thing / anything" word (plus fixed phrases)
+ELSE = re.compile(r"anything else|something else|any other|"
+                  r"(?:(?:aur|koi aur)|और|दूसरी|अजून|आणखी|ఇంకా|ఇంకే|வேறு|ಬೇರೆ|മറ്റ്|બીજ|আর|ਹੋਰ)[^.!?।]{0,25}"
+                  r"(?:(?:help|madad|kuch|cheez)|मदद|help|चीज़|चीज|कुछ|काही|मदत|ఏమైనా|సహాయ|ஏதாவது|உதவி|ಏನಾದರೂ|ಸಹಾಯ|"
+                  r"എന്തെങ്കിലും|സഹായ|કંઈ|મદદ|কিছু|সাহায্য|ਕੁਝ|ਮਦਦ)", re.I)
 COVERED = {"hindi", "english", "marathi", "telugu", "tamil", "kannada", "gujarati", "bengali", "punjabi"}
 NUM = re.compile(r"\d[\d,]*")
 
