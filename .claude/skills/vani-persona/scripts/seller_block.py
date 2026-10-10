@@ -158,7 +158,8 @@ def pointer_lines(facts, main):
         else:
             bits = [f"{k.replace('_', ' ')} {num(v)}" for k, v in fc.items() if num(v) is not None][:4]
             if hid == "hook.peer_usage":
-                bits = [f"seller is {fc['seller_vs_peers']} of same-size sellers"] if ok("state.peer_position", fc.get("seller_vs_peers")) else []
+                bits = [{"ahead": "seller uses more buy-leads than same-size sellers", "level": "seller uses buy-leads like same-size sellers",
+                         "behind": "seller uses fewer buy-leads than same-size sellers"}[fc["seller_vs_peers"]]]                     if ok("state.peer_position", fc.get("seller_vs_peers")) else []
         L.append((f"- {HOOK_LABEL.get(hid, hid)}: {'; '.join(bits) or 'see facts'}", hid))
     return L
 
