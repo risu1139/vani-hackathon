@@ -15,7 +15,8 @@ import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REF = os.path.join(HERE, "..", "references")
-SKELETON = os.path.join(HERE, "..", "..", "..", "..", "app", "sarvam", "vani_prompt.md")
+REPO = os.environ.get("VANI_REPO") or os.path.join(HERE, "..", "..", "..", "..")  # the launcher sets VANI_REPO for its skill copy
+SKELETON = os.path.join(REPO, "app", "sarvam", "vani_prompt.md")
 
 LANG_NAME = {"HINDI": "Hindi", "GUJARATI": "Gujarati", "MARATHI": "Marathi", "TAMIL": "Tamil", "TELUGU": "Telugu",
              "KANNADA": "Kannada", "MALAYALAM": "Malayalam", "BENGALI": "Bengali", "PUNJABI": "Punjabi", "ODIA": "Odia",

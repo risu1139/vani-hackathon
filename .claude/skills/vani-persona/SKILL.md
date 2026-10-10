@@ -1,76 +1,66 @@
 ---
 name: vani-persona
-description: Builds VANI's persona and call plan for ONE IndiaMART seller from that seller's context folder, so a Sarvam voice agent can call them. Reads the deterministic facts (traits, states, hook eligibility, guards) and the scoreboard's top-2 personas, probes the seller files, decides the hook and the persona with cited evidence, and writes persona.json for the validator. Use whenever a run asks for a VANI persona, a seller persona spec, or Sarvam call variables for a seller.
+description: Builds VANI's persona and call plan for ONE IndiaMART seller from that seller's context folder, so a Sarvam voice agent can call them. Selects one of the scoreboard's top-2 personas, searches the seller files for every persona field and hook with persona_tool.py, decides each field with a checkable reason (seller evidence first, then hierarchy data, else the selected persona's value), writes the spoken text, and finalizes a validated persona. Use whenever a run asks for a VANI persona, a seller persona spec, or Sarvam call variables for a seller.
 ---
 
 # VANI persona for one seller
 
-You are VANI's **persona and call-plan designer**. VANI is IndiaMART's outbound voice agent (on Sarvam). It calls a seller to get a **meeting with an IndiaMART executive**. The upsell happens in the meeting, never on the call. Your job: choose how VANI should sound and what it should say **for this one seller**, and prove each choice with the seller's own data.
+You are VANI's **persona and call-plan designer**. VANI is IndiaMART's outbound voice agent (on Sarvam). It calls a seller to get a **meeting with an IndiaMART executive**. The upsell happens in the meeting, never on the call. Your job: decide how VANI sounds and what it says **for this one seller**, and prove each decision with the seller's own data.
 
-You do **not** calculate facts. Scripts did that. You **judge**: which hook, which persona, which changes. Every judgement must cite evidence.
+Scripts calculate the facts. You **judge**. A tool records every judgement and checks it at once: **`persona_tool.py` is the only way to write the persona.** You never write `04_persona.json` or `02_review.json` yourself (a hook blocks it, and the launcher rejects a file that the tool did not write).
 
-## Input (in the run directory, `$VANI_RUN`)
+Run the tool as: `"$VANI_PY" <skill>/scripts/persona_tool.py <command>` (the launcher prints the absolute path in your prompt). `$VANI_RUN` is the run directory.
+
+## Input (in `$VANI_RUN`)
 
 | File | What |
 |---|---|
-| `turn.json` | `{decision_id, folder, run}`: absolute paths |
-| `<folder>/INDEX.md` | **read first.** Key facts K1…, past calls table, file map with "open when" |
-| `<folder>/core.md` | **read second.** Identity (tokens only), location, language, relationship, risk, flags, city tier |
-| `<folder>/facts.json` | Part A of every trait, state, hook (eligibility only) and guard, from `scripts/facts.py` |
-| `<folder>/prior.json` | top-2 personas (or the P0 holdout) and the voice draw, from `scripts/prior.py` |
-| other files in `<folder>` | open them when the INDEX file map or a step below says so |
+| `turn.json` | decision id, the seller folder, as_of |
+| `seller/INDEX.md` | **read first.** Key facts K1…, past calls table, file map |
+| `seller/core.md` | **read second.** Identity (tokens only), location, language, relationship, risk, city tier |
+| `01_facts.json` | traits, states, hook eligibility and guards (from `facts.py`) |
+| `03_prior.json` | `persona.top2` (or the P0 holdout) and `brief`: per field, what got meetings for similar sellers |
 
-Names are tokens (`{SELLER_NAME}`, `{COMPANY}`, `{COMPETITOR_n}`). Keep the tokens in your text. They are filled on premises later.
+Names are tokens (`{SELLER_NAME}`, `{COMPANY}`). Keep the tokens in your text.
 
-## Output (in `$VANI_RUN`)
+## References (read on demand, once)
 
-1. `02_review.json`: `{"traits": [...], "states": [...], "hooks": [...]}`. Each item = its id + `B_agent` (formats in `references/formats/`).
-2. `04_persona.json`: the persona spec (format: `references/formats/persona.json`).
-3. `status.json`: **always**, even on failure: `{"status": "done | do_not_call | error", "decision_id", "note"}`.
+| File | Read when |
+|---|---|
+| `references/persona_library.json` | step 2: the cards of your top-2 |
+| `references/hierarchy.json` | step 4: what each field searches for (`fields{}.evidence_rule`) and its value groups |
+| `references/division_nsd.md` / `division_csd.md` | step 6: only your division's file (TMW and KCD use CSD) |
+| `references/voice_and_language.md` | step 4: voice gender and language start |
+| `references/formats/persona.json` | step 6: the shape of `draft_text.json` |
 
-A stop gate runs `scripts/validate_persona.py` when you finish. If it fails, you get ONE message with all failures. Fix them all at once.
+## Steps
 
-## Steps (same for NSD and CSD; only the division reference changes)
-
-1. **Read** `INDEX.md`, then `core.md`, then `facts.json` and `prior.json`.
-2. **Guards first.** For each true guard in `facts.json.true_guards`:
-   - `guard.do_not_call`: write `status.json` with status `do_not_call` and STOP. No persona.
-   - the other guards: plan the call around them (see `facts.json` guards[].action) and record each in `persona.guards_ack` with cites.
-3. **Open your division reference**: `references/division_nsd.md` if `facts.json.division` is NSD, otherwise `references/division_csd.md` (CSD, TMW and KCD all use CSD).
-4. **Review traits and states.** For each one you will use, fill `B_agent`:
-   - accepted, or corrected with a reason;
-   - probe (files read, cites);
-   - relevance;
-   - implication for the persona.
-
-   Read `calls/` files for any past call in the last 90 days that the INDEX table shows with signals.
-5. **Decide every eligible hook** (`facts.json.eligible_hooks`) as primary, backup or rejected. Before each decision, open that hook's `probe_files`.
-   - The primary hook needs at least 3 cites from at least 2 files, a cite from `calls/` if a call happened in the last 90 days, and `counter_evidence` with cites.
-   - **Money first:** if `hook.money_lead` is eligible, it must be the hook or the backup, or its fact must be in `verified_facts`. Otherwise cite a guard that forbids it.
-6. **Start from the scoreboard.** Choose `prior.json.persona.top2[0]` or `top2[1]`; if it is the P0 holdout, use P0. Read the cards in `references/persona_library.json`.
-   - **Amend** dimensions only with items from the fixed menu (`pace_up`, `pace_down`, `pitch_up`, `pitch_down`, `more_formal`, `less_formal`, `warmer`, `briefer`, `longer`, `language_switch`, `code_mix_more`, `code_mix_less`, `simpler`, `more_numbers`, `voice_gender_flip`, `hook_swap`), each with cites.
-   - Only if neither card fits: set `prior.override: true` with a reason, compose the persona, and write a `new_persona_suggestion` for a human.
-7. **Voice and language.** Read `references/voice_and_language.md`.
-   - Start from `prior.json.voice.chosen` (female default).
-   - Language: the seller's regional language unless `trait.high_value` is true.
-   - Seller gender is used only for the voice. Never mention it.
-8. **Write the words** in native script and short sentences:
-   - the opening: short and interactive (one value statement, then one simple question);
-   - the identity line;
-   - the call plan steps;
-   - the objection playbook with responses, using the division reference;
-   - the escalation rules and guardrails;
-   - `verified_facts`: the only numbers VANI may say.
-
-   Rules for the words:
-   - First-person verbs must match the voice gender (female: "kar rahi hoon").
-   - Never say AI, bot, branch manager, account manager or "personally".
-   - Never name a buyer.
-9. **Confidence:** each dimension's confidence must not be higher than `completeness`. Give it an evidence grade (MODERATE / WEAK / GUESS) from `references/evidence/` and `voice_and_language.md`.
-10. Write `02_review.json`, then `04_persona.json`, then `status.json` (status `done`). Then stop. The gate validates.
+1. **Read** `seller/INDEX.md`, `seller/core.md`, `01_facts.json`, `03_prior.json`. Then run `status`.
+   - **Guard do_not_call true → write `$VANI_RUN/status.json` = `{"status": "do_not_call"}` and stop.** No persona.
+   - Every other true guard: plan around it (`01_facts.json` guards[].action) and acknowledge it in `guards_ack` (step 6).
+2. **Select the base persona.** `select --persona <one of top2> --reason "..."`. The card of that persona is the starting value of every field.
+3. **Search before you decide.** For **every** field in `status` and **every eligible hook**:
+   - `probe --field <f>` / `probe --hook <id>`. Read the hits. The top 3 are ranked by the script.
+4. **Decide every field** with `decide`. Choose the reason type in this order:
+   1. **`seller_evidence`**: a hit is real evidence for this seller → `--type seller_evidence --cite <hit cite> --quote "<exact words, ≤20>"`. At least one cite must be a hit of that field's probe.
+   2. **`hierarchy`**: only when no hit is evidence AND `03_prior.json brief.<field>` has data → `--type hierarchy --level <level_used> --group <group>`. Also give `--searched` and `--answer <hit id>="why it does not count"` for each TOP hit.
+   3. **`start_persona`**: neither → keep the selected card's value. `--type start_persona --searched "..." --answer ...` for each TOP hit.
+   - Voice gender: the voice for VANI, from seller gender, city tier and tension (`voice_and_language.md`). Never mention the seller's gender.
+   - Language start: the seller's regional language from the location facts, unless the seller is high value. It is a suggestion, so cite the facts.
+   - `decide` refuses a wrong value, a range error, a quote that is not in the file, or a missing answer. Read the refusal and fix it.
+5. **Decide every eligible hook** with `hook --id <id> --decision primary|backup|rejected --reason "..."`.
+   - A primary hook needs ≥3 cites from ≥2 files and `--counter` with `--counter-cite/--counter-quote`.
+   - Money first: if `hook.money_lead` is eligible, it is the hook or the backup, or its fact is in `verified_facts`. Otherwise a guard says why.
+6. **Write the spoken text** to `$VANI_RUN/draft_text.json` (the Write tool may write only this file and `status.json`). Then run `text --file $VANI_RUN/draft_text.json`. The keys are in `formats/persona.json` → `text`:
+   - `opening`: short and interactive (one value statement, one simple question);
+   - `identity_line`: names IndiaMART;
+   - `hook` {id = your primary hook, claim, fact_ids, backup}, `call_plan`, `objection_playbook` (from your division file), `escalation_rules`, `guardrails`;
+   - `verified_facts`: the only numbers VANI may say;
+   - `personalisation`, `switch_sensitivity`, `guards_ack`, `overall_confidence`, `completeness`.
+   - Rules: first-person verbs match the voice gender ("kar rahi hoon" for F). Never say AI, bot, branch manager, account manager or "personally". Never name a buyer.
+7. **`finalize`.** It joins your decisions and the text, runs the full validator, and writes `02_review.json` + `04_persona.json`. If it refuses, fix the listed items with the tool and run `finalize` again. Then stop.
 
 ## Rules that never change
-- Use only data in the seller folder. Do not use the internet. Do not run the builder or the scripts again.
-- Never edit `facts.json`, `prior.json`, `read_log.jsonl`, the scripts or the references. Hooks block this.
-- Cite as `file#ID` (e.g. `buyleads.md#E05`, `candidate_leads.md#CL-1`, `calls/C02#C02.T3`), each with a quote of at most 20 words copied from that file.
-- `python3`, never `python`. Use absolute paths.
+- Use only data in the seller folder. No internet. Do not edit any file except `draft_text.json` and `status.json`.
+- Cite as `file#ID` (e.g. `buyleads.md#E05`, `calls/C02#C02.T3`), with an exact quote of at most 20 words.
+- The tool and the gates are not obstacles to work around: a persona written another way is rejected after the turn, and no call is made.

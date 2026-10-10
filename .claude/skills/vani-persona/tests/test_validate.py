@@ -6,6 +6,13 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 import validate_persona as V  # noqa: E402
+import pytest  # noqa: E402
+
+
+@pytest.fixture(autouse=True)
+def old_mode(monkeypatch):
+    """These cases test the pre-hierarchy rules (read log, amendment menu); the hierarchy mode has its own tests."""
+    monkeypatch.setenv("VANI_HIERARCHY", "none")
 
 FILES = {
     "INDEX.md": "# Seller X: INDEX\n- **K1** Division: NSD\n",
