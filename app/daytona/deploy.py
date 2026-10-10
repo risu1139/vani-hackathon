@@ -20,6 +20,7 @@ Usage: python app/daytona/deploy.py <command> [args]
 """
 import io
 import json
+import shlex
 import os
 import sys
 import tarfile
@@ -49,7 +50,7 @@ STAGE_SHA = os.path.join(ROOT, "data", "launcher", "daytona_stage.sha256")
 
 
 def sh(cmd, timeout=600):
-    r = requests.post(f"{TB}/process/execute", headers=H, json={"command": f"bash -c {json.dumps(cmd)}", "timeout": timeout},
+    r = requests.post(f"{TB}/process/execute", headers=H, json={"command": f"bash -c {shlex.quote(cmd)}", "timeout": timeout},
                       timeout=timeout + 30)
     r.raise_for_status()
     d = r.json()
@@ -58,7 +59,7 @@ def sh(cmd, timeout=600):
 
 def run_async(cmd, sid, poll=15, limit=3600):
     requests.post(f"{TB}/process/session", headers=H, json={"sessionId": sid}, timeout=30)
-    c = requests.post(f"{TB}/process/session/{sid}/exec", headers=H, json={"command": f"bash -c {json.dumps(cmd)}", "runAsync": True},
+    c = requests.post(f"{TB}/process/session/{sid}/exec", headers=H, json={"command": f"bash -c {shlex.quote(cmd)}", "runAsync": True},
                       timeout=60).json()["cmdId"]
     t0 = time.time()
     while time.time() - t0 < limit:
@@ -82,7 +83,18 @@ def tar_of(entries):
     buf = io.BytesIO()
     with tarfile.open(fileobj=buf, mode="w:gz") as t:
         for p, arc in entries:
-            t.add(p, arcname=arc, filter=lambda ti: None if "__pycache__" in ti.name or ti.name.endswith(".pyc") else ti)
+            files = [(p, arc)] if os.path.isfile(p) else [
+                (os.path.join(b, f), arc + "/" + os.path.relpath(os.path.join(b, f), p).replace("\\", "/"))
+                for b, ds, fs in os.walk(p) if "__pycache__" not in b for f in fs if not f.endswith(".pyc")]
+            for src, name in files:  # forward-slash names (Windows os.path.join would put "\" into the archive)
+                name = name.replace("\\", "/")
+                if src.endswith(".sh"):  # bash rejects CRLF (git on Windows checks out CRLF)
+                    data = open(src, "rb").read().replace(b"\r\n", b"\n")
+                    ti = tarfile.TarInfo(name)
+                    ti.size, ti.mode = len(data), 0o755
+                    t.addfile(ti, io.BytesIO(data))
+                else:
+                    t.add(src, arcname=name, recursive=False)
     return buf.getvalue()
 
 
