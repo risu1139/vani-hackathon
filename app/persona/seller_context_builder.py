@@ -212,6 +212,7 @@ def category_value(P, refresh=False, top_n=3):
 # ---------------------------------------------------------------- AOV (E10) via Redash
 AOV_CACHE = os.path.join(DATA, "api_cache", "aov")
 REDASH_BL_DS = 16       # pg-imblr-prod-live: buy-lead report DB (eto_attribute = last ~3 months)
+REDASH_MESH_DS = 21      # pg-meshr-prod-live: catalogue tables (pc_item, pc_item_to_glcat_mcat, glcat_mcat)
 REDASH_DWH_DS = 8       # im_dwh_rpt (Redshift): dim_glcat_mcat.aov_bucket
 NUM_UNIT = re.compile(r"(\d+(?:\.\d+)?)\s*(crore|cr|lakh|lac|thousand|k)?", re.I)
 SCALE = {"crore": 1e7, "cr": 1e7, "lakh": 1e5, "lac": 1e5, "thousand": 1e3, "k": 1e3}
@@ -222,12 +223,15 @@ def redash(sql, ds, timeout=120):
     import urllib.request
     env = {}
     path = os.path.join(os.path.expanduser("~"), ".redash_env")
-    if not os.path.exists(path):
+    if os.path.exists(path):
+        for line in open(path, encoding="utf-8"):
+            if "=" in line:
+                k, v = line.strip().split("=", 1)
+                env[k] = v.strip().strip('"\'')
+    elif os.environ.get("REDASH_URL") and os.environ.get("REDASH_API_KEY"):
+        env = {"REDASH_URL": os.environ["REDASH_URL"], "REDASH_API_KEY": os.environ["REDASH_API_KEY"]}
+    else:
         return None
-    for line in open(path, encoding="utf-8"):
-        if "=" in line:
-            k, v = line.strip().split("=", 1)
-            env[k] = v.strip().strip('"\'')
     base, hdr = env["REDASH_URL"].rstrip("/"), {"Authorization": f"Key {env['REDASH_API_KEY']}", "Content-Type": "application/json"}
 
     def req(url, body=None):
@@ -641,6 +645,34 @@ def city_tier(peer, refresh=False):
     return _cached(os.path.join(AOV_CACHE, "city", f"{int(cid)}.json"), q, refresh)
 
 
+TOP_MCATS_SQL = """SELECT m.glcat_mcat_id AS mcat_id, m.glcat_mcat_name AS mcat_name, COUNT(DISTINCT i.pc_item_id) AS active_products
+    FROM pc_item_to_glcat_mcat pm
+    JOIN pc_item i ON i.pc_item_id = pm.fk_pc_item_id
+    JOIN glcat_mcat m ON m.glcat_mcat_id = pm.fk_glcat_mcat_id
+    WHERE pm.fk_glusr_usr_id = {glid} AND i.pc_item_glusr_usr_id = pm.fk_glusr_usr_id AND i.pc_item_status_approval >= 10
+    GROUP BY m.glcat_mcat_id, m.glcat_mcat_name
+    ORDER BY active_products DESC, m.glcat_mcat_id LIMIT {n}"""
+
+
+def top_mcats(glid, refresh=False, n=5):
+    """D08: the seller's top MCATs by number of ACTIVE products (approval status >= 10), most first (Redash, pg-meshr)."""
+    def q():
+        rows = redash(TOP_MCATS_SQL.format(glid=int(glid), n=int(n)), REDASH_MESH_DS)
+        if rows is None:
+            return None
+        return {"status": "ok", "mcats": [{"mcat_id": int(r["mcat_id"]), "mcat_name": r.get("mcat_name"),
+                                           "active_products": int(r["active_products"])} for r in rows]}
+    return _cached(os.path.join(AOV_CACHE, "top_mcats", f"{int(glid)}.json"), q, refresh)
+
+
+def render_top_mcats(t):
+    lines = ["### D08 Top MCATs by active products (most first)", ""]
+    if not t or t.get("status") != "ok" or not t.get("mcats"):
+        return "\n".join(lines + ["_not available_", ""])
+    lines += [f"{i}. {m['mcat_name']} (MCAT {m['mcat_id']}): {m['active_products']} active products" for i, m in enumerate(t["mcats"], 1)]
+    return "\n".join(lines + [""])
+
+
 GST_STATE_CODES = {  # statutory GST state codes (first 2 digits of a GSTIN); a code list, not a language mapping
     "01": "Jammu and Kashmir", "02": "Himachal Pradesh", "03": "Punjab", "04": "Chandigarh", "05": "Uttarakhand", "06": "Haryana",
     "07": "Delhi", "08": "Rajasthan", "09": "Uttar Pradesh", "10": "Bihar", "11": "Sikkim", "12": "Arunachal Pradesh",
@@ -889,6 +921,9 @@ def key_facts(P, hist, peer, leads, s_aov, m_aov, cat):
     add(f"Contact designation: {_short(g('A04'))}; recorded gender/salutation: {_short(g('A07')) if g('A07') else 'none'}", "core.md#A04")
     add(f"Languages seen on calls: {_short(g('B03'))}", "core.md#B03")
     add(f"Top categories: {_short((g('D01') or {}).get('top'))}", "catalogue.md#D01")
+    tm = g("D08") or {}
+    if tm.get("status") == "ok" and tm.get("mcats"):
+        add("Top MCATs by active products: " + "; ".join(f"{m['mcat_name']} {m['active_products']}" for m in tm["mcats"]), "catalogue.md#D08")
     add(f"Business type: {_short(g('C01'))}; nature: {_short(g('C03'))}", "business.md#C01")
     s = (s_aov or {}).get("stats")
     add(f"Seller AOV (bought leads): " + (f"median Rs {s['median_rs']}, top quarter Rs {s['p75_rs']}, n={s['n_valued']}" if s else "not available"),
@@ -957,6 +992,8 @@ def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref,
             parts.append(render_peer(peer))
         if name == "core.md":
             parts.append(render_kyc(other, P.get("X05", (None,))[0], P.get("X06", (None,))[0]))
+        if name == "catalogue.md":
+            parts.append(render_top_mcats(P.get("D08", (None,))[0]))
         if name == "channels.md":
             parts.append(render_other(other))
         if "E12" in prefixes:
@@ -1052,7 +1089,7 @@ def as_of_flags(P):
     """Points that the as_of filter cannot date: API / Redash values (fetched today) and undated snapshot files."""
     flags = {}
     for pid, (_, src) in P.items():
-        if pid in ("E09", "E10", "E11", "E12", "X05", "X06") or API_SRC.search(src or ""):
+        if pid in ("E09", "E10", "E11", "E12", "X05", "X06", "D08") or API_SRC.search(src or ""):
             flags[pid] = {"as_of_unsafe": True}
         elif SNAPSHOT_SRC.search(src or ""):
             flags[pid] = {"as_of_snapshot": True}
@@ -1110,6 +1147,7 @@ def build(glid, use_api=True, refresh=False, rebuild=False, as_of=None):
     hist = call_history(files, now)
     other = other_records(files)
     P["X05"] = (city_tier(peer, refresh) if use_api else None, "pg-imblr gl_city classification")
+    P["D08"] = (top_mcats(glid, refresh) if use_api else None, "pg-meshr active products per MCAT")
     P["X06"] = (gst_location(glid, refresh) if use_api else None, "pg-imblr glusr_gst_details (state code only)")
     P["X00"] = (other, "LEAP calls, onboarding locations, KYC status (persona builder)")
     P["G00"] = (hist, "ps07_bot_calls + ps07_evaluator (rebuilt by the persona builder)")

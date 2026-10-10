@@ -1,0 +1,946 @@
+{
+ "_doc": "VANI persona hierarchy and per-field decision rules. DRAFT for review: not read by any code yet. When approved, prior.py and loop2_update.py read the levels and keys from here (no level lists in code) and the gates/validator read probe_files, reason_types and hard ranges. Review view: outputs/plans/persona_design_v2.pdf.",
+ "version": "v2-draft-3",
+ "approved_by": "pending",
+ "date": "2026-10-10",
+ "changes": [
+  {
+   "version": "v2-draft-1",
+   "date": "2026-10-10",
+   "what": "Draft. Adds L3-L6 as nested levels (code at a8f2e06 has L0-L2 nested; AOV and zone as flat offsets; state and category group not built). Fields are decided by the agent with a reason type; per-field probe files; no fixed amendment menu."
+  },
+  {
+   "version": "v2-draft-2",
+   "date": "2026-10-10",
+   "what": "Per the persona session: probe_files are file#section; added search_terms and evidence_rule per field; added top-level hooks{} with probe_files and search_terms; voice_id needs no reason; empathy is free text with no value groups; I01 is core.md#I01."
+  },
+  {
+   "version": "v2-draft-3",
+   "date": "2026-10-10",
+   "what": "L2 band labels (small, medium, medium-high, high); English suggested for 5 Cr+; random draw (top-2 only) and 15% P0 holdout marked DECIDED."
+  }
+ ],
+ "kappa": 20,
+ "holdout": {
+  "share": 0.15,
+  "arm": "P0",
+  "note": "DECIDED (persona session's user, 2026-10-10): keep the 15% P0 holdout. P0 is the current production style and the comparison group."
+ },
+ "base_means": {
+  "persona": 0.12,
+  "voice": {
+   "F": 0.13,
+   "M": 0.11
+  }
+ },
+ "select_rule": {
+  "script_gives": "top-2 personas for the seller's path (scoreboard A) and a brief per field",
+  "top_n": 2,
+  "agent_selects": 1,
+  "base": "the selected persona is the base; every field keeps its value unless a reason type below allows a change",
+  "randomness": "DECIDED (persona session's user, 2026-10-10): the weighted random draw stays ONLY for picking the top-2 personas (it is the propensity for learning). Field values are never drawn."
+ },
+ "persona_levels": [
+  {
+   "id": "L0",
+   "key": "all",
+   "parent": null,
+   "fact": null,
+   "buckets": null,
+   "status_at_a8f2e06": "built"
+  },
+  {
+   "id": "L1",
+   "key": "div",
+   "parent": "L0",
+   "fact": {
+    "id": "trait.division",
+    "field": "value"
+   },
+   "buckets": [
+    "NSD",
+    "CSD"
+   ],
+   "note": "TMW and KCD map to CSD until decided",
+   "status_at_a8f2e06": "built, nested"
+  },
+  {
+   "id": "L2",
+   "key": "band",
+   "parent": "L1",
+   "fact": {
+    "id": "trait.business_scale",
+    "field": "detail.turnover_band"
+   },
+   "buckets": [
+    {
+     "band": "0 - 40 L",
+     "label": "small"
+    },
+    {
+     "band": "40 L - 1.5 Cr",
+     "label": "medium"
+    },
+    {
+     "band": "1.5 - 5 Cr",
+     "label": "medium-high"
+    },
+    {
+     "band": "5 Cr+",
+     "label": "high"
+    }
+   ],
+   "note": "Seller size by annual turnover: below 40 lakh = small; 40 lakh to 1.5 crore = medium; 1.5 to 5 crore = medium-high; 5 crore and above = high (all bands above 5 Cr grouped). Labels are for the agent and the brief; the key stays the band.",
+   "status_at_a8f2e06": "built, nested"
+  },
+  {
+   "id": "L3",
+   "key": "aov",
+   "parent": "L2",
+   "fact": {
+    "id": "trait.business_scale",
+    "field": "detail.aov_tier"
+   },
+   "buckets": [
+    "low",
+    "mid",
+    "high"
+   ],
+   "status_at_a8f2e06": "flat offset, not nested"
+  },
+  {
+   "id": "L4",
+   "key": "zone",
+   "parent": "L3",
+   "fact": {
+    "id": "trait.city_tier",
+    "field": "detail.state",
+    "via": "state_to_zone"
+   },
+   "buckets": [
+    "North",
+    "West",
+    "South",
+    "East",
+    "Central",
+    "Other"
+   ],
+   "status_at_a8f2e06": "flat offset, not nested"
+  },
+  {
+   "id": "L5",
+   "key": "state",
+   "parent": "L4",
+   "fact": {
+    "id": "trait.city_tier",
+    "field": "detail.state"
+   },
+   "buckets": "state name; falls back to its zone",
+   "status_at_a8f2e06": "not built"
+  },
+  {
+   "id": "L6",
+   "key": "catgroup",
+   "parent": "L1",
+   "fact": {
+    "id": "D01",
+    "field": "top_category_group"
+   },
+   "buckets": "category group name; falls back to division",
+   "note": "OPEN QUESTION: the seller's top category group (suggested) or the group of the hook's category",
+   "status_at_a8f2e06": "not built"
+  }
+ ],
+ "state_to_zone": {
+  "North": [
+   "delhi",
+   "haryana",
+   "punjab",
+   "chandigarh",
+   "himachal pradesh",
+   "jammu and kashmir",
+   "uttarakhand",
+   "uttar pradesh",
+   "rajasthan"
+  ],
+  "West": [
+   "maharashtra",
+   "gujarat",
+   "goa"
+  ],
+  "South": [
+   "tamil nadu",
+   "karnataka",
+   "kerala",
+   "andhra pradesh",
+   "telangana",
+   "puducherry"
+  ],
+  "East": [
+   "west bengal",
+   "odisha",
+   "bihar",
+   "jharkhand",
+   "assam",
+   "meghalaya",
+   "tripura",
+   "manipur",
+   "mizoram",
+   "nagaland",
+   "arunachal pradesh",
+   "sikkim"
+  ],
+  "Central": [
+   "madhya pradesh",
+   "chhattisgarh"
+  ]
+ },
+ "fallback": "A level with few calls uses its parent's rate: pooled mean = (kappa * parent_mean + successes) / (kappa + n). Counts are kept per field x value group x level.",
+ "voice_levels": [
+  {
+   "id": "V0",
+   "key": "all",
+   "parent": null,
+   "fact": null,
+   "base": {
+    "F": 0.13,
+    "M": 0.11
+   },
+   "note": "female-first prior (team decision)"
+  },
+  {
+   "id": "V1",
+   "key": "seller_gender",
+   "parent": "V0",
+   "fact": {
+    "id": "trait.seller_gender",
+    "field": "value"
+   },
+   "buckets": [
+    "F",
+    "M",
+    "unknown"
+   ],
+   "note": "used only to choose the voice; never said on the call"
+  },
+  {
+   "id": "V2",
+   "key": "city_tier",
+   "parent": "V1",
+   "fact": {
+    "id": "trait.city_tier",
+    "field": "value"
+   },
+   "buckets": [
+    "metro",
+    "tier2",
+    "small_town",
+    "village_or_unclassified"
+   ]
+  },
+  {
+   "id": "V3",
+   "key": "tense",
+   "parent": "V2",
+   "fact": {
+    "id": "state.call_mood",
+    "field": "frustrated|rushed|open_grievance"
+   },
+   "buckets": [
+    "yes",
+    "no"
+   ]
+  },
+  {
+   "id": "VH",
+   "key": "hindi_belt_rural",
+   "parent": "V2",
+   "fact": {
+    "id": "trait.city_tier",
+    "field": "detail.hindi_belt and detail.rural_proxy"
+   },
+   "buckets": [
+    "yes",
+    "no"
+   ],
+   "note": "learned key (a fixed lean only at a8f2e06)"
+  }
+ ],
+ "reason_types": {
+  "order": [
+   "seller_evidence",
+   "hierarchy",
+   "start_persona"
+  ],
+  "seller_evidence": {
+   "priority": 1,
+   "allowed_when": "the seller's own files support a value different from the selected persona's",
+   "requires": [
+    "cites with a quote of at most 20 words each (file#id)",
+    "reason text"
+   ]
+  },
+  "hierarchy": {
+   "priority": 2,
+   "allowed_when": "the search of the field's probe files found NO seller evidence AND the brief has data for the seller's path",
+   "requires": [
+    "the level used (L0..L6 or V0..V3)",
+    "the value group",
+    "n calls",
+    "meeting rate",
+    "all probe_files opened (read log)",
+    "a 'searched' note: what was looked for and not found"
+   ],
+   "if_evidence_existed": "the agent must say why the evidence does not apply"
+  },
+  "start_persona": {
+   "priority": 3,
+   "allowed_when": "no seller evidence and no hierarchy data",
+   "effect": "the value stays equal to the selected persona's value; no new value",
+   "requires": [
+    "a 'searched' note (so we know the agent looked)",
+    "all probe_files opened (read log)"
+   ],
+   "learning": "counted as its own group"
+  },
+  "rules": [
+   "no random values",
+   "no random test fields",
+   "a field with no reason or a wrong cite fails the validator"
+  ]
+ },
+ "calls_probe": "'calls/' means every call file in the last 90 days that INDEX.md lists",
+ "fields": {
+  "voice_gender": {
+   "probe_files": [
+    "core.md#A07",
+    "calls/"
+   ],
+   "ids": [
+    "core.md#A07"
+   ],
+   "looks_for": "recorded gender or salutation; a past call where the seller reacted to a woman or man",
+   "value_groups": [
+    "F",
+    "M"
+   ],
+   "hard_range": null,
+   "voice_levels": [
+    "V0",
+    "V1",
+    "V2",
+    "V3",
+    "VH"
+   ],
+   "reason_required": true,
+   "searched_note_required": true,
+   "search_terms": [
+    "female",
+    "male",
+    "mrs",
+    "mr ",
+    "madam",
+    "sir",
+    "ma'am",
+    "aunty",
+    "bhaiya",
+    "didi",
+    "आवाज़",
+    "awaz",
+    "voice",
+    "ladki",
+    "ladka",
+    "लड़की",
+    "लड़का"
+   ],
+   "evidence_rule": "a recorded gender or salutation (A07), or a call turn where the seller reacts to the voice or addresses the caller by gender"
+  },
+  "voice_id": {
+   "probe_files": [],
+   "ids": [],
+   "looks_for": "derived from voice_gender and language; must be a catalogue voice",
+   "value_groups": null,
+   "hard_range": "catalogue-checked by compile_vars",
+   "reason_required": false,
+   "searched_note_required": false,
+   "follows": "voice_gender through the catalogue (compile_vars)"
+  },
+  "pace": {
+   "probe_files": [
+    "calls/",
+    "core.md#B03"
+   ],
+   "ids": [
+    "core.md#B03"
+   ],
+   "looks_for": "rushed or slow-speech cues in past calls; languages the seller speaks",
+   "value_groups": [
+    "0.85-0.95",
+    "0.95-1.05",
+    "1.05-1.25"
+   ],
+   "hard_range": [
+    0.85,
+    1.25
+   ],
+   "reason_required": true,
+   "searched_note_required": true,
+   "search_terms": [
+    "busy",
+    "bizi",
+    "jaldi",
+    "baad me",
+    "baad mein",
+    "call back",
+    "callback",
+    "later",
+    "driving",
+    "meeting me",
+    "time nahi",
+    "बिजी",
+    "जल्दी",
+    "बाद में",
+    "व्यस्त",
+    "समय नहीं",
+    "samajh nahi",
+    "samjha nahi",
+    "kya matlab",
+    "dhire",
+    "slowly",
+    "repeat",
+    "phir se bolo",
+    "समझ नहीं",
+    "क्या मतलब",
+    "धीरे"
+   ],
+   "evidence_rule": "a call turn where the seller was rushed or asked for a callback (faster, briefer) or asked to slow down or repeat (slower)"
+  },
+  "pitch": {
+   "probe_files": [
+    "calls/"
+   ],
+   "ids": [],
+   "looks_for": "seller reaction to the voice in past calls",
+   "value_groups": [
+    "-0.3..-0.1",
+    "-0.1..0.1",
+    "0.1..0.3"
+   ],
+   "hard_range": [
+    -0.3,
+    0.3
+   ],
+   "reason_required": true,
+   "searched_note_required": true,
+   "evidence_grade_default": "GUESS",
+   "search_terms": [
+    "awaz",
+    "आवाज़",
+    "voice",
+    "loud",
+    "slow",
+    "tez",
+    "dheere",
+    "high",
+    "low",
+    "ladki",
+    "ladka"
+   ],
+   "evidence_rule": "a call turn where the seller comments on the voice (loud, soft, hard to hear)"
+  },
+  "language_start": {
+   "probe_files": [
+    "core.md#B01",
+    "core.md#X06",
+    "core.md#X02",
+    "core.md#B03",
+    "core.md#X05"
+   ],
+   "ids": [
+    "core.md#B01",
+    "core.md#X06",
+    "core.md#X02",
+    "core.md#B03"
+   ],
+   "looks_for": "profile city/state, GST state (X06, optional), onboarding cities, languages heard on calls; a suggestion, with a backup language and a note when the profile and GST states differ",
+   "value_groups": "any language Sarvam supports",
+   "hard_range": "compile_vars allowed language list (refuses unsupported)",
+   "rule": "a SUGGESTION, not a rule: regional language from the location facts (read by the LLM, no hardcoded mapping); for 5 Cr+ sellers (trait.high_value) suggest English; the agent may change either with cited seller evidence",
+   "reason_required": true,
+   "searched_note_required": true,
+   "search_terms": [
+    "hinglish",
+    "english",
+    "hindi",
+    "gujarati",
+    "tamil",
+    "telugu",
+    "kannada",
+    "malayalam",
+    "marathi",
+    "bengali",
+    "language",
+    "bhasha",
+    "भाषा",
+    "हिंदी",
+    "अंग्रेज़ी"
+   ],
+   "evidence_rule": "a location fact (profile state or city, GST state, onboarding cities) or a language the seller spoke on a past call",
+   "size_suggestion": {
+    "5 Cr+ (high)": "suggest ENGLISH as the starting language (with light Hindi); a suggestion only: seller evidence (their location or the language they spoke) can change it, with cites",
+    "other bands": "suggest the regional language of the seller's location, from the LLM's reading of the location facts; never a fixed mapping"
+   }
+  },
+  "code_mix": {
+   "probe_files": [
+    "core.md#B03",
+    "calls/"
+   ],
+   "ids": [
+    "core.md#B03"
+   ],
+   "looks_for": "how much Hinglish or English the seller used in past calls",
+   "value_groups": [
+    "regional_only",
+    "light_hinglish",
+    "hinglish",
+    "english_heavy"
+   ],
+   "hard_range": null,
+   "reason_required": true,
+   "searched_note_required": true,
+   "search_terms": [
+    "hinglish",
+    "english",
+    "hindi",
+    "gujarati",
+    "tamil",
+    "telugu",
+    "kannada",
+    "malayalam",
+    "marathi",
+    "bengali",
+    "language",
+    "bhasha",
+    "भाषा",
+    "हिंदी",
+    "अंग्रेज़ी",
+    "english me",
+    "hindi me",
+    "hinglish"
+   ],
+   "evidence_rule": "a past call where the seller spoke or asked for a particular language mix"
+  },
+  "formality": {
+   "probe_files": [
+    "business.md#C01",
+    "business.md#C02",
+    "buyleads.md#E10",
+    "core.md#A04"
+   ],
+   "ids": [
+    "core.md#A04"
+   ],
+   "looks_for": "business size, order values, contact designation",
+   "value_groups": [
+    "low",
+    "medium",
+    "high"
+   ],
+   "hard_range": null,
+   "reason_required": true,
+   "searched_note_required": true,
+   "search_terms": [
+    "owner",
+    "director",
+    "proprietor",
+    "manager",
+    "partner",
+    "sir",
+    "madam",
+    "ji",
+    "mr",
+    "ceo",
+    "md"
+   ],
+   "evidence_rule": "a contact designation (A04), a turnover band (C02), a high order value (E10), or a seller who addresses the caller formally"
+  },
+  "sophistication": {
+   "probe_files": [
+    "business.md#C01",
+    "business.md#C02",
+    "business.md#C03",
+    "buyleads.md#E10",
+    "core.md#A04"
+   ],
+   "ids": [
+    "core.md#A04"
+   ],
+   "looks_for": "turnover band, order values, how technical the seller's own words were",
+   "value_groups": [
+    "simple",
+    "practical",
+    "numbers_first"
+   ],
+   "hard_range": null,
+   "reason_required": true,
+   "searched_note_required": true,
+   "search_terms": [
+    "turnover",
+    "crore",
+    "lakh",
+    "export",
+    "gst",
+    "b2b",
+    "dealer",
+    "distributor",
+    "manufacturer",
+    "wholesale",
+    "retail",
+    "samajh nahi"
+   ],
+   "evidence_rule": "turnover band, nature of business, order values, or how technical or simple the seller's own words were"
+  },
+  "warmth": {
+   "probe_files": [
+    "calls/",
+    "core.md#I01"
+   ],
+   "ids": [
+    "core.md#I01"
+   ],
+   "looks_for": "complaints, frustration, tone of past calls",
+   "value_groups": [
+    "medium",
+    "high"
+   ],
+   "hard_range": null,
+   "reason_required": true,
+   "searched_note_required": true,
+   "search_terms": [
+    "pareshan",
+    "kitni baar",
+    "baar baar",
+    "mat karo",
+    "band karo",
+    "complaint",
+    "shikayat",
+    "faltu",
+    "bekar",
+    "irritat",
+    "angry",
+    "frustrat",
+    "stop calling",
+    "परेशान",
+    "कितनी बार",
+    "शिकायत",
+    "बंद करो",
+    "thank",
+    "dhanyavad",
+    "shukriya",
+    "achha",
+    "धन्यवाद"
+   ],
+   "evidence_rule": "an open complaint (I01), a frustrated call turn (needs more warmth), or a friendly call turn"
+  },
+  "empathy": {
+   "probe_files": [
+    "calls/",
+    "core.md#I01"
+   ],
+   "ids": [
+    "core.md#I01"
+   ],
+   "looks_for": "open complaint, frustration, earlier calls to acknowledge",
+   "value_groups": null,
+   "free_text": true,
+   "hard_range": null,
+   "reason_required": true,
+   "searched_note_required": true,
+   "search_terms": [
+    "pareshan",
+    "kitni baar",
+    "baar baar",
+    "mat karo",
+    "band karo",
+    "complaint",
+    "shikayat",
+    "faltu",
+    "bekar",
+    "irritat",
+    "angry",
+    "frustrat",
+    "stop calling",
+    "परेशान",
+    "कितनी बार",
+    "शिकायत",
+    "बंद करो",
+    "last time",
+    "pichli baar",
+    "pehle bhi",
+    "kuch nahi hua",
+    "executive aaya",
+    "पहले भी"
+   ],
+   "evidence_rule": "an open complaint (I01) or a past call where the seller described a bad earlier experience",
+   "learning": "ignored by learning (free text)"
+  },
+  "words_per_turn": {
+   "probe_files": [
+    "calls/"
+   ],
+   "ids": [],
+   "looks_for": "how long the seller's past answers were; whether past calls were cut short",
+   "value_groups": [
+    "8-12",
+    "13-18",
+    "19-25"
+   ],
+   "hard_range": [
+    8,
+    25
+   ],
+   "reason_required": true,
+   "searched_note_required": true,
+   "search_terms": [
+    "busy",
+    "bizi",
+    "jaldi",
+    "baad me",
+    "baad mein",
+    "call back",
+    "callback",
+    "later",
+    "driving",
+    "meeting me",
+    "time nahi",
+    "बिजी",
+    "जल्दी",
+    "बाद में",
+    "व्यस्त",
+    "समय नहीं",
+    "samajh nahi",
+    "samjha nahi",
+    "kya matlab",
+    "dhire",
+    "slowly",
+    "repeat",
+    "phir se bolo",
+    "समझ नहीं",
+    "क्या मतलब",
+    "धीरे",
+    "short",
+    "chhota",
+    "jaldi bolo"
+   ],
+   "evidence_rule": "past call turns showing the seller cuts the caller short (shorter replies) or asks for detail (longer replies)"
+  },
+  "hook": {
+   "ids": [],
+   "looks_for": "money lead, profile gap, unused credits, lead quality, grievance, peer usage, category demand",
+   "value_groups": "eligible hook ids (facts.json eligible_hooks)",
+   "hard_range": "eligible hooks only; money first",
+   "reason_required": true,
+   "searched_note_required": true,
+   "note": "OPEN QUESTION: use the same hierarchy for a per-segment hook brief? Hooks are not logged in the learning step at a8f2e06.",
+   "probe_files": "see top-level 'hooks' (each hook has its own probe_files and search_terms)",
+   "search_terms": "see top-level 'hooks'",
+   "evidence_rule": "the hook's own facts (facts.py eligibility) plus its probe sections; money first"
+  },
+  "opening": {
+   "probe_files": [
+    "calls/"
+   ],
+   "ids": [],
+   "looks_for": "past calls and the hook facts; short, one value statement then one simple question",
+   "value_groups": null,
+   "free_text": true,
+   "hard_range": "validator wording rules (banned words, gender agreement, identity line)",
+   "reason_required": true,
+   "searched_note_required": true,
+   "search_terms": [
+    "pehle bhi",
+    "last time",
+    "pichli baar",
+    "called",
+    "call kiya",
+    "yaad",
+    "executive",
+    "meeting"
+   ],
+   "evidence_rule": "a past call that the opening should acknowledge or avoid repeating"
+  }
+ },
+ "learning": {
+  "records_per_call": [
+   "path",
+   "selected persona",
+   "per field: final value group, reason_type, outcome",
+   "hook id"
+  ],
+  "counts": "per field x value group x level",
+  "reports": [
+   "meeting rate by reason_type (seller_evidence, hierarchy, start_persona)",
+   "uplift vs P0 holdout (needs real calls)"
+  ],
+  "card_changes": "the script suggests; a human approves a new persona_library.json version",
+  "test_calls": "go to data/scoreboards_test, never to data/scoreboards"
+ },
+ "tests_required": [
+  "hierarchy used with an unread probe file fails",
+  "hierarchy used with no searched note fails",
+  "seller evidence available but hierarchy used, with no explanation, fails",
+  "start_persona without a searched note fails",
+  "a value outside its hard range fails",
+  "the keys loop2 writes equal the keys prior reads, both from this file"
+ ],
+ "hooks": {
+  "hook.money_lead": {
+   "probe_files": [
+    "candidate_leads.md#E12",
+    "buyleads.md#E10"
+   ],
+   "search_terms": [
+    "order",
+    "requirement",
+    "lead",
+    "quantity",
+    "lakh",
+    "value",
+    "buyer",
+    "ऑर्डर",
+    "रिक्वायरमेंट"
+   ],
+   "evidence_rule": "a live or expired lead with an order value near the seller's AOV"
+  },
+  "hook.profile_gap": {
+   "probe_files": [
+    "catalogue.md#D06",
+    "business.md#C08",
+    "business.md#C09"
+   ],
+   "search_terms": [
+    "photo",
+    "image",
+    "price",
+    "category",
+    "catalogue",
+    "profile",
+    "product",
+    "फोटो",
+    "प्रोफाइल"
+   ],
+   "evidence_rule": "products without photo or price, a weak catalogue score, or a thin profile"
+  },
+  "hook.category_demand": {
+   "probe_files": [
+    "peers.md#E08",
+    "buyleads.md#E09"
+   ],
+   "search_terms": [
+    "demand",
+    "requirement",
+    "buy lead",
+    "enquiry",
+    "buyer",
+    "category"
+   ],
+   "evidence_rule": "local or total buy-lead counts in the seller's category"
+  },
+  "hook.unused_credits": {
+   "probe_files": [
+    "buyleads.md#E05",
+    "calls/"
+   ],
+   "search_terms": [
+    "credit",
+    "lapse",
+    "balance",
+    "unused",
+    "paisa",
+    "recharge",
+    "क्रेडिट"
+   ],
+   "evidence_rule": "lapsed or unused buy-lead credits, or a call about credits"
+  },
+  "hook.lead_quality_fix": {
+   "probe_files": [
+    "buyleads.md#E07",
+    "calls/"
+   ],
+   "search_terms": [
+    "not interested",
+    "irrelevant",
+    "wrong lead",
+    "poor quality",
+    "fake",
+    "bekar",
+    "faltu lead",
+    "price poochhte"
+   ],
+   "evidence_rule": "rejected leads or call talk that leads are bad"
+  },
+  "hook.enquiry_drop": {
+   "probe_files": [
+    "enquiries.md#E01",
+    "enquiries.md#E02"
+   ],
+   "search_terms": [
+    "no enquiry",
+    "enquiry nahi",
+    "kam",
+    "drop",
+    "decrease",
+    "ek bhi nahi",
+    "एनक्वायरी"
+   ],
+   "evidence_rule": "enquiries falling versus the last quarter, or a seller saying enquiries stopped"
+  },
+  "hook.peer_usage": {
+   "probe_files": [
+    "peers.md#E11"
+   ],
+   "search_terms": [
+    "peer",
+    "same size",
+    "competitor",
+    "nearby",
+    "others",
+    "doosre"
+   ],
+   "evidence_rule": "an allowed peer rung (at least 5 same-size peers who bought)"
+  },
+  "hook.resolve_grievance": {
+   "probe_files": [
+    "core.md#I01",
+    "calls/"
+   ],
+   "search_terms": [
+    "pareshan",
+    "kitni baar",
+    "baar baar",
+    "mat karo",
+    "band karo",
+    "complaint",
+    "shikayat",
+    "faltu",
+    "bekar",
+    "irritat",
+    "angry",
+    "frustrat",
+    "stop calling",
+    "परेशान",
+    "कितनी बार",
+    "शिकायत",
+    "बंद करो"
+   ],
+   "evidence_rule": "an open complaint or a grievance in a call in the last 60 days"
+  }
+ },
+ "probe_rules": {
+  "format": "every probe_files entry is 'file#section' (a ### heading id in the folder file) or 'calls/' for the call files",
+  "calls": "'calls/' = every call file in the last 90 days that INDEX.md lists",
+  "search_terms": "words or regexes in English, Hindi and Hinglish; the probe searches ONLY the listed sections and the validator re-runs the same search to check a 'no evidence' claim",
+  "evidence_rule": "one line: what counts as evidence for the field"
+ }
+}
