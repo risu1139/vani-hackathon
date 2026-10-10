@@ -189,6 +189,26 @@ def replace_json(o, fn, glid, pseudo):
     return o
 
 
+SOURCE_KEYS = {"sources", "api_status", "cache_files_used", "cache_hash"}
+
+
+def _drop_gap(o):
+    """'gap' notes name the APIs that did not work; the agent has no use for them."""
+    if isinstance(o, dict):
+        return {k: _drop_gap(v) for k, v in o.items() if k != "gap"}
+    if isinstance(o, list):
+        return [_drop_gap(x) for x in o]
+    return o
+
+
+def strip_sources(ctx):
+    """The agent must not see where data came from (files, tables, APIs): it runs in a sandbox that has none of them."""
+    out = {k: v for k, v in ctx.items() if k not in SOURCE_KEYS}
+    out["points"] = {pid: {k: v for k, v in (pt.items() if isinstance(pt, dict) else []) if k != "source"}
+                     for pid, pt in (ctx.get("points") or {}).items()}
+    return _drop_gap(out)
+
+
 # ---------------------------------------------------------------- gate
 def gate(folder, glid, names):
     """Hard PII gate: pii_check patterns + any original name / alias / GLID left. Returns {category: [files]}."""
@@ -231,12 +251,14 @@ def export(glid, src=None, dst=None, maps=None, key=None):
             rel = os.path.relpath(path, folder)
             target = os.path.join(out, fn(rel))
             os.makedirs(os.path.dirname(target), exist_ok=True)
+            if f == "all.md":
+                continue  # one-file human copy; the agent reads the split files
             if f == "context.json":
                 with open(target, "w", encoding="utf-8") as w:
-                    json.dump(replace_json(ctx, fn, glid, pseudo), w, ensure_ascii=False, default=str)
+                    json.dump(replace_json(strip_sources(ctx), fn, glid, pseudo), w, ensure_ascii=False, default=str)
             elif f.endswith(".md"):
                 with open(target, "w", encoding="utf-8") as w:
-                    w.write(fn(open(path, encoding="utf-8").read()))
+                    w.write(re.sub(r"(?m)^- \*\*gap:\*\*.*\n?", "", fn(open(path, encoding="utf-8").read())))
             # any other file type is not exported
     hits = gate(out, glid, names)
     if hits:

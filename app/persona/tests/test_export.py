@@ -115,3 +115,12 @@ def test_load_key_generates_once(tmp_path, monkeypatch):
     k2 = E.load_key(str(env))
     assert k1 == k2 and len(k1) == 64
     assert env.read_text(encoding="utf-8").startswith("OTHER=1\n")
+
+
+def test_export_strips_sources_and_all_md():
+    import export_for_agent as X
+    ctx = {"glid": "1", "sources": {"gc_x": 3}, "api_status": {"a": 200}, "cache_hash": "h", "cache_files_used": 2,
+           "points": {"A01": {"value": 5, "source": "users_detail", "as_of_unsafe": True}}}
+    out = X.strip_sources(ctx)
+    assert not (set(out) & X.SOURCE_KEYS)
+    assert out["points"]["A01"] == {"value": 5, "as_of_unsafe": True}

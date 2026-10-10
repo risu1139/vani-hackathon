@@ -10,7 +10,7 @@ def test_dict_cut_at_whole_field():
     v = {"bl_bought": 412, "long_note": "x" * 150, "gc_credits_used": 13000, "other": 5}
     out = _short(v, 200)
     assert "1300" not in out.replace("13000", "")  # never a cut number
-    assert "more, see source" in out
+    assert "more, see the cited file" in out
 
 
 def test_number_kept_whole():
@@ -24,4 +24,4 @@ def test_short_string_unchanged():
 
 def test_long_string_word_boundary():
     out = _short("word " * 60, 50)
-    assert out.endswith("(see source)") and "wor …" not in out
+    assert out.endswith("(see the cited file)") and "wor …" not in out

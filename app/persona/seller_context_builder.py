@@ -329,7 +329,7 @@ def render_aov(seller, mcats, cat_rows):
     rs = lambda s: (f"median Rs {s['median_rs']:,}, top quarter from Rs {s['p75_rs']:,}, highest Rs {s['max_rs']:,} "
                     f"({s['n_valued']} leads with a value; common: {', '.join(s['common_ranges'])})") if s else "_no values_"
     lines = ["## E10. Average order value (seller and category)", "",
-             "*Source:* buy-lead 'Probable Order Value' (pg-imblr eto_attribute, via Redash). Each range is turned into its "
+             "Each buy-lead 'Probable Order Value' range is turned into its "
              "midpoint. Seller = leads this seller bought; category = all buy leads in that MCAT in the window.", ""]
     s = seller or {}
     lines.append(f"- **Seller AOV** ({s.get('n_bought', 0)} leads bought): "
@@ -480,7 +480,6 @@ def peer_stat(glid, cat_rows, refresh=False, days=30, seller_aov_stats=None):
 
 def render_peer(p):
     lines = ["## E11. Peer statistic (same MCAT, same turnover band; fallback ladder)", "",
-             "*Source:* pg-imblr glusr_usr_mcat_prd_count + glusr_gst_details + weberp.eto_lead_pur_hist + eto_attribute, via Redash. "
              f"A rung is allowed only when it is the seller's SAME turnover band and has at least {MIN_PEERS} peers who bought leads "
              "in the MCAT. Rungs 4-5 (band ±1) are shown for context and are never allowed for a claim. Rungs 1a/2a/3a also keep "
              "only peers whose AOV is 0.5-2x the seller's. Use the first allowed rung and name its geography honestly. "
@@ -563,7 +562,6 @@ def showcase_leads(cat_rows, peer, seller_aov_stats, refresh=False, keep=12):
 
 def render_showcase(leads, ref):
     lines = ["## E12. Showcase buy-lead candidates (best first)", "",
-             "*Source:* pg-imblr eto_ofr (live) + eto_ofr_expired (last 30 days) + eto_attribute, via Redash. "
              f"fit_score rewards order value near (a little above) the seller's AOV (ref Rs {ref}), the same city/state, live, and new. "
              "Say only product, quantity, value, region and status. Never the buyer's name, company or contact.", ""]
     if not leads:
@@ -643,23 +641,52 @@ def city_tier(peer, refresh=False):
     return _cached(os.path.join(AOV_CACHE, "city", f"{int(cid)}.json"), q, refresh)
 
 
+GST_STATE_CODES = {  # statutory GST state codes (first 2 digits of a GSTIN); a code list, not a language mapping
+    "01": "Jammu and Kashmir", "02": "Himachal Pradesh", "03": "Punjab", "04": "Chandigarh", "05": "Uttarakhand", "06": "Haryana",
+    "07": "Delhi", "08": "Rajasthan", "09": "Uttar Pradesh", "10": "Bihar", "11": "Sikkim", "12": "Arunachal Pradesh",
+    "13": "Nagaland", "14": "Manipur", "15": "Mizoram", "16": "Tripura", "17": "Meghalaya", "18": "Assam", "19": "West Bengal",
+    "20": "Jharkhand", "21": "Odisha", "22": "Chhattisgarh", "23": "Madhya Pradesh", "24": "Gujarat",
+    "26": "Dadra and Nagar Haveli and Daman and Diu", "27": "Maharashtra", "29": "Karnataka", "30": "Goa", "31": "Lakshadweep",
+    "32": "Kerala", "33": "Tamil Nadu", "34": "Puducherry", "35": "Andaman and Nicobar Islands", "36": "Telangana",
+    "37": "Andhra Pradesh", "38": "Ladakh", "97": "Other Territory", "99": "Centre Jurisdiction"}
+
+
+def gst_location(glid, refresh=False):
+    """X06: the STATE of the seller's GST registration, from the first 2 digits of the GSTIN.
+    glusr_gst_details has no city or address column, so the state is all the GST gives. The query returns only
+    left(glusr_gst_no, 2): the GSTIN itself never leaves the database and never reaches the folder or the agent."""
+    def q():
+        rows = redash(f"select left(glusr_gst_no, 2) as code from glusr_gst_details where fk_glusr_usr_id = {int(glid)}", REDASH_BL_DS)
+        if rows is None:
+            return None
+        code = str((rows or [{}])[0].get("code") or "").strip()
+        if not rows or not code:
+            return {"status": "no_gst"}
+        if code not in GST_STATE_CODES:
+            return {"status": "unknown_code"}
+        return {"status": "ok", "state": GST_STATE_CODES[code]}
+    return _cached(os.path.join(AOV_CACHE, "gst_state", f"{int(glid)}.json"), q, refresh)
+
+
 def render_other(o):
-    lines = ["### X01 Lead-enrichment (LEAP) calls linked to this GLID", "*Source:* aids/Call_Logs_Hackathon.csv", ""]
+    lines = ["### X01 Lead-enrichment (LEAP) calls linked to this GLID", ""]
     lines += [f"- {c['date']}: answered {c['answered']}; {c['disposition']} (code {c['reason_code']})" for c in o["leap_calls"]] or ["_no data_"]
     return "\n".join(lines + [""])
 
 
-def render_kyc(o, ct=None):
+def render_kyc(o, ct=None, gl=None):
     f = o.get("seller_flags") or {}
-    lines = ["### X04 Seller flags (PS07 seller file, Apr–Sep, undated)", "*Source:* ps07_seller_file", "",
+    lines = ["### X04 Seller flags (undated snapshot, Apr–Sep)", "",
              f"- do_not_call_requested: {f.get('do_not_call_requested')}; already_in_touch_with_executive: {f.get('already_in_touch_with_executive')}; "
              f"showed_frustration: {f.get('showed_frustration')}; asked_if_talking_to_bot: {f.get('asked_if_talking_to_bot')}", "",
-             "### X05 City tier (rural proxy)", "*Source:* pg-imblr gl_city.gl_city_classification", "",
+             "### X05 City tier (rural proxy)", "",
              (f"- {ct.get('city')}, {ct.get('state')}: classification {ct.get('classification')} → {ct.get('tier')}; "
               f"rural proxy {ct.get('rural_proxy')}; Hindi belt {ct.get('hindi_belt')}" if ct and ct.get("status") == "ok" else "_not available_"), "",
-             "### X02 Onboarding locations (city level only)", "*Source:* seller_onboarding/so_seller_locations.csv", ""]
+             "### X06 GST registered location (state only)", "",
+             (f"- GST registration state: {gl.get('state')}" if gl and gl.get("status") == "ok" else "_not available_"), "",
+             "### X02 Onboarding locations (city level only)", ""]
     lines += [f"- {l['city']}, {l['state']} (rank {l['cluster_rank']}, {l['source']}, {l['created_on']})" for l in o["onboarding_locations"]] or ["_no data_"]
-    lines += ["", "### X03 KYC status (no document paths, no ID values)", "*Source:* seller_onboarding/so_kyc_*.csv", ""]
+    lines += ["", "### X03 KYC status (no document paths, no ID values)", ""]
     lines += [f"- {d['document_type']}: {d['status']} (uploaded {d['uploaded_on']}, verified {d['verified_on']})" for d in o["kyc_documents"]] or ["_no documents_"]
     if o["kyc_sessions"]:
         lines.append(f"- Sessions: {json.dumps(o['kyc_sessions'], ensure_ascii=False)[:600]}")
@@ -729,7 +756,7 @@ def call_history(files, now):
 
 
 def render_history(h):
-    lines = ["## G. Past VANI calls (built by us from PS07 bot calls + evaluator)", "",
+    lines = ["## G. Past VANI calls", "",
              f"*All history:* {h['n_calls_all_history']} calls; outcomes {h['outcome_counts_all_history']}; "
              f"meetings fixed {h['meetings_fixed_all_history']}; objection categories {h['objection_categories_all_history']}. "
              f"Every call is listed, newest first; weigh recent ones more.", ""]
@@ -761,7 +788,7 @@ def render_history(h):
 
 def render_category(rows):
     lines = ["## E09. Category value (unit price spread, bulk share)", "",
-             "*Source:* imdwh mcatpriceapi + mcatetoretail, per top MCAT. Unit prices of listed products (not order value); "
+             "Per top MCAT. Unit prices of listed products (not order value); "
              "bulk = buy leads at or above the retail quantity cut-off; boundary value = cut-off x median (derived).", ""]
     if not rows:
         return "\n".join(lines + ["_no data_", ""])
@@ -800,10 +827,10 @@ FILES_MAP = [
 
 def _point_md(pid, P):
     v, src = P.get(pid, (None, ""))
-    if pid in ("E09", "E10", "E11", "E12", "G00", "X00", "X05"):
+    if pid in ("E09", "E10", "E11", "E12", "G00", "X00", "X05", "X06"):
         return None
     lab = S.LABELS.get(pid, pid)
-    return f"### {pid} {lab}\n*Source:* {src}\n\n{S.render_value(v) if not S.blank(v) else '_no data_'}\n"
+    return f"### {pid} {lab}\n\n{S.render_value(v) if not S.blank(v) else '_no data_'}\n"
 
 
 def _pids_for(prefixes):
@@ -825,14 +852,14 @@ def _short(v, n=160):
         out = []
         for it in items:
             if out and len("; ".join(out + [it])) > n:
-                return "; ".join(out) + f"; … (+{len(items) - len(out)} more, see source)"
+                return "; ".join(out) + f"; … (+{len(items) - len(out)} more, see the cited file)"
             out.append(it)
         return "; ".join(out)
     s = val(v)
     if len(s) <= n:
         return s
     cut = s[:n].rsplit(" ", 1)[0] if " " in s[:n] else s[:n]
-    return cut + " … (see source)"
+    return cut + " … (see the cited file)"
 
 
 def key_facts(P, hist, peer, leads, s_aov, m_aov, cat):
@@ -854,6 +881,11 @@ def key_facts(P, hist, peer, leads, s_aov, m_aov, cat):
     add(f"Seller flags: DNC requested {fl.get('do_not_call_requested')}; already with executive {fl.get('already_in_touch_with_executive')}; "
         f"showed frustration {fl.get('showed_frustration')}; asked if bot {fl.get('asked_if_talking_to_bot')}", "core.md#X04")
     add(f"Location: {_short(g('B01'))}", "core.md#B01")
+    gl, on = g("X06") or {}, ((g("X00") or {}).get("onboarding_locations") or [])
+    add("Locations: profile " + ", ".join(str(x) for x in ((g("B01") or {}).get("seller_city"), (g("B01") or {}).get("seller_state")) if x)
+        + f"; GST state {gl.get('state') if gl.get('status') == 'ok' else 'not available'}"
+        + ("; onboarding " + ", ".join(sorted({f"{l.get('city')}, {l.get('state')}" for l in on})[:3]) if on else "")
+        + f"; languages on calls {_short(g('B03'))}", "core.md#B01, core.md#X06, core.md#X02, core.md#B03")
     add(f"Contact designation: {_short(g('A04'))}; recorded gender/salutation: {_short(g('A07')) if g('A07') else 'none'}", "core.md#A04")
     add(f"Languages seen on calls: {_short(g('B03'))}", "core.md#B03")
     add(f"Top categories: {_short((g('D01') or {}).get('top'))}", "catalogue.md#D01")
@@ -924,7 +956,7 @@ def write_folder(glid, P, hist, peer, leads, s_aov, m_aov, cat, files, api, ref,
         if "E11" in prefixes:
             parts.append(render_peer(peer))
         if name == "core.md":
-            parts.append(render_kyc(other, P.get("X05", (None,))[0]))
+            parts.append(render_kyc(other, P.get("X05", (None,))[0], P.get("X06", (None,))[0]))
         if name == "channels.md":
             parts.append(render_other(other))
         if "E12" in prefixes:
@@ -1020,7 +1052,7 @@ def as_of_flags(P):
     """Points that the as_of filter cannot date: API / Redash values (fetched today) and undated snapshot files."""
     flags = {}
     for pid, (_, src) in P.items():
-        if pid in ("E09", "E10", "E11", "E12", "X05") or API_SRC.search(src or ""):
+        if pid in ("E09", "E10", "E11", "E12", "X05", "X06") or API_SRC.search(src or ""):
             flags[pid] = {"as_of_unsafe": True}
         elif SNAPSHOT_SRC.search(src or ""):
             flags[pid] = {"as_of_snapshot": True}
@@ -1078,6 +1110,7 @@ def build(glid, use_api=True, refresh=False, rebuild=False, as_of=None):
     hist = call_history(files, now)
     other = other_records(files)
     P["X05"] = (city_tier(peer, refresh) if use_api else None, "pg-imblr gl_city classification")
+    P["X06"] = (gst_location(glid, refresh) if use_api else None, "pg-imblr glusr_gst_details (state code only)")
     P["X00"] = (other, "LEAP calls, onboarding locations, KYC status (persona builder)")
     P["G00"] = (hist, "ps07_bot_calls + ps07_evaluator (rebuilt by the persona builder)")
     text = text.replace("\n## H. ", "\n" + render_history(hist) + "\n## H. ", 1) if "\n## H. " in text else text + "\n" + render_history(hist)
@@ -1097,7 +1130,7 @@ def build(glid, use_api=True, refresh=False, rebuild=False, as_of=None):
     if left:
         print(f"PII WARNING {glid}: " + ", ".join(f"{k} {len(v)}" for k, v in left.items()), file=sys.stderr)
     with open(os.path.join(folder, "all.md"), "w", encoding="utf-8") as f:  # one-file copy for humans; the agent uses the split files
-        f.write(scrub_text(text))
+        f.write(re.sub(r"(?m)^\*Source:\*.*\n?", "", scrub_text(text)))
     for old in (os.path.join(OUT, f"{glid}.md"), os.path.join(OUT, f"{glid}.json")):  # retire the old single-file layout
         if os.path.exists(old):
             os.remove(old)
