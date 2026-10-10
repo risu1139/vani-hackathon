@@ -84,8 +84,13 @@ Keep it to 2 sessions of at most 4 turns each.
 
 `python app/sarvam/collect_call.py --interaction-id <id>` gives `06_call.json` + `07_outcome.json` (analytics API, `X-API-Key`).
 
+**Recording.** Sarvam records every call. The audio is served only with the console login: `GET apps.sarvam.ai/api/analytics/v4/orgs/{org}/workspaces/{ws}/interactions/{iid}/merged-audio` (`audio/wav`). The API key gets 401. Open `06_call.json` → `audio_url` in the logged-in browser and save that response as `data/runs_daytona/<id>/call_recording.wav` (git-ignored).
+
+**Tools must be listed in the state.** Uploading `vani_tools.py` registers the tools, but the model can call only the names in `states.start.tool_names`. Until v3, only `read_seller_signal` was listed, so `book_meeting` was never called. `OnStart` needs no listing (picked up by class name; `on_start_config` stays null).
+
 ## Log
 
 | Date | What | Result |
 |---|---|---|
+| 2026-10-10 | v3 committed: free seller run `e2e-20261010-174118-480222` prompt verbatim (15,699 chars, stored equal); tools re-uploaded (9 AM-6 PM check, booking nudge); `book_meeting` added to `tool_names`; KB `indiamart-reference` attached (top_k 5); variable `prompt_seller` defined | validate `[]`, commit 200 |
 | 2026-10-10 | Playground smoke, Telugu CSD seller (route B, legacy 11-variable prompt with the new sections inside) | Long variables render (~12K chars); hook word for word; objection from the playbook; bot sidestep OK; tool on 6/6 turns; ~2.5 s/turn. **Fails:** Telugu "busy" was not rushed; romanised Telugu read as English. Fixed in `lex-v2` (regional cues for mr/bn/te/ta/kn/ml; Latin = English only with English function words). The fix is not uploaded to the clone yet. |
