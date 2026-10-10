@@ -2,10 +2,10 @@
 
 Endpoint (found 2026-10-10 from the console's "Test agent -> Phone -> Call"): POST
   https://apps.sarvam.ai/api/scheduling/v1/orgs/{org}/workspaces/{ws}/playground-test   (X-API-Key = SARVAM_AGENTS_API_KEY)
-  body {"app_config": {"app_id", "app_version", "user_config": {"app_overrides": {"initial_language_name", "agent_variables"}}},
-        "phone_numbers": ["+91..."]}
+  body {"app_config": {"app_id", "app_version", "user_config": {"app_variables": {...}, "app_overrides": {"initial_language_name"}}},
+        "phone_numbers": ["+91..."]}   (the console's own body)
 Only numbers whitelisted in the workspace can be called (Deploy -> phone numbers). The per-call agent_variables are
-sent in app_overrides; after the call the script checks the interaction's variables to confirm they arrived (else the
+sent in user_config.app_variables (the console's body); after the call the script checks every variable arrived (else the
 version's default variable values were used, and it says so).
 Production calls to sellers need a telephony connection and the Instant Outbound API (outbounds), not this endpoint.
 
@@ -59,10 +59,13 @@ def main():
     v = json.load(open(os.path.join(p.run, "05_sarvam_vars.json"), encoding="utf-8"))
     lang = LANG_NAME.get(str(v.get("persona_language")).upper(), "Hindi")
     since = datetime.now(timezone.utc) - timedelta(seconds=30)
-    # 2026-10-10: agent_variables under user_config.app_overrides did NOT reach the call (the version defaults were used);
-    # also send them at app_config.agent_variables, where the Instant Outbound API takes them, and check again.
-    body = {"app_config": {"app_id": APP, "app_version": p.version, "agent_variables": v,
-                           "user_config": {"app_overrides": {"initial_language_name": lang, "agent_variables": v}}},
+    # The body the console's own "Test agent -> Phone -> Call" sends (read from its code, 2026-10-10):
+    # user_config.app_variables = the variables, user_config.app_overrides = {initial_language_name}.
+    # Earlier we sent app_config.agent_variables / app_overrides.agent_variables: Sarvam ignores both, so phone calls ran
+    # on the version's (empty) defaults. Values are strings, as the console sends them.
+    body = {"app_config": {"app_id": APP, "app_version": p.version,
+                           "user_config": {"app_variables": {k: "" if x is None else str(x) for k, x in v.items()},
+                                           "app_overrides": {"initial_language_name": lang}}},
             "phone_numbers": [p.to]}
     r = requests.post(f"https://apps.sarvam.ai/api/scheduling/v1/orgs/{ORG}/workspaces/{WS}/playground-test",
                       headers={"X-API-Key": KEY, "Content-Type": "application/json"}, json=body, timeout=60)
@@ -75,9 +78,10 @@ def main():
         return
     print("call placed: answer the phone. Waiting for the interaction record ...", flush=True)
     iid, av = find_interaction(since, v.get("decision_id"))
-    arrived = av.get("decision_id") == v.get("decision_id") and av.get("persona_language") == v.get("persona_language")
-    print(json.dumps({"interaction": iid, "per_call_variables_arrived": arrived,
-                      "note": "per-call variables used" if arrived else "the version's default variable values were used"}))
+    diff = [k for k, x in v.items() if str(av.get(k, "")) != ("" if x is None else str(x))]
+    arrived = bool(av) and not diff
+    print(json.dumps({"interaction": iid, "per_call_variables_arrived": arrived, "arrived_equal": len(v) - len(diff),
+                      "of": len(v), "different": diff[:10]}))
     print(f"INTERACTION {iid}")
 
 
