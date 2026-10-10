@@ -122,6 +122,7 @@ launcher, after the agent
 |---|---|---|
 | 2026-10-10 | Redash peer (bash-quoting-testing-analysis), 1st review | Gate bypassable through Bash; hits_rejected noise; over-built logging. Changes in 5a items 1-9. |
 | 2026-10-10 | Redash peer, 2nd review | "Revised plan looks sound." It added items 10 and 11. Waiting for explicit approval of the plan with 10-11. |
+| 2026-10-10 | Redash peer, review of 5d | Not approved yet: number sources, trimming order, adjacency and coverage of names, the year, a leak check before upload. Fixed in 5d item 7. |
 
 ## 6. Questions for you
 
@@ -181,3 +182,15 @@ The problem (phone call 2026-10-10): the seller asked about the hook and about V
    - The peer-name rule: a name with no number is allowed. A name with a number is refused. `{BUYER_COMPANY}` is refused.
    - The fill of the handler tokens.
    - Re-run all the tests in the skill and in `app/`.
+
+7. **Changes after the Redash peer's review (2026-10-10).** These replace items 1-4 where they differ.
+   - **Where the numbers come from.** A number in the seller block must come from `verified_facts` or from a state or trait value in the frozen `01_facts.json`. Dates such as "3 days ago" and counts such as "60 days" therefore pass. The check records the source of each number.
+   - **Trimming.** `compile_vars` cuts the block in a fixed order. First it drops the pointers to the other hooks (the last one first). Then it drops the trait lines. It fails only when the main hook, the states and the handler are longer than 2,500 characters by themselves. It counts the characters after the names and the language are filled in.
+   - **Values only.** The block holds values and a fixed label for each state, for example "open complaint: yes". It never holds free text from the seller (complaint wording, catalogue text). Free text could inject instructions into the voice agent.
+   - **Year of a named seller.** VANI says it only in words, for example "kai saalon se IndiaMART par", and never as a number. The rule "no number about a named seller" therefore has no exception.
+   - **Adjacency.** A spoken unit is one sentence, one call-plan step or one objection response. A unit that holds `{COMPETITOR_n}` holds no number. No aggregate follows it in the same step. An aggregate is always said about the group, for example "aapke sheher ke paid sellers average mein ...". The same rule goes into the prompt, for what VANI says that is not in the script.
+   - **Coverage.** `{COMPETITOR_n}` is refused everywhere: call plan, objections, opening, hook text. The one exception is a step that cites the E08 fact. In that step the adjacency rule applies.
+   - **One switch.** `references/policy.json` holds `peer_naming: on`, the user's decision of 2026-10-10. Set to `off`, it turns the naming of peers (and the word "paid") off, with no code change.
+   - **Leak check before upload.** `deploy.py` scans the pseudonymised seller folder before the upload. It looks for every real name in the laptop's token map, and it uses a regex for email addresses and phone numbers. It refuses the upload if it finds one. After the fetch, every `{TOKEN}` in the outputs must be a token that `compile_vars` knows. An unknown token fails the run and is never spoken.
+   - **Simpler.** The rule "use another hook when the main hook fails" is only one prompt instruction, with no code. The handler detail is only "person" or "pool". The phone handler `{TELE_EXEC}` stays in the map, but the persona does not say it.
+   - **Knowledge base.** It is uploaded by hand, one time. The uploaded file, its sha and the upload date are committed in `outputs/kb/`. They show which KB version a call used.
