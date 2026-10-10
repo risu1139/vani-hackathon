@@ -128,3 +128,14 @@ launcher, after the agent
 1. Do you approve `hierarchy.json` v2-draft-3? The other session waits for this before it changes `prior.py`.
 2. Do you approve the launcher changes in section 3? They remove your Gmail/Drive tools, and the project and user settings, from the agent's run.
 3. Can I start the build in the order of section 5?
+
+## 5c. Start values (user decision 2026-10-10, after the review)
+
+1. A "start_persona" value is deterministic: the selected card's value, changed only by the state rules in `01_facts.json` → `start_rules`. There is no random draw and there are no ad-hoc defaults.
+2. Every card defines `voice_gender` (F, the team default) and `empathy`. `language_start` comes only from the rules.
+3. Rules, in fixed priority (first match wins), each with an id and an evidence grade:
+   - **Voice:** `voice.female_seller` (WEAK), then `voice.tense` (WEAK), then `voice.rural_hindi_belt` (GUESS).
+   - **Language:** `lang.high_value` → English (GUESS), then `lang.regional` (WEAK).
+   - **Empathy additions:** `emp.grievance` (WEAK), `emp.frustrated` (GUESS), `emp.rushed` (GUESS).
+4. A fired rule wins over the card. The persona records the rule ids in `dimensions[field].start_rule_ids`, so learning can report results by rule.
+5. **Known limit (accepted for the demo):** the voice question cannot be learned while every card is F and the rules point only to F. Male outcomes come only from agent decisions with seller evidence.
