@@ -1,8 +1,6 @@
 """Smoke test (2026-10-10): does a compiled per-seller persona drive the Sarvam agent? TEXT sessions only (cheapest).
 
-The clone still has the 11-variable prompt, so the new prompt_* sections are sent through its existing variables:
-persona_style <- persona + style, division_block <- objective (hook), call_plan <- phases,
-verified_facts <- facts, guardrails_extra <- environment + guardrails.
+Sends <run>/05_sarvam_vars.json as agent_variables to the published clone (prompt_* sections, see app/sarvam/RUNBOOK.md).
 
 Checks: long variables render (replies use the hook / facts / objection answers), same-turn switch on a rushed line,
 bot-question sidestep, agent_variables + switch_log read back from analytics.
@@ -34,17 +32,6 @@ SESSIONS = {  # Telugu seller lines; each session at most 3 seller turns
     "S1_hook_objection": ["అవును, చెప్పండి.", "Phone lone cheppandi, meeting enduku?", "సరే, రేపు సాయంత్రం 5 గంటలకు రండి."],
     "S2_rushed_bot": ["ఇప్పుడు బిజీగా ఉన్నాను, త్వరగా చెప్పండి.", "మీరు bot ఆ? మనిషేనా?"],
 }
-
-
-def legacy_vars(v):
-    """Map the new section variables onto the clone's existing 11-variable prompt."""
-    out = {k: x for k, x in v.items() if not k.startswith("prompt_")}
-    out["persona_style"] = v["prompt_persona"] + "\n" + v["prompt_style"]
-    out["division_block"] = v["prompt_objective"]
-    out["call_plan"] = v["prompt_phases"]
-    out["verified_facts"] = v["prompt_facts"]
-    out["guardrails_extra"] = v["prompt_environment"] + "\n" + v["prompt_guardrails"]
-    return out
 
 
 async def session(name, lines, avars):
@@ -112,7 +99,7 @@ def main():
     a.add_argument("--only")
     p = a.parse_args()
     v = json.load(open(os.path.join(p.run, "05_sarvam_vars.json"), encoding="utf-8"))
-    avars = legacy_vars(v)
+    avars = dict(v)
     names = [v.get("seller_name"), v.get("company_name")]
 
     def mask(s):
@@ -137,6 +124,8 @@ def main():
         print("  vars back:", "none" if av is None else f"{sum(1 for k in sent if k in av)}/{len(sent)} present,"
               f" equal={sum(1 for k in sent if str(av.get(k)) == str(sent[k]))}, seller_mode={av.get('seller_mode')}")
         print("  switch_log:", str(av.get("switch_log"))[:600])
+        print("  post-call:", {k: av.get(k) for k in ("call_outcome", "main_objection", "hook_reaction", "persona_fit",
+                                                     "seller_mood_end", "end_language", "meeting_fixed", "meeting_slot")})
     json.dump(out, open(os.path.join(p.run, "smoke_text.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 

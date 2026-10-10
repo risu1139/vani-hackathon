@@ -28,5 +28,70 @@
   "switch_log": "JSON list of rows {t, turn, utt, lang, from, to, cue, directive_id, change, reason, ms}; never shown to the LLM",
   "meeting_fixed": "yes | no (set by book_meeting tool)",
   "meeting_slot": "natural-language slot the seller agreed (set by book_meeting tool)"
+ },
+ "set_after_call_by_sarvam": {
+  "_doc": "Sarvam post-interaction variables (update_post_interaction=true). Cheap per-call labels for the loops; the frontier review (08_review.json) is the judge and may disagree.",
+  "call_outcome": {
+   "one_of": [
+    "meeting_booked",
+    "callback_requested",
+    "not_interested",
+    "opt_out",
+    "wrong_person",
+    "dropped_early",
+    "other"
+   ],
+   "prompt": "How did the call end? meeting_booked only if the seller agreed a day and time."
+  },
+  "main_objection": {
+   "one_of": [
+    "none",
+    "why_meeting_not_phone",
+    "exec_came_before_no_change",
+    "no_enquiries",
+    "profile_already_complete",
+    "lead_quality",
+    "price_or_plan",
+    "busy",
+    "bot_or_trust",
+    "other"
+   ],
+   "prompt": "The seller's main objection, if any."
+  },
+  "hook_reaction": {
+   "one_of": [
+    "positive",
+    "neutral",
+    "negative",
+    "not_reached"
+   ],
+   "prompt": "How did the seller react to the first reason VANI gave for the call (the hook)?"
+  },
+  "persona_fit": {
+   "one_of": [
+    "good",
+    "too_long",
+    "too_formal",
+    "too_casual",
+    "wrong_language",
+    "too_pushy",
+    "too_fast",
+    "other"
+   ],
+   "prompt": "The biggest problem with how VANI spoke to this seller, or good if none."
+  },
+  "seller_mood_end": {
+   "one_of": [
+    "positive",
+    "neutral",
+    "irritated",
+    "angry"
+   ],
+   "prompt": "The seller's mood at the end of the call."
+  },
+  "end_language": {
+   "one_of": [],
+   "prompt": "The language the seller spoke at the end of the call (one word, e.g. Telugu, Hindi)."
+  }
  }
 }

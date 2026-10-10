@@ -75,6 +75,9 @@ def safe(s):
     return re.sub(r"[^A-Za-z0-9._-]+", "_", s)[:120]
 
 
+POST_CALL = ("call_summary", "call_outcome", "main_objection", "hook_reaction", "persona_fit", "seller_mood_end", "end_language")
+
+
 def build(app, item):
     av = item.get("agent_variables") or {}
     iid = item.get("interaction_id", "")
@@ -88,7 +91,9 @@ def build(app, item):
                "meeting_slot": av.get("meeting_slot") or "", "ended_by": item.get("ended_by"),
                "opted_out": av.get("seller_mode") == "opt_out" or any(r.get("to") == "opt_out" for r in log if isinstance(r, dict)),
                "final_seller_mode": av.get("seller_mode"), "meeting_held": None,  # future work (not in the hackathon)
-               "duration_in_seconds": item.get("duration_in_seconds")}
+               "duration_in_seconds": item.get("duration_in_seconds"),
+               # Sarvam post-call labels (contract: set_after_call_by_sarvam); cheap, the frontier review is the judge
+               "sarvam_labels": {k: av.get(k) for k in POST_CALL}}
     return decision_id, call, outcome
 
 
