@@ -139,3 +139,45 @@ launcher, after the agent
    - **Empathy additions:** `emp.grievance` (WEAK), `emp.frustrated` (GUESS), `emp.rushed` (GUESS).
 4. A fired rule wins over the card. The persona records the rule ids in `dimensions[field].start_rule_ids`, so learning can report results by rule.
 5. **Known limit (accepted for the demo):** the voice question cannot be learned while every card is F and the rules point only to F. Male outcomes come only from agent decisions with seller evidence.
+
+## 5d. What VANI knows during the call (user decisions 2026-10-10)
+
+The problem (phone call 2026-10-10): the seller asked about the hook and about VANI, and VANI could not answer. Sarvam got one hook, 3 facts and the phases. It got no states, no traits, no other hooks, no handler and no IndiaMART reference content.
+
+1. **Short seller block.** It is a new per-call variable, `prompt_seller` (`@prompt_seller` in the skeleton, under Facts). `compile_vars` builds it from `01_facts.json` and `04_persona.json` with code. No LLM writes it. The cap is 2,500 characters, and `compile_vars` fails when the block is longer. It holds:
+   - **States:** the value and the "as of" date of each state that has evidence. For example: last call busy, 3 days ago; no executive contact in 60 days; an open complaint.
+   - **Traits:** division, plan, years on IndiaMART, seller type and city tier.
+   - **Main hook:** the main hook (as now) with its details: each cited fact from `facts_for_claim`, in the call's language.
+   - **Other hooks:** each other eligible hook gets one pointer line with its cited fact. VANI uses a pointer only when the seller asks, or after the main hook fails twice.
+   - **Handler:** the handler fact (see item 3).
+
+   Every number in the block comes from `verified_facts`. The validator check on numbers covers this block too.
+2. **Similar sellers by name (user rule, replaces "peers only as aggregates").** VANI may name a nearby seller of the same category: the company name, that it is a paid IndiaMART seller, its city, and since when it has been on IndiaMART. VANI may not give any other detail of that seller: no phone, no person, no catalogue address, no lead data.
+   - The data has no figures (earnings, leads used) for one named competitor. Figures come only from the peer aggregates (E08 local paid-seller count, E11 same-size median leads), and VANI says them as aggregates. It never puts a number on a named seller.
+   - The agent writes the peer fact with the `{COMPETITOR_n}` token and the cite `peers.md#E08`. `compile_vars` fills the name on the laptop only.
+   - The validator rule `OTHER_SELLER` changes. It now allows `{COMPETITOR_n}` in a `verified_facts` line that cites `E08` and holds no number. It still refuses `{BUYER_COMPANY}`, `{COMPETITOR_n_ID}` and `{EXEC_NAME}`.
+   - Who else must do something:
+     - **Data session:** add the paid flag for each competitor (the `custtype` table: `custtype_name` → `paid`).
+     - **Data session:** fix one token leak. One competitor `catalog_url` still holds the plain name.
+3. **Handler (proposal from the data session, accepted).**
+   - A new state `state.handler` with the detail `{sales: person|pool, tele: person|pool|same}`, from `core.md#H02`.
+   - It gives one allowed fact in the call's language: "hamare IndiaMART executive {SALES_EXEC}", or for a pool, "hamari IndiaMART team".
+   - `compile_vars` and `review_call` learn the tokens `{SALES_EXEC}` and `{TELE_EXEC}`.
+   - The prompt rule: when the seller asks who handles the account, VANI uses that fact only. If there is no fact, VANI offers a callback. VANI never says a phone number, an email or a designation, and never says "account manager".
+4. **IndiaMART knowledge base (shared, one for all sellers).** It is one Sarvam KB, "IndiaMART reference", attached to the agent once. It is not changed for each call.
+   - **Contents:** what buy-leads and credits are; how leads are filtered and used; enquiries and PNS calls; the catalogue and profile; what the meeting with the executive is; who VANI is; the plan types without prices.
+   - **Sources:** the files in `raw/` and the hackathon documents. Each section names its source. The file is `outputs/kb/indiamart-reference.md`.
+   - **The KB description tells the agent:** search it for questions about IndiaMART services. Do not search it for this seller's own data (that data is in `prompt_seller`).
+   - **Uploading:** the KB API works only with the console login (our API key gets 401). The upload is done once, in the browser.
+5. **Meeting.** (Done: commit 44b0cab.)
+   - VANI asks for a day and a time.
+   - If the seller gives none, VANI asks once for a time on the next day.
+   - If there is still none, VANI says that an IndiaMART executive will call the seller to set the time.
+   - `book_meeting` refuses a slot outside 9 AM-6 PM.
+   - When the seller says a time, VANI is pushed to call `book_meeting`.
+6. **Tests.**
+   - The cap on `prompt_seller`.
+   - The numbers check on the block.
+   - The peer-name rule: a name with no number is allowed. A name with a number is refused. `{BUYER_COMPANY}` is refused.
+   - The fill of the handler tokens.
+   - Re-run all the tests in the skill and in `app/`.
