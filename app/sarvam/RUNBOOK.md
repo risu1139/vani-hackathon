@@ -92,6 +92,7 @@ Keep it to 2 sessions of at most 4 turns each.
 
 | Date | What | Result |
 |---|---|---|
+| 2026-10-10 | v10 committed via the Voice Agents MCP (agents commit) after a console upload of vani_tools.py 76a682f (Hindi/Marathi shared words). The MCP cannot upload Python tools in this workspace (upload_agent_code = tts only), so tool files stay a console step; config, commit, KB and test calls go through the MCP | scripts default to v10 |
 | 2026-10-10 | v5 committed = template from `build_template.py` (sha match); scripts point at it | per-seller console steps removed |
 | 2026-10-10 | v3 committed: free seller run `e2e-20261010-174118-480222` prompt verbatim (15,699 chars, stored equal); tools re-uploaded (9 AM-6 PM check, booking nudge); `book_meeting` added to `tool_names`; KB `indiamart-reference` attached (top_k 5); variable `prompt_seller` defined | validate `[]`, commit 200 |
 | 2026-10-10 | Playground smoke, Telugu CSD seller (route B, legacy 11-variable prompt with the new sections inside) | Long variables render (~12K chars); hook word for word; objection from the playbook; bot sidestep OK; tool on 6/6 turns; ~2.5 s/turn. **Fails:** Telugu "busy" was not rushed; romanised Telugu read as English. Fixed in `lex-v2` (regional cues for mr/bn/te/ta/kn/ml; Latin = English only with English function words). The fix is not uploaded to the clone yet. |
