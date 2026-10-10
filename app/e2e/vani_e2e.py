@@ -1,6 +1,6 @@
 """vani_e2e.py: ONE command, seller GLID -> persona -> final Sarvam prompt -> live test call -> learning loop.
 
-  python app/e2e/vani_e2e.py --glid <GLID> [--no-call] [--refresh]
+  python app/e2e/vani_e2e.py --glid <GLID> [--phone +91XXXXXXXXXX] [--no-call] [--refresh]
 
 Steps (each prints one line; any failure stops with the reason):
   1. context   laptop: seller_context_builder.py build (cached; --refresh re-fetches the APIs)
@@ -80,6 +80,7 @@ def main():
     a.add_argument("--refresh", action="store_true", help="re-fetch the APIs and queries for the context")
     a.add_argument("--no-call", action="store_true", help="stop after the final prompt (no Sarvam call)")
     a.add_argument("--decision-id")
+    a.add_argument("--phone", help="whitelisted test number: a REAL phone call (place_call.py) instead of the SDK voice session")
     p = a.parse_args()
 
     # 1-2. context + export (laptop)
@@ -138,7 +139,10 @@ def main():
         return
 
     # 8. live voice call on the Sarvam agent, then the learning loops (test mode)
-    rc, out = run([PY, "app/sarvam/voice_smoke.py", "--run", rdir], timeout=600)
+    if p.phone:  # a real phone call to a whitelisted number (Sarvam playground-test API, X-API-Key)
+        rc, out = run([PY, "app/sarvam/place_call.py", "--run", rdir, "--to", p.phone], timeout=900)
+    else:  # an SDK voice session with seller audio in the persona's language
+        rc, out = run([PY, "app/sarvam/voice_smoke.py", "--run", rdir], timeout=600)
     iid = next((ln.split()[-1] for ln in out.splitlines() if ln.startswith("INTERACTION")), None)
     step("call", rc == 0 and iid not in (None, "None"), f"interaction {iid}" if iid else out[-400:])
     for attempt in range(8):  # analytics lists the call (and its post-call labels) some time after it ends
