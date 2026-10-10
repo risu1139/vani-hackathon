@@ -41,3 +41,11 @@ def test_export_strips_catalog_url_everywhere():
     assert "catalog_url" not in E.CATALOG_URL_TEXT.sub("", md) and "a-slug" not in E.CATALOG_URL_TEXT.sub("", md)
     last = '    - {"competitor_company": "A", "catalog_url": "https://x/a-slug/"}'
     assert E.CATALOG_URL_TEXT.sub("", last) == '    - {"competitor_company": "A"}'
+
+
+def test_builder_keeps_only_the_sales_handler():
+    P = {"H02": ({"custtype_name": "CATALOG", "assignedto": 1, "assignedto_name": "A B", "vertical_name": "CSD", "teleassignedto": 2,
+                  "teleassignedto_name": "C D", "tele_vertical": "CSD", "cks_assignedto": 3, "member_since": "Apr-2016"}, "x")}
+    B.keep_sales_handler(P)
+    assert P["H02"][0] == {"custtype_name": "CATALOG", "assignedto_name": "A B", "vertical_name": "CSD", "member_since": "Apr-2016"}
+    B.keep_sales_handler({})

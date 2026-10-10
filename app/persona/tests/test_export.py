@@ -68,7 +68,7 @@ def test_export_replaces_names_and_glid(tmp_path):
     assert "{TELE_EXEC}" not in t and "{EXEC_NAME}" not in t          # same person for sales and tele: one role token
     ctx = json.load(open(os.path.join(out, "context.json"), encoding="utf-8"))
     assert ctx["glid"] == pseudo and ctx["points"]["A01"]["value"] == pseudo
-    assert ctx["points"]["H02"]["value"]["assignedto"] == 42
+    assert "assignedto" not in ctx["points"]["H02"]["value"] and "teleassignedto_name" not in ctx["points"]["H02"]["value"]   # only the sales handler stays
 
 
 def test_map_written_outside_export(tmp_path):
@@ -141,8 +141,20 @@ def test_role_tokens_for_different_handlers(tmp_path):
     for bad in ("Draventi", "Koshal", "Pardesi", "Mehrun", "Orlanda", "Pyke"):
         assert bad.lower() not in t.lower(), bad
     h02 = json.load(open(os.path.join(out, "context.json"), encoding="utf-8"))["points"]["H02"]["value"]
-    assert h02["assignedto_name"] == "{SALES_EXEC}" and h02["teleassignedto_name"] == "{TELE_EXEC}"
+    assert h02["assignedto_name"] == "{SALES_EXEC}" and not any(k.startswith("tele") for k in h02)      # tele handler fields are dropped
     assert "{EXEC_NAME}" in t                                           # other staff keep the generic token
     m = json.load(open(tmp_path / "maps" / f"{pseudo}.json", encoding="utf-8"))["tokens"]
     assert "Draventi Koshal" in m["{SALES_EXEC}"] and "Pardesi Mehrun" in m["{TELE_EXEC}"] and "Orlanda Pyke" in m["{EXEC_NAME}"]
     assert not set(m["{SALES_EXEC}"]) & set(m["{TELE_EXEC}"])
+
+
+def test_tele_handler_and_employee_ids_dropped_from_text(tmp_path):
+    folder = make_context(tmp_path)
+    (folder / "core.md").write_text("### H02 Account managers\n\n- **custtype_name:** CATALOG\n- **assignedto:** 125300\n"
+                                    "- **assignedto_name:** Draventi Koshal\n- **vertical_name:** CSD\n- **teleassignedto:** 115182\n"
+                                    "- **teleassignedto_name:** Pardesi Mehrun\n- **tele_vertical:** CSD\n- **member_since:** Apr-2016\n", encoding="utf-8")
+    pseudo, out, hits = E.export(GLID, str(tmp_path / "contexts"), str(tmp_path / "export"), str(tmp_path / "maps"), key=KEY)
+    core = open(os.path.join(out, "core.md"), encoding="utf-8").read()
+    assert "assignedto_name:** {SALES_EXEC}" in core and "vertical_name:** CSD" in core and "member_since" in core
+    for gone in ("teleassignedto", "tele_vertical", "125300", "115182", "Pardesi", "**assignedto:**"):
+        assert gone not in core, gone

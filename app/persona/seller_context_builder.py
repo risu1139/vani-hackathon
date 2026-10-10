@@ -715,6 +715,19 @@ def custtype_paid_map(refresh=False):
     return _cached(os.path.join(AOV_CACHE, "custtype_paid.json"), q, refresh)
 
 
+HANDLER_DROP = ("assignedto", "teleassignedto", "tele_vertical", "cks_assignedto")
+
+
+def keep_sales_handler(P):
+    """H02: only the SALES handler matters (user decision 2026-10-10: the meeting is always with the sales handler).
+    Drop the tele handler (id, name, vertical) and the employee id numbers; keep assignedto_name and vertical_name."""
+    v = (P.get("H02") or (None,))[0]
+    if isinstance(v, dict):
+        for k in list(v):
+            if k in HANDLER_DROP or k.startswith("teleassignedto") or k.startswith("cks_assignedto"):
+                v.pop(k, None)
+
+
 def tidy_competitors(P, refresh=False):
     """E08 competitors: drop catalog_url (VANI never says URLs and a slug leaks the company name) and add plan = paid | free
     from the competitor's custtype_name (custtype.paid = -1 is paid; user rule 2026-10-10)."""
@@ -1194,6 +1207,7 @@ def build(glid, use_api=True, refresh=False, rebuild=False, as_of=None):
     meta = {"glid": glid, "stratum": "on-demand", "rich_sources_of_8": "-"}
     api = S.fetch(glid, refresh) if use_api else {}
     P = scrub_points(S.build_points(glid, files, api, meta, now))
+    keep_sales_handler(P)
     cat = category_value(P, refresh) if use_api else []
     P["E09"] = (cat, "imdwh mcatpriceapi + mcatetoretail (top MCATs)")
     s_aov = seller_aov(glid, files, refresh, f"_asof{as_of}" if as_of else "") if use_api else None

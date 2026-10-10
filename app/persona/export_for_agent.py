@@ -219,6 +219,18 @@ def _drop_urls(o):
     return o
 
 
+HANDLER_EXTRA_KEYS = re.compile(r"^(assignedto|teleassignedto\w*|tele_vertical|cks_assignedto\w*)$")
+HANDLER_EXTRA_LINES = re.compile(r"(?m)^- \*\*(assignedto|teleassignedto\w*|tele_vertical|cks_assignedto\w*):\*\*.*\n?")
+
+
+def _drop_handler_extras(ctx):
+    """Only the SALES handler matters (user decision 2026-10-10): drop the tele handler and the employee id numbers from H02."""
+    h02 = ((ctx.get("points") or {}).get("H02") or {})
+    if isinstance(h02.get("value"), dict):
+        h02["value"] = {k: v for k, v in h02["value"].items() if not HANDLER_EXTRA_KEYS.match(k)}
+    return ctx
+
+
 CATALOG_URL_TEXT = re.compile(r',?\s*"catalog_url":\s*"[^"]*"')
 
 
@@ -227,7 +239,7 @@ def strip_sources(ctx):
     out = {k: v for k, v in ctx.items() if k not in SOURCE_KEYS}
     out["points"] = {pid: {k: v for k, v in (pt.items() if isinstance(pt, dict) else []) if k != "source"}
                      for pid, pt in (ctx.get("points") or {}).items()}
-    return _drop_urls(_drop_gap(out))
+    return _drop_handler_extras(_drop_urls(_drop_gap(out)))
 
 
 # ---------------------------------------------------------------- gate
@@ -279,7 +291,7 @@ def export(glid, src=None, dst=None, maps=None, key=None):
                     json.dump(replace_json(strip_sources(ctx), fn, glid, pseudo), w, ensure_ascii=False, default=str)
             elif f.endswith(".md"):
                 with open(target, "w", encoding="utf-8") as w:
-                    w.write(CATALOG_URL_TEXT.sub("", re.sub(r"(?m)^- \*\*gap:\*\*.*\n?", "", fn(open(path, encoding="utf-8").read()))))
+                    w.write(HANDLER_EXTRA_LINES.sub("", CATALOG_URL_TEXT.sub("", re.sub(r"(?m)^- \*\*gap:\*\*.*\n?", "", fn(open(path, encoding="utf-8").read())))))
             # any other file type is not exported
     hits = gate(out, glid, names)
     if hits:
