@@ -106,13 +106,16 @@ def main():
     a.add_argument("--run", required=True)
     a.add_argument("--lang", default="auto", help="auto = from persona_language in 05_sarvam_vars.json")
     a.add_argument("--version", type=int, default=TEMPLATE_VERSION)
+    a.add_argument("--switch-to", default="", help="e.g. hi-IN: turn 1 in the persona language, turns 2-3 in this one "
+                                                     "(checks the mid-call language switch)")
     p = a.parse_args()
     avars = json.load(open(os.path.join(p.run, "05_sarvam_vars.json"), encoding="utf-8"))
     if p.lang == "auto":
         p.lang = LANG_CODE.get(str(avars.get("persona_language")).upper(), "hi-IN")
-    audio = [tts(x, p.lang) for x in LINES[p.lang]]
+    plan = [(LINES[p.lang][0], p.lang)] + [(x, p.switch_to or p.lang) for x in LINES[p.switch_to or p.lang][1:]]
+    audio = [tts(x, lg) for x, lg in plan]
     iid, heard = asyncio.run(call(avars, audio, p.version))
-    json.dump({"interaction_id": iid, "heard": heard}, open(os.path.join(p.run, "voice_smoke.json"), "w", encoding="utf-8"),
+    json.dump({"interaction_id": iid, "heard": heard, "seller_lines": [lg for _, lg in plan]}, open(os.path.join(p.run, "voice_smoke.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
     names = [avars.get("seller_name"), avars.get("company_name")]
     for h in heard:

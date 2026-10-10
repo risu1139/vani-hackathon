@@ -2,7 +2,7 @@
  "_doc": "Sarvam agent used by the VANI persona system. No secrets here. Clone of the main agent 'Voice Bot' (Voice-Bot-104c356b-536d, left untouched).",
  "app_id": "VANI-person-b8c173ff-b272",
  "name": "VANI persona demo",
- "version": 5,
+ "version": 6,
  "cloned_from": "Voice-Bot-104c356b-536d",
  "created": "2026-10-10",
  "instructions": "app/sarvam/vani_prompt.md (pasted as Tiptap JSON; 11 @variable mentions)",
@@ -17,6 +17,6 @@
   "per_language_voices": "off (voice/pace/pitch/language come only from OnStart variables)",
   "ui_fallback_when_vars_empty": "Shubh, speed 1.15, pitch 0, Hindi"
  },
- "template_version": 5,
+ "template_version": 6,
  "template_sha256": "5aaf5a71fff9fd3f31f084c405ccfce00ea0e042ebc06dc014a4ef6f347e0aa3"
 }
