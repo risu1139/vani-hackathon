@@ -69,5 +69,7 @@ chown -R daytona:daytona /srv/vani /dev/shm/vani
 chmod 711 /srv/vani /srv/vani/runs /srv/vani/launcher /srv/vani/stubruns
 chmod 700 /srv/vani/scoreboards /dev/shm/vani /dev/shm/vani/sellers
 
+echo "$SHA" > "$DEST/stage.sha256"   # what is installed: vani_e2e.py reinstalls only when the laptop stage differs
+chmod 644 "$DEST/stage.sha256"
 rm -rf "$STAGE"
 echo "installed: $DEST (root-owned); python=$PY; claude=$(/usr/local/bin/claude --version); agent user=$AGENT (no sudo)"

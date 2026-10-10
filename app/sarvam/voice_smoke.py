@@ -27,7 +27,22 @@ sys.path.insert(0, os.path.join(ROOT, "app", "spike"))
 from call_spike import SPEECH_RMS, SR, Line  # noqa: E402  (20 ms PCM "microphone")
 
 APP = "VANI-person-b8c173ff-b272"
-LINES = {"te-IN": ["అవును, చెప్పండి.", "ఫోన్ లోనే చెప్పండి, మీటింగ్ ఎందుకు?", "సరే, రేపు సాయంత్రం ఐదు గంటలకు రండి."]}
+# 3 seller turns per language: yes / "why a meeting, tell me on the phone" / "ok, tomorrow 5 pm" (picked from persona_language)
+LINES = {
+    "te-IN": ["అవును, చెప్పండి.", "ఫోన్ లోనే చెప్పండి, మీటింగ్ ఎందుకు?", "సరే, రేపు సాయంత్రం ఐదు గంటలకు రండి."],
+    "hi-IN": ["हाँ, बोलिए।", "फ़ोन पर ही बता दीजिए, मीटिंग क्यों?", "ठीक है, कल शाम पाँच बजे आ जाइए।"],
+    "gu-IN": ["હા, બોલો.", "ફોન પર જ કહી દો, મીટિંગ કેમ?", "સારું, કાલે સાંજે પાંચ વાગ્યે આવો."],
+    "mr-IN": ["हो, बोला.", "फोनवरच सांगा, मीटिंग कशाला?", "ठीक आहे, उद्या संध्याकाळी पाच वाजता या."],
+    "ta-IN": ["ஆமா, சொல்லுங்க.", "போன்லயே சொல்லுங்க, மீட்டிங் எதுக்கு?", "சரி, நாளைக்கு சாயங்காலம் அஞ்சு மணிக்கு வாங்க."],
+    "kn-IN": ["ಹೌದು, ಹೇಳಿ.", "ಫೋನ್‌ನಲ್ಲೇ ಹೇಳಿ, ಮೀಟಿಂಗ್ ಯಾಕೆ?", "ಸರಿ, ನಾಳೆ ಸಂಜೆ ಐದು ಗಂಟೆಗೆ ಬನ್ನಿ."],
+    "ml-IN": ["അതെ, പറയൂ.", "ഫോണിൽ തന്നെ പറയൂ, മീറ്റിംഗ് എന്തിനാ?", "ശരി, നാളെ വൈകുന്നേരം അഞ്ചു മണിക്ക് വരൂ."],
+    "bn-IN": ["হ্যাঁ, বলুন।", "ফোনেই বলুন, মিটিং কেন?", "ঠিক আছে, কাল সন্ধ্যা পাঁচটায় আসুন।"],
+    "pa-IN": ["ਹਾਂ ਜੀ, ਦੱਸੋ।", "ਫੋਨ 'ਤੇ ਹੀ ਦੱਸ ਦਿਓ, ਮੀਟਿੰਗ ਕਿਉਂ?", "ਠੀਕ ਹੈ, ਕੱਲ੍ਹ ਸ਼ਾਮ ਪੰਜ ਵਜੇ ਆ ਜਾਓ।"],
+    "od-IN": ["ହଁ, କୁହନ୍ତୁ।", "ଫୋନରେ ହିଁ କୁହନ୍ତୁ, ମିଟିଂ କାହିଁକି?", "ଠିକ ଅଛି, କାଲି ସନ୍ଧ୍ୟା ପାଞ୍ଚଟାରେ ଆସନ୍ତୁ।"],
+    "en-IN": ["Yes, tell me.", "Tell me on the phone, why a meeting?", "Okay, come tomorrow evening at five."],
+}
+LANG_CODE = {"TELUGU": "te-IN", "HINDI": "hi-IN", "GUJARATI": "gu-IN", "MARATHI": "mr-IN", "TAMIL": "ta-IN", "KANNADA": "kn-IN",
+             "MALAYALAM": "ml-IN", "BENGALI": "bn-IN", "PUNJABI": "pa-IN", "ODIA": "od-IN", "ENGLISH": "en-IN"}
 
 
 def tts(text, lang):
@@ -86,10 +101,12 @@ async def call(avars, audio, version):
 def main():
     a = argparse.ArgumentParser()
     a.add_argument("--run", required=True)
-    a.add_argument("--lang", default="te-IN")
+    a.add_argument("--lang", default="auto", help="auto = from persona_language in 05_sarvam_vars.json")
     a.add_argument("--version", type=int, default=2)
     p = a.parse_args()
     avars = json.load(open(os.path.join(p.run, "05_sarvam_vars.json"), encoding="utf-8"))
+    if p.lang == "auto":
+        p.lang = LANG_CODE.get(str(avars.get("persona_language")).upper(), "hi-IN")
     audio = [tts(x, p.lang) for x in LINES[p.lang]]
     iid, heard = asyncio.run(call(avars, audio, p.version))
     json.dump({"interaction_id": iid, "heard": heard}, open(os.path.join(p.run, "voice_smoke.json"), "w", encoding="utf-8"),

@@ -79,23 +79,25 @@ def upload_bytes(data, path):
 
 
 def tar_of(entries):
-    """entries: [(local path, arcname)] -> tar.gz bytes (no __pycache__)."""
+    """entries: [(local path, arcname)] -> tar.gz bytes (no __pycache__). Deterministic (sorted names, mtime 0, owner 0,
+    gzip mtime 0), so the same files always give the same sha256 (vani_e2e.py reinstalls only when it changes)."""
+    import gzip
     buf = io.BytesIO()
-    with tarfile.open(fileobj=buf, mode="w:gz") as t:
+    with tarfile.open(fileobj=buf, mode="w") as t:
         for p, arc in entries:
             files = [(p, arc)] if os.path.isfile(p) else [
-                (os.path.join(b, f), arc + "/" + os.path.relpath(os.path.join(b, f), p).replace("\\", "/"))
-                for b, ds, fs in os.walk(p) if "__pycache__" not in b for f in fs if not f.endswith(".pyc")]
-            for src, name in files:  # forward-slash names (Windows os.path.join would put "\" into the archive)
+                (os.path.join(b, fn), arc + "/" + os.path.relpath(os.path.join(b, fn), p).replace("\\", "/"))
+                for b, ds, fs in os.walk(p) if "__pycache__" not in b for fn in fs if not fn.endswith(".pyc")]
+            for src, name in sorted(files, key=lambda x: x[1]):  # forward-slash names (no "\\" from Windows joins)
                 name = name.replace("\\", "/")
+                data = open(src, "rb").read()
                 if src.endswith(".sh"):  # bash rejects CRLF (git on Windows checks out CRLF)
-                    data = open(src, "rb").read().replace(b"\r\n", b"\n")
-                    ti = tarfile.TarInfo(name)
-                    ti.size, ti.mode = len(data), 0o755
-                    t.addfile(ti, io.BytesIO(data))
-                else:
-                    t.add(src, arcname=name, recursive=False)
-    return buf.getvalue()
+                    data = data.replace(b"\r\n", b"\n")
+                ti = tarfile.TarInfo(name)
+                ti.size, ti.mtime, ti.uid, ti.gid = len(data), 0, 0, 0
+                ti.mode = 0o755 if src.endswith(".sh") else 0o644
+                t.addfile(ti, io.BytesIO(data))
+    return gzip.compress(buf.getvalue(), mtime=0)
 
 
 def cmd_stage():
