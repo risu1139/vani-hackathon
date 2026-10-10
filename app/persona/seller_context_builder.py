@@ -326,11 +326,28 @@ def mcat_aov(mcat_ids, refresh=False, days=30):
                           "and a.fk_im_spec_master_desc = 'Probable Order Value' group by 1", REDASH_BL_DS, timeout=150)
             if rows is None:
                 return None
-            b = redash(f"select aov_bucket, aov_bucket_start, aov_bucket_end from im_dwh_rpt.dim_glcat_mcat where glcat_mcat_id={mid}",
-                       REDASH_DWH_DS, timeout=40)
-            return {"window_days": days, "stats": value_stats(rows), "dwh_aov_bucket": (b or [None])[0]}
-        out[str(mid)] = _cached(os.path.join(AOV_CACHE, "mcat", f"{mid}.json"), q, refresh)
+            b = dwh_bucket(mid)
+            return {"window_days": days, "stats": value_stats(rows), "dwh_aov_bucket": b,
+                    "dwh_status": "ok" if b is not None else "unavailable"}
+        path = os.path.join(AOV_CACHE, "mcat", f"{mid}.json")
+        res = _cached(path, q, refresh)
+        # 2026-10-10: the Redshift sources were down (SSL negotiation failed). The band is display-only, so the build goes
+        # on without it; a cached 'unavailable' band is retried on the next build instead of staying empty for good.
+        if isinstance(res, dict) and res.get("dwh_status") == "unavailable":
+            b = dwh_bucket(mid)
+            if b is not None:
+                res.update(dwh_aov_bucket=b, dwh_status="ok")
+                with open(path, "w", encoding="utf-8") as fh:
+                    json.dump(res, fh, ensure_ascii=False)
+        out[str(mid)] = res
     return out
+
+
+def dwh_bucket(mid):
+    """DWH aov_bucket for one MCAT (im_dwh_rpt, Redshift), or None when the warehouse is unreachable. Display-only."""
+    b = redash(f"select aov_bucket, aov_bucket_start, aov_bucket_end from im_dwh_rpt.dim_glcat_mcat where glcat_mcat_id={mid}",
+               REDASH_DWH_DS, timeout=40)
+    return (b or [None])[0]
 
 
 def render_aov(seller, mcats, cat_rows):
