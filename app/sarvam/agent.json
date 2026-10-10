@@ -2,12 +2,21 @@
  "_doc": "Sarvam agent used by the VANI persona system. No secrets here. Clone of the main agent 'Voice Bot' (Voice-Bot-104c356b-536d, left untouched).",
  "app_id": "VANI-person-b8c173ff-b272",
  "name": "VANI persona demo",
- "version": 1,
+ "version": 5,
  "cloned_from": "Voice-Bot-104c356b-536d",
  "created": "2026-10-10",
  "instructions": "app/sarvam/vani_prompt.md (pasted as Tiptap JSON; 11 @variable mentions)",
  "tools": "app/sarvam/vani_tools.py (OnStart, read_seller_signal, book_meeting); Sarvam audit passed",
  "variables": "all 23 in app/contracts/sarvam_vars.contract.json + legacy user_name; switch_log and switch_sensitivity not in context",
- "settings": {"eagerness": "Patient", "switch_language_during_call": true, "auto_detected_language_switch": true,
-              "languages_allowed": 11, "starting_language_default": "Hindi", "per_language_voices": "off (voice/pace/pitch/language come only from OnStart variables)", "ui_fallback_when_vars_empty": "Shubh, speed 1.15, pitch 0, Hindi"}
+ "settings": {
+  "eagerness": "Patient",
+  "switch_language_during_call": true,
+  "auto_detected_language_switch": true,
+  "languages_allowed": 11,
+  "starting_language_default": "Hindi",
+  "per_language_voices": "off (voice/pace/pitch/language come only from OnStart variables)",
+  "ui_fallback_when_vars_empty": "Shubh, speed 1.15, pitch 0, Hindi"
+ },
+ "template_version": 5,
+ "template_sha256": "5aaf5a71fff9fd3f31f084c405ccfce00ea0e042ebc06dc014a4ef6f347e0aa3"
 }

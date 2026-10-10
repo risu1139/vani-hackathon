@@ -45,6 +45,9 @@ LANG_CODE = {"TELUGU": "te-IN", "HINDI": "hi-IN", "GUJARATI": "gu-IN", "MARATHI"
              "MALAYALAM": "ml-IN", "BENGALI": "bn-IN", "PUNJABI": "pa-IN", "ODIA": "od-IN", "ENGLISH": "en-IN"}
 
 
+# the committed template version (build_template.py); every seller arrives as per-call variables
+TEMPLATE_VERSION = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "agent.json"), encoding="utf-8"))["template_version"]
+
 def tts(text, lang):
     r = requests.post("https://api.sarvam.ai/text-to-speech", timeout=60,
                       headers={"api-subscription-key": os.environ["SARVAM_STT_API_KEY"]},
@@ -102,7 +105,7 @@ def main():
     a = argparse.ArgumentParser()
     a.add_argument("--run", required=True)
     a.add_argument("--lang", default="auto", help="auto = from persona_language in 05_sarvam_vars.json")
-    a.add_argument("--version", type=int, default=2)
+    a.add_argument("--version", type=int, default=TEMPLATE_VERSION)
     p = a.parse_args()
     avars = json.load(open(os.path.join(p.run, "05_sarvam_vars.json"), encoding="utf-8"))
     if p.lang == "auto":

@@ -31,6 +31,9 @@ LANG_NAME = {"TELUGU": "Telugu", "HINDI": "Hindi", "GUJARATI": "Gujarati", "MARA
              "ENGLISH": "English"}
 
 
+# the committed template version (build_template.py); every seller arrives as per-call variables
+TEMPLATE_VERSION = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "agent.json"), encoding="utf-8"))["template_version"]
+
 def find_interaction(since, decision_id, wait=600):
     """The interaction started after `since` on this app; (iid, agent_variables) once analytics lists it."""
     t0 = time.time()
@@ -50,7 +53,7 @@ def main():
     a = argparse.ArgumentParser()
     a.add_argument("--run", required=True)
     a.add_argument("--to", required=True, help="whitelisted test number, e.g. +91XXXXXXXXXX")
-    a.add_argument("--version", type=int, default=3)
+    a.add_argument("--version", type=int, default=TEMPLATE_VERSION)
     a.add_argument("--no-wait", action="store_true", help="do not wait for the interaction record")
     p = a.parse_args()
     v = json.load(open(os.path.join(p.run, "05_sarvam_vars.json"), encoding="utf-8"))

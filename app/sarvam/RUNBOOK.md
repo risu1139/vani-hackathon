@@ -40,7 +40,7 @@ To recompile after a code change, without running the agent again:
 | Tools | `app/sarvam/vani_tools.py` | console tool upload (passes Sarvam's code audit) |
 | Settings | `app/sarvam/agent.json` (`settings`) | Eagerness = Patient; language switching on; per-language voices off |
 
-Status (2026-10-10): the clone `VANI-person-b8c173ff-b272` still has the 11-variable prompt and the `lex-v1` tools. It is a **draft** (not published).
+Status (2026-10-10): **v5 is the template** (committed). Built by `python app/sarvam/build_template.py` (skeleton slots, all contract variables with empty defaults, tools `read_seller_signal` + `book_meeting`); the stored instructions match the file's sha256 (recorded in `agent.json` → `template_sha256`). `place_call.py` and `voice_smoke.py` default to `agent.json` → `template_version`. **Per seller nothing is done in the console**: `vani_e2e.py --glid <G> --phone <number>` sends the seller's sections and voice as per-call variables; OnStart applies them. A console test-panel call has empty variables (no seller), by design.
 
 **Why not the SDK:** `sarvam-conv-ai-sdk` (1.1.1, the latest) is runtime only: conversations, variables, tool classes. It has no create, update, upload or publish calls.
 
@@ -92,5 +92,6 @@ Keep it to 2 sessions of at most 4 turns each.
 
 | Date | What | Result |
 |---|---|---|
+| 2026-10-10 | v5 committed = template from `build_template.py` (sha match); scripts point at it | per-seller console steps removed |
 | 2026-10-10 | v3 committed: free seller run `e2e-20261010-174118-480222` prompt verbatim (15,699 chars, stored equal); tools re-uploaded (9 AM-6 PM check, booking nudge); `book_meeting` added to `tool_names`; KB `indiamart-reference` attached (top_k 5); variable `prompt_seller` defined | validate `[]`, commit 200 |
 | 2026-10-10 | Playground smoke, Telugu CSD seller (route B, legacy 11-variable prompt with the new sections inside) | Long variables render (~12K chars); hook word for word; objection from the playbook; bot sidestep OK; tool on 6/6 turns; ~2.5 s/turn. **Fails:** Telugu "busy" was not rushed; romanised Telugu read as English. Fixed in `lex-v2` (regional cues for mr/bn/te/ta/kn/ml; Latin = English only with English function words). The fix is not uploaded to the clone yet. |
