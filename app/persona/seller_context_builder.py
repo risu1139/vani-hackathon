@@ -316,9 +316,14 @@ def mcat_aov(mcat_ids, refresh=False, days=30):
     out = {}
     for mid in [m for m in mcat_ids if str(m).isdigit()]:
         def q(mid=mid):
-            rows = redash("select fk_im_spec_options_desc v, count(*) n from eto_attribute where date(eto_attribute_mod_date) >= "
-                          f"current_date - {days} and eto_attribute_mcat_id={mid} and fk_im_spec_master_desc='Probable Order Value' "
-                          "group by 1", REDASH_BL_DS, timeout=150)
+            # leads approved in the last `days` days in this MCAT (live + expired, both indexed on the MCAT), then their
+            # 'Probable Order Value' through the (display_id, master_desc) index. 2026-10-10: the old filter on
+            # eto_attribute_mcat_id (no index) scanned 30 days of all attributes and hit the statement timeout; this runs in ~0.03 s.
+            rows = redash("select a.fk_im_spec_options_desc v, count(*) n from ("
+                          f"select eto_ofr_display_id id from eto_ofr where fk_glcat_mcat_id={mid} and eto_ofr_approv_date_orig >= current_date - {days} "
+                          f"union select eto_ofr_display_id from eto_ofr_expired where fk_glcat_mcat_id={mid} "
+                          f"and eto_ofr_approv_date_orig >= current_date - {days}) l join eto_attribute a on a.fk_eto_ofr_display_id = l.id "
+                          "and a.fk_im_spec_master_desc = 'Probable Order Value' group by 1", REDASH_BL_DS, timeout=150)
             if rows is None:
                 return None
             b = redash(f"select aov_bucket, aov_bucket_start, aov_bucket_end from im_dwh_rpt.dim_glcat_mcat where glcat_mcat_id={mid}",
