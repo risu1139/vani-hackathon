@@ -134,8 +134,8 @@ def _ctx(**vals):
                              engagement_metadata={"interaction_id": "x", "app_id": "a", "app_version": 1})
 
 
-def _say(ctx, utt):
-    out = asyncio.run(vt.ReadSellerSignal(seller_utterance=utt, language="hindi").run(ctx))
+def _say(ctx, utt, lang="hindi"):
+    out = asyncio.run(vt.ReadSellerSignal(seller_utterance=utt, language=lang).run(ctx))
     return out, json.loads(ctx.agent_variables["switch_log"])[-1]
 
 
@@ -248,3 +248,17 @@ def test_time_named_nudges_booking():
     assert "book_meeting" in out.message_to_llm and "book_meeting nudge" in row["reason"]
     out, row = _say(ctx, "mere 5 credits bache hain")
     assert "book_meeting" not in out.message_to_llm
+
+
+def test_hindi_after_marathi_start_switches():
+    """2026-10-10 call: Marathi start, seller asked in Hindi; same script, so the old check missed it."""
+    assert vt.deva_lang("आप कोण बोल रहे हो?") == "Hindi"
+    assert vt.deva_lang("तुम्ही कोण बोलता आहात?") == "Marathi"
+    assert vt.deva_lang("हॅलो.", "marathi") == "Marathi"
+    ctx = _ctx(persona_language="MARATHI")
+    out, row = _say(ctx, "हॅलो.", "marathi")
+    assert "Hindi" not in out.message_to_llm
+    out, row = _say(ctx, "आप कौन बोल रहे हो? मुझे हिंदी में बात करनी है")
+    assert "Hindi" in out.message_to_llm and "Marathi->" not in row["reason"]
+    out, row = _say(ctx, "हाँ बताइए क्या बात है")
+    assert "Reply in Hindi" not in out.message_to_llm or row["to"] == "language_switch"  # already Hindi: no second switch

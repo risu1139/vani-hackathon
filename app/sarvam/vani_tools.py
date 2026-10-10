@@ -302,6 +302,26 @@ LANG_SCRIPT = {"Hindi": "deva", "Marathi": "deva", "Konkani": "deva", "Bengali":
                "Kannada": "knda", "Malayalam": "mlym", "English": "latn"}
 
 
+# Hindi and Marathi share Devanagari: tell them apart by common words (2026-10-10 call: a Hindi turn after a Marathi
+# start was not switched because only the script was compared)
+_HI_WORDS = set("है हैं हो हूँ हूं क्या आप नहीं मुझे मैं रहे रहा रही कौन कहाँ कहां था थी में यह वह हम तुम कैसे क्यों अभी बात "
+                "hai hain kya aap nahi nahin mujhe main rahe raha kaun kahan tha thi yeh hum kaise kyun abhi baat".split())
+_MR_WORDS = set("आहे आहात आहेत आहोत काय तुम्ही नाही मला मी कोण कोणती कोणत्या बोलता बोलतोय बोलते आपण होय करता कसं कशी "
+                "का तुमच्याकडे आता आम्ही ahe aahe ahat kay tumhi nahi mala mi kon kasa".split())
+
+
+def deva_lang(text, hint=""):
+    """'Hindi' / 'Marathi' for a Devanagari (or romanised) turn by common words; the LLM's language hint breaks a tie."""
+    w = re.findall(r"[\wऀ-ॿ]+", (text or "").lower())
+    hi, mr = sum(x in _HI_WORDS for x in w), sum(x in _MR_WORDS for x in w)
+    if hi > mr:
+        return "Hindi"
+    if mr > hi:
+        return "Marathi"
+    h = (hint or "").strip().lower()
+    return {"hindi": "Hindi", "marathi": "Marathi"}.get(h, "")
+
+
 # English function words: a Latin-script turn is English only if it uses them (romanised Telugu / Hindi is not English)
 _EN_FUNC = set("the a an is are am was i you we it this that what why how when where can could will would do does did "
                "not please to of in on for with my your me and or but be have has there here now just so if".split())
@@ -492,6 +512,18 @@ class ReadSellerSignal(SarvamTool):
         if script not in ("none", ""):
             context.set_internal_variable("last_script", script)
         new_lang = SCRIPT_LANG.get(script, "") if lang_switch else ""
+        if script == "deva":  # same script, maybe another language (Hindi <-> Marathi)
+            start = language_enum(_var(context, "persona_language"))
+            cur = _ivar(context, "last_lang") or (start.value if start is not None and LANG_SCRIPT.get(start.value) == "deva" else "")
+            heard = deva_lang(utt, self.language)
+            if heard and cur and heard != cur:
+                lang_switch, new_lang = True, heard
+            elif lang_switch and heard:
+                new_lang = heard  # switched into Devanagari: Marathi is possible, not only Hindi
+            if heard:
+                context.set_internal_variable("last_lang", heard if (lang_switch or not cur) else cur)
+        elif new_lang:
+            context.set_internal_variable("last_lang", new_lang)
         lang_set = ""
         if lang_switch:
             target = language_enum(new_lang)
