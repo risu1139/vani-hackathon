@@ -194,3 +194,13 @@ def test_ranking_more_terms_first(tmp_path, monkeypatch):
     spec = F.HIERARCHY["fields"]["pace"]
     hits = PT.search(str(run / "seller"), spec, F.TODAY)
     assert hits[0]["score"] == 2  # the line with 2 distinct terms is ranked first
+
+
+def test_start_value_precedence_rule_beats_card():
+    """Review: card says M, a state rule says F -> F, in the one function both the tool and the validator use."""
+    import persona_tool as PT
+    facts = {"start_rules": {"voice_gender": {"value": "F", "rule": "tense seller"}, "language_start": None, "empathy_add": []}}
+    assert PT.start_value("voice_gender", {"voice_gender": "M"}, facts) == "F"
+    assert PT.start_value("voice_gender", {"voice_gender": "M"}, {"start_rules": {"voice_gender": None}}) == "M"
+    assert PT.start_value("empathy", {"empathy": "warm"}, {"start_rules": {"empathy_add": [{"text": "acknowledge the complaint"}]}}) \
+        == "warm; acknowledge the complaint"

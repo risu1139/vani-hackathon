@@ -234,7 +234,9 @@ def search(folder, spec, as_of):
 def start_value(field, card, facts_doc):
     """The value a start_persona decision must keep: the selected card's value, changed only by the deterministic
     state rules in 01_facts.json start_rules (user decision 2026-10-10: no random draw, no ad-hoc defaults).
-    voice_gender = rule if one fired, else the card; language_start = the rule; empathy = the card + rule additions."""
+    PRECEDENCE: a fired state rule wins over the card (the rule is about this seller; the card is generic).
+    voice_gender = rule if one fired, else the card; language_start = the rule; empathy = the card + rule additions.
+    The validator calls this same function, so both places apply the same precedence."""
     r = (facts_doc or {}).get("start_rules") or {}
     card = card or {}
     if field == "voice_gender":

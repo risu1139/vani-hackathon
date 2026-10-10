@@ -356,6 +356,16 @@ def build(ctx, today):
             "start_rules": start_rules(T, S, G)}
 
 
+def pick(rules):
+    """First matching rule wins (the list order IS the priority). Returns {value, rule, evidence, priority, matched}."""
+    matched = [r for r in rules if r[0]]
+    if not matched:
+        return None
+    _, value, rule, evidence = matched[0]
+    return {"value": value, "rule": rule, "evidence": evidence, "priority": [r[2] for r in rules],
+            "matched": [r[2] for r in matched]}
+
+
 LANG_NAME = {"hi": "HINDI", "gu": "GUJARATI", "mr": "MARATHI", "ta": "TAMIL", "kn": "KANNADA", "ml": "MALAYALAM", "te": "TELUGU",
              "bn": "BENGALI", "or": "ODIA", "pa": "PUNJABI", "as": "HINDI"}
 
@@ -372,19 +382,19 @@ def start_rules(T, S, G):
     grievance = val("state.open_grievance") == "yes"
     tense = grievance or (mood.get("frustrated") or 0) >= 0.5
     rural_hb = bool(det("trait.city_tier").get("rural_proxy") and det("trait.city_tier").get("hindi_belt"))
-    voice = None
-    if val("trait.seller_gender") == "F":
-        voice = {"value": "F", "rule": "seller is female (recorded or name guess): female voice", "evidence": ["trait.seller_gender"]}
-    elif tense:
-        voice = {"value": "F", "rule": "tense seller (frustrated on calls or open grievance): female voice", "evidence": ["state.call_mood", "state.open_grievance"]}
-    elif rural_hb:
-        voice = {"value": "F", "rule": "rural Hindi-belt seller: female voice", "evidence": ["trait.city_tier"]}
+    # Fixed priority (first match wins; never dict order). Every match is recorded so the persona's reason can cite it.
+    voice_rules = [
+        (val("trait.seller_gender") == "F", "F", "seller is female (recorded or name guess): female voice", ["trait.seller_gender"]),
+        (tense, "F", "tense seller (frustrated on calls or open grievance): female voice", ["state.call_mood", "state.open_grievance"]),
+        (rural_hb, "F", "rural Hindi-belt seller: female voice", ["trait.city_tier"]),
+    ]
+    voice = pick(voice_rules)
     lang = val("trait.language") or {}
-    if val("trait.high_value"):
-        language = {"value": "ENGLISH", "rule": "high-value seller (5 Cr+ or high AOV): English with light Hindi", "evidence": ["trait.high_value"]}
-    else:
-        code = (lang.get("regional") if isinstance(lang, dict) else None) or "hi"
-        language = {"value": LANG_NAME.get(code, "HINDI"), "rule": f"regional language of the seller's state ({code})", "evidence": ["trait.language"]}
+    code = (lang.get("regional") if isinstance(lang, dict) else None) or "hi"
+    language = pick([
+        (bool(val("trait.high_value")), "ENGLISH", "high-value seller (5 Cr+ or high AOV): English with light Hindi", ["trait.high_value"]),
+        (True, LANG_NAME.get(code, "HINDI"), f"regional language of the seller's state ({code})", ["trait.language"]),
+    ])
     adds = []
     if grievance:
         adds.append({"text": "acknowledge the open complaint first, in one sentence", "rule": "state.open_grievance = yes"})

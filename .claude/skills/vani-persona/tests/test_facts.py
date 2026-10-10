@@ -184,3 +184,13 @@ def test_start_rules_language():
     assert out["start_rules"]["language_start"]["value"] == "TELUGU"
     out, _ = run({"C02": {"annual_turnover": "5 - 25 Cr"}, "B01": {"seller_state": "Telangana"}})
     assert out["start_rules"]["language_start"]["value"] == "ENGLISH"
+
+
+def test_start_rules_priority_is_fixed_and_recorded():
+    """Review: tense AND female both match -> the first in the fixed priority wins; all matches are recorded."""
+    out, _ = run({"A07": {"glusr_usr_gender": "Female"}, "I01": {"cmplnts_cnt": 2, "closed_cmplnts": 1}})
+    v = out["start_rules"]["voice_gender"]
+    assert v["rule"].startswith("seller is female") and len(v["matched"]) == 2 and v["priority"][0] == v["matched"][0]
+    out, _ = run({"C02": {"annual_turnover": "5 - 25 Cr"}, "B01": {"seller_state": "Telangana"}})
+    lg = out["start_rules"]["language_start"]
+    assert lg["value"] == "ENGLISH" and len(lg["matched"]) == 2  # high value beats the regional rule
