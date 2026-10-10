@@ -58,7 +58,7 @@ Names are tokens (`{SELLER_NAME}`, `{COMPANY}`). Keep the tokens in your text.
    - `verified_facts`: the only numbers VANI may say;
    - `personalisation`, `switch_sensitivity`, `guards_ack`, `overall_confidence`, `completeness`.
    - Rules: first-person verbs match the voice gender ("kar rahi hoon" for F). Never say AI, bot, branch manager, account manager or "personally". Never name a buyer.
-   - Address the seller by **name only**: no honorific (ji, garu, avare, saheb, sir) in any language. An honorific changes meaning between languages; the validator refuses it.
+   - Address the seller by name with the polite form of the language of that sentence ('ji' Hindi, 'garu' Telugu, 'avare' Kannada), not in every sentence. Never 'ji' inside Telugu, Tamil, Kannada text; the validator refuses a wrong-language honorific.
 7. **`finalize`.** It joins your decisions and the text, runs the full validator, and writes `02_review.json` + `04_persona.json`. If it refuses, fix the listed items with the tool and run `finalize` again. Then stop.
 
 ## Rules that never change

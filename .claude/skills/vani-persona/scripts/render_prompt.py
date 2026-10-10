@@ -35,7 +35,7 @@ LANG_NAME = {"HINDI": "Hindi", "GUJARATI": "Gujarati", "MARATHI": "Marathi", "TA
              "ENGLISH": "English"}
 FORMALITY = {"low": "friendly and informal, still respectful",
              "medium": "polite and direct",
-             "high": "formal and respectful; use 'aap' and full polite verb forms (no honorific words)"}
+             "high": "formal and respectful; use 'aap' and full polite verb forms"}
 WARMTH = {"medium": "calm and pleasant", "high": "warm and caring; sound genuinely glad to help"}
 SOPH = {"simple": "very simple everyday words, no jargon, no English business terms unless the seller uses them",
         "practical": "practical, everyday business words",
@@ -99,7 +99,7 @@ def sections(p):
     ])
     env = "\n".join([
         "Channel: outbound phone call to a seller on IndiaMART.",
-        "Seller: @seller_name of @company_name, @city. Address the seller by name only, with no honorific (no ji, garu, avare, saheb, sir): an honorific changes meaning between languages. Say the company name at most once.",
+        "Seller: @seller_name of @company_name, @city. Address the seller by name with the polite form of the language you are speaking now (for example 'ji' in Hindi, 'garu' in Telugu, 'avare' in Kannada), in the greeting and now and then, not in every sentence. When the language changes, change the polite form too: never carry 'ji' into Telugu, Tamil, Kannada or another language. Say the company name at most once.",
         "What you know about this seller (use it, never read it out as a list):",
         lines(x.get("what") for x in p.get("personalisation") or []),
         "Situation to respect:" if p.get("guards_ack") else "",

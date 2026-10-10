@@ -194,3 +194,10 @@ def test_compile_refuses_unvalidated_and_fills(tmp_path):
                  "# Conversation Guidelines", "# Guardrails", "# Date resolution"):
         assert head in text
     assert "@prompt_" not in text and "@identity_line" not in text
+
+
+def test_honorific_must_match_sentence_language():
+    assert V.wrong_honorific("నమస్కారం Mohammad గారు!") is None
+    assert V.wrong_honorific("Namaste Mohammad ji, do minute hain?") is None
+    assert V.wrong_honorific("నమస్కారం Mohammad ji!") == "ji"
+    assert V.wrong_honorific("ನಮಸ್ಕಾರ Ravi garu") == "garu"
