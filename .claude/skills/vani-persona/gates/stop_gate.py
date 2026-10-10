@@ -12,7 +12,8 @@ import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TOOL = os.path.join(HERE, "..", "scripts", "persona_tool.py")
+SKILL = os.path.abspath(os.path.join(HERE, ".."))
+TOOL = os.path.join(SKILL, "scripts", "persona_tool.py")
 
 
 def sha(p):
@@ -44,7 +45,7 @@ def failures(run):
     out = []
     if sha(p04) != fin.get("sha04") or sha(p02) != fin.get("sha02"):
         out.append(f"04_persona.json / 02_review.json changed after finalize. Run {fix} finalize again (never edit them by hand)")
-    r = subprocess.run([sys.executable, os.path.join(HERE, "..", "scripts", "validate_persona.py"), "--folder", turn["folder"],
+    r = subprocess.run([sys.executable, os.path.join(SKILL, "scripts", "validate_persona.py"), "--folder", turn["folder"],
                         "--run", run], capture_output=True, text=True, encoding="utf-8")
     if r.returncode != 0:
         out += [ln[2:] for ln in r.stdout.splitlines() if ln.startswith("- ")] or [r.stdout[-500:] or r.stderr[-500:]]

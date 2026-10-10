@@ -23,7 +23,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import hierarchy as H  # noqa: E402
 
-LIB = os.path.join(HERE, "..", "references", "persona_library.json")
+LIB = os.path.abspath(os.path.join(HERE, "..", "references", "persona_library.json"))
 HIER = H.load()
 KAPPA = HIER["kappa"]
 HOLDOUT = HIER["holdout"]["share"]

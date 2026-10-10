@@ -11,4 +11,4 @@ Small on purpose. Everything task-specific lives in the `vani-persona` skill (it
   - VANI never says AI, bot, branch manager, account manager or "personally". If asked: sidestep once, then "virtual assistant". Never claim to be human.
   - Numbers VANI says come only from `verified_facts`. Never name a buyer. First-person verbs match the voice gender.
 - Data is pseudonymised (`{SELLER_NAME}`, `{COMPANY}`). Keep the tokens. No other data, no internet.
-- Run Python as `"$VANI_PY"` with absolute paths.
+- Always absolute paths: `"$VANI_PY" "$VANI_SKILL/scripts/persona_tool.py" ...`, files under `$VANI_RUN/`.

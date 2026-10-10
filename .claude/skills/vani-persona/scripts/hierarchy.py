@@ -13,7 +13,7 @@ import os
 import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-HIER = os.path.join(HERE, "..", "references", "hierarchy.json")
+HIER = os.path.abspath(os.path.join(HERE, "..", "references", "hierarchy.json"))
 UNKNOWN = (None, "", "unknown", "None")
 
 

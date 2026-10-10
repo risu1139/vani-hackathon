@@ -119,7 +119,7 @@ def selftest(skill, sfile, mcp, ldir):
         if os.path.exists(os.path.join(st, f)):
             os.remove(os.path.join(st, f))
     json.dump({"decision_id": "selftest", "folder": st, "run": st, "selftest": True}, open(os.path.join(st, "turn.json"), "w", encoding="utf-8"))
-    env = dict(os.environ, VANI_RUN=st, VANI_PY=PY, PYTHONIOENCODING="utf-8")
+    env = dict(os.environ, VANI_RUN=st, VANI_PY=PY, VANI_SKILL=skill, VANI_REPO=ROOT, PYTHONIOENCODING="utf-8")
     prompt = f"Self-test. Use the Write tool to create {os.path.join(st, '04_persona.json')} with the text {{}}. Then reply DONE and stop."
     args = base_args(skill, sfile, mcp, SELFTEST_MODEL, st, 4)
     args.insert(1, prompt)
@@ -177,7 +177,7 @@ def main():
         shutil.copy(os.path.join(seller, "facts.json"), os.path.join(run, "01_facts.json"))
         shutil.copy(os.path.join(seller, "prior.json"), os.path.join(run, "03_prior.json"))
         shas = {"01": fsha(os.path.join(run, "01_facts.json")), "03": fsha(os.path.join(run, "03_prior.json")), "seller": tree_sha(seller)}
-        json.dump({"decision_id": did, "folder": seller, "run": run, "as_of": datetime.date.today().isoformat(), "py": PY,
+        json.dump({"decision_id": did, "folder": os.path.abspath(seller), "run": run, "as_of": datetime.date.today().isoformat(), "py": PY,
                    "skill": skill}, open(os.path.join(run, "turn.json"), "w", encoding="utf-8"), indent=1)
         facts = json.load(open(os.path.join(run, "01_facts.json"), encoding="utf-8"))
         # 4. settings + CLI version
@@ -194,7 +194,7 @@ def main():
             return
         status["selftest"] = "pass"
         # 6. the turn
-        env = dict(os.environ, VANI_RUN=run, VANI_PY=PY, PYTHONIOENCODING="utf-8")
+        env = dict(os.environ, VANI_RUN=run, VANI_PY=PY, VANI_SKILL=skill, VANI_REPO=ROOT, PYTHONIOENCODING="utf-8")
         tool = os.path.join(skill, "scripts", "persona_tool.py")
         prompt = (f"Use the vani-persona skill: read {os.path.join(skill, 'SKILL.md')} first and follow its steps exactly. "
                   f"Run directory ($VANI_RUN): {run}. Seller folder: {seller}. "

@@ -29,7 +29,7 @@ def main():
         return 0
     p, r = canon(path), canon(run)
     name = os.path.basename(p)
-    tool = f"\"$VANI_PY\" {canon(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'scripts', 'persona_tool.py'))}"
+    tool = f"\"$VANI_PY\" {canon(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scripts', 'persona_tool.py'))}"
     if os.path.dirname(p) == r and name in ALLOWED:
         return 0
     if name in TOOL_ONLY:

@@ -31,7 +31,7 @@ import time
 import unicodedata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-REF = os.path.join(HERE, "..", "references")
+REF = os.path.abspath(os.path.join(HERE, "..", "references"))
 CALL_DAYS = 90
 SPECIAL = {"hook", "opening"}            # hook: the hook command; opening: the text file
 TEXT_KEYS = {"personalisation", "hook", "opening", "identity_line", "call_plan", "objection_playbook", "escalation_rules",

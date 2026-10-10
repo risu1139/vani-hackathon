@@ -18,7 +18,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import render_prompt as R  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-REF = os.path.join(HERE, "..", "references")
+REF = os.path.abspath(os.path.join(HERE, "..", "references"))
 VOICES = {  # proven in the 2026-10-09 OnStart spike; all Bulbul v4 voices speak 12 languages
     "F": {"id": "01a0cf16-90ae-7470-941d-2c1f17b37528", "name": "Aarti"},
     "M": {"id": "01a0e8fc-8a76-72d3-ae24-89b4688928eb", "name": "Anand"},
