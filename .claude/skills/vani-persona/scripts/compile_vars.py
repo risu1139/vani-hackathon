@@ -102,12 +102,13 @@ def compile_vars(run, names=None, city=None):
             text = text.replace("@" + name, inner[name] or ("the seller" if name == "seller_name" else "their company" if name == "company_name" else ""))
         sec[k] = fill(text, names)
     out = {**base, **sec}
-    contract = json.load(open(os.path.join(HERE, "..", "..", "..", "..", "app", "contracts", "sarvam_vars.contract.json"), encoding="utf-8")) \
-        if os.path.exists(os.path.join(HERE, "..", "..", "..", "..", "app", "contracts", "sarvam_vars.contract.json")) else None
-    if contract:
-        missing = [k for k in contract["set_before_call"] if k not in out]
-        if missing:
-            raise SystemExit(f"REFUSED: contract variables missing {missing}")
+    cpath = os.path.join(R.REPO, "app", "contracts", "sarvam_vars.contract.json")
+    if not os.path.exists(cpath):  # fail closed: never send variables that were not checked against the contract
+        raise SystemExit(f"REFUSED: contract not found at {cpath} (the launcher sets VANI_REPO)")
+    contract = json.load(open(cpath, encoding="utf-8"))
+    missing = [k for k in contract["set_before_call"] if k not in out]
+    if missing:
+        raise SystemExit(f"REFUSED: contract variables missing {missing}")
     left = [k for k, x in out.items() if isinstance(x, str) and re.search(r"\{[A-Z_]+\}", x)]
     if left and names is not None:
         raise SystemExit(f"REFUSED: unfilled name tokens in {left}")
