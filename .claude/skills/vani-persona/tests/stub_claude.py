@@ -69,10 +69,10 @@ def good_flow(run):
             tool("probe", "--hook", hid)
         tool("hook", "--id", hid, "--decision", "rejected", "--reason", "stub")
     text = {"personalisation": [], "hook": {"id": None, "claim": "", "fact_ids": [], "backup": None},
-            "opening": "Namaste ji, main IndiaMART se baat kar rahi hoon. Do minute milenge?",
+            "opening": "Namaste {SELLER_NAME}, main IndiaMART se baat kar rahi hoon. Do minute milenge?",
             "identity_line": "Main IndiaMART se baat kar rahi hoon, aapke profile ke liye call kiya hai.",
-            "call_plan": [{"step": 1, "goal": "ask", "say": "Kya kal milna theek rahega ji?", "basis": {"type": "persona", "ref": "words_per_turn"}}],
-            "objection_playbook": [{"objection": "busy", "response": "Ji, kab call karun?", "basis": {"type": "division", "ref": "O1"}}],
+            "call_plan": [{"step": 1, "goal": "ask", "say": "Kya kal milna theek rahega?", "basis": {"type": "persona", "ref": "words_per_turn"}}],
+            "objection_playbook": [{"objection": "busy", "response": "Theek hai, kab call karun?", "basis": {"type": "division", "ref": "O1"}}],
             "escalation_rules": ["opt-out: end"], "guardrails": ["never volunteer AI"], "verified_facts": [],
             "switch_sensitivity": {"rushed": "high"},
             "guards_ack": [{"guard": g, "action": "stub", "cites": []} for g in facts.get("true_guards", [])],

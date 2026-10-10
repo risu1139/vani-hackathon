@@ -48,6 +48,8 @@ BANNED = re.compile(r"\b(AI|A\.I\.|artificial intelligence|bot|robot|chatbot|bra
 MASC = re.compile(r"(raha hoon|rahaa hoon|karta hoon|bol raha|aaya hoon|gaya hoon|sakta hoon|रहा हूँ|रहा हूं|करता हूँ|करता हूं|सकता हूँ|सकता हूं|बोल रहा)", re.I)
 FEM = re.compile(r"(rahi hoon|karti hoon|bol rahi|aayi hoon|gayi hoon|sakti hoon|रही हूँ|रही हूं|करती हूँ|करती हूं|सकती हूँ|सकती हूं|बोल रही)", re.I)
 NUM = re.compile(r"(?<![\w.])\d[\d,]*(?:\.\d+)?")
+# user decision 2026-10-10: the seller is addressed by name only; an honorific changes meaning between languages
+HONORIFIC = re.compile(r"(?<![A-Za-z])(ji|jee|garu|gaaru|avare|saheb|sahab)(?![A-Za-z])|जी|गारु|గారు|ಅವರೇ|ಅವರೆ|ಸಾರ್|சார்|साहब|ਜੀ", re.I)
 AMEND_MENU = {"pace_up", "pace_down", "pitch_up", "pitch_down", "more_formal", "less_formal", "warmer", "briefer", "longer",
               "language_switch", "code_mix_more", "code_mix_less", "simpler", "more_numbers", "voice_gender_flip", "hook_swap"}
 
@@ -394,6 +396,8 @@ def validate(folder, run):
     g = (dims.get("voice_gender") or {}).get("value")
     g = {"female": "F", "male": "M"}.get(str(g).lower(), g)
     for where, t in spoken(persona):
+        if h and HONORIFIC.search(t):
+            fails.append(f"{where}: honorific '{HONORIFIC.search(t).group(0)}': address the seller by name only")
         if BANNED.search(t):
             fails.append(f"{where}: banned word '{BANNED.search(t).group(0)}' (identity rule)")
         if g == "F" and MASC.search(t):

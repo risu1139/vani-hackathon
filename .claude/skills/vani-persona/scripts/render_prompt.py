@@ -35,7 +35,7 @@ LANG_NAME = {"HINDI": "Hindi", "GUJARATI": "Gujarati", "MARATHI": "Marathi", "TA
              "ENGLISH": "English"}
 FORMALITY = {"low": "friendly and informal, still respectful",
              "medium": "polite and direct",
-             "high": "formal and respectful; use 'aap' and full polite forms"}
+             "high": "formal and respectful; use 'aap' and full polite verb forms (no honorific words)"}
 WARMTH = {"medium": "calm and pleasant", "high": "warm and caring; sound genuinely glad to help"}
 SOPH = {"simple": "very simple everyday words, no jargon, no English business terms unless the seller uses them",
         "practical": "practical, everyday business words",
@@ -45,6 +45,7 @@ CODE_MIX = {"regional_only": "speak only {lang}; use English only for words the 
             "hinglish": "natural Hinglish, the way a Delhi or Mumbai trader speaks",
             "english_heavy": "mostly English with light Hindi"}
 PACE = lambda p: "a little slower than normal" if p < 0.97 else "a little brisker than normal" if p > 1.03 else "a normal pace"
+WORK_HOURS = ("9 AM", "6 PM")  # the executives' working hours: every meeting slot must fall inside them (team rule 2026-10-10)
 PRESERVE = "IndiaMART, buy lead, lead, enquiry, credit, catalogue, profile, photo, GST, meeting, executive, order"
 
 
@@ -98,7 +99,7 @@ def sections(p):
     ])
     env = "\n".join([
         "Channel: outbound phone call to a seller on IndiaMART.",
-        "Seller: @seller_name of @company_name, @city. Use the seller's name with the polite form of the language ('ji', 'garu'). Say the company name at most once.",
+        "Seller: @seller_name of @company_name, @city. Address the seller by name only, with no honorific (no ji, garu, avare, saheb, sir): an honorific changes meaning between languages. Say the company name at most once.",
         "What you know about this seller (use it, never read it out as a list):",
         lines(x.get("what") for x in p.get("personalisation") or []),
         "Situation to respect:" if p.get("guards_ack") else "",
@@ -141,6 +142,8 @@ def sections(p):
     phases += ["- After each step, ask one simple question and listen. Let the seller talk; pick up their words.",
                "Phase 3: Ask for the meeting",
                "- Ask for a meeting with hamare IndiaMART executive, tied to the hook. Let the seller choose the day and time.",
+               f"- Meetings only between {WORK_HOURS[0]} and {WORK_HOURS[1]} (the team's working hours). If the seller asks for a "
+               f"time outside these hours, offer the nearest time inside them, e.g. 'shaam 6 se pehle' or 'agle din subah {WORK_HOURS[0]}'.",
                "Phase 4: Objections (answer from this list; at most twice per objection, then offer a callback)"]
     phases += [f"- If the seller says \"{o.get('objection')}\": {o.get('response')}" for o in p.get("objection_playbook") or []]
     phases += ["Phase 5: Book",
