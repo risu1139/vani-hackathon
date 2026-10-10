@@ -5,7 +5,6 @@ __pycache__/
 .venv/
 app/spike/.daytona_signal_sandbox
 # organiser deck (large binary; source is the hackathon Drive)
-*.pptx
 # browser/network captures can contain session tokens
 *.network-response
 *.network-request
