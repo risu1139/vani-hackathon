@@ -194,3 +194,51 @@ The problem (phone call 2026-10-10): the seller asked about the hook and about V
    - **Leak check before upload.** `deploy.py` scans the pseudonymised seller folder before the upload. It looks for every real name in the laptop's token map, and it uses a regex for email addresses and phone numbers. It refuses the upload if it finds one. After the fetch, every `{TOKEN}` in the outputs must be a token that `compile_vars` knows. An unknown token fails the run and is never spoken.
    - **Simpler.** The rule "use another hook when the main hook fails" is only one prompt instruction, with no code. The handler detail is only "person" or "pool". The phone handler `{TELE_EXEC}` stays in the map, but the persona does not say it.
    - **Knowledge base.** It is uploaded by hand, one time. The uploaded file, its sha and the upload date are committed in `outputs/kb/`. They show which KB version a call used.
+
+## 5f. Call-behaviour rules: one file, used by every layer, checked before and after the call (2026-10-10)
+
+The problem. Three phone calls on 2026-10-10 (free seller, run e2e-20261010-174118-480222) show faults that no file holds and no check catches:
+- VANI asked for the meeting in 8 of 13 replies, even right after the seller asked a question. The seller said: "बार-बार मिलने के लिए पूछे जा रहे हो, पहला मेरी इंफॉर्मेशन तो बताओ".
+- VANI said the same fact ("26 requirements") 3 to 4 times.
+- The seller asked for his executive's name 3 times. VANI gave the same dodge each time. For this seller the data has no person (H02 is a pool), so the true answer is: "our IndiaMART team handles your account; the executive's name comes with the meeting".
+- VANI ended the call right after booking. It did not ask "anything else?".
+
+Today the push to the meeting comes from 3 layers, and none of them limits it:
+- the agent's call plan (each step ends with an ask);
+- the fixed phases in `render_prompt.py` (Phase 3, the backup hook);
+- the directives of `read_seller_signal` (interested → "move to the meeting day"; declined → "ask if another day suits").
+
+### What changes
+
+1. **One rules file: `references/call_rules.json`** in the skill.
+   - Each rule has: `id`, `say` (the text VANI gets), `layers` (agent text, phases, live tool), `pre_check` (a validator check id, or none), `post_check` (a review check id), `evidence` (the call and the turn that showed the fault), and `added` (the date).
+   - New rules are added only to this file.
+   - First rules:
+     - **R1 answer-first.** When the seller asks something, answer it fully. Do not add a meeting ask to that reply.
+     - **R2 meeting-pace.** Ask for the meeting at most once in 3 VANI turns. Never ask twice in a row. Exception: the seller has just shown interest or given a time.
+     - **R3 no-repeat.** Say each fact once. Repeat a fact only if the seller asks for it again.
+     - **R4 straight-answer.** Answer a direct question once, with the true answer from the facts or the seller block (for example, "no name on record, our team handles your account"). Never give the same dodge twice.
+     - **R5 close-with-care.** After booking, or before any end, ask "anything else I can help with?". End only after the seller says no or goodbye, or after the nudges get no answer.
+2. **The prompt is made from the file.**
+   - `render_prompt.py` writes every rule's `say` text into a "Call rules" part of `prompt_phases`. It also removes the ask-pushing lines it has now (Phase 3, the backup line) or makes them follow R1 and R2.
+   - SKILL.md tells the agent to read `call_rules.json` and to write a call plan that follows it.
+3. **Check before the call: the validator, which is the agent's hook.**
+   - It refuses a call plan with a meeting ask in 2 steps in a row (R2).
+   - It refuses a plan with the same fact in 2 steps (R3).
+   - It refuses a plan with no closing "anything else" step (R5).
+   - Each refusal names the rule id, so `finalize` fails until the agent fixes the plan.
+4. **The live tool keeps count.**
+   - `read_seller_signal` counts VANI's meeting asks and the turns since the last one. It does this through an internal variable that the model sets by a new tool argument, `asked_meeting_last_turn`.
+   - When the seller asks a question (question words or a "?"), the directive says: "answer it fully; no meeting ask in this reply" (R1 and R2).
+   - The declined and interested directives drop the ask that is built into them now.
+5. **Check after the call: `review_call` plus a check script.**
+   - A script, `app/loops/rule_checks.py`, scores R2, R3 and R5 on the transcript. It needs no LLM: it counts meeting asks per VANI turn, finds the same fact said twice, and checks whether "anything else" came before the end.
+   - The Opus review scores R1 and R4, which need judgement.
+   - The results go to `08_review.json → rules{id: pass|fail, turns}`. Loop 2 counts the failures per rule, so we can see which rules break most.
+6. **Tests.**
+   - A transcript from the 171 s call must fail R2, R3 and R4.
+   - A corrected transcript must pass.
+   - The validator refuses a call plan with asks in steps 3 and 4, and accepts the plan once it is fixed.
+
+### Not changed
+The persona decisions, the hierarchy, the gates, Daytona, the template slots, and the TTS volume (user decision: no change).
