@@ -2,7 +2,7 @@
 
 **Problem 4 of 6 | Voice AI Hackathon 2.0 | IndiaMART | October 2026**
 
-Companion to the demo deck (`outputs/plans/VANI_Persona_Design_Deck_v2_visual.pptx`, 18 slides). Numbers are aggregates; no seller names, ids or call text appear in this document. Version 6 adds: the agent picks the persona and hook from the data (not a rule table), the skill it follows, and the self-learning loop (technical view). Mood layers: keyword tool in the call, Jev after the call.
+Companion to the demo deck (`outputs/plans/VANI_Persona_Design_Deck_v2_visual.pptx`, 18 slides). Numbers are aggregates; no seller names, ids or call text appear in this document. Version 6 adds: the agent picks the persona and hook from the data (not a rule table), the skill it follows, and the self-learning loop (technical view). Mood layers: keyword tool in the call, Jev between calls.
 
 ## 1. Summary
 
@@ -10,7 +10,7 @@ VANI is IndiaMART's outbound voice agent. On this call type its job is one thing
 
 - **The agent decides.** The persona and the hook are not picked by a fixed rule table. A Claude agent reads the seller's data and decides the persona, the hook and 12 fields, with a cited quote for every choice. A validator refuses anything uncited.
 - **Data the current VANI does not use, now supplied:** 62 data points per seller from about 60 IndiaMART sources: similar sellers, live buy leads and order values, category value, catalogue quality, plan and credit use, enquiry trend, top categories, the assigned executive, location and language, past-call mood and objections.
-- **Live adaptation:** a signal tool runs on every seller turn and changes how VANI speaks on the same turn. In the call a fast keyword tool decides the mood; after the call the Jev decision model judges the same turns and its labels improve the keyword tool.
+- **Live adaptation:** a signal tool runs on every seller turn and changes how VANI speaks on the same turn. In the call a fast keyword tool decides the mood; between calls the Jev decision model judges the same turns and its labels improve the keyword tool.
 - **Self-learning:** every call updates scoreboards for the persona, the hook, each field value, the reason behind it and our default rules. The next agent reads what worked for similar sellers. 15% of calls use a control persona so uplift is measured.
 - **Safety first:** VANI never claims to be human and never says AI, bot or manager; every number it says traces to a verified fact; personal data is removed before the model sees it; compliance rules are checked before and after each call.
 
@@ -46,9 +46,9 @@ VANI is IndiaMART's outbound voice agent. On this call type its job is one thing
 
 1. **Seller data.** 62 data points from about 60 IndiaMART sources: offline PS07 and Global Context files, internal APIs (data warehouse, user service, company page) and read-only queries on the buy-lead and catalogue databases.
 2. **Context builder.** One folder per seller: an index with key facts, then topic files (identity, business, catalogue, buy leads, enquiries, channels, peers, candidate leads) and numbered past-call files.
-3. **Safe export.** Personal data is removed before the model sees it. Names become tokens, a hard PII check refuses any export that still holds a leak, source names and internal notes are stripped. Phone, GST and PAN numbers never leave IndiaMART. The real names stay on the laptop.
+3. **Safe export.** Personal data is removed before the model sees it. Names become tokens, a hard PII check refuses any export that still holds a leak, source names and internal notes are stripped. Phone, GST and PAN numbers never leave IndiaMART. The real names stay inside IndiaMART.
 4. **Persona design (Claude, in a sandbox).** Scripts compute traits, states, guards and hook eligibility; the scoreboards give the top two personas; **the agent selects one and decides every field and the hook with a checkable reason**; gates and a validator refuse anything uncited.
-5. **Compile.** The validated persona becomes the Sarvam agent's per-call variables and prompt sections; names are filled in only now, on the laptop.
+5. **Compile.** The validated persona becomes the Sarvam agent's per-call variables and prompt sections; names are filled in only now, at call time.
 6. **The call (Sarvam voice agent).** A start tool sets voice, pace, pitch, language and the opening; a signal tool reads each seller turn and returns a directive; a booking tool records the meeting.
 7. **Review and learning.** Claude reviews the call against compliance rules and call-rule checks; Jev labels the seller turns; the outcome updates the scoreboards; the next agent reads the result.
 
@@ -56,7 +56,7 @@ VANI is IndiaMART's outbound voice agent. On this call type its job is one thing
 
 **For each seller we collect 62 data points from about 60 IndiaMART sources** (the count of sources is approximate; about 53 of the 62 are filled for an average seller). Their business. Their catalogue gaps. Live buy leads. Their competitors. How past calls went. Each data point can give VANI a reason for the meeting.
 
-**Before the model sees the data, all personal data is removed.** Names become tokens. Phone, GST and PAN numbers never leave IndiaMART. A hard check refuses any export that still holds one; real names are put back only on the laptop, for the voice call.
+**Before the model sees the data, all personal data is removed.** Names become tokens. Phone, GST and PAN numbers never leave IndiaMART. A hard check refuses any export that still holds one; real names are put back only at call time, for the voice.
 
 | Group | Examples |
 |---|---|
@@ -178,10 +178,10 @@ A signal tool runs on every seller turn and returns the seller's mode and a dire
 
 **Switch log** row: turn, utterance, from mode, to mode, cue, directive id, change made, reason, whether asking for the meeting is allowed, milliseconds. Voice, pace and pitch are set at call start and cannot change mid-call (a Sarvam platform limit); tone changes through the words VANI uses.
 
-### How mood is decided: keyword tool in the call, Jev after the call
+### How mood is decided: keyword tool in the call, Jev between calls
 
 - **Instant keyword tool (in the call).** Reads each seller turn in Hindi, Hinglish, Marathi, Telugu and other scripts and answers in well under a millisecond, so the directive applies on the same turn. Measured accuracy is about 0.60 on a small reviewed set; we present it as a measurement, not a production figure.
-- **Jev decision model (after the call, on real calls).** Jev (typesafe jev-1.13, reached through OpenRouter) is a decision model, not a chat model: it answers six mood questions at once (rushed, frustrated, confused, bot question, interested, language) with a probability for each, about 0.5 seconds at the median and a tiny fraction of a cent per turn. In tests it scored 49 of 51 on a native-script set and 10 of 10 on a tricky set, and it catches cases the keywords miss. Jev labels real call turns; the labels form a gold set that scores the keyword tool and proposes keyword fixes (each checked against the gold set and approved by a person). We also tested Jev in live scripted calls through a relay.
+- **Jev decision model (between calls, on real calls).** Jev (typesafe jev-1.13, reached through OpenRouter) is a decision model, not a chat model: it answers six mood questions at once (rushed, frustrated, confused, bot question, interested, language) with a probability for each, about 0.5 seconds at the median and a tiny fraction of a cent per turn. In tests it scored 49 of 51 on a native-script set and 10 of 10 on a tricky set, and it catches cases the keywords miss. Jev labels real call turns; the labels form a gold set that scores the keyword tool and proposes keyword fixes (each checked against the gold set and approved by a person). We also tested Jev in live scripted calls through a relay.
 - **Why Jev is not in the live loop yet.** A web call to Jev adds about 0.5 seconds to a spoken reply, so in the live call the instant keyword tool decides; a hybrid that asks Jev only on unclear turns within a strict time budget is the next step.
 - **Problem-solving path.** We also evaluated a Sarvam chat model, a small trained classifier and a hosted fast model as alternatives, and measured each option's latency before choosing the keyword-first design.
 
@@ -228,12 +228,12 @@ The scoreboards start empty. Until real calls arrive, every pick is a division-b
 
 | Stage | What runs | Where |
 |---|---|---|
-| Context builder | Reads offline files, internal APIs and read-only database queries; writes one folder per seller | Laptop (VPN) |
-| Safe export | Name tokens, hard PII check, sources stripped | Laptop |
+| Context builder | Reads offline files, internal APIs and read-only database queries; writes one folder per seller | IndiaMART network (VPN) |
+| Safe export | Name tokens, hard PII check, sources stripped | IndiaMART network |
 | Persona design | Scripts for facts and prior, then Claude Opus 5.5 with a skill; a single writer tool, read log, stop gate, validator | Isolated Daytona sandbox |
-| Compile | Variables and prompt sections; names filled in | Laptop |
+| Compile | Variables and prompt sections; names filled in | IndiaMART network |
 | Voice call | Sarvam voice agent: speech to text, language model, text to speech; start, signal and booking tools; one fixed prompt template with per-call variables; IndiaMART knowledge base attached | Sarvam |
-| Review and learning | Claude reviews each call; Jev labels real turns; scoreboards update by seller segment; the brief feeds the next agent | Laptop |
+| Review and learning | Claude reviews each call; Jev labels real turns; scoreboards update by seller segment; the brief feeds the next agent | IndiaMART network |
 
 The agent in the sandbox never sees real names, sources, or unmasked data; it works only from the pseudonymised folder.
 
@@ -242,13 +242,13 @@ The agent in the sandbox never sees real names, sources, or unmasked data; it wo
 - **Identity:** never "AI", "bot", "branch manager" or "account manager"; never claims to be human; if pressed, "IndiaMART's virtual assistant".
 - **Verified facts only:** every spoken number traces to a fact in the seller's data; no unverified claims; no figures next to named sellers.
 - **No selling on the call:** no plan or price; the call is about the meeting.
-- **Privacy:** no real seller, buyer, competitor or staff name, phone number, email, GSTIN, PAN, Aadhaar, IFSC, pincode, address or GPS location reaches the persona model; the export refuses on any leak; real names are filled in on the laptop for the Sarvam voice only.
+- **Privacy:** no real seller, buyer, competitor or staff name, phone number, email, GSTIN, PAN, Aadhaar, IFSC, pincode, address or GPS location reaches the persona model; the export refuses on any leak; real names are filled in at call time, for the Sarvam voice only.
 - **Compliance rubric:** 7 fatal items (claims human, banned identity words, unverified number, pushing after opt-out, naming a buyer or competitor, quoting a price or plan, false claim about the seller) and 13 non-fatal items, checked before the call and after it.
 - **Human approval:** new persona library versions and keyword changes need a person's approval.
 
 ## 15. Progress and evidence to date
 
-- Full persona runs on the sandbox: 7 done and 1 running, about 2 to 3 minutes and $1 to $1.5 each; validation passed in the sandbox and again on the laptop every time.
+- Full persona runs on the sandbox: 7 done and 1 running, about 2 to 3 minutes and $1 to $1.5 each; validation passed in the sandbox and again outside the sandbox every time.
 - About 7 real phone tests and about 16 scripted voice test calls: in every scripted call all 21 to 22 per-call variables arrived, checked against Sarvam's own record.
 - Every switch type fired on the same turn in scripted calls: rushed, frustrated, confused, bot question, declined, explicit end, and language switch (Marathi to Hindi to English). Languages tested: Marathi, Hindi, English, Telugu.
 - Review of the reviewed call: 0 fatal items.
@@ -259,7 +259,7 @@ The agent in the sandbox never sees real names, sources, or unmasked data; it wo
 
 - Voice, pace and pitch cannot change mid-call; tone changes through wording.
 - The keyword switch tool is a baseline; its measured accuracy is about 0.60 on a small reviewed set.
-- Jev runs after the call; its network round trip of about 0.5 seconds keeps it out of the live loop for now.
+- Jev runs between calls; its network round trip of about 0.5 seconds keeps it out of the live loop for now.
 - The voice question (female or male) cannot be learned while the start rules point to the female voice.
 - Live values (order value, peers, GST state, top categories) are not safe for replaying past calls.
 - Objection and meeting rates come from old bot calls with noisy outcome labels; the transcribed subset leans to longer, more engaged calls.
@@ -300,4 +300,4 @@ The demo videos of calls will be added at the end of the deck: contrasting selle
 - **Thompson sampling:** a weighted random draw that favours what worked but keeps trying alternatives.
 - **Control arm (P0):** today's VANI style, used on 15% of calls to measure uplift.
 - **NPS:** net promoter score, a customer satisfaction measure.
-- **Jev:** a decision model that returns a probability for each yes or no question about a seller's turn; used here to judge mood on real calls after the call.
+- **Jev:** a decision model that returns a probability for each yes or no question about a seller's turn; used here to judge mood on real call turns between calls.
