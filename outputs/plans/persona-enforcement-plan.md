@@ -67,6 +67,62 @@ launcher, after the agent
 3. 1 end-to-end run with Opus 5.5 on the CSD demo seller, then the cold seller and the do-not-call seller.
 4. Peer review by the Redash session (bash-quoting-testing-analysis).
 
+## 5a. Revision after the critical review by the Redash peer (2026-10-10). This section replaces sections 2-3 where they differ.
+
+1. **A script writes the persona.** The agent never writes `04_persona.json` or `02_review.json` itself. Tool: `scripts/persona_tool.py`.
+   - `select --persona P2`: refused unless P2 is in the top-2 of 03_prior.
+   - `probe --field f` and `probe --hook h`: hits with cite-ready ids, ranked by the script.
+   - `decide --field f --value v --type seller_evidence --cite <id> --quote "..." --reason "..."`. It is checked at write time:
+     - the selection was done, and the probe ran;
+     - the cite is one of that field's hits, and the quote is in the cited file (normalised);
+     - the range and the value group are correct;
+     - the type is allowed: seller_evidence first; hierarchy only with matching brief data; start_persona = the card value;
+     - for hierarchy or start_persona, the script's top-3 hits each have a one-line answer (`--answer <hit id>="..."`).
+   - `hook --id h --decision primary|backup|rejected --reason "..." --cite ... --quote ...`: the same checks as today's hook rules.
+   - `text --file draft.json`: the spoken parts only (opening, identity line, call plan, objections, escalation, guardrails, verified facts, personalisation). The tool refuses fields in it.
+   - `finalize`: refused while a field or hook has no decision. It joins the decisions and the text, runs the full validator, and writes `02_review.json` and `04_persona.json` with a sha256.
+2. **Gates become simple.**
+   - The PreToolUse gate denies every direct Write, Edit or MultiEdit of `04_persona.json`, `02_review.json` and the decisions log.
+   - Bash bypasses are caught after the turn: the file sha must equal the sha that finalize recorded, and the validator runs again.
+   - The PostToolUse read log, the output hashes, the Edit simulation and the Bash regex guard are dropped.
+3. **Fixed inputs.** The launcher copies the seller folder into `<run>/seller/`, hashes it, and gives the agent only that copy. The validator searches the same copy.
+4. **Hits: the top-3, not all.** "Each hit rejected" is replaced by 2 rules:
+   - the cited evidence must be one of that field's hits;
+   - for hierarchy or start_persona, the script's top-3 hits each have an answer.
+   Too many hits is fixed by tighter search terms (other session).
+5. **Quotes are normalised on both sides.** Case is folded, curly quotes become straight, spaces collapse, and line breaks are ignored.
+6. **The launcher:**
+   - a unique run dir, with every gate input cleared at the start;
+   - status.json on every exit path (try/finally);
+   - the validator runs from the launcher's own copy, and its hash is checked before it runs;
+   - CLI version pinned and logged;
+   - a **self-test** launch that must show a Stop refusal;
+   - the model is checked in the run log;
+   - one retry only if no assistant message came;
+   - the exit code means "the launcher finished", and is separate from the result.
+7. **Windows limit.** Read-only files and hashes show tampering but do not stop it, because the agent runs as the same user. The launcher fails closed on any hash mismatch. The real boundary is Daytona Linux, with root-owned hooks and settings under /etc.
+8. **Evals in both directions.** Bad personas must fail. Good personas with little evidence (cold seller) must pass.
+9. **Refusal messages.** They list up to 6 problems per message, each with the exact command that fixes it.
+10. **Bypass test** (requested by the reviewer). In an eval, a stub agent writes `04_persona.json` with Bash and does not use persona_tool.py. The test passes only when:
+    - the launcher's check after the turn (the sha against the finalize sha, and the validator) gives status=error;
+    - **no** Sarvam variables are written.
+    This proves that the backstop catches the one path the gate cannot see.
+11. **Fail-closed tests** (requested by the reviewer). Each step fails in turn:
+    - persona_tool.py exits non-zero;
+    - the validator crashes;
+    - the hash file is missing;
+    - the seller copy changes;
+    - claude exits with no output;
+    - the launcher is stopped during the turn.
+    Each of these runs must end with status=error, a reason, and no variables. A half-written success must never occur.
+
+## 5b. Review log
+
+| Date | Reviewer | Result |
+|---|---|---|
+| 2026-10-10 | Redash peer (bash-quoting-testing-analysis), 1st review | Gate bypassable through Bash; hits_rejected noise; over-built logging. Changes in 5a items 1-9. |
+| 2026-10-10 | Redash peer, 2nd review | "Revised plan looks sound." It added items 10 and 11. Waiting for explicit approval of the plan with 10-11. |
+
 ## 6. Questions for you
 
 1. Do you approve `hierarchy.json` v2-draft-3? The other session waits for this before it changes `prior.py`.
