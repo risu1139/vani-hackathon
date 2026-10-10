@@ -242,3 +242,47 @@ Today the push to the meeting comes from 3 layers, and none of them limits it:
 
 ### Not changed
 The persona decisions, the hierarchy, the gates, Daytona, the template slots, and the TTS volume (user decision: no change).
+
+### 5f item 7: changes after the enforcement review (Redash dashboard peer, 2026-10-10). These replace items 1-5 where they differ.
+
+1. **The live tool GRANTS the ask; it does not count asks.**
+   - `read_seller_signal` keeps an internal variable, `ask_ok_turn`. Each directive ends with either "You may ask for the meeting in this reply." or "Do NOT ask for the meeting in this reply."
+   - An ask is allowed only when:
+     - (turn − last allowed turn) ≥ 3; or
+     - the mode is interested; or
+     - `time_mention()` fired.
+   - The asks that are built into the directives now are removed (interested, the P1/P4 variants, declined).
+   - No argument from the model is used. The SDK tool context has no transcript or last reply (checked 2026-10-10: only variables, language, state, user id, secret). So R2 is enforced by our code, and the post-call R2 check measures how often VANI obeyed.
+2. **A "question" mode for R1.**
+   - It is found by question words for each language, for example:
+     - Hindi: kya, kaun, kab, kitna, kaise, kyun;
+     - Marathi: काय, कोण, कधी, किती;
+     - Telugu: ఏమి, ఎవరు, ఎప్పుడు, ఎంత;
+     - Tamil: என்ன, யார், எப்போது, எவ்வளவு;
+     - Kannada, Malayalam, Gujarati, Bengali, Punjabi, English.
+
+     A "?" is not used: STT output often has no punctuation.
+   - Its directive is "answer the question fully, from the facts or the seller block; no meeting ask". Its word cap is 30.
+3. **R4 is enforced live.**
+   - A cue class, `ask_handler`, fires on "who is my executive", "executive kaun", "naam batao", "कौन आएगा" and the same in other languages.
+   - Its directive carries the handler sentence word for word, from a new per-call variable `handler_line`.
+   - `compile_vars` sets `handler_line` from `state.handler`: the person's name, or "our IndiaMART team handles your account; the executive's name comes with the meeting confirmation".
+   - The Opus review still scores R4.
+4. **The checks before the call are structural.**
+   - Each call-plan step gets `kind: info|question|ask|close` and `fact_ids[]`.
+   - **R2:** no two steps of kind `ask` in a row.
+   - **R3:** no fact id in two steps.
+   - **Cross-check:** a step of kind `info` that holds meeting or time words (`time_mention()` or meeting/मीटिंग/executive) is refused as labelled wrongly.
+   - R5 is the same for every seller. It moves into the fixed phases in `render_prompt` (a closing step), and there is no validator rule for it.
+5. **The exceptions to R5 are written in `call_rules.json` and in the check.** These ends never ask "anything else?":
+   - opt-out, DND or remove-my-number (`set_end_conversation` + `OPT_OUT_LINE`);
+   - a hostile seller, or a legal threat;
+   - the seller's explicit end request;
+   - the end of the nudges.
+6. **The checks after the call write `pass|fail|unknown` and the language.**
+   - **R5 by events:** after `book_meeting` there must be at least one more VANI turn AND at least one seller turn before the end, unless it was an opt-out. This works in every language.
+   - **R3 by verified fact:** the same number in 2 or more VANI turns. Number words are matched with a table for hi, mr, te, ta, gu. For other languages the result is "unknown", never "pass".
+   - **R2 by words:** meeting|मीटिंग|executive plus `time_mention()`. The result is "unknown" for a language the lexicon does not cover.
+   - Before Loop 2 counts any of it, it is calibrated on today's 3 calls and on the role-play transcripts.
+7. **Tests in both directions, in Hindi AND in Telugu or Tamil.** Each check must fire on a bad transcript and stay silent on a good one.
+8. **`call_rules.json` keeps:** `id`, `say`, `pre_check`, `post_check`, `exceptions`, `evidence`, `added`. `layers` is dropped: `render_prompt` and the tool read the same `say`.
