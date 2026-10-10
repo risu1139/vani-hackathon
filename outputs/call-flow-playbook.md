@@ -27,7 +27,7 @@ The discovery opener (`main`) got sellers talking about their own business (expa
 
 ## 2. Objection taxonomy (from reading 70 calls, measured on 12,354)
 
-Share = calls where the seller said it at least once (text pattern, approximate). Meeting rate = share of those calls that ended with a fixed meeting. **Overall meeting rate: 22.4%.**
+Share = calls where the seller said it at least once (text pattern, approximate). Meeting rate = share of those calls that ended with a fixed meeting. **Meeting rate inside this transcribed set: 22.4%** (the 12,354 calls that have transcripts, which lean to longer calls). The rate over all 269,455 answered bot calls is **11.5%**; compare these objection rates with 22.4%, not with 11.5%.
 
 | # | Objection | Share of calls | Meeting rate | What the seller says (paraphrase) | What worked in the calls read | What failed |
 |---|---|---|---|---|---|---|
@@ -54,7 +54,7 @@ Also seen, not in the table: **language not supported** (a seller replied in Odi
 |---|---|---|
 | Does naming nearby, similar sellers ("these businesses joined us in 2023 and get good enquiries") convert? | Among calls where the seller said "no" at least once: **14.0%** meeting with social proof (713 calls) vs **25.3%** without (5,641) | **Not supported, but confounded**: the bot adds it only after resistance. Reading the 70 calls: about 4 sellers agreed right after it, and about 5 did not change (rough tally, not measured). Needs an A/B test, not a conclusion. The source is the nearby-competitor data (name + member-since), the same data we already extract (E08). |
 | Does offering an online / phone meeting to a busy or travelling seller convert? | **10.5%** with the offer (437 calls) vs **16.1%** without (1,621) | Same confounding. In the few calls read where a travelling seller was offered online or phone, most were fixed, but the sample is tiny (about 6) and one seller who asked for phone was ignored. Evidence is small and mixed. |
-| Do sellers who ask about price convert better? | **33%** vs 22.4% average | Price questions look like engagement; answer them directly. |
+| Do sellers who ask about price convert better? | **33%** vs 22.4% average in the transcribed set | Price questions look like engagement; answer them directly. |
 | Is the outcome label reliable? | 4 of the first 20 calls had a label that contradicts the transcript | Treat outcome counts as approximate. |
 
 ---

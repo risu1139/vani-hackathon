@@ -12,94 +12,247 @@
       "nsd_csd_split is NOT computed yet: the transcripts are not joined to division. Fill from the builder's division fact if wanted."
     ],
     "enum_mapping_note": "persona session's main_objection enum: none, why_meeting_not_phone, exec_came_before_no_change, no_enquiries, profile_already_complete, lead_quality, price_or_plan, busy, bot_or_trust, other. Ids below are stable; 'maps_to' is the proposed value, 'propose_new_enum' lists values we suggest adding because 6 of 12 land in 'other'.",
-    "propose_new_enum": ["not_interested", "confused_what_is_this", "decision_maker_elsewhere", "repeated_calls", "wrong_number", "bad_past_experience"],
-    "no_equivalent_in_our_data": ["profile_already_complete", "lead_quality"]
+    "propose_new_enum": [
+      "not_interested",
+      "confused_what_is_this",
+      "decision_maker_elsewhere",
+      "repeated_calls",
+      "wrong_number",
+      "bad_past_experience"
+    ],
+    "no_equivalent_in_our_data": [
+      "profile_already_complete",
+      "lead_quality"
+    ],
+    "overall_meeting_rate_note": "22.4% is the meeting rate of the 12,354 calls that have transcripts (biased to longer calls). The rate over ALL 269,455 answered bot calls is 11.5%. The prevalence and meeting rates below are inside the transcribed set: compare them with 22.4%.",
+    "meeting_rate_all_answered_calls": 0.115
   },
   "objections": [
     {
-      "id": "obj.busy", "name": "Busy / travelling / out", "maps_to": "busy", "prevalence": 0.167, "meeting_rate": 0.149,
-      "seller_says": ["in the godown", "driving", "out of town", "on leave tomorrow"],
-      "worked": ["offer a phone or online meeting to a travelling seller (3 calls fixed it)", "ask for a rough day instead of 'tomorrow'"],
-      "failed": ["repeating 'kal kis time?'", "insisting on 11:00-17:00 only"],
+      "id": "obj.busy",
+      "name": "Busy / travelling / out",
+      "maps_to": "busy",
+      "prevalence": 0.167,
+      "meeting_rate": 0.149,
+      "seller_says": [
+        "in the godown",
+        "driving",
+        "out of town",
+        "on leave tomorrow"
+      ],
+      "worked": [
+        "offer a phone or online meeting to a travelling seller (3 calls fixed it)",
+        "ask for a rough day instead of 'tomorrow'"
+      ],
+      "failed": [
+        "repeating 'kal kis time?'",
+        "insisting on 11:00-17:00 only"
+      ],
       "nsd_csd_split": null
     },
     {
-      "id": "obj.not_interested", "name": "No interest / no need", "maps_to": "other", "propose_new_enum": "not_interested", "prevalence": 0.096, "meeting_rate": 0.092,
-      "seller_says": ["no requirement", "I don't want to be online", "only offline"],
-      "worked": ["graceful close after the second 'no'", "one question about what business they do"],
-      "failed": ["a third and fourth restatement of the same enquiry count"],
+      "id": "obj.not_interested",
+      "name": "No interest / no need",
+      "maps_to": "other",
+      "propose_new_enum": "not_interested",
+      "prevalence": 0.096,
+      "meeting_rate": 0.092,
+      "seller_says": [
+        "no requirement",
+        "I don't want to be online",
+        "only offline"
+      ],
+      "worked": [
+        "graceful close after the second 'no'",
+        "one question about what business they do"
+      ],
+      "failed": [
+        "a third and fourth restatement of the same enquiry count"
+      ],
       "nsd_csd_split": null
     },
     {
-      "id": "obj.confused", "name": "Confusion: what is this?", "maps_to": "other", "propose_new_enum": "confused_what_is_this", "prevalence": 0.092, "meeting_rate": 0.230,
-      "seller_says": ["kya matlab meeting?", "who are you?", "how did you get my number?"],
-      "worked": ["one plain sentence about what the meeting is, then the ask"],
-      "failed": ["the same sentence again", "a canned 'are you talking about the meeting time?'"],
+      "id": "obj.confused",
+      "name": "Confusion: what is this?",
+      "maps_to": "other",
+      "propose_new_enum": "confused_what_is_this",
+      "prevalence": 0.092,
+      "meeting_rate": 0.23,
+      "seller_says": [
+        "kya matlab meeting?",
+        "who are you?",
+        "how did you get my number?"
+      ],
+      "worked": [
+        "one plain sentence about what the meeting is, then the ask"
+      ],
+      "failed": [
+        "the same sentence again",
+        "a canned 'are you talking about the meeting time?'"
+      ],
       "nsd_csd_split": null
     },
     {
-      "id": "obj.price", "name": "Price / paid / trial", "maps_to": "price_or_plan", "prevalence": 0.075, "meeting_rate": 0.330,
-      "seller_says": ["what are the charges?", "can I get one month free?"],
-      "worked": ["a straight answer, then 'the meeting itself is free'"],
-      "failed": ["quoting two different prices in different calls"],
+      "id": "obj.price",
+      "name": "Price / paid / trial",
+      "maps_to": "price_or_plan",
+      "prevalence": 0.075,
+      "meeting_rate": 0.33,
+      "seller_says": [
+        "what are the charges?",
+        "can I get one month free?"
+      ],
+      "worked": [
+        "a straight answer, then 'the meeting itself is free'"
+      ],
+      "failed": [
+        "quoting two different prices in different calls"
+      ],
       "note": "highest meeting rate: a price question signals engagement; answer it directly (needs one approved price statement from the business).",
       "nsd_csd_split": null
     },
     {
-      "id": "obj.phone_online_pref", "name": "Phone or online preferred", "maps_to": "why_meeting_not_phone", "prevalence": 0.052, "meeting_rate": 0.248,
-      "seller_says": ["only phone", "virtual is fine"],
-      "worked": ["accept the format"],
-      "failed": ["pushing for in-person anyway (one call logged a time after the seller said no)"],
+      "id": "obj.phone_online_pref",
+      "name": "Phone or online preferred",
+      "maps_to": "why_meeting_not_phone",
+      "prevalence": 0.052,
+      "meeting_rate": 0.248,
+      "seller_says": [
+        "only phone",
+        "virtual is fine"
+      ],
+      "worked": [
+        "accept the format"
+      ],
+      "failed": [
+        "pushing for in-person anyway (one call logged a time after the seller said no)"
+      ],
       "nsd_csd_split": null
     },
     {
-      "id": "obj.already_met", "name": "Already met an executive", "maps_to": "exec_came_before_no_change", "prevalence": 0.045, "meeting_rate": 0.142,
-      "seller_says": ["an executive visited", "meeting done", "I'm in touch with him"],
-      "worked": ["close politely", "ask who the contact is"],
-      "failed": ["pitching the same meeting again"],
+      "id": "obj.already_met",
+      "name": "Already met an executive",
+      "maps_to": "exec_came_before_no_change",
+      "prevalence": 0.045,
+      "meeting_rate": 0.142,
+      "seller_says": [
+        "an executive visited",
+        "meeting done",
+        "I'm in touch with him"
+      ],
+      "worked": [
+        "close politely",
+        "ask who the contact is"
+      ],
+      "failed": [
+        "pitching the same meeting again"
+      ],
       "nsd_csd_split": null
     },
     {
-      "id": "obj.decision_maker_elsewhere", "name": "Owner / decision-maker elsewhere", "maps_to": "other", "propose_new_enum": "decision_maker_elsewhere", "prevalence": 0.025, "meeting_rate": 0.252,
-      "seller_says": ["ask my owner", "higher management", "my son handles it"],
-      "worked": ["ask for the name and forward the message"],
+      "id": "obj.decision_maker_elsewhere",
+      "name": "Owner / decision-maker elsewhere",
+      "maps_to": "other",
+      "propose_new_enum": "decision_maker_elsewhere",
+      "prevalence": 0.025,
+      "meeting_rate": 0.252,
+      "seller_says": [
+        "ask my owner",
+        "higher management",
+        "my son handles it"
+      ],
+      "worked": [
+        "ask for the name and forward the message"
+      ],
       "failed": [],
       "nsd_csd_split": null
     },
     {
-      "id": "obj.bot_question", "name": "Is this a bot / recording?", "maps_to": "bot_or_trust", "prevalence": 0.024, "meeting_rate": 0.264,
-      "seller_says": ["AI ho kya?", "system generated?"],
-      "worked": ["an honest answer (the persona session's identity rule now governs the exact wording)"],
-      "failed": ["denying it ('main bilkul real insaan hoon' appeared in 24 calls)"],
+      "id": "obj.bot_question",
+      "name": "Is this a bot / recording?",
+      "maps_to": "bot_or_trust",
+      "prevalence": 0.024,
+      "meeting_rate": 0.264,
+      "seller_says": [
+        "AI ho kya?",
+        "system generated?"
+      ],
+      "worked": [
+        "an honest answer (the persona session's identity rule now governs the exact wording)"
+      ],
+      "failed": [
+        "denying it ('main bilkul real insaan hoon' appeared in 24 calls)"
+      ],
       "nsd_csd_split": null
     },
     {
-      "id": "obj.repeated_calls", "name": "Repeated calls", "maps_to": "other", "propose_new_enum": "repeated_calls", "prevalence": 0.016, "meeting_rate": 0.164,
-      "seller_says": ["you called yesterday", "why again and again?"],
-      "worked": ["a short apology"],
-      "failed": ["carrying on with the pitch", "seller escalates: 'I will file a complaint'"],
+      "id": "obj.repeated_calls",
+      "name": "Repeated calls",
+      "maps_to": "other",
+      "propose_new_enum": "repeated_calls",
+      "prevalence": 0.016,
+      "meeting_rate": 0.164,
+      "seller_says": [
+        "you called yesterday",
+        "why again and again?"
+      ],
+      "worked": [
+        "a short apology"
+      ],
+      "failed": [
+        "carrying on with the pitch",
+        "seller escalates: 'I will file a complaint'"
+      ],
       "nsd_csd_split": null
     },
     {
-      "id": "obj.wrong_number", "name": "Wrong number / person", "maps_to": "other", "propose_new_enum": "wrong_number", "prevalence": 0.016, "meeting_rate": 0.171,
+      "id": "obj.wrong_number",
+      "name": "Wrong number / person",
+      "maps_to": "other",
+      "propose_new_enum": "wrong_number",
+      "prevalence": 0.016,
+      "meeting_rate": 0.171,
       "seller_says": [],
-      "worked": ["thank and close"],
+      "worked": [
+        "thank and close"
+      ],
       "failed": [],
       "nsd_csd_split": null
     },
     {
-      "id": "obj.distrust", "name": "Distrust / bad past experience", "maps_to": "other", "propose_new_enum": "bad_past_experience", "prevalence": 0.013, "meeting_rate": 0.188,
-      "seller_says": ["executives only collect money", "bogus enquiries", "photos changed without my consent"],
-      "worked": ["acknowledge the specific complaint and promise a different agenda (one call: 'this time the executive will focus on enquiries only'; it booked Friday)"],
-      "failed": ["repeating the benefit after an angry reply (about two calls ended with 'don't call me again')"],
+      "id": "obj.distrust",
+      "name": "Distrust / bad past experience",
+      "maps_to": "other",
+      "propose_new_enum": "bad_past_experience",
+      "prevalence": 0.013,
+      "meeting_rate": 0.188,
+      "seller_says": [
+        "executives only collect money",
+        "bogus enquiries",
+        "photos changed without my consent"
+      ],
+      "worked": [
+        "acknowledge the specific complaint and promise a different agenda (one call: 'this time the executive will focus on enquiries only'; it booked Friday)"
+      ],
+      "failed": [
+        "repeating the benefit after an angry reply (about two calls ended with 'don't call me again')"
+      ],
       "note": "'bogus enquiries' overlaps lead_quality; if the persona enum keeps lead_quality, route that phrase there.",
       "nsd_csd_split": null
     },
     {
-      "id": "obj.no_enquiries", "name": "'I got no enquiries'", "maps_to": "no_enquiries", "prevalence": 0.011, "meeting_rate": 0.302,
-      "seller_says": ["not one enquiry has come (while the bot says 175+)"],
+      "id": "obj.no_enquiries",
+      "name": "'I got no enquiries'",
+      "maps_to": "no_enquiries",
+      "prevalence": 0.011,
+      "meeting_rate": 0.302,
+      "seller_says": [
+        "not one enquiry has come (while the bot says 175+)"
+      ],
       "worked": [],
-      "failed": ["repeating the count; the seller read it as lying"],
+      "failed": [
+        "repeating the count; the seller read it as lying"
+      ],
       "note": "only quote counts that are in verified_facts.",
       "nsd_csd_split": null
     }

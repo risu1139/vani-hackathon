@@ -9,7 +9,7 @@ Sources: `.claude/skills/vani-persona/{SKILL.md,scripts/facts.py,scripts/prior.p
 
 VANI is IndiaMART's outbound voice agent (on Sarvam). **One goal per call: a meeting between the seller and "hamare IndiaMART executive".** The upsell happens in the meeting, never on the call. The persona decides *how VANI sounds and what it says for this one seller*; every choice must cite the seller's own data.
 
-Overall baseline meeting rate in past bot calls: **22.4%** (hook baseline 11.6%).
+Baseline meeting rate in past bot calls: **11.5%** of all 269,455 answered calls (22.4% among the 12,354 calls with transcripts; hook baseline 11.6%).
 
 ## 1. The chain at a glance
 
@@ -178,7 +178,7 @@ Evidence note: only 13 of 73 hook-prior rows are statistically significant; trea
 
 ## 11. Objection playbook and responses
 
-Answer at most twice, then offer a callback. `outputs/objections.json` holds the call-data ids, prevalence and meeting rates (overall 22.4%).
+Answer at most twice, then offer a callback. `outputs/objections.json` holds the call-data ids, prevalence and meeting rates (22.4% inside the transcribed set; 11.5% over all answered calls).
 
 ### 11.1 Cross-division objections (from 12,354 calls)
 

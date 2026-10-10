@@ -97,7 +97,7 @@ Voice has **no outcome data of our own yet**, so these are starting priors that 
 - **Hook style (PS07 bot-version experiment):** the default "enquiry-count" opening beats the "interest" and "discovery" openings by a small but significant margin overall. Only 13 of 73 segment rows are statistically significant. Treat most segment preferences as weak.
 - **Voice, pitch, formality:** no data of ours; outside field studies only (weak).
 - **Persona starting leans:** guesses until the scoreboards fill.
-- **The overall baseline meeting rate** in past bot calls is **22.4%**.
+- **The baseline meeting rate** in past bot calls is **11.5%** over all 269,455 answered calls (22.4% among the 12,354 calls that have transcripts).
 
 # 9. Proposed change for review
 
