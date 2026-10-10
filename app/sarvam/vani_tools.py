@@ -203,6 +203,12 @@ LEXICON = [
         "not interested", "no interest", "interest nahi", "interested nahi", "nahi chahiye", "baat nahi karni", "baat nahi karna",
         "nahi karni meeting", "meeting nahi", "नहीं चाहिए", "इंटरेस्ट नहीं", "इंटरेस्टेड नहीं", "बात नहीं करनी", "बात नहीं करना",
         "मीटिंग नहीं", "नहीं करनी मुझे", "मला नको", "रस नाही")),
+    ("end_now", "strong", (
+        # the seller ends THIS call (2026-10-10 live test: "chalo theek hai, call rakho" was read as neutral and VANI pitched on)
+        "call rakh*", "phone rakh do", "phone rakhiye", "phone rakho", "call band karo", "call cut karo", "bye bye", "goodbye",
+        "कॉल रख", "कॉल रखो", "कॉल रखिए", "फोन रख दो", "फोन रखो", "फ़ोन रखो", "फोन रखिए", "कॉल बंद करो", "बाय बाय",
+        "फोन ठेवा", "कॉल ठेवा", "ఫోన్ పెట్టేయండి", "ఫోన్ పెట్టేస్తా", "போன வைங்க", "போன் வைக்கிறேன்", "ಫೋನ್ ಇಡಿ",
+        "ഫോൺ വെക്ക്", "ફોન મૂકો", "ফোন রাখুন", "ফোন রাখছি", "ਫੋਨ ਰੱਖੋ")),
     ("ask_handler", "strong", (
         # R4 (plan 5f): the seller asks who handles the account / who will come; answered with handler_line, word for word
         "executive kaun", "executive ka naam", "mera executive", "kaun aayega", "kaun aaega",
@@ -307,10 +313,12 @@ LEXICON = [
         "કેવી રીતે")),
 ]
 _COMPILED = [(mode, strength, cue, _cue_re(cue)) for mode, strength, cues in LEXICON for cue in cues]
-PRIORITY = ["opt_out", "frustrated", "ask_handler", "ask_more", "declined", "bot_question", "rushed", "confused", "interested", "question"]
-ALWAYS_NOW = {"opt_out", "frustrated", "bot_question"}
+PRIORITY = ["opt_out", "end_now", "frustrated", "ask_handler", "ask_more", "declined", "bot_question", "rushed", "confused", "interested", "question"]
+ALWAYS_NOW = {"opt_out", "end_now", "frustrated", "bot_question"}
 _LATER = re.compile(r"(?<![a-z])(baad|kal|shaam|later|tomorrow|evening|tarvata|appuram|amele|pinne|nantar)(?![a-z])|"
                     r"बाद|कल|शाम|પછી|કાલે|नंतर|পরে|తర్వాత|రేపు|அப்புறம்|நாளை|ಆಮೇಲೆ|ನಾಳೆ|പിന്നെ|നാളെ")
+_CONDITION = re.compile(r"(?<![a-z])(warna|varna|nahi to|nahin to|otherwise|else)(?![a-z])|वरना|नहीं तो|नही तो|नाहीतर|"
+                        r"లేకపోతే|இல்லன்னா|ಇಲ್ಲಾಂದ್ರೆ|ഇല്ലെങ്കിൽ|નહીં તો|নইলে|ਨਹੀਂ ਤਾਂ", re.I)
 _NO_MORE = re.compile(r"(?<![a-z])(nahi|nahin|no|nothing|bas)(?![a-z])|नहीं|नही|बस|नाही|లేదు|இல்ல|ಇಲ್ಲ|ഇല്ല|ના|না|ਨਹੀਂ", re.I)
 _NOT_WANTED = re.compile(r"(?<![a-z])(nahi chahiye|interest nahi|not interested|zarurat nahi)(?![a-z])|नही चाहिए|"
                          r"इंटरेस्ट नही|जरूरत नही|નથી જોઈએ")
@@ -352,6 +360,9 @@ def classify(text):
         # "abhi call mat karo, baad me karna" = a callback request, not an opt-out (PS07 lesson)
         hits = [h for h in hits if h[0] != "opt_out"] + [("rushed", "strong", "call mat + later")]
         note = "opt-out phrase with a later time = callback"
+    if any(m == "end_now" for m, _, _ in hits) and _CONDITION.search(t):
+        # "price batao warna phone rakh do" = an irritated condition, not a request to end the call now
+        hits = [h for h in hits if h[0] != "end_now"] + [("frustrated", "strong", "condition + phone rakh")]
     if any(m == "ask_more" for m, _, _ in hits) and _NO_MORE.search(t):
         hits = [h for h in hits if h[0] != "ask_more"]
     if _NOT_WANTED.search(t):
@@ -431,7 +442,7 @@ def script_of(text):
 # ---------------------------------------------------------------- directives (per mode x persona style)
 STYLE_WPT = {"P0": 20, "P1": 18, "P2": 15, "P3": 14, "P4": 10, "P5": 16, "P6": 20, "COMPOSED": 18}
 MODE_CAP = {"neutral": 20, "rushed": 12, "frustrated": 18, "confused": 20, "interested": 20, "bot_question": 20,
-            "opt_out": 15, "declined": 20, "language_switch": 20, "question": 30, "ask_handler": 30, "ask_more": 30}
+            "opt_out": 15, "end_now": 12, "declined": 20, "language_switch": 20, "question": 30, "ask_handler": 30, "ask_more": 30}
 _D = {  # mode -> style -> (word cap, text); "*" = any style without its own variant. {cap} is filled in.
     "rushed": {
         "*": (12, "Seller is busy. ONE short sentence, max {cap} words: the value in a few words, then ask when to call back."),
@@ -485,6 +496,10 @@ _D = {  # mode -> style -> (word cap, text); "*" = any style without its own var
     "opt_out": {
         "*": (15, "Seller does not want calls. Apologise, confirm they will not be called again, thank them, end the call. No pitch. Max {cap} words."),
     },
+    "end_now": {
+        "*": (12, "Seller wants to end the call now. Thank them in one short line and end the call. No pitch, no question. "
+                  "Max {cap} words."),
+    },
     "declined": {
         "*": (20, "Seller is not interested now. Do NOT end the call. Acknowledge briefly, then {retry}. "
                   "End only if they clearly ask to end the call. Max {cap} words."),
@@ -524,13 +539,13 @@ def directive(mode, style_id, lang="", handler="", retry=""):
 TEAM_HANDLER_LINE = ("our IndiaMART team handles your account; the executive will introduce themselves when they call")
 ASK_GAP = 2  # R2 (user 2026-10-10: "let the agent decide, but do not irritate"): never two asks in a row; VANI decides when
 OVERLAY_MODES = {"question", "ask_handler", "ask_more"}
-NO_ASK_MODES = {"ask_more", "question", "ask_handler", "declined", "frustrated", "opt_out", "confused", "bot_question"}
+NO_ASK_MODES = {"end_now", "ask_more", "question", "ask_handler", "declined", "frustrated", "opt_out", "confused", "bot_question"}
 _CHANGE = {"neutral": "default persona style", "rushed": "brevity + callback offer", "frustrated": "apology, pitch stopped",
            "confused": "simplify: short comma phrases + check", "interested": "move to meeting day/time",
            "bot_question": "identity sidestep", "bot_question_pressed": "virtual-assistant line + human callback",
            "opt_out": "apology + end call", "declined": "acknowledge, keep the line open", "language_switch": "reply language",
            "question": "answer fully, no meeting ask", "ask_handler": "handler line, word for word",
-           "ask_more": "next topic from Other topics"}
+           "ask_more": "next topic from Other topics", "end_now": "thank and end this call"}
 
 OPT_OUT_LINE = {
     "Hindi": "माफ़ कीजिए, अब आपको हमारी तरफ से कॉल नहीं आएगा। धन्यवाद।",
@@ -716,6 +731,8 @@ class ReadSellerSignal(SarvamTool):
                     "reason": reason, "sens": sens, "dup": False, "ms": round((time.perf_counter() - t0) * 1000, 2)})
         _append_log(context, row)
 
+        if to == "end_now":
+            context.set_end_conversation()
         if to == "opt_out":
             context.set_end_conversation()
             try:

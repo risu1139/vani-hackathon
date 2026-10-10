@@ -391,3 +391,12 @@ def test_r7_ask_more_gives_next_topic(utt, lang):
 @pytest.mark.parametrize("utt", ["नहीं, और कुछ नहीं, बस इतना ही", "nahi aur kuch nahi", "no, nothing else"])
 def test_nothing_more_is_not_ask_more(utt):
     assert vt.classify(utt)[0] != "ask_more"
+
+
+@pytest.mark.parametrize("utt,lang", [("चलो ठीक है, कॉल रखो।", "hindi"), ("theek hai phone rakho", "hinglish"),
+                                      ("okay bye bye", "english"), ("సరే ఫోన్ పెట్టేయండి", "telugu"), ("ठीक आहे, फोन ठेवा", "marathi")])
+def test_end_now_ends_this_call(utt, lang):
+    """2026-10-10 live test: 'call rakho' was neutral and VANI pitched on. Now: thank and end, no pitch, no DND line."""
+    ctx = _ctx()
+    out, row = _say(ctx, utt, lang)
+    assert row["to"] == "end_now" and ctx.end_conversation and "No pitch" in out.message_to_llm
