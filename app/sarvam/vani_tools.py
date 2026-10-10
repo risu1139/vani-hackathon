@@ -213,8 +213,9 @@ LEXICON = [
     ("question", "weak", (
         # R1 (plan 5f): a question by question words per language (STT often drops the "?")
         "kya", "kaun", "kab", "kitna", "kitni", "kitne", "kaise", "kyun", "kahan", "kaunsa", "kaun se", "kis", "kiska", "kisko",
+        "kaisa", "kaisi", "kaise", "kaunsi", "kaunse", "kahan se",
         "what", "who", "when", "how", "why", "which", "where",
-        "किस", "किसका", "किसको", "क्या", "कौन", "कब", "कितना", "कितनी", "कितने", "कैसे", "क्यों", "कहाँ", "कहां", "कौनसा", "कौन से",
+        "कैसा", "कैसी", "कैसे", "कौनसी", "कौनसे", "कौन सी", "किसकी", "किसके", "किस", "किसका", "किसको", "क्या", "कौन", "कब", "कितना", "कितनी", "कितने", "कैसे", "क्यों", "कहाँ", "कहां", "कौनसा", "कौन से",
         "काय", "कोण", "कधी", "किती", "कसे", "कसं", "कुठे", "कोणत्या",
         "ఎన్ని", "ఏది", "ఏవి", "ఏమి", "ఏంటి", "ఎవరు", "ఎప్పుడు", "ఎంత", "ఎలా", "ఎందుకు", "ఎక్కడ", "ఏ ",
         "எத்தனை", "எது", "என்ன", "யார்", "எப்போது", "எவ்வளவு", "எப்படி", "ஏன்", "எங்கே",
@@ -316,8 +317,14 @@ def tokens(text):
 
 
 def _token_hit(cue, toks):
+    """Whole-token match; a trailing '*' matches a word stem (कैस* = कैसा / कैसी / कैसे) in any script."""
     c = tokens(cue.rstrip("*"))
-    return bool(c) and any(toks[i:i + len(c)] == c for i in range(len(toks) - len(c) + 1))
+    if not c:
+        return False
+    if cue.endswith("*"):
+        return any(toks[i:i + len(c) - 1] == c[:-1] and toks[i + len(c) - 1].startswith(c[-1])
+                   for i in range(len(toks) - len(c) + 1))
+    return any(toks[i:i + len(c)] == c for i in range(len(toks) - len(c) + 1))
 
 
 def find_cues(text):
@@ -555,6 +562,8 @@ class ReadSellerSignal(SarvamTool):
 
     seller_utterance: str = Field(description="The seller's most recent utterance, copied word for word as spoken.")
     language: str = Field(default="", description="Language the seller just spoke in: hinglish, hindi, english, gujarati, tamil, other.")
+    seller_asked_question: bool = Field(default=False, description="True if the seller's last utterance asks you something "
+                                        "(a question in any language), even without a question mark.")
 
     async def run(self, context: SarvamToolContext) -> SarvamToolOutput:
         t0 = time.perf_counter()
@@ -577,6 +586,8 @@ class ReadSellerSignal(SarvamTool):
         context.set_internal_variable("turn", turn)
 
         mode, strength, cue, note = classify(utt)
+        if mode == "neutral" and (self.seller_asked_question or "?" in utt or "？" in utt):
+            mode, strength, cue = "question", "weak", "model: seller asked" if self.seller_asked_question else "?"
         if mode == "question" and time_mention(utt):
             mode, strength, cue = "interested", "strong", "time named"
         overlay = mode if mode in OVERLAY_MODES else ""
@@ -710,6 +721,7 @@ class BookMeeting(SarvamTool):
             return SarvamToolOutput(message_to_llm="Booking could not be saved. Do not claim it is booked; say our IndiaMART executive will call to confirm the time, then thank the seller and close.",
                                     context=context)
         return SarvamToolOutput(
-            message_to_llm=(f"Booked: {value}. Confirm this slot once in the seller's language, say our IndiaMART "
-                            "executive will meet them then, thank them and close the call. Max 20 words."),
+            message_to_llm=(f"Booked: {value}. Confirm this slot once in the seller's language and say who will meet them "
+                            "(the handler from 'About this seller', else our IndiaMART executive). Then ask if there is anything "
+                            "else you can help with. Do not end the call yet. Max 25 words."),
             context=context)

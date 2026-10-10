@@ -65,16 +65,26 @@ def check(call):
                  "vani_turns": sum(m["role"] == "assistant" for m in tr), "bad_turns": bad}
 
     # R3: the same number in 2+ VANI turns, unless the seller said it (asked again) in between
-    first, rep = {}, []
+    first, rep, restated = {}, [], set()
+    vani_lang = {}
     for i, m in enumerate(tr):
         if m["role"] != "assistant":
             continue
+        sc = VT.script_of(m.get("content") or "")
+        lang_i = (sc, VT.deva_lang(m.get("content") or "") if sc == "deva" else "")
         for n in nums(m.get("content")):
             if n in first:
                 between = " ".join(x.get("content") or "" for x in tr[first[n] + 1:i] if x["role"] == "user")
-                if n not in nums(between):
+                # one restatement in a new language right after a switch is a translation, not a repeat
+                was = vani_lang.get(first[n]) or ("", "")
+                # a real change of language: another script, or Hindi <-> Marathi when both turns are identified
+                switched = n not in restated and (lang_i[0] != was[0] or (lang_i[1] and was[1] and lang_i[1] != was[1]))
+                if switched:
+                    restated.add(n)
+                elif n not in nums(between):
                     rep.append({"number": n, "turns": [first[n], i]})
             first.setdefault(n, i)
+        vani_lang[i] = lang_i
     # digits only: a call whose VANI turns say numbers in words is 'unknown' for R3 (no number-word table yet)
     out["R3"] = {"result": "fail" if rep else ("pass" if first and covered else "unknown"), "repeats": rep}
 

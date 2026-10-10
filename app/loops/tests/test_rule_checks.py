@@ -46,3 +46,10 @@ def test_r5_exceptions():
 def test_uncovered_language_is_unknown_not_pass():
     r = RC.check(call([("assistant", "x"), ("user", "y")], "Odia"))
     assert r["R5"]["result"] == "unknown" and r["R2"]["result"] == "unknown"
+
+
+def test_one_restatement_after_a_language_switch_is_not_a_repeat():
+    c = call([("assistant", "तुमच्या category मध्ये 26 requirements आल्या आहेत."), ("user", "हिंदी में बोलो"),
+              ("assistant", "आपकी category में 26 requirements आई हैं।"), ("user", "ठीक है"),
+              ("assistant", "और कुछ मदद कर सकती हूँ?"), ("user", "नहीं")], "Hindi")
+    assert RC.check(c)["R3"]["result"] == "pass"

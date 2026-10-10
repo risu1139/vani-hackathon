@@ -345,3 +345,17 @@ def test_overlay_keeps_frustrated_mode():
     out, row = _say(ctx, "kitne leads aaye?")
     assert row.get("overlay") == "question" and "Answer it fully" in out.message_to_llm
     assert ctx.agent_variables["seller_mode"] == "frustrated" and row["ask_ok"] is False
+
+
+def test_question_from_the_models_flag_in_any_language():
+    """generic: the model marks a seller question in any language; the tool answers it without a meeting ask."""
+    ctx = _ctx()
+    out = asyncio.run(vt.ReadSellerSignal(seller_utterance="ଆପଣଙ୍କ ପାଖରେ କେତେ ଲିଡ୍ ଅଛି", language="other",
+                                          seller_asked_question=True).run(ctx))
+    row = json.loads(ctx.agent_variables["switch_log"])[-1]
+    assert row.get("overlay") == "question" and "Do NOT ask" in out.message_to_llm
+
+
+def test_booking_reply_asks_anything_else_and_does_not_close():
+    out = asyncio.run(vt.BookMeeting(slot="kal shaam 4 baje").run(_ctx()))
+    assert "anything" in out.message_to_llm and "Do not end the call" in out.message_to_llm and "close the call" not in out.message_to_llm
