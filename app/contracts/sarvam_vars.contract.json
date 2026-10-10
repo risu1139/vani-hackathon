@@ -14,6 +14,7 @@
   "seller_name": "name token filled on premises (first name + ji) - never sent to the frontier model",
   "company_name": "company token filled on premises",
   "city": "seller city",
+  "handler_line": "R4 (plan 5f): the true answer to 'who handles my account', from state.handler: the sales handler's name ({SALES_EXEC} filled on the laptop) or the team sentence; never empty",
   "prompt_persona": "Persona section: who VANI is for this seller (gender forms, style card, tone, empathy, identity line)",
   "prompt_environment": "Environment & Situation: seller, company, city, what we know (personalisation), guards to respect",
   "prompt_objective": "Objective: division block (NSD/CSD) + this seller's hook and backup",

@@ -315,6 +315,37 @@ def check_text(folder, persona, fails):
 RULE_LINE = re.compile(r"\b(never|do not|don't|not|avoid|no)\b", re.I)
 
 
+STEP_KINDS = {"info", "question", "ask", "close"}
+# meeting/time words: an 'info' step holding one of these plus a question is a meeting ask labelled wrongly
+ASK_WORDS = re.compile(r"(?<![a-z])(kal|parso|subah|shaam|baje|milein|milna|milte|meeting|tomorrow|morning|evening|o'clock)(?![a-z])|"
+                       r"कल|परसों|सुबह|शाम|बजे|मिलें|मिलना|मीटिंग|उद्या|सकाळी|संध्याकाळी|वाजता|భేటీ|రేపు|ఉదయం|సాయంత్రం|"
+                       r"நாளை|காலை|மாலை|ನಾಳೆ|ಬೆಳಿಗ್ಗೆ|ಸಂಜೆ|നാളെ|രാവിലെ|વાગ્યે|કાલે|সকাল|কাল|ਕੱਲ੍ਹ", re.I)
+QMARK = re.compile(r"[?？]|\b(kya|ki|ya)\b|या |किंवा|లేదా|அல்லது|ಅಥವಾ|અથવા|নাকি")
+
+
+def check_plan_rules(persona, fails):
+    """Plan 5f, from references/call_rules.json (pre_check): structural checks on the call plan, named by rule id.
+    They stop a bad plan; the live tool (read_seller_signal) is where R2 is enforced during the call."""
+    steps = persona.get("call_plan") or []
+    kinds = []
+    seen = {}
+    for i, st in enumerate(steps):
+        k = st.get("kind")
+        if k not in STEP_KINDS:
+            fails.append(f"call_plan[{i}]: kind must be one of {sorted(STEP_KINDS)} (call_rules.json)")
+        kinds.append(k)
+        for fid in st.get("fact_ids") or []:
+            if fid in seen:
+                fails.append(f"call_plan[{i}]: R3 no-repeat: fact {fid} is already said in call_plan[{seen[fid]}]")
+            seen.setdefault(fid, i)
+        say = str(st.get("say") or "")
+        if k == "info" and ASK_WORDS.search(say) and QMARK.search(say):
+            fails.append(f"call_plan[{i}]: kind 'info' but the text asks for a day or time: label it 'ask' (R2)")
+    for i in range(1, len(kinds)):
+        if kinds[i] == "ask" and kinds[i - 1] == "ask":
+            fails.append(f"call_plan[{i}]: R2 meeting-pace: two meeting asks in a row (steps {i - 1} and {i})")
+
+
 def check_rendered(persona, fails):
     """Scan the real prompt text (every render_prompt section), so no field falls outside the token / banned / phone checks."""
     import render_prompt as R
@@ -365,6 +396,7 @@ def validate(folder, run):
     if h:
         check_fields(folder, run, persona, h, prior, fails, facts)
         check_text(folder, persona, fails)
+        check_plan_rules(persona, fails)
     else:
         for d in REQ_DIMS_OLD:
             x = dims.get(d)

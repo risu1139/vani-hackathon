@@ -57,7 +57,8 @@ def test_gold(utt, mode):
 
 @pytest.mark.parametrize("utt", NEUTRAL)
 def test_neutral_no_switch(utt):
-    assert vt.classify(utt)[0] == "neutral", (utt, vt.find_cues(utt))
+    # plan 5f: a question ("kaun bol raha hai?") is answered (question mode), never a pitch or a meeting ask
+    assert vt.classify(utt)[0] in ("neutral", "question"), (utt, vt.find_cues(utt))
 
 
 def test_interest_strict_bare_fillers():
@@ -273,3 +274,40 @@ def test_only_explicit_requests_end_the_call(utt, mode, ends):
     ctx = _ctx()
     out, row = _say(ctx, utt)
     assert row["to"] == mode and bool(ctx.end_conversation) is ends
+
+
+# ---------------------------------------------------------------- plan 5f: R1 answer-first, R2 ask grant, R4 handler line
+@pytest.mark.parametrize("utt,lang", [("कितने बजे आओगे कल?", "hindi"), ("meeting kab hogi", "hindi"),
+                                      ("రేపు సాయంత్రం ఐదు గంటలకు రండి", "telugu"), ("kal shaam 4 baje aa jao", "hindi")])
+def test_time_or_interest_beats_question(utt, lang):
+    """review note 1: 'kab aaoge' / a named time is interest, never 'question' (which would forbid the ask)."""
+    ctx = _ctx()
+    out, row = _say(ctx, utt, lang)
+    assert vt.classify(utt)[0] == "interested" or vt.time_mention(utt)
+    assert row["ask_ok"] is True and "You may ask" in out.message_to_llm
+
+
+@pytest.mark.parametrize("utt,lang", [("अच्छा, किस तरह की लीड आती है?", "hindi"), ("ఎన్ని లీడ్స్ వచ్చాయి", "telugu"),
+                                      ("எத்தனை லீட்ஸ் வந்தது", "tamil")])
+def test_question_is_answered_without_ask(utt, lang):
+    ctx = _ctx()
+    out, row = _say(ctx, utt, lang)
+    assert vt.classify(utt)[0] == "question" and row["ask_ok"] is False and "Do NOT ask" in out.message_to_llm
+
+
+@pytest.mark.parametrize("utt,lang", [("कौन है मेरा एग्जीक्यूटिव? कौन आएगा?", "hindi"), ("executive ఎవరు వస్తారు", "telugu")])
+def test_handler_question_gets_the_handler_line(utt, lang):
+    ctx = _ctx(handler_line="our IndiaMART team handles your account; the executive will introduce themselves when they call")
+    out, row = _say(ctx, utt, lang)
+    assert row["to"] == "ask_handler" and "introduce themselves" in out.message_to_llm and "Do NOT ask" in out.message_to_llm
+    out, row = _say(_ctx(), utt, lang)  # no variable: the team sentence, never empty
+    assert "IndiaMART team handles your account" in out.message_to_llm
+
+
+def test_ask_never_twice_in_a_row():
+    ctx = _ctx()
+    grants = []
+    for u in ("haan boliye", "achha", "theek hai", "haan", "accha ji", "theek"):
+        out, row = _say(ctx, u)
+        grants.append(row["ask_ok"])
+    assert grants == [False, True, False, True, False, True], grants  # opening first; then VANI decides, never two turns running

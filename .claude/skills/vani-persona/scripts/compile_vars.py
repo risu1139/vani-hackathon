@@ -57,6 +57,18 @@ def load_names(path):
     return out
 
 
+TEAM_HANDLER_LINE = "our IndiaMART team handles your account; the executive will introduce themselves when they call"
+
+
+def handler_line(facts, names):
+    """R4 (plan 5f): the sentence VANI says when asked who handles the account. A person only through the {SALES_EXEC}
+    token (so the unknown/unfilled-token checks cover it); anything else, or no data, is the team sentence, never empty."""
+    st = {x["id"]: (x.get("A_script") or {}).get("value") for x in facts.get("states") or []}
+    if st.get("state.handler") == "person":
+        return fill("our IndiaMART executive {SALES_EXEC} handles your account and will meet you", names)
+    return TEAM_HANDLER_LINE
+
+
 def fill(text, names):
     for k, v in (names or {}).items():
         text = text.replace(k, v)
@@ -114,6 +126,7 @@ def compile_vars(run, names=None, city=None):
         "persona_style_id": (p.get("prior") or {}).get("chosen") if not (p.get("prior") or {}).get("override") else "COMPOSED",
         "switch_sensitivity": json.dumps(p.get("switch_sensitivity") or {}),
         "seller_name": (names or {}).get("{SELLER_NAME}", ""), "company_name": (names or {}).get("{COMPANY}", ""), "city": city or "",
+        "handler_line": handler_line(facts, names),
     }
     # Sarvam fills variables in one pass: resolve @refs inside the sections here, before sending.
     inner = {k: base[k] for k in ("identity_line", "persona_opening", "seller_name", "company_name", "city")}

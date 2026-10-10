@@ -43,6 +43,7 @@ def main():
     if not run or not os.path.exists(os.path.join(run, "07_outcome.json")):
         raise SystemExit("no run with 06_call.json / 07_outcome.json")
     review = [PY, os.path.join(ROOT, "app", "loops", "review_call.py"), "--run", run] + (["--names", p.names] if p.names else [])
+    step("rules", [PY, os.path.join(ROOT, "app", "loops", "rule_checks.py"), "--run", run])  # plan 5f, no LLM
     step("review", review)
     # test chats (console playground) never touch the real scoreboards
     import json

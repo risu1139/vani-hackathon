@@ -74,6 +74,11 @@ def lines(xs):
     return "\n".join(f"- {x}" for x in xs if x)
 
 
+def call_rules():
+    """references/call_rules.json (plan 5f): the one list of call-behaviour rules; every prompt carries all of them."""
+    return json.load(open(os.path.join(REF, "call_rules.json"), encoding="utf-8"))["rules"]
+
+
 def sections(p):
     """{section variable: text}. Pure function of the validated persona (+ library card + division reference)."""
     g = val(p, "voice_gender")
@@ -162,6 +167,7 @@ def sections(p):
                "names another person, book with that person instead.",
                "- Ask anything else (office or video, who will join) only AFTER book_meeting confirms.",
                "- Say it is booked only after book_meeting confirms. If it fails, say hamare IndiaMART executive will call to fix the time.",
+               "- After booking, ask if there is anything else you can help with; end the call only after the seller says no or goodbye.",
                "Phase 6: Not interested",
                "- Acknowledge it, do not argue. Give ONE short reason from the facts, or ask if another day or a callback suits them.",
                "- If they say no again, thank them and ask if you may call later. End the call ONLY when the seller clearly asks "
@@ -179,6 +185,7 @@ def sections(p):
                "- the seller asks who handles the account -> say only what 'About this seller' gives for the handler; never invent a "
                "name, a phone number, an email or a designation",
                "- the main topic does not land after two tries -> move to one of the other topics under 'About this seller'"]
+    phases += ["Call rules (always; they win over any step above)"] + [f"- {r['id']}: {r['say']}" for r in call_rules()]
     guard = "\n".join([lines(p.get("guardrails") or []),
                        "- Never argue. Never promise leads, orders, sales or results.",
                        "- Never say AI, bot, robot, branch manager, account manager or 'personally'."])

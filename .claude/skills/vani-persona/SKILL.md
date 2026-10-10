@@ -55,6 +55,7 @@ Names are tokens (`{SELLER_NAME}`, `{COMPANY}`). Keep the tokens in your text.
    - `opening`: short and interactive (one value statement, one simple question);
    - `opening` and `identity_line` both say VANI's own name as the token `{AGENT_NAME}` and name IndiaMART, e.g. "Main {AGENT_NAME}, IndiaMART se bol rahi hoon". compile_vars fills the name of the voice (a female name for a female voice, a male name for a male voice);
    - `hook` {id = your primary hook, claim, fact_ids, backup}, `call_plan`, `objection_playbook` (from your division file), `escalation_rules`, `guardrails`;
+   - every `call_plan` step has `kind` (info | question | ask | close) and `fact_ids` (the verified facts it says). Read `$VANI_SKILL/references/call_rules.json` first: the validator refuses two `ask` steps in a row (R2), one fact in two steps (R3), and an `info` step that asks for a day or time. Plan few asks; VANI decides in the call when to ask;
    - `verified_facts`: the only numbers VANI may say;
    - `personalisation`, `switch_sensitivity`, `guards_ack`, `overall_confidence`, `completeness`.
    - Rules: first-person verbs match the voice gender ("kar rahi hoon" for F). Never say AI, bot, branch manager, account manager or "personally". Never name a buyer.

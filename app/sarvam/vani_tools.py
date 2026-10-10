@@ -190,6 +190,26 @@ LEXICON = [
         "not interested", "no interest", "interest nahi", "interested nahi", "nahi chahiye", "baat nahi karni", "baat nahi karna",
         "nahi karni meeting", "meeting nahi", "नहीं चाहिए", "इंटरेस्ट नहीं", "इंटरेस्टेड नहीं", "बात नहीं करनी", "बात नहीं करना",
         "मीटिंग नहीं", "नहीं करनी मुझे", "मला नको", "रस नाही")),
+    ("ask_handler", "strong", (
+        # R4 (plan 5f): the seller asks who handles the account / who will come; answered with handler_line, word for word
+        "executive kaun", "executive ka naam", "mera executive", "kaun aayega", "kaun aaega", "naam batao", "naam kya hai",
+        "who is my executive", "executive name", "who will come", "account manager kaun",
+        "एग्जीक्यूटिव का", "एग्जीक्यूटिव कौन", "मेरा एग्जीक्यूटिव", "कौन आएगा", "कौन है वो", "नाम क्या है", "नाम बताओ",
+        "executive कौन", "कोण येणार", "एक्झिक्युटिव्ह कोण", "ఎవరు వస్తారు", "ఎగ్జిక్యూటివ్ ఎవరు", "யார் வருவாங்க",
+        "ಯಾರು ಬರುತ್ತಾರೆ", "ആരാണ് വരുന്നത്", "કોણ આવશે", "কে আসবে", "ਕੌਣ ਆਵੇਗਾ")),
+    ("question", "weak", (
+        # R1 (plan 5f): a question by question words per language (STT often drops the "?")
+        "kya", "kaun", "kab", "kitna", "kitni", "kitne", "kaise", "kyun", "kahan", "kaunsa", "kaun se", "kis", "kiska", "kisko",
+        "what", "who", "when", "how", "why", "which", "where",
+        "किस", "किसका", "किसको", "क्या", "कौन", "कब", "कितना", "कितनी", "कितने", "कैसे", "क्यों", "कहाँ", "कहां", "कौनसा", "कौन से",
+        "काय", "कोण", "कधी", "किती", "कसे", "कसं", "का?", "कुठे", "कोणत्या",
+        "ఎన్ని", "ఏది", "ఏవి", "ఏమి", "ఏంటి", "ఎవరు", "ఎప్పుడు", "ఎంత", "ఎలా", "ఎందుకు", "ఎక్కడ", "ఏ ",
+        "எத்தனை", "எது", "என்ன", "யார்", "எப்போது", "எவ்வளவு", "எப்படி", "ஏன்", "எங்கே",
+        "ಯಾವ", "ಏನು", "ಯಾರು", "ಯಾವಾಗ", "ಎಷ್ಟು", "ಹೇಗೆ", "ಯಾಕೆ", "ಎಲ್ಲಿ",
+        "എന്ത്", "ആര്", "എപ്പോൾ", "എത്ര", "എങ്ങനെ", "എന്തിന്", "എവിടെ",
+        "શું", "કોણ", "ક્યારે", "કેટલું", "કેટલા", "કેવી રીતે", "કેમ", "ક્યાં",
+        "কি", "কে", "কখন", "কত", "কিভাবে", "কেন", "কোথায়",
+        "ਕੀ", "ਕੌਣ", "ਕਦੋਂ", "ਕਿੰਨਾ", "ਕਿਵੇਂ", "ਕਿਉਂ", "ਕਿੱਥੇ")),
     ("frustrated", "strong", (
         # v3: complaints about the leads (phone test 2026-10-10)
         "बेकार", "bekaar", "bekar", "क्वालिटी खराब", "quality kharab", "बहुत खराब", "బాగాలేదు", "బాగోలేవు", "క్వాలిటీ బాగాలేదు",
@@ -247,7 +267,8 @@ LEXICON = [
     ("interested", "strong", (
         "kitna charge", "kitne ka", "charges kya", "kya charge", "charge kitna", "paise kitne", "kitne lagenge",
         "kitna lagega", "price kya", "exact price", "kaise kaam karta", "kaise kaam karega", "kab aayenge",
-        "kab aaoge", "kab milenge", "kab mil sakte", "meeting kab", "kitne baje", "mil lete", "aa jaiye",
+        "kab aaoge", "kab aayega", "kab aaega", "kab aaenge", "kab milenge", "kab mil sakte", "meeting kab", "kitne baje",
+        "कब आएगा", "कब आएंगे", "कब आयेंगे", "कब आओगे", "कब मिलेंगे", "कब आ सकते", "ఎప్పుడు వస్తారు", "எப்போது வருவீங்க", "mil lete", "aa jaiye",
         "details bhej*", "detail bhej*", "milte hai*", "how much", "what is the price", "how does it work",
         "send details", "when can you come", "let's meet",
         "कितना चार्ज", "कितने का", "चार्ज क्या", "क्या चार्ज", "चार्ज कितना", "पैसे कितने", "कितने लगेगे",
@@ -265,7 +286,7 @@ LEXICON = [
         "કેવી રીતે")),
 ]
 _COMPILED = [(mode, strength, cue, _cue_re(cue)) for mode, strength, cues in LEXICON for cue in cues]
-PRIORITY = ["opt_out", "frustrated", "declined", "bot_question", "rushed", "confused", "interested"]
+PRIORITY = ["opt_out", "frustrated", "ask_handler", "declined", "bot_question", "rushed", "confused", "interested", "question"]
 ALWAYS_NOW = {"opt_out", "frustrated", "bot_question"}
 _LATER = re.compile(r"(?<![a-z])(baad|kal|shaam|later|tomorrow|evening|tarvata|appuram|amele|pinne|nantar)(?![a-z])|"
                     r"बाद|कल|शाम|પછી|કાલે|नंतर|পরে|తర్వాత|రేపు|அப்புறம்|நாளை|ಆಮೇಲೆ|ನಾಳೆ|പിന്നെ|നാളെ")
@@ -364,7 +385,7 @@ def script_of(text):
 # ---------------------------------------------------------------- directives (per mode x persona style)
 STYLE_WPT = {"P0": 20, "P1": 18, "P2": 15, "P3": 14, "P4": 10, "P5": 16, "P6": 20, "COMPOSED": 18}
 MODE_CAP = {"neutral": 20, "rushed": 12, "frustrated": 18, "confused": 20, "interested": 20, "bot_question": 20,
-            "opt_out": 15, "declined": 20, "language_switch": 20}
+            "opt_out": 15, "declined": 20, "language_switch": 20, "question": 30, "ask_handler": 30}
 _D = {  # mode -> style -> (word cap, text); "*" = any style without its own variant. {cap} is filled in.
     "rushed": {
         "*": (12, "Seller is busy. ONE short sentence, max {cap} words: the value in a few words, then ask when to call back."),
@@ -391,9 +412,17 @@ _D = {  # mode -> style -> (word cap, text); "*" = any style without its own var
         "P6": (20, "Seller is confused. Re-explain one idea plainly, short phrases separated by commas, no jargon, then check understanding. Max {cap} words."),
     },
     "interested": {
-        "*": (20, "Seller is interested. Answer in one short line using only verified facts, then ask a day and time for our IndiaMART executive's meeting. Do not pitch again. Max {cap} words."),
-        "P1": (18, "Seller is interested. One line with one verified fact, then ask a day and time for the meeting. Do not pitch again. Max {cap} words."),
-        "P4": (12, "Seller is interested. Skip details; ask a day and time for the meeting. Max {cap} words."),
+        "*": (20, "Seller is interested. First answer what they asked in one short line from the facts. Do not pitch again. Max {cap} words."),
+        "P1": (18, "Seller is interested. Answer with one verified fact first. Do not pitch again. Max {cap} words."),
+        "P4": (12, "Seller is interested. Answer in one short line. Max {cap} words."),
+    },
+    "question": {
+        "*": (30, "Seller asked a question. Answer it fully and truthfully from the facts and 'About this seller'. If the answer "
+                  "is not there, say so plainly once, never with the same words twice. Max {cap} words."),
+    },
+    "ask_handler": {
+        "*": (30, "Seller asked who handles the account or who will come. Say this, in the seller's language, and nothing "
+                  "else about it: {handler}. Max {cap} words."),
     },
     "bot_question": {
         "*": (20, "Seller asked if you are a bot or a person. Do not say AI or bot, never claim to be human. Say you are calling from IndiaMART about their profile, then return to the call plan. Max {cap} words."),
@@ -406,8 +435,8 @@ _D = {  # mode -> style -> (word cap, text); "*" = any style without its own var
         "*": (15, "Seller does not want calls. Apologise, confirm they will not be called again, thank them, end the call. No pitch. Max {cap} words."),
     },
     "declined": {
-        "*": (20, "Seller is not interested now. Do NOT end the call. Acknowledge briefly, then ONE reason from the facts or "
-                  "ask if another day suits them. End only if they clearly ask to end the call. Max {cap} words."),
+        "*": (20, "Seller is not interested now. Do NOT end the call. Acknowledge briefly, then ONE reason from the facts. "
+                  "End only if they clearly ask to end the call. Max {cap} words."),
     },
     "language_switch": {
         "*": (20, "Seller switched to {lang}. Reply in {lang} from now on, same persona and rules. Max {cap} words."),
@@ -418,7 +447,7 @@ _D = {  # mode -> style -> (word cap, text); "*" = any style without its own var
 }
 
 
-def directive(mode, style_id, lang=""):
+def directive(mode, style_id, lang="", handler=""):
     """(directive_id, word cap, text) for a mode and persona style. Neutral uses the persona's words per turn."""
     style = (style_id or "").strip().upper() or "COMPOSED"
     variants = _D[mode]
@@ -426,13 +455,18 @@ def directive(mode, style_id, lang=""):
     cap, text = variants[key]
     if mode == "neutral":
         cap = min(STYLE_WPT.get(style, 18), MODE_CAP["neutral"])
-    return f"{mode}.{key if key != '*' else 'base'}.v1", cap, text.format(cap=cap, lang=lang or "the seller's language")
+    return f"{mode}.{key if key != '*' else 'base'}.v1", cap, text.format(cap=cap, lang=lang or "the seller's language",
+                                                                          handler=handler or TEAM_HANDLER_LINE)
 
 
+TEAM_HANDLER_LINE = ("our IndiaMART team handles your account; the executive will introduce themselves when they call")
+ASK_GAP = 2  # R2 (user 2026-10-10: "let the agent decide, but do not irritate"): never two asks in a row; VANI decides when
+NO_ASK_MODES = {"question", "ask_handler", "declined", "frustrated", "opt_out", "confused", "bot_question"}
 _CHANGE = {"neutral": "default persona style", "rushed": "brevity + callback offer", "frustrated": "apology, pitch stopped",
            "confused": "simplify: short comma phrases + check", "interested": "move to meeting day/time",
            "bot_question": "identity sidestep", "bot_question_pressed": "virtual-assistant line + human callback",
-           "opt_out": "apology + end call", "declined": "acknowledge, keep the line open", "language_switch": "reply language"}
+           "opt_out": "apology + end call", "declined": "acknowledge, keep the line open", "language_switch": "reply language",
+           "question": "answer fully, no meeting ask", "ask_handler": "handler line, word for word"}
 
 OPT_OUT_LINE = {
     "Hindi": "माफ़ कीजिए, अब आपको हमारी तरफ से कॉल नहीं आएगा। धन्यवाद।",
@@ -514,6 +548,8 @@ class ReadSellerSignal(SarvamTool):
         context.set_internal_variable("turn", turn)
 
         mode, strength, cue, note = classify(utt)
+        if mode == "question" and time_mention(utt):
+            mode, strength, cue = "interested", "strong", "time named"
         # language switch: dominant script differs from the last seller turn (or from the persona's start language)
         last_script = _ivar(context, "last_script") or _ivar(context, "start_script") or ""
         if not last_script:
@@ -565,7 +601,7 @@ class ReadSellerSignal(SarvamTool):
             context.set_internal_variable("bot_q_count", n)
             if n >= 2:
                 dmode = "bot_question_pressed"
-        did, cap, text = directive(dmode, style, new_lang)
+        did, cap, text = directive(dmode, style, new_lang, _var(context, "handler_line"))
         if lang_switch and to != "language_switch":
             text += f" Reply in {new_lang}."
         if lang_switch:
@@ -575,6 +611,18 @@ class ReadSellerSignal(SarvamTool):
             text += (" The seller named a time: if they agreed to meet then, call book_meeting in THIS reply with that slot "
                      "(inside 9 AM - 6 PM; else offer the nearest time inside).")
             reason += "; time named -> book_meeting nudge"
+
+        # R2 (plan 5f): the tool GRANTS the meeting ask; no self-report from the model
+        if to != "opt_out":
+            last_ok = int(_ivar(context, "ask_ok_turn") or 0)
+            # the seller's raw signal decides (a smoothed mode can lag one turn)
+            allow = mode not in NO_ASK_MODES and (mode == "interested" or bool(tm) or turn - last_ok >= ASK_GAP)
+            if allow:
+                context.set_internal_variable("ask_ok_turn", turn)
+                text += " You may ask for the meeting in this reply if it fits; you decide."
+            else:
+                text += " Do NOT ask for the meeting in this reply."
+            row["ask_ok"] = allow
 
         _setvar(context, "seller_mode", to)
         _setvar(context, "persona_directive", text)

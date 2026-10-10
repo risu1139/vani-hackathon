@@ -24,7 +24,7 @@
   "hook": {"id": "the primary hook decided with 'hook'", "claim": "spoken claim (native script)", "fact_ids": ["candidate_leads.md#CL-1"], "backup": "hook.profile_gap"},
   "opening": "first line, native script, gender-agreed, short and interactive",
   "identity_line": "IndiaMART se ... profile correct karne ke liye call kiya hai (language + gender of the voice)",
-  "call_plan": [{"step": 1, "goal": "...", "say": "..."}],
+  "call_plan": [{"step": 1, "goal": "...", "say": "...", "kind": "info|question|ask|close", "fact_ids": ["<verified_facts id>"]}],
   "objection_playbook": [{"objection": "phone par hi bata do", "response": "...", "fact_ids": []}],
   "escalation_rules": ["opt-out / DND -> apologise once, end the call", "hostile -> short and calm", "asks for a human -> offer a callback from an IndiaMART executive"],
   "guardrails": ["never volunteer AI; sidestep once; 'virtual assistant' if pressed; never claim to be human", "numbers only from verified_facts", "never name a buyer"],

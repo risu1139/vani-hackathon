@@ -213,3 +213,34 @@ def test_name_tokens_refused_in_persona_text(tmp_path):
 def test_rendered_scan_catches_unlisted_fields(tmp_path):
     bad(tmp_path, lambda p, r: p.update(escalation_rules=["say you are the account manager"]), "rendered")
     bad(tmp_path, lambda p, r: p.update(guardrails=["call 98765 43210 for help"]), "phone number or email")
+
+
+# ---------------------------------------------------------------- plan 5f: structural call-plan checks (call_rules.json)
+def _plan(*steps):
+    return [{"step": i + 1, "goal": "g", "say": s, "kind": k, "fact_ids": f, "basis": {"type": "persona", "ref": "pace"}}
+            for i, (s, k, f) in enumerate(steps)]
+
+
+def test_plan_rules_catch_bad_plans():
+    import validate_persona as VP
+    cases = [
+        (_plan(("Kal subah milein?", "ask", []), ("Ya shaam ko?", "ask", [])), "R2 meeting-pace"),
+        (_plan(("26 requirements aayi hain", "info", ["peers.md#E08"]), ("Phir se, 26 requirements", "info", ["peers.md#E08"])), "R3 no-repeat"),
+        (_plan(("Executive dikhayenge, kal subah ya shaam?", "info", []),), "label it 'ask'"),
+        (_plan(("రేపు ఉదయం లేదా సాయంత్రం?", "info", []),), "label it 'ask'"),
+        (_plan(("x", "pitch", []),), "kind must be one of"),
+    ]
+    for plan, expect in cases:
+        fails = []
+        VP.check_plan_rules({"call_plan": plan}, fails)
+        assert any(expect in f for f in fails), (expect, fails)
+
+
+def test_plan_rules_accept_good_plan():
+    import validate_persona as VP
+    plan = _plan(("26 requirements aayi hain", "info", ["peers.md#E08"]), ("Kis tarah ki leads chahiye?", "question", []),
+                 ("Executive aapko live dikhayenge. Kal subah milein?", "ask", []), ("Satara se 36 piece ki requirement hai", "info", ["candidate_leads.md#E12"]),
+                 ("Aur kuch madad kar sakti hoon?", "close", []))
+    fails = []
+    VP.check_plan_rules({"call_plan": plan}, fails)
+    assert fails == [], fails
