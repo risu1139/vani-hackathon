@@ -158,3 +158,18 @@ def test_tele_handler_and_employee_ids_dropped_from_text(tmp_path):
     assert "assignedto_name:** {SALES_EXEC}" in core and "vertical_name:** CSD" in core and "member_since" in core
     for gone in ("teleassignedto", "tele_vertical", "125300", "115182", "Pardesi", "**assignedto:**"):
         assert gone not in core, gone
+
+
+def test_spoken_name_is_a_first_name_never_a_company_word():
+    ctx = {"points": {"A03": {"value": {"glusr_usr_cfirstname": "Ishvani", "glusr_usr_firstname": "Quentaro"}}}}
+    names = {"{COMPANY}": ["Ishvani Traders Pvt Ltd", "Ishvani Traders"]}
+    assert E.spoken_names(ctx, names) == {"{SELLER_NAME}": "Quentaro"}          # the contact first name is a company word: next field
+    assert E.spoken_names({"points": {"A03": {"value": {"glusr_usr_cfirstname": "ishvani"}}}}, {"{COMPANY}": ["Zorbax"]}) == {"{SELLER_NAME}": "Ishvani"}
+    assert E.spoken_names({"points": {"A03": {"value": {"glusr_usr_cfirstname": "M/S Zorbax Fabricators"}}}}, {}) == {}   # not a clean first name
+    assert E.spoken_names({"points": {}}, {}) == {}
+
+
+def test_map_carries_spoken_form(tmp_path):
+    pseudo, out, _ = run(tmp_path)
+    m = json.load(open(tmp_path / "maps" / f"{pseudo}.json", encoding="utf-8"))
+    assert m["spoken"] == {"{SELLER_NAME}": "Ishvani"}

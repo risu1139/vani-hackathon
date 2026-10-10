@@ -264,6 +264,24 @@ def gate(folder, glid, names):
 
 
 # ---------------------------------------------------------------- export
+FIRST_NAME_KEYS = ("glusr_usr_cfirstname", "glusr_usr_firstname")
+
+
+def spoken_names(ctx, names):
+    """The form VANI may SAY for {SELLER_NAME}: the contact's FIRST name from the account first-name fields only.
+    Never a word of the company name and never taken from gst_partner_names / contact-person strings (they can hold a firm name).
+    Returns {"{SELLER_NAME}": "First"} or {} when no safe first name exists (then VANI says no name)."""
+    a03 = (((ctx.get("points") or {}).get("A03") or {}).get("value") or {})
+    company_words = {w.lower() for c in names.get("{COMPANY}", []) for w in re.split(r"\W+", c) if len(w) > 2}
+    for k in FIRST_NAME_KEYS:
+        v = a03.get(k) if isinstance(a03, dict) else None
+        parts = re.split(r"\s+", str(v or "").strip())
+        first = parts[0] if parts and parts[0] else ""
+        if len(first) >= 2 and first.isalpha() and first.lower() not in company_words:
+            return {"{SELLER_NAME}": first.title()}
+    return {}
+
+
 def export(glid, src=None, dst=None, maps=None, key=None):
     glid = str(glid).strip()
     src, dst, maps = src or SRC, dst or DST, maps or MAPS
@@ -299,7 +317,7 @@ def export(glid, src=None, dst=None, maps=None, key=None):
         return pseudo, None, hits
     os.makedirs(maps, exist_ok=True)
     with open(os.path.join(maps, f"{pseudo}.json"), "w", encoding="utf-8") as f:
-        json.dump({"pseudo": pseudo, "glid": glid, "tokens": names}, f, ensure_ascii=False, indent=1)
+        json.dump({"pseudo": pseudo, "glid": glid, "tokens": names, "spoken": spoken_names(ctx, names)}, f, ensure_ascii=False, indent=1)
     return pseudo, out, {}
 
 
