@@ -141,7 +141,10 @@ def sections(p):
     phases += [f"- Step {s.get('step')}, {s.get('goal')}: say \"{s.get('say')}\"" for s in plan]
     phases += ["- After each step, ask one simple question and listen. Let the seller talk; pick up their words.",
                "Phase 3: Ask for the meeting",
-               "- Ask for a meeting with hamare IndiaMART executive, tied to the hook. Let the seller choose the day and time.",
+               "- Ask for a meeting with hamare IndiaMART executive, tied to the hook. Ask directly for a day and time.",
+               "- If the seller gives no time: ask once for a time the next day ('kal kis time theek rahega?').",
+               "- If still no time: say hamare IndiaMART executive will call them and fix a time together, thank them and close. "
+               "Do not call book_meeting then.",
                f"- Meetings only between {WORK_HOURS[0]} and {WORK_HOURS[1]} (the team's working hours). If the seller asks for a "
                f"time outside these hours, offer the nearest time inside them, e.g. 'shaam 6 se pehle' or 'agle din subah {WORK_HOURS[0]}'.",
                "Phase 4: Objections (answer from this list; at most twice per objection, then offer a callback)"]

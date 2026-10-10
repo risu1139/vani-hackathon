@@ -226,3 +226,25 @@ def test_tool_only_contract_variables():
     src = (Path(vt.__file__)).read_text(encoding="utf-8")
     used = set(re.findall(r'_(?:set)?var\(context, "([a-z_]+)"', src))
     assert used <= set(ALL_VARS), used - set(ALL_VARS)
+
+
+@pytest.mark.parametrize("slot,ok", [
+    ("kal shaam 5 baje", True), ("kal subah 10 baje", True), ("Monday 11 am", True), ("రేపు సాయంత్రం 5 గంటలకు", True),
+    ("kal 3 baje", True), ("kal shaam 7 baje", False), ("raat 9 baje", False), ("subah 8 baje", False), ("8 baje", False),
+    ("6 pm", False), ("kal milte hain", True)])
+def test_slot_inside_work_hours(slot, ok):
+    assert (vt.slot_check(slot) == "") is ok
+
+
+def test_book_meeting_refuses_outside_hours():
+    ctx = _ctx()
+    out = asyncio.run(vt.BookMeeting(slot="kal raat 8 baje").run(ctx))
+    assert out.message_to_llm.startswith("Not booked") and ctx.agent_variables.get("meeting_fixed") != "yes"
+
+
+def test_time_named_nudges_booking():
+    ctx = _ctx()
+    out, row = _say(ctx, "theek hai kal shaam 4 baje aa jaiye")
+    assert "book_meeting" in out.message_to_llm and "book_meeting nudge" in row["reason"]
+    out, row = _say(ctx, "mere 5 credits bache hain")
+    assert "book_meeting" not in out.message_to_llm

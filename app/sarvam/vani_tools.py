@@ -108,6 +108,48 @@ _TOKEN_MAP = {"nahin": "nahi", "nhi": "nahi", "nai": "nahi", "nahee": "nahi", "m
               "pareshaan": "pareshan", "dobaara": "dobara"}
 
 
+
+# ---------------------------------------------------------------- meeting time (team works 9 AM - 6 PM, rule 2026-10-10)
+WORK_START, WORK_END = 9, 18
+# words that mark a clock time or a part of the day, in the languages VANI speaks
+HOUR_MARK = re.compile(r"(\d{1,2})(?:[:.](\d{2}))?\s*(am|a\.m\.|pm|p\.m\.|baje|bje|bajey|o'?clock|बजे|గంటలకు|గంటలు|மணிக்கு|மணி|"
+                       r"ಗಂಟೆಗೆ|ಗಂಟೆ|वाजता|વાગ્યે|টায়|টার|മണിക്ക്)?", re.I)
+PART_PM = re.compile(r"\b(pm|p\.m\.|shaam|sham|dopahar|dopaher|evening|afternoon|raat|night)\b|शाम|दोपहर|रात|సాయంత్రం|మధ్యాహ్నం|రాత్రి|"
+                     r"மாலை|மதியம்|இரவு|ಸಂಜೆ|ಮಧ್ಯಾಹ್ನ|ರಾತ್ರಿ|संध्याकाळी|दुपारी|સાંજે|બપોરે|বিকেল|সন্ধ্যা|দুপুর|വൈകുന്നേരം|ഉച്ച", re.I)
+PART_AM = re.compile(r"\b(am|a\.m\.|subah|subha|morning)\b|सुबह|ఉదయం|காலை|ಬೆಳಿಗ್ಗೆ|सकाळी|સવારે|সকাল|രാവിലെ", re.I)
+DAY_WORD = re.compile(r"\b(kal|parso|aaj|tomorrow|today|monday|tuesday|wednesday|thursday|friday|saturday|sunday|somvar|mangalvar|"
+                      r"budhvar|guruvar|shukravar|shanivar)\b|कल|परसों|आज|రేపు|ఈరోజు|நாளை|இன்று|ನಾಳೆ|ಇವತ್ತು|उद्या|આજે|કાલે|আজ|কাল|നാളെ|ഇന്ന്", re.I)
+
+
+def time_mention(text):
+    """(hour or None, said_part) when the text names a clock time or a day with a part of day; else None."""
+    t = text or ""
+    m = next((m for m in HOUR_MARK.finditer(t) if m.group(3)), None)
+    part = "pm" if PART_PM.search(t) else "am" if PART_AM.search(t) else ""
+    if m:
+        return int(m.group(1)), part or ("pm" if (m.group(3) or "").lower().startswith("p") else "")
+    if DAY_WORD.search(t) and part:
+        return None, part
+    return None
+
+
+def slot_check(slot):
+    """'' when the slot is inside 9 AM - 6 PM (or cannot be read: the executive confirms it), else the reason."""
+    tm = time_mention(slot)
+    if not tm or tm[0] is None:
+        return ""
+    h, part = tm
+    if part == "pm" and h < 12:
+        h += 12
+    elif not part and 1 <= h <= 6:
+        h += 12  # a bare '5 baje' at work is 5 PM
+    elif not part and h in (7, 8):
+        return f"'{h}' could be morning or evening and both are outside 9 AM - 6 PM"
+    if WORK_START <= h < WORK_END:
+        return ""
+    return f"{h}:00 is outside the working hours 9 AM - 6 PM"
+
+
 def norm(text):
     """Lower case, NFD, drop nukta / anusvara / chandrabindu, punctuation -> space, map common romanised variants."""
     t = unicodedata.normalize("NFD", (text or "").lower())
@@ -485,6 +527,11 @@ class ReadSellerSignal(SarvamTool):
             text += f" Reply in {new_lang}."
         if lang_switch:
             reason += f"; script {last_script}->{script}" + (f" (set {lang_set})" if lang_set else "")
+        tm = time_mention(utt) if to not in ("opt_out", "frustrated") else None
+        if tm and (_var(context, "meeting_fixed") or "no") != "yes":
+            text += (" The seller named a time: if they agreed to meet then, call book_meeting in THIS reply with that slot "
+                     "(inside 9 AM - 6 PM; else offer the nearest time inside).")
+            reason += "; time named -> book_meeting nudge"
 
         _setvar(context, "seller_mode", to)
         _setvar(context, "persona_directive", text)
@@ -516,6 +563,11 @@ class BookMeeting(SarvamTool):
         slot = (self.slot or "").strip()
         if len(slot) < 2:
             return SarvamToolOutput(message_to_llm="Not booked: no day and time yet. Ask the seller for a day and time first.",
+                                    context=context)
+        bad = slot_check(slot)
+        if bad:
+            return SarvamToolOutput(message_to_llm=(f"Not booked: {bad}. Our executives meet between 9 AM and 6 PM. Offer the "
+                                                    "nearest time inside, for example the next day morning, then call book_meeting again."),
                                     context=context)
         value = slot[:120] + (f" @ {self.place.strip()[:60]}" if self.place.strip() else "")
         ok = _setvar(context, "meeting_fixed", "yes") & _setvar(context, "meeting_slot", value)
