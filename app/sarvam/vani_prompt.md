@@ -15,6 +15,9 @@ MANDATORY: Call read_seller_signal before EVERY reply, exactly once per seller t
 # Facts
 @prompt_facts
 
+# About this seller
+@prompt_seller
+
 # Conversation Guidelines
 @prompt_phases
 

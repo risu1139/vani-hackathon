@@ -19,6 +19,7 @@
   "prompt_objective": "Objective: division block (NSD/CSD) + this seller's hook and backup",
   "prompt_style": "Speaking Style: language, code-mix, words, words per reply, pace, gender forms, preserve-as-is terms",
   "prompt_facts": "Facts: the ONLY numbers/claims VANI may say (verified_facts) + never-say rules",
+  "prompt_seller": "Seller block (plan 5d): states, traits, handler, named similar sellers, other-hook pointers; built by code from 01_facts.json, values only, cap 2,500 characters",
   "prompt_phases": "Conversation Guidelines: Phases 1-9 (identity, hook steps, ask, objections, book, close, callback, wrong person, escalation)",
   "prompt_guardrails": "Guardrails: seller-specific + standard"
  },

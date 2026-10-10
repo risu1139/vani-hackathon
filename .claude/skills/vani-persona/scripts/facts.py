@@ -299,6 +299,31 @@ def build(ctx, today):
                   [ev("E12", "candidate_leads.md#CL-1", bool(leads))], 0.8 if leads else 0.1, "first two rows by fit_score (E12)",
                   as_of=str(today), half_life_days=7, weight=1.0))
 
+    # ---------------- handler and named peers (plan 5d, user decisions 2026-10-10)
+    h2 = g("H02") if isinstance(g("H02"), dict) else {}
+    sales = str(h2.get("assignedto_name") or "")
+    # a person handler only with the role token; {EXEC_NAME} (old export) cannot say which person, so it is spoken as the team
+    kind = "person" if sales == "{SALES_EXEC}" else "pool" if sales else "unknown"
+    S.append(item("state", "state.handler", kind, [ev("H02", "H02.assignedto_name", sales or None)], 0.9 if sales else 0.1,
+                  "person when assignedto_name is the {SALES_EXEC} token, else the IndiaMART team (pool labels are never spoken)",
+                  detail={"token": "{SALES_EXEC}" if kind == "person" else None}))  # sales handler only (user decision)
+    e8c = g("E08") if isinstance(g("E08"), dict) else {}
+    comp = ((e8c.get("competitors") or {}).get("competitors") or []) if isinstance(e8c.get("competitors"), dict) else []
+    peers = []
+    for c in comp:
+        if not isinstance(c, dict) or not re.fullmatch(r"\{COMPETITOR_\d+\}", str(c.get("competitor_company") or "")):
+            continue
+        yrs = None
+        m = re.search(r"(19|20)\d\d", str(c.get("competitor_membersince") or ""))
+        if m:
+            yrs = today.year - int(m.group(0))
+        peers.append({"token": c["competitor_company"], "city": str(c.get("competitor_city") or "")[:40],
+                      "paid": c.get("plan") == "paid" if c.get("plan") in ("paid", "free") else None,
+                      "on_im": None if yrs is None else "for many years" if yrs >= 3 else "for a few years" if yrs >= 1 else "recently"})
+    S.append(item("state", "state.peer_names", peers[:3], [ev("E08", "E08.competitors", len(comp))], 0.8 if peers else 0.1,
+                  "first 3 tokenised competitors from E08 (name token, city, paid flag, time on IndiaMART in words)",
+                  as_of=str(today), half_life_days=30, weight=0.5))
+
     # ---------------- guards
     fl = ((P.get("X00") or {}).get("seller_flags") or {})
     dnc = str(fl.get("do_not_call_requested")) in ("1", "1.0", "True", "true")

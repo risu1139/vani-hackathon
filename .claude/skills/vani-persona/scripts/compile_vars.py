@@ -16,6 +16,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import render_prompt as R  # noqa: E402
+import seller_block as SB  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REF = os.path.abspath(os.path.join(HERE, "..", "references"))
@@ -31,7 +32,11 @@ def val(p, d):
     return ((p.get("dimensions") or {}).get(d) or {}).get("value")
 
 
-SUFFIX = re.compile(r"\s*(pvt\.?|private|ltd\.?|limited|llp|inc\.?|co\.)(\s|$).*$", re.I)
+KNOWN_TOKEN = re.compile(r"\{(SELLER_NAME|COMPANY|SALES_EXEC|AGENT_NAME|COMPETITOR_\d+)\}")
+ANY_TOKEN = re.compile(r"\{\s*[A-Za-z][A-Za-z0-9_ ]*\}")  # case-insensitive, spaces allowed: '{ competitor_1 }' is caught too
+NAME_TOKEN = re.compile(r"\{(COMPETITOR_\d+(_ID)?|BUYER_COMPANY|EXEC_NAME|SALES_EXEC|TELE_EXEC)\}")
+PHONE_EMAIL = re.compile(r"(\+?\d[\d\s-]{8,}\d)|([\w.+-]+@[\w-]+\.[\w.]+)")
+SUFFIX = re.compile(r"\s*\b(pvt\.?|private|ltd\.?|limited|llp|inc\.?|co\.)(\s|$).*$", re.I)
 
 
 def load_names(path):
@@ -89,12 +94,23 @@ def compile_vars(run, names=None, city=None):
         (str(val(p, "language_start")).upper() if str(val(p, "language_start")).upper() in LANGS.values() else None)
     if not lang:
         raise SystemExit(f"REFUSED: language {val(p, 'language_start')} not supported")
+    names = dict(names) if names is not None else None
+    agent = {"{AGENT_NAME}": VOICES[g]["name"]}  # VANI's own name = the voice's name (female voice, female name)
+    if names is not None:
+        names.update(agent)
     sec = R.sections(p)
+    bad = sorted({k for k, t in sec.items() if NAME_TOKEN.search(t)})
+    if bad:  # names of other sellers / the handler come only from the seller block (plan 5d)
+        raise SystemExit(f"REFUSED: name tokens in persona sections {bad}")
+    facts = json.load(open(os.path.join(run, "01_facts.json"), encoding="utf-8"))
+    sec["prompt_seller"], block_lines = SB.build(facts, p, names)
+    with open(os.path.join(run, "05_seller_block.json"), "w", encoding="utf-8") as f:
+        json.dump([{"line": x, "source": c} for x, c in block_lines], f, ensure_ascii=False, indent=1)  # tokens, not names
     base = {
         "decision_id": p["decision_id"],
         "persona_voice_id": VOICES[g]["id"], "persona_voice_gender": g,
         "persona_pace": f"{pace:.2f}", "persona_pitch": f"{pitch:.2f}", "persona_language": lang,
-        "persona_opening": fill(p["opening"], names), "identity_line": fill(p["identity_line"], names),
+        "persona_opening": fill(fill(p["opening"], names), agent), "identity_line": fill(fill(p["identity_line"], names), agent),
         "persona_style_id": (p.get("prior") or {}).get("chosen") if not (p.get("prior") or {}).get("override") else "COMPOSED",
         "switch_sensitivity": json.dumps(p.get("switch_sensitivity") or {}),
         "seller_name": (names or {}).get("{SELLER_NAME}", ""), "company_name": (names or {}).get("{COMPANY}", ""), "city": city or "",
@@ -104,7 +120,7 @@ def compile_vars(run, names=None, city=None):
     for k, text in sec.items():
         for name in sorted(inner, key=len, reverse=True):
             text = text.replace("@" + name, inner[name] or ("the seller" if name == "seller_name" else "their company" if name == "company_name" else ""))
-        sec[k] = fill(text, names)
+        sec[k] = fill(text if k == "prompt_seller" else fill(text, names), agent)
     out = {**base, **sec}
     cpath = os.path.join(R.REPO, "app", "contracts", "sarvam_vars.contract.json")
     if not os.path.exists(cpath):  # fail closed: never send variables that were not checked against the contract
@@ -113,7 +129,14 @@ def compile_vars(run, names=None, city=None):
     missing = [k for k in contract["set_before_call"] if k not in out]
     if missing:
         raise SystemExit(f"REFUSED: contract variables missing {missing}")
-    left = [k for k, x in out.items() if isinstance(x, str) and re.search(r"\{[A-Z_]+\}", x)]
+    unknown = sorted({t for x in out.values() if isinstance(x, str) for t in ANY_TOKEN.findall(x) if not KNOWN_TOKEN.fullmatch(t)})
+    if unknown:  # a token compile_vars does not know would be spoken as is
+        raise SystemExit(f"REFUSED: unknown tokens {unknown}")
+    leak = [k for k, x in out.items() if (k.startswith("prompt_") or k in ("persona_opening", "identity_line"))
+            and isinstance(x, str) and PHONE_EMAIL.search(x)]
+    if leak:
+        raise SystemExit(f"REFUSED: phone number or email in {leak}")
+    left = [k for k, x in out.items() if isinstance(x, str) and re.search(r"\{[A-Z_0-9]+\}", x)]
     if left and names is not None:
         raise SystemExit(f"REFUSED: unfilled name tokens in {left}")
     with open(os.path.join(run, "05_sarvam_vars.json"), "w", encoding="utf-8") as f:

@@ -83,7 +83,7 @@ Rules for every hook:
 - **When it fits:** `state.peer_position` has an allowed rung (at least 5 same-size peers in the same category and turnover band). Else do not use it.
 - **Template (behind or level):** "Aapki category mein aapke size ke {rung.peers_bought_in_mcat} sellers ne pichhle mahine buy leads li hain." Take every number from the rung in `facts_for_claim` (peer count, median leads per buyer). If the rung has no such number, say the line without a number.
 - **Template (ahead):** "Aap apne size ke sellers se aage ho. Profile poora ho toh ye aur dikhega."
-- **Never claim:** a named competitor. Never say what a competitor paid or earned. Never compare a small seller with big distributors, or the reverse (team decision). In RS-call 6, SV-call 2, SV-call 3 and UC-call 3 the executive named a company or a "nearby seller", and the seller asked for numbers or called it a contradiction.
+- **Never claim:** anything about a named competitor beyond name, paid, city and time on IndiaMART (allowed since 2026-10-10). Never say what a competitor paid or earned. Never compare a small seller with big distributors, or the reverse (team decision). In RS-call 6, SV-call 2, SV-call 3 and UC-call 3 the executive named a company or a "nearby seller", and the seller asked for numbers or called it a contradiction.
 
 ### hook.enquiry_drop
 - **When it fits:** `state.enquiry_flow` = falling. Rare for NSD, but possible.
@@ -178,7 +178,7 @@ Every reason you give must come from the facts. Never invent a buyer, a demand t
 When the seller asks why a meeting, name the exact gap from the facts and say the work needs the seller's own products and account, so it cannot be done on the phone.
 If the seller says the profile is already complete, accept it and move to the buyer demand fact. Never argue.
 If the seller asks whether a package will be pushed later, say this call is only about the profile, and the executive will talk about plans only if the seller asks.
-Compare the seller only with same-size sellers in the same category, and only with numbers from the facts. Never name another company.
+Compare the seller only with same-size sellers in the same category, and only with numbers from the facts. You may name a similar seller only as listed under 'About this seller' (name, paid IndiaMART seller, city, time on IndiaMART in words). Never say a number, a plan move, growth or earnings about a named seller; say figures only about the group.
 Never promise leads, orders, enquiry counts or results.
 Do not keep saying the meeting is short. Answer the real question in one sentence, then ask for a day.
 Let the seller choose the time. Offer to have the executive come to the seller's office. If the seller refuses, offer a callback.

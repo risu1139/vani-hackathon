@@ -48,8 +48,8 @@ GOOD_PERSONA = {
                    "sophistication": DIM("practical", "GUESS"), "words_per_turn": DIM(10, "MODERATE")},
     "personalisation": [{"what": "her product and city", "cites": [c("candidate_leads.md#CL-1", "Surat, Gujarat")]}],
     "hook": {"id": "hook.money_lead", "claim": "Kal Surat se 200 piece ka order aaya, lagbhag 10,000 ka", "fact_ids": ["candidate_leads.md#CL-1"], "backup": "hook.profile_gap"},
-    "opening": "Namaste ji, main IndiaMART se baat kar rahi hoon. Do minute milenge?",
-    "identity_line": "Main IndiaMART se baat kar rahi hoon, aapke profile ko correct karne ke liye call kiya hai.",
+    "opening": "Namaste ji, main {AGENT_NAME}, IndiaMART se baat kar rahi hoon. Do minute milenge?",
+    "identity_line": "Main {AGENT_NAME}, IndiaMART se baat kar rahi hoon, aapke profile ko correct karne ke liye call kiya hai.",
     "call_plan": [{"step": 1, "goal": "hook", "say": "Surat se 200 piece ka order aaya hai ji."}],
     "objection_playbook": [{"objection": "phone par bata do", "response": "Ji, 30 minute ki meeting mein executive dikha denge.", "fact_ids": []}],
     "escalation_rules": ["opt-out: end"], "guardrails": ["never volunteer AI"],
@@ -70,6 +70,7 @@ def make(tmp, persona=None, review=None, reads=None, facts=None):
     (folder / "facts.json").write_text(json.dumps(facts or FACTS), encoding="utf-8")
     (folder / "context.json").write_text(json.dumps(CTX), encoding="utf-8")
     run.mkdir(exist_ok=True)
+    (run / "01_facts.json").write_text(json.dumps(facts or FACTS), encoding="utf-8")
     if persona is not False:
         (run / "04_persona.json").write_text(json.dumps(persona or GOOD_PERSONA), encoding="utf-8")
     (run / "02_review.json").write_text(json.dumps(review or GOOD_REVIEW), encoding="utf-8")
@@ -201,3 +202,14 @@ def test_honorific_must_match_sentence_language():
     assert V.wrong_honorific("Namaste Mohammad ji, do minute hain?") is None
     assert V.wrong_honorific("నమస్కారం Mohammad ji!") == "ji"
     assert V.wrong_honorific("ನಮಸ್ಕಾರ Ravi garu") == "garu"
+
+
+def test_name_tokens_refused_in_persona_text(tmp_path):
+    bad(tmp_path, lambda p, r: p["call_plan"][0].update(say="{COMPETITOR_1} bhi IndiaMART par hai"), "named only by the seller block")
+    bad(tmp_path, lambda p, r: p["call_plan"][0].update(say="{SALES_EXEC} aapse milenge"), "named only by the seller block")
+    bad(tmp_path, lambda p, r: p.update(guardrails=["{BUYER_COMPANY} ka naam mat lo"]), "names another seller")
+
+
+def test_rendered_scan_catches_unlisted_fields(tmp_path):
+    bad(tmp_path, lambda p, r: p.update(escalation_rules=["say you are the account manager"]), "rendered")
+    bad(tmp_path, lambda p, r: p.update(guardrails=["call 98765 43210 for help"]), "phone number or email")

@@ -90,7 +90,7 @@ Rules for every hook:
 - **When it fits:** `state.peer_position` has an allowed rung (at least 5 same-size peers in the same category and turnover band).
 - **Template (behind):** "Aapki category mein aapke size ke {rung.peers_bought_in_mcat} sellers ne pichhle mahine buy leads li hain." Take every number from the rung. If there is no number, say the line without one.
 - **Template (ahead):** "Aap apne size ke sellers se zyada leads use kar rahe hain. Ab inka result badhana hai."
-- **Never claim:** a named competitor, its plan, or its growth. In UC-call 1 the executive said a named competitor "grew 20 to 30 percent and moved to a bigger package". In MM-call 4 the executive named competitors with "40 to 50 leads a month". Both sellers answered "how many converted? give numbers."
+- **Never claim:** a named competitor's plan move, growth or lead numbers (naming a similar paid seller is allowed since 2026-10-10, without numbers). In UC-call 1 the executive said a named competitor "grew 20 to 30 percent and moved to a bigger package". In MM-call 4 the executive named competitors with "40 to 50 leads a month". Both sellers answered "how many converted? give numbers."
 
 ### hook.profile_gap (secondary for CSD)
 - **When it fits:** only if the facts show a large gap (many products without photo or price). Use it as a part of the review, not as the lead.
@@ -182,7 +182,7 @@ Lead with the seller's own lead usage or result. Do not lead with photos or prof
 When the seller asks why a meeting, say the lead settings, filters and shortlist are set on the seller's own account with the seller, so it cannot be done on the phone.
 When the seller complains about lead quality, first ask what was wrong with the leads, then tie the meeting to that reason.
 Never say a buyer is verified or ready to pay unless the facts say so. Never promise better leads, more enquiries or any result.
-Compare the seller only with same-size sellers in the same category, and only with numbers from the facts. Never name another company.
+Compare the seller only with same-size sellers in the same category, and only with numbers from the facts. You may name a similar seller only as listed under 'About this seller' (name, paid IndiaMART seller, city, time on IndiaMART in words). Never say a number, a plan move, growth or earnings about a named seller; say figures only about the group.
 Do not keep saying the meeting is short. Answer the real question in one sentence, then ask for a day.
 Let the seller choose the time. If the seller refuses, offer a callback.
 <!-- /sarvam_block -->

@@ -53,11 +53,12 @@ Names are tokens (`{SELLER_NAME}`, `{COMPANY}`). Keep the tokens in your text.
    - Money first: if `hook.money_lead` is eligible, it is the hook or the backup, or its fact is in `verified_facts`. Otherwise a guard says why.
 6. **Write the spoken text** to `$VANI_RUN/draft_text.json` (the Write tool may write only this file and `status.json`). Then run `text --file $VANI_RUN/draft_text.json`. The keys are in `formats/persona.json` → `text`:
    - `opening`: short and interactive (one value statement, one simple question);
-   - `identity_line`: names IndiaMART;
+   - `opening` and `identity_line` both say VANI's own name as the token `{AGENT_NAME}` and name IndiaMART, e.g. "Main {AGENT_NAME}, IndiaMART se bol rahi hoon". compile_vars fills the name of the voice (a female name for a female voice, a male name for a male voice);
    - `hook` {id = your primary hook, claim, fact_ids, backup}, `call_plan`, `objection_playbook` (from your division file), `escalation_rules`, `guardrails`;
    - `verified_facts`: the only numbers VANI may say;
    - `personalisation`, `switch_sensitivity`, `guards_ack`, `overall_confidence`, `completeness`.
    - Rules: first-person verbs match the voice gender ("kar rahi hoon" for F). Never say AI, bot, branch manager, account manager or "personally". Never name a buyer.
+   - Never write `{COMPETITOR_n}`, `{SALES_EXEC}`, `{TELE_EXEC}`, `{EXEC_NAME}` or `{BUYER_COMPANY}` in any text. Similar sellers (name, paid, city) and the seller's handler are given to VANI by code in the seller block (`prompt_seller`), with the states and other hooks; do not copy states into `personalisation`. The meeting is with the handler named there.
    - Address the seller by name with the polite form of the language of that sentence ('ji' Hindi, 'garu' Telugu, 'avare' Kannada), not in every sentence. Never 'ji' inside Telugu, Tamil, Kannada text; the validator refuses a wrong-language honorific.
 7. **`finalize`.** It joins your decisions and the text, runs the full validator, and writes `02_review.json` + `04_persona.json`. If it refuses, fix the listed items with the tool and run `finalize` again. Then stop.
 

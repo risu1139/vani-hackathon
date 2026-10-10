@@ -40,8 +40,8 @@ FACTS = {"division": "NSD", "true_guards": [], "eligible_hooks": ["hook.profile_
 PRIOR = {"decision_id": "t1", "persona": {"top2": ["P2", "P4"], "holdout": False, "path": {}}, "brief": {},
          "voice": {"chosen": "F"}}
 TEXT = {"personalisation": [], "hook": {"id": None, "claim": "", "fact_ids": [], "backup": None},
-        "opening": "Namaste {SELLER_NAME}, main IndiaMART se baat kar rahi hoon. Do minute milenge?",
-        "identity_line": "Main IndiaMART se baat kar rahi hoon, aapke profile ke liye call kiya hai.",
+        "opening": "Namaste {SELLER_NAME}, main {AGENT_NAME}, IndiaMART se baat kar rahi hoon. Do minute milenge?",
+        "identity_line": "Main {AGENT_NAME}, IndiaMART se baat kar rahi hoon, aapke profile ke liye call kiya hai.",
         "call_plan": [{"step": 1, "goal": "ask", "say": "Kya kal milna theek rahega?", "basis": {"type": "persona", "ref": "pace"}}],
         "objection_playbook": [{"objection": "busy", "response": "Theek hai, kab call karun?", "basis": {"type": "division", "ref": "O1"}}],
         "escalation_rules": ["opt-out: end"], "guardrails": ["never volunteer AI"], "verified_facts": [],

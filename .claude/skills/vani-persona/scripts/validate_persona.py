@@ -176,7 +176,23 @@ ALWAYS_SCRIPTS = {"deva"}  # Latin is always allowed (transliterated speech); De
 PROMISE = re.compile(r"(guarantee[ds]?|guaranteed|pakka (order|lead|business)|100 ?%|sure ?shot|गारंटी|पक्का ऑर्डर|"
                      r"zaroor (milenge|milega|aayenge)|ज़रूर मिलेंगे)", re.I)
 NEGATION = re.compile(r"(nahi|nahin|nhi|नहीं|नही|not|no |cannot|can't|won't|never|ఇవ్వను|కాదు|லை|ಇಲ್ಲ|ഇല്ല|না|ના|નહીં)", re.I)
-OTHER_SELLER = re.compile(r"\{(COMPETITOR_\d+(_ID)?|BUYER_COMPANY|EXEC_NAME)\}")
+OTHER_SELLER = re.compile(r"\{(COMPETITOR_\d+(_ID)?|BUYER_COMPANY|EXEC_NAME|SALES_EXEC|TELE_EXEC)\}")
+PEER_TOKEN = re.compile(r"\{COMPETITOR_\d+\}")
+HANDLER_TOKEN = re.compile(r"\{(SALES_EXEC|TELE_EXEC)\}")
+PHONE_EMAIL = re.compile(r"(\+?\d[\d\s-]{8,}\d)|([\w.+-]+@[\w-]+\.[\w.]+)")
+
+
+def token_rule(text, cite=""):
+    """Plan 5d after the enforcement review: similar sellers ({COMPETITOR_n}) and the handler ({SALES_EXEC}/{TELE_EXEC})
+    are named ONLY in the code-built seller block (seller_block.py), never in text the agent writes; buyer, staff and id
+    tokens never. Number words and digits next to a name therefore cannot come from the agent. '' if ok."""
+    m = OTHER_SELLER.search(str(text or ""))
+    if not m:
+        return ""
+    tok = m.group(0)
+    if PEER_TOKEN.fullmatch(tok) or HANDLER_TOKEN.fullmatch(tok):
+        return f"{tok} is named only by the seller block (prompt_seller), never in persona text"
+    return f"names another seller / buyer / executive ({tok})"
 
 
 def scripts_in(text):
@@ -236,6 +252,9 @@ def check_text(folder, persona, fails):
         e = PT.quote_ok(folder, v["id"], v["quote"])
         if e:
             fails.append(f"{w}: {e}")
+        e = token_rule(v["say"], v["id"])
+        if e:
+            fails.append(f"{w}: {e}")
         extra = _nums(v["say"]) - _nums(v["quote"])
         if extra:
             fails.append(f"{w}: numbers {sorted(extra)} in 'say' are not in the quote")
@@ -271,6 +290,8 @@ def check_text(folder, persona, fails):
     total = sum(len(str(s.get("say") or "").split()) for s in steps)
     if len(steps) > 12 or total > 300:
         fails.append(f"call_plan too long: {len(steps)} steps, {total} words (max 12 steps, 300 words)")
+    unit_cite = {w: ((item.get("basis") or {}).get("cite") or "") for w, item, _ in items
+                 if (item.get("basis") or {}).get("type") == "evidence"}
     spoken_items = [("opening", persona.get("opening"), max(30, 2 * (wpt or 15))), ("identity_line", persona.get("identity_line"), 40),
                     ("hook.claim", hk.get("claim"), max(40, 3 * (wpt or 15)))]
     spoken_items += [(w, t, max(20, 2 * (wpt or 15)) if w.startswith("call_plan") else max(40, 3 * (wpt or 15))) for w, _, t in items]
@@ -286,8 +307,31 @@ def check_text(folder, persona, fails):
         for sent in re.split(r"[.!?।\n]", str(t)):
             if PROMISE.search(sent) and not NEGATION.search(sent):
                 fails.append(f"{w}: promise '{PROMISE.search(sent).group(0)}' (never promise leads, orders or results)")
-        if OTHER_SELLER.search(str(t)):
-            fails.append(f"{w}: names another seller / buyer / executive ({OTHER_SELLER.search(str(t)).group(0)}); peers only as aggregates")
+        e = token_rule(t, unit_cite.get(w, ""))
+        if e:
+            fails.append(f"{w}: {e}")
+
+
+RULE_LINE = re.compile(r"\b(never|do not|don't|not|avoid|no)\b", re.I)
+
+
+def check_rendered(persona, fails):
+    """Scan the real prompt text (every render_prompt section), so no field falls outside the token / banned / phone checks."""
+    import render_prompt as R
+    try:
+        sec = R.sections(persona)
+    except Exception as e:  # noqa: BLE001
+        fails.append(f"render: {e}")
+        return
+    for k, t in sec.items():
+        e = token_rule(t)
+        if e:
+            fails.append(f"rendered {k}: {e}")
+        for ln in t.splitlines():  # a rule line ("never say AI ...") names the word on purpose
+            if BANNED.search(ln) and not RULE_LINE.search(ln):
+                fails.append(f"rendered {k}: banned word '{BANNED.search(ln).group(0)}'")
+        if PHONE_EMAIL.search(t):
+            fails.append(f"rendered {k}: phone number or email")
 
 
 def validate(folder, run):
@@ -317,6 +361,7 @@ def validate(folder, run):
     allowed = (["P0"] if p.get("holdout") else p.get("top2")) or pr.get("top2") or []
     if pr.get("chosen") not in allowed and not (pr.get("override") and not h):
         fails.append(f"prior.chosen {pr.get('chosen')!r} is not one of {allowed} (03_prior.json)")
+    check_rendered(persona, fails)  # every mode: the real prompt text
     if h:
         check_fields(folder, run, persona, h, prior, fails, facts)
         check_text(folder, persona, fails)
@@ -432,6 +477,9 @@ def validate(folder, run):
     if persona.get("identity_line") and "indiamart" not in norm(persona["identity_line"]).replace(" ", "") \
             and "इंडियामार्ट" not in persona["identity_line"] and "इंडिया मार्ट" not in persona["identity_line"]:
         fails.append("identity_line must name IndiaMART")
+    for k in ("opening", "identity_line"):  # user rule 2026-10-10: VANI says its own name (filled from the voice)
+        if persona.get(k) and "{AGENT_NAME}" not in persona[k]:
+            fails.append(f"{k} must say VANI's own name as the token {{AGENT_NAME}}")
     return fails
 
 
