@@ -186,7 +186,7 @@ Review: `outputs/plans/persona-e2e-plan - adversarial review.md`. Each finding h
 | M9 | Each cite has a quote of ≤ 20 words that must match the file text; counter_evidence must cite; Bash reads of the seller folder are logged too; padded-cite stub test | validate_persona.py, gates | TODO |
 | M10 | The script's Thompson draw fixes the arm; P(best) by Monte Carlo is the propensity; the agent's amendments come from a fixed menu and are logged as factors; a full override is logged as a separate arm | prior.py, persona format | TODO |
 | M11 | Holdout: 15% of decisions use P0 (current production style) as the measurement baseline (not a fallback; it is a normal persona arm) | prior.py | TODO |
-| M12 | Hierarchy reduced: all → division → turnover band, plus additive offsets for zone and AOV tier; κ = 20 | prior.py, design §9.2 | TODO |
+| M12 | Hierarchy: first reduced (all → division → band, flat zone and AOV offsets). **Changed 2026-10-10: full L0–L6 restored** (nested chain L1–L5, L6 branch under L1), κ = 20, read from references/hierarchy.json v2.0 by prior.py and loop2_update.py; seed leans only with evidence | prior.py, loop2_update.py, hierarchy.py, design §9.2 | DONE (changed) |
 | M13 | Voice scoreboard V0 prior asymmetric (female mean 0.6 vs male 0.4) plus tension and rural/Hindi-belt offsets; test asserts P(F) > 0.5 | prior.py | TODO |
 | M14 | money_lead must be in the call plan when eligible, unless a guard is cited | validate_persona.py | TODO |
 | M15 | Peer ladder: ±1-band rungs never "allowed" for a claim; same 30-day window for the seller and the peers; optional AOV 0.5–2× filter | builder peer_stat, key_facts | TODO |

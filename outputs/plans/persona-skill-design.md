@@ -135,6 +135,8 @@ In the skill: `.claude/skills/vani-persona/references/formats/`:
 Each scoreboard has its own hierarchy. This keeps each hierarchy small.
 
 ### 9.2 Levels of scoreboard A (persona) - revised 2026-10-10 after user review
+
+**Implementation status (2026-10-10, hierarchy v2.0, approved):** L0 to L6 are all built and the single source of truth is `references/hierarchy.json`. `scripts/hierarchy.py` turns it into scoreboard keys; `prior.py` reads cells and `loop2_update.py` writes cells with the same functions, so the keys cannot drift (a test checks this). L1 to L5 are one nested chain (`div=CSD|band=..|aov=..|zone=..|state=..`). L6 (category group, from the seller's top category group) is a branch under L1 (`div=CSD|catgroup=..`) and enters as an offset shrunk by κ. A level whose value is unknown is skipped. Size labels on L2: below 40 L small, 40 L to 1.5 Cr medium, 1.5 to 5 Cr medium-high, 5 Cr and above high. Seed leans exist only where evidence exists (division). This replaces the reduced hierarchy of review item M12.
 | Level | Key | Example | Why |
 |---|---|---|---|
 | L0 | all sellers | — | The base |
@@ -155,10 +157,12 @@ Each level starts from the level above it (partial pooling). A state with few ca
 | V0 | all sellers (start: female) |
 | V1 | seller gender (recorded or guessed, with confidence) |
 | V2 | + city tier (metro / tier-2 / small town or rural) |
-| V2b | + state (Hindi belt or not) |
+| V2b | + Hindi belt and rural (a learned key `hindi_belt_rural`, built 2026-10-10; before that only a fixed female lean) |
 | V3 | + call tension (calm / tense, from the states) |
 
 ### 9.4 What each cell stores
+**As built:** counts only, `cells[key][arm] = {n, s}` (calls, meetings), in `data/scoreboards/` (test calls in `data/scoreboards_test/`): `persona.json`, `voice.json`, `fields.json` (per field and value group, feeds the brief), `reasons.json` (per reason type and field), `hooks.json` (hook tally per persona key). One row per call goes to `decisions.jsonl` and `amendments.jsonl`. The score is computed from the counts when it is read. The richer record below is the original design.
+
 `{"path": [...], "arm": "P3", "calls": 42, "meetings": 7, "prior_mean": 0.12, "prior_weight": 20, "score_mean": ..., "score_low": ..., "score_high": ..., "updated": "..."}`
 
 ### 9.5 How learning happens (after each call)
@@ -167,14 +171,14 @@ Each level starts from the level above it (partial pooling). A state with few ca
 3. The script adds the result to the cell at every level of the path.
 4. The score of a cell = its own results + the score of the level above, weighted as `prior_weight` calls (Beta with partial pooling). With few calls, the level above decides. With many calls, the cell decides.
 5. The next time, Thompson sampling draws from each persona's score. The highest draw is the first choice. A close second gets calls sometimes.
-6. The script scores each persona against the default persona (uplift), not only on raw meetings.
+6. The script scores each persona against the default persona P0 in the same cell (uplift): `python3 loop2_update.py --report` (built 2026-10-10). The same report shows the meeting rate by reason type (seller_evidence, hierarchy, start_persona).
 
 ### 9.6 What learning changes, and what it does not
 | Item | Changes automatically? | Who changes it |
 |---|---|---|
 | Scoreboard numbers (A and B) | Yes, after each call | Script |
 | The persona definitions (the library) | No | The agent suggests; a human approves a new version |
-| The amendments that the agent makes | The script counts which amendments go with good results. If one wins many times, it is suggested as a library change | Human approval |
+| The agent's per-field choices | The script counts each field's value group and reason type per call (fields.json, reasons.json). The fixed amendment menu is replaced by reason-per-field decisions (hierarchy.json v2.0). Winning groups are suggested as library changes | Human approval |
 | The Sarvam prompt template | No. A persona fills **variables** in a fixed template. A new persona needs no prompt edit | Only when a human approves a new template version |
 | Mid-call switch (Loop 1): keyword list, switch directive text, sensitivity | Not automatically | See 9.7 |
 

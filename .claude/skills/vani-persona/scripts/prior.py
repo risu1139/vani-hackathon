@@ -1,13 +1,14 @@
-"""prior.py: starting persona and voice for one seller, from two learning scoreboards (S2).
+"""prior.py: starting persona, voice and per-field brief for one seller, from learning scoreboards (S2).
 
-Scoreboard A (persona arms P0..P6): hierarchy  all → division → turnover band  (Beta partial pooling, κ pseudo-calls),
-plus additive log-odds offsets for zone and AOV tier (review M12: few levels, separate effects).
-Scoreboard B (voice F / M): base with an asymmetric female prior (team decision), plus offsets for seller gender,
-city tier (rural proxy), Hindi belt and call tension (review M13).
-Thompson sampling picks the arm; P(best) by Monte Carlo is logged as the propensity (review M10).
-A 15% holdout uses P0 (current production style) as the measurement baseline (review M11) - a normal arm, not a fallback.
+The levels, keys, kappa, holdout and base means come from references/hierarchy.json through scripts/hierarchy.py (no level list in this file).
+Scoreboard A (persona arms P0..P6): nested chain L0 all -> L1 division -> L2 band -> L3 AOV tier -> L4 zone -> L5 state, with L6 category
+group as a branch under L1. Partial pooling at each level: a cell with few calls falls back to its parent (kappa pseudo-calls).
+Scoreboard B (voice F / M): asymmetric female base plus flat offsets for each voice level (seller gender, city tier, tension, Hindi belt).
+Thompson sampling picks the top-2 personas only (never a field value); P(best) by Monte Carlo is logged as the propensity.
+A 15% holdout uses P0 (current production style) as the comparison arm.
+Brief: for each learned field, the value groups that got meetings at the deepest level with enough calls (see hierarchy.json 'brief').
 
-Scoreboards live in data/scoreboards/{persona,voice}.json and are updated only by loop2_update.py.
+Scoreboards live in data/scoreboards/{persona,voice,fields}.json and are updated only by loop2_update.py.
 Usage: python3 prior.py --folder <seller folder> --decision-id <id> [--scoreboards <dir>]
 """
 import argparse
@@ -16,20 +17,21 @@ import json
 import math
 import os
 import random
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import hierarchy as H  # noqa: E402
+
 LIB = os.path.join(HERE, "..", "references", "persona_library.json")
-KAPPA = 20
-HOLDOUT = 0.15
+HIER = H.load()
+KAPPA = HIER["kappa"]
+HOLDOUT = HIER["holdout"]["share"]
+BASE = HIER["base_means"]["persona"]
+VOICE_BASE = HIER["base_means"]["voice"]
+VOICE_LEAN_F = HIER["voice_lean_f"]["value"]
+MIN_CALLS = HIER["brief"]["min_calls"]
 DRAWS = 4000
-BASE = 0.12
-VOICE_BASE = {"F": 0.13, "M": 0.11}      # asymmetric: female default (team decision 2026-10-10)
-VOICE_LEAN_F = 0.02                        # extra female lean for tense calls and rural / Hindi-belt sellers
-BANDS = ["0 - 40 L", "40 L - 1.5 Cr", "1.5 - 5 Cr", "5 - 25 Cr", "25 - 100 Cr", "100 - 500 Cr", "> 500 Cr"]
-ZONE = {"North": "delhi haryana punjab chandigarh himachal pradesh jammu and kashmir uttarakhand uttar pradesh rajasthan",
-        "West": "maharashtra gujarat goa", "South": "tamil nadu karnataka kerala andhra pradesh telangana puducherry",
-        "East": "west bengal odisha bihar jharkhand assam meghalaya tripura manipur mizoram nagaland arunachal pradesh sikkim",
-        "Central": "madhya pradesh chhattisgarh"}
 
 
 def logit(p):
@@ -39,20 +41,6 @@ def logit(p):
 
 def sigm(x):
     return 1 / (1 + math.exp(-x))
-
-
-def zone_of(state):
-    s = (state or "").strip().lower()
-    for z, ss in ZONE.items():
-        if s and s in ss:
-            return z
-    return "Other"
-
-
-def band_group(band):
-    if band not in BANDS:
-        return "unknown"
-    return band if BANDS.index(band) < 3 else "5 Cr+"
 
 
 def load(path):
@@ -72,30 +60,43 @@ def pooled(prior_mean, n, s, k=KAPPA):
 
 
 def seed_mean(lib, keyname, value, arm):
+    """Weak lean toward an arm, only for the keys in persona_library.json seed_leans.by_key (evidence-backed leans only)."""
     lean = lib["seed_leans"]
     return lean["base_mean"] + (lean["lean"] if arm in lean["by_key"].get(f"{keyname}={value}", []) else 0)
 
 
-def persona_scores(lib, sb, path):
-    """Mean and effective n per arm: L0 → division → band (pooling), then zone and AOV offsets."""
+def _level_seed(lib, lv, path, arm):
+    sk = lv.get("seed_key")
+    return seed_mean(lib, sk, path.get(lv["path_key"]), arm) if sk else None
+
+
+def persona_scores(lib, sb, path, h=None):
+    """Mean and effective n per arm. Walks the nested chain (each level pools toward its parent), then adds the L6 branch as an offset."""
+    h = h or HIER
+    levels = {lv["id"]: lv for lv in h["persona_levels"]}
+    ch, br = H.chain(h, path), H.branch_keys(h, path)
     out = {}
     for p in lib["personas"]:
         arm = p["id"]
-        m, eff = pooled(BASE, *cell(sb, "all", arm))
-        m, eff = pooled((m + seed_mean(lib, "division", path["division"], arm)) / 2, *cell(sb, f"div={path['division']}", arm))
-        m, eff = pooled((m + seed_mean(lib, "turnover", path["band"], arm)) / 2,
-                        *cell(sb, f"div={path['division']}|band={path['band']}", arm))
+        m, eff = BASE, KAPPA
+        m_by_level = {}
+        for lid, key in ch:
+            seed = _level_seed(lib, levels[lid], path, arm) if lid != "L0" else None
+            prior_mean = (m + seed) / 2 if seed is not None else m
+            m, eff = pooled(prior_mean, *cell(sb, key, arm))
+            m_by_level[lid] = m
         x = logit(m)
-        for keyname, val in (("zone", path["zone"]), ("aov", path["aov"])):
-            n, s = cell(sb, f"{keyname}={val}", arm)
-            prior = seed_mean(lib, keyname, val, arm)
-            post, _ = pooled(prior, n, s)
-            x += logit(post) - logit(BASE)          # additive offset, shrunk by κ
+        for lid, key in br:                                   # branch level: additive offset from its parent level, shrunk by kappa
+            parent = m_by_level.get(levels[lid]["parent"], m)
+            post, _ = pooled(parent, *cell(sb, key, arm))
+            x += logit(post) - logit(parent)
         out[arm] = (sigm(x), eff)
     return out
 
 
-def voice_scores(sb, v):
+def voice_scores(sb, v, h=None):
+    h = h or HIER
+    keys = H.voice_keys(h, v)[1:]
     out = {}
     for arm in ("F", "M"):
         m, eff = pooled(VOICE_BASE[arm], *cell(sb, "all", arm))
@@ -103,7 +104,7 @@ def voice_scores(sb, v):
         lean_f = (v["tense"] or v["rural"] or v["hindi_belt_rural"])
         if arm == "F" and lean_f:
             x += logit(VOICE_BASE["F"] + VOICE_LEAN_F) - logit(VOICE_BASE["F"])
-        for key in (f"seller_gender={v['seller_gender']}", f"city_tier={v['city_tier']}", f"tense={v['tense']}"):
+        for key in keys:
             n, s = cell(sb, key, arm)
             post, _ = pooled(m, n, s)
             x += logit(post) - logit(m)
@@ -125,6 +126,30 @@ def thompson(scores, rng):
     return first_draw, pbest
 
 
+def brief(fields_sb, path, h=None, min_calls=None):
+    """{field: {level_used, key, n_total, value_groups: {group: {n, rate}}}} for every learned field.
+    Levels are tried deepest first (L6 branch, then L5 down to L0); the first with >= min_calls calls for the field is used."""
+    h = h or HIER
+    min_calls = MIN_CALLS if min_calls is None else min_calls
+    ch, br = H.chain(h, path), H.branch_keys(h, path)
+    order = list(reversed(br)) + list(reversed(ch))
+    out = {}
+    for f in H.learned_fields(h):
+        groups = h["fields"][f]["value_groups"]
+        entry = {"level_used": None, "key": None, "n_total": 0, "value_groups": {}}
+        for lid, key in order:
+            cells = (fields_sb.get("cells", {}).get(key, {}) or {}).get(f, {})
+            total = sum(c.get("n", 0) for c in cells.values())
+            if total >= min_calls:
+                entry = {"level_used": lid, "key": key, "n_total": total,
+                         "value_groups": {g: {"n": cells.get(g, {}).get("n", 0),
+                                              "rate": (round(cells[g]["s"] / cells[g]["n"], 4) if cells.get(g, {}).get("n") else None)}
+                                          for g in groups}}
+                break
+        out[f] = entry
+    return out
+
+
 def main():
     a = argparse.ArgumentParser()
     a.add_argument("--folder", required=True)
@@ -133,34 +158,35 @@ def main():
     p = a.parse_args()
     sbdir = p.scoreboards or os.path.join(p.folder, "..", "..", "scoreboards")
     facts = json.load(open(os.path.join(p.folder, "facts.json"), encoding="utf-8"))
+    ctx_path = os.path.join(p.folder, "context.json")
+    points = json.load(open(ctx_path, encoding="utf-8")).get("points", {}) if os.path.exists(ctx_path) else {}
     lib = json.load(open(LIB, encoding="utf-8"))
     val = {x["id"]: x["A_script"] for x in facts["traits"] + facts["states"]}
-    div = facts["division"] if facts["division"] in ("NSD", "CSD") else ("CSD" if facts["division"] in ("TMW", "KCD") else "NSD")
-    scale = val["trait.business_scale"]["detail"]
+    by_id = {k: {"value": v["value"], "detail": v.get("detail") or {}} for k, v in val.items()}
+    path = H.resolve_path(HIER, by_id, points)
     ct = val["trait.city_tier"]
-    path = {"division": div, "band": band_group(scale.get("turnover_band")), "aov": scale.get("aov_tier") or "unknown",
-            "zone": zone_of(ct["detail"].get("state"))}
     rng = random.Random(int(hashlib.sha256(p.decision_id.encode()).hexdigest()[:12], 16))
     holdout = rng.random() < HOLDOUT
     pscores = persona_scores(lib, load(os.path.join(sbdir, "persona.json")), path)
     order, pbest = thompson(pscores, rng)
     if holdout:
-        top2 = ["P0"]
-        chosen_rule = "holdout: P0 baseline (measurement arm, 15%)"
+        top2 = [HIER["holdout"]["arm"]]
+        chosen_rule = f"holdout: {top2[0]} baseline (measurement arm, {int(HOLDOUT * 100)}%)"
     else:
-        top2 = [x for x in order if x != "P0"][:2]
-        chosen_rule = "Thompson draw; agent must start from top2[0] or top2[1]"
+        top2 = [x for x in order if x != HIER["holdout"]["arm"]][:HIER["select_rule"]["top_n"]]
+        chosen_rule = "Thompson draw picks the top-2 only; agent selects one as its base"
     mood = val["state.call_mood"]["value"] or {}
     tense = bool((mood.get("frustrated") or 0) >= 0.5 or val["state.open_grievance"]["value"] == "yes")
     v = {"seller_gender": val["trait.seller_gender"]["value"], "city_tier": ct["value"], "tense": tense,
          "rural": bool(ct["detail"].get("rural_proxy")), "hindi_belt_rural": bool(ct["detail"].get("rural_proxy") and ct["detail"].get("hindi_belt"))}
     vscores = voice_scores(load(os.path.join(sbdir, "voice.json")), v)
     vorder, vpbest = thompson(vscores, rng)
-    out = {"decision_id": p.decision_id, "library_version": lib["version"], "kappa": KAPPA,
+    out = {"decision_id": p.decision_id, "library_version": lib["version"], "hierarchy_version": HIER["version"], "kappa": KAPPA,
            "persona": {"path": path, "holdout": holdout, "top2": top2, "rule": chosen_rule, "p_best": pbest,
                        "scores": {k: round(m, 4) for k, (m, n) in pscores.items()},
                        "top2_cards": [next(x for x in lib["personas"] if x["id"] == t) for t in top2]},
-           "voice": {"inputs": v, "chosen": vorder[0], "p_best": vpbest, "scores": {k: round(m, 4) for k, (m, n) in vscores.items()}}}
+           "voice": {"inputs": v, "chosen": vorder[0], "p_best": vpbest, "scores": {k: round(m, 4) for k, (m, n) in vscores.items()}},
+           "brief": brief(load(os.path.join(sbdir, "fields.json")), path)}
     with open(os.path.join(p.folder, "prior.json"), "w", encoding="utf-8") as f:
         json.dump(out, f, ensure_ascii=False, indent=1)
     print(json.dumps({"path": path, "top2": top2, "holdout": holdout, "voice": vorder[0], "p_voice_F": vpbest["F"]}))

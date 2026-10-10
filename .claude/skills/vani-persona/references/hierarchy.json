@@ -1,7 +1,7 @@
 {
- "_doc": "VANI persona hierarchy and per-field decision rules. DRAFT for review: not read by any code yet. When approved, prior.py and loop2_update.py read the levels and keys from here (no level lists in code) and the gates/validator read probe_files, reason_types and hard ranges. Review view: outputs/plans/persona_design_v2.pdf.",
- "version": "v2-draft-3",
- "approved_by": "pending",
+ "_doc": "VANI persona hierarchy and per-field decision rules. APPROVED v2.0. prior.py and loop2_update.py read the levels and keys from here through scripts/hierarchy.py (no level lists in code); the gates and validator read probe_files, reason_types and hard ranges.",
+ "version": "v2.0",
+ "approved_by": "Rishav (via persona session), 2026-10-10",
  "date": "2026-10-10",
  "changes": [
   {
@@ -18,6 +18,16 @@
    "version": "v2-draft-3",
    "date": "2026-10-10",
    "what": "L2 band labels (small, medium, medium-high, high); English suggested for 5 Cr+; random draw (top-2 only) and 15% P0 holdout marked DECIDED."
+  },
+  {
+   "version": "v2.0",
+   "date": "2026-10-10",
+   "what": "Approved (Rishav via persona session). Added path_key and seed_key per persona level, band map (5 Cr and above grouped), voice_lean_f, brief.min_calls. prior.py and loop2_update.py now read levels and keys from this file (scripts/hierarchy.py)."
+  },
+  {
+   "version": "v2.0",
+   "date": "2026-10-10",
+   "what": "search_terms tightened (phrases and regex over single words; generic terms dropped); 're:' prefix convention in probe_rules."
   }
  ],
  "kappa": 20,
@@ -62,7 +72,9 @@
     "CSD"
    ],
    "note": "TMW and KCD map to CSD until decided",
-   "status_at_a8f2e06": "built, nested"
+   "status_at_a8f2e06": "built, nested",
+   "path_key": "division",
+   "seed_key": "division"
   },
   {
    "id": "L2",
@@ -91,7 +103,15 @@
     }
    ],
    "note": "Seller size by annual turnover: below 40 lakh = small; 40 lakh to 1.5 crore = medium; 1.5 to 5 crore = medium-high; 5 crore and above = high (all bands above 5 Cr grouped). Labels are for the agent and the brief; the key stays the band.",
-   "status_at_a8f2e06": "built, nested"
+   "status_at_a8f2e06": "built, nested",
+   "path_key": "band",
+   "seed_key": "turnover",
+   "map": {
+    "5 - 25 Cr": "5 Cr+",
+    "25 - 100 Cr": "5 Cr+",
+    "100 - 500 Cr": "5 Cr+",
+    "> 500 Cr": "5 Cr+"
+   }
   },
   {
    "id": "L3",
@@ -106,7 +126,9 @@
     "mid",
     "high"
    ],
-   "status_at_a8f2e06": "flat offset, not nested"
+   "status_at_a8f2e06": "flat offset, not nested",
+   "path_key": "aov",
+   "seed_key": "aov"
   },
   {
    "id": "L4",
@@ -125,7 +147,9 @@
     "Central",
     "Other"
    ],
-   "status_at_a8f2e06": "flat offset, not nested"
+   "status_at_a8f2e06": "flat offset, not nested",
+   "path_key": "zone",
+   "seed_key": "zone"
   },
   {
    "id": "L5",
@@ -136,7 +160,9 @@
     "field": "detail.state"
    },
    "buckets": "state name; falls back to its zone",
-   "status_at_a8f2e06": "not built"
+   "status_at_a8f2e06": "not built",
+   "path_key": "state",
+   "seed_key": null
   },
   {
    "id": "L6",
@@ -148,7 +174,9 @@
    },
    "buckets": "category group name; falls back to division",
    "note": "OPEN QUESTION: the seller's top category group (suggested) or the group of the hook's category",
-   "status_at_a8f2e06": "not built"
+   "status_at_a8f2e06": "not built",
+   "path_key": "catgroup",
+   "seed_key": null
   }
  ],
  "state_to_zone": {
@@ -338,20 +366,17 @@
     "female",
     "male",
     "mrs",
-    "mr ",
     "madam",
-    "sir",
     "ma'am",
     "aunty",
     "bhaiya",
     "didi",
-    "आवाज़",
-    "awaz",
-    "voice",
     "ladki",
     "ladka",
     "लड़की",
-    "लड़का"
+    "लड़का",
+    "re:\\b(awaz|voice) (achhi|acchi|kharab|bekar|ladki|ladke)",
+    "आवाज़"
    ],
    "evidence_rule": "a recorded gender or salutation (A07), or a call turn where the seller reacts to the voice or addresses the caller by gender"
   },
@@ -386,17 +411,22 @@
    "reason_required": true,
    "searched_note_required": true,
    "search_terms": [
-    "busy",
-    "bizi",
+    "busy hoon",
+    "busy hu",
+    "busy hun",
+    "bahut busy",
+    "am busy",
+    "i'm busy",
+    "bit busy",
+    "bizi hoon",
     "jaldi",
     "baad me",
     "baad mein",
     "call back",
     "callback",
-    "later",
     "driving",
-    "meeting me",
     "time nahi",
+    "re:\\bmeeting (me|mein) hoon",
     "बिजी",
     "जल्दी",
     "बाद में",
@@ -405,10 +435,10 @@
     "samajh nahi",
     "samjha nahi",
     "kya matlab",
-    "dhire",
+    "dhire bolo",
     "slowly",
-    "repeat",
     "phir se bolo",
+    "repeat karo",
     "समझ नहीं",
     "क्या मतलब",
     "धीरे"
@@ -434,17 +464,11 @@
    "searched_note_required": true,
    "evidence_grade_default": "GUESS",
    "search_terms": [
-    "awaz",
-    "आवाज़",
-    "voice",
+    "re:\\b(awaz|voice) (tez|dheere|dhime|loud|low|high|clear nahi)",
+    "awaz clear nahi",
+    "sunai nahi",
     "loud",
-    "slow",
-    "tez",
-    "dheere",
-    "high",
-    "low",
-    "ladki",
-    "ladka"
+    "आवाज़ साफ़"
    ],
    "evidence_rule": "a call turn where the seller comments on the voice (loud, soft, hard to hear)"
   },
@@ -469,21 +493,17 @@
    "reason_required": true,
    "searched_note_required": true,
    "search_terms": [
+    "re:\\bspeak (in )?(hindi|english|gujarati|tamil|telugu|kannada|malayalam|marathi|bengali)",
+    "re:\\b(hindi|english|gujarati|tamil|telugu|kannada|malayalam|marathi|bengali) (me|mein) (baat|bolo|bol)",
     "hinglish",
-    "english",
-    "hindi",
-    "gujarati",
-    "tamil",
-    "telugu",
-    "kannada",
-    "malayalam",
-    "marathi",
-    "bengali",
     "language",
     "bhasha",
     "भाषा",
-    "हिंदी",
-    "अंग्रेज़ी"
+    "re:seller_(city|state|district)",
+    "GST registration state",
+    "re:\\(rank \\d",
+    "re:\b(city|state):",
+    "re:languages?:"
    ],
    "evidence_rule": "a location fact (profile state or city, GST state, onboarding cities) or a language the seller spoke on a past call",
    "size_suggestion": {
@@ -510,24 +530,15 @@
    "reason_required": true,
    "searched_note_required": true,
    "search_terms": [
+    "re:\\bspeak (in )?(hindi|english|gujarati|tamil|telugu|kannada|malayalam|marathi|bengali)",
+    "re:\\b(hindi|english|gujarati|tamil|telugu|kannada|malayalam|marathi|bengali) (me|mein) (baat|bolo|bol)",
     "hinglish",
-    "english",
-    "hindi",
-    "gujarati",
-    "tamil",
-    "telugu",
-    "kannada",
-    "malayalam",
-    "marathi",
-    "bengali",
     "language",
     "bhasha",
     "भाषा",
-    "हिंदी",
-    "अंग्रेज़ी",
     "english me",
     "hindi me",
-    "hinglish"
+    "hinglish me"
    ],
    "evidence_rule": "a past call where the seller spoke or asked for a particular language mix"
   },
@@ -551,17 +562,14 @@
    "reason_required": true,
    "searched_note_required": true,
    "search_terms": [
+    "proprietor",
     "owner",
     "director",
-    "proprietor",
-    "manager",
     "partner",
-    "sir",
-    "madam",
-    "ji",
-    "mr",
     "ceo",
-    "md"
+    "managing director",
+    "re:\\bmd\\b",
+    "re:\\b(sir|madam) bol"
    ],
    "evidence_rule": "a contact designation (A04), a turnover band (C02), a high order value (E10), or a seller who addresses the caller formally"
   },
@@ -590,13 +598,10 @@
     "crore",
     "lakh",
     "export",
-    "gst",
-    "b2b",
-    "dealer",
+    "re:\\bb2b\\b",
     "distributor",
     "manufacturer",
     "wholesale",
-    "retail",
     "samajh nahi"
    ],
    "evidence_rule": "turnover band, nature of business, order values, or how technical or simple the seller's own words were"
@@ -627,18 +632,17 @@
     "shikayat",
     "faltu",
     "bekar",
-    "irritat",
+    "irritated",
     "angry",
-    "frustrat",
+    "frustrated",
     "stop calling",
     "परेशान",
     "कितनी बार",
     "शिकायत",
     "बंद करो",
-    "thank",
+    "thank you",
     "dhanyavad",
     "shukriya",
-    "achha",
     "धन्यवाद"
    ],
    "evidence_rule": "an open complaint (I01), a frustrated call turn (needs more warmth), or a friendly call turn"
@@ -667,9 +671,9 @@
     "shikayat",
     "faltu",
     "bekar",
-    "irritat",
+    "irritated",
     "angry",
-    "frustrat",
+    "frustrated",
     "stop calling",
     "परेशान",
     "कितनी बार",
@@ -703,17 +707,22 @@
    "reason_required": true,
    "searched_note_required": true,
    "search_terms": [
-    "busy",
-    "bizi",
+    "busy hoon",
+    "busy hu",
+    "busy hun",
+    "bahut busy",
+    "am busy",
+    "i'm busy",
+    "bit busy",
+    "bizi hoon",
     "jaldi",
     "baad me",
     "baad mein",
     "call back",
     "callback",
-    "later",
     "driving",
-    "meeting me",
     "time nahi",
+    "re:\\bmeeting (me|mein) hoon",
     "बिजी",
     "जल्दी",
     "बाद में",
@@ -722,14 +731,14 @@
     "samajh nahi",
     "samjha nahi",
     "kya matlab",
-    "dhire",
+    "dhire bolo",
     "slowly",
-    "repeat",
     "phir se bolo",
+    "repeat karo",
     "समझ नहीं",
     "क्या मतलब",
     "धीरे",
-    "short",
+    "short me",
     "chhota",
     "jaldi bolo"
    ],
@@ -762,11 +771,13 @@
     "pehle bhi",
     "last time",
     "pichli baar",
-    "called",
-    "call kiya",
-    "yaad",
-    "executive",
-    "meeting"
+    "call kiya tha",
+    "yaad hai",
+    "kuch nahi hua",
+    "executive aaya",
+    "meeting ho chuki",
+    "meeting ho gayi",
+    "पिछली बार"
    ],
    "evidence_rule": "a past call that the opening should acknowledge or avoid repeating"
   }
@@ -801,13 +812,10 @@
     "buyleads.md#E10"
    ],
    "search_terms": [
-    "order",
-    "requirement",
-    "lead",
+    "re:\\border (value|of)",
     "quantity",
     "lakh",
-    "value",
-    "buyer",
+    "requirement aayi",
     "ऑर्डर",
     "रिक्वायरमेंट"
    ],
@@ -820,15 +828,14 @@
     "business.md#C09"
    ],
    "search_terms": [
-    "photo",
-    "image",
-    "price",
-    "category",
-    "catalogue",
-    "profile",
-    "product",
-    "फोटो",
-    "प्रोफाइल"
+    "re:prod_wo_image|prd_no_prices|name_only_prd|WITHOUT_PHOTO",
+    "cqs",
+    "photo nahi",
+    "price nahi",
+    "profile incomplete",
+    "profile complete",
+    "फोटो नहीं",
+    "प्रोफाइल अधूरा"
    ],
    "evidence_rule": "products without photo or price, a weak catalogue score, or a thin profile"
   },
@@ -838,12 +845,11 @@
     "buyleads.md#E09"
    ],
    "search_terms": [
-    "demand",
-    "requirement",
+    "local_bl",
+    "total_bl",
     "buy lead",
-    "enquiry",
-    "buyer",
-    "category"
+    "demand",
+    "requirements aayi"
    ],
    "evidence_rule": "local or total buy-lead counts in the seller's category"
   },
@@ -853,12 +859,11 @@
     "calls/"
    ],
    "search_terms": [
-    "credit",
+    "bl_credit_lapsed",
     "lapse",
-    "balance",
     "unused",
-    "paisa",
-    "recharge",
+    "credit balance",
+    "credits",
     "क्रेडिट"
    ],
    "evidence_rule": "lapsed or unused buy-lead credits, or a call about credits"
@@ -873,8 +878,8 @@
     "irrelevant",
     "wrong lead",
     "poor quality",
-    "fake",
-    "bekar",
+    "fake lead",
+    "bekar lead",
     "faltu lead",
     "price poochhte"
    ],
@@ -888,11 +893,10 @@
    "search_terms": [
     "no enquiry",
     "enquiry nahi",
-    "kam",
-    "drop",
-    "decrease",
-    "ek bhi nahi",
-    "एनक्वायरी"
+    "ek bhi enquiry",
+    "enq_lm",
+    "enq_lq",
+    "एनक्वायरी नहीं"
    ],
    "evidence_rule": "enquiries falling versus the last quarter, or a seller saying enquiries stopped"
   },
@@ -901,12 +905,10 @@
     "peers.md#E11"
    ],
    "search_terms": [
-    "peer",
     "same size",
-    "competitor",
-    "nearby",
-    "others",
-    "doosre"
+    "peers",
+    "peers_bought",
+    "median_leads_per_buyer"
    ],
    "evidence_rule": "an allowed peer rung (at least 5 same-size peers who bought)"
   },
@@ -925,9 +927,9 @@
     "shikayat",
     "faltu",
     "bekar",
-    "irritat",
+    "irritated",
     "angry",
-    "frustrat",
+    "frustrated",
     "stop calling",
     "परेशान",
     "कितनी बार",
@@ -940,7 +942,16 @@
  "probe_rules": {
   "format": "every probe_files entry is 'file#section' (a ### heading id in the folder file) or 'calls/' for the call files",
   "calls": "'calls/' = every call file in the last 90 days that INDEX.md lists",
-  "search_terms": "words or regexes in English, Hindi and Hinglish; the probe searches ONLY the listed sections and the validator re-runs the same search to check a 'no evidence' claim",
+  "search_terms": "entries are literals or regexes: a 're:' prefix means regex (case-insensitive); otherwise a literal. ASCII literals match on WHOLE WORDS; non-ASCII (Hindi and other scripts) literals match as substrings. Prefer phrases over single words; no term that hits most call files (ji, haan, ok, meeting, called). Target: at most 10 hit lines per field on average over the 10 demo sellers.",
   "evidence_rule": "one line: what counts as evidence for the field"
+ },
+ "voice_lean_f": {
+  "value": 0.02,
+  "when": "tense call, rural proxy, or Hindi belt and rural (extra female lean on top of the learned keys)"
+ },
+ "brief": {
+  "min_calls": 20,
+  "rule": "For each learned field the brief uses the DEEPEST level of the seller's path whose cell holds at least min_calls calls for that field (L6 is checked before L5, then L5 down to L0). level_used is null and value_groups is empty when no level has enough calls. Each group shows n calls and meeting rate (null when n is 0).",
+  "output": "03_prior.json brief{field: {level_used, key, n_total, value_groups{group: {n, rate}}}}"
  }
 }
