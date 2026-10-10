@@ -202,3 +202,16 @@ def test_start_rules_have_ids_and_grades():
     assert r["voice_gender"]["id"] == "voice.female_seller" and r["voice_gender"]["grade"] in ("WEAK", "GUESS")
     assert r["voice_gender"]["matched"] == ["voice.female_seller", "voice.tense"]
     assert all(a["id"] and a["grade"] for a in r["empathy_add"])
+
+
+def test_division_falls_back_to_plan_class_when_vertical_unknown():
+    """2026-10-10 Hyderabad demo seller: a pool vertical name gave division 'unknown' and no eligible hook."""
+    import datetime
+    import facts as F
+    ctx = {"points": {"H02": {"value": {"vertical_name": "Some Team Pool"}}, "X07": {"value": {"status": "ok", "plan": "free"}}}}
+    assert F.build(ctx, datetime.date(2026, 10, 10))["division"] == "NSD"
+    ctx["points"]["X07"]["value"]["plan"] = "paid"
+    assert F.build(ctx, datetime.date(2026, 10, 10))["division"] == "CSD"
+    ctx["points"]["H02"]["value"]["vertical_name"] = "CSD"  # a known vertical still wins
+    ctx["points"]["X07"]["value"]["plan"] = "free"
+    assert F.build(ctx, datetime.date(2026, 10, 10))["division"] == "CSD"

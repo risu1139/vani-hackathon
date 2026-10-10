@@ -66,8 +66,15 @@ def build(ctx, today):
     vert = (g("H02").get("vertical_name") or "") if isinstance(g("H02"), dict) else ""
     div = "NSD" if "NSD" in vert.upper() else "CSD" if "CSD" in vert.upper() else "TMW" if "TMW" in vert.upper() or "WELCOME" in vert.upper() \
         else "KCD" if "KCD" in vert.upper() else "unknown"
-    T.append(item("trait", "trait.division", div, [ev("H02", "H02.vertical_name", vert)], 1.0 if div != "unknown" else 0.3,
-                  "text match on vertical_name; TMW and KCD use the CSD reference until decided",
+    div_ev = [ev("H02", "H02.vertical_name", vert)]
+    div_rule = "text match on vertical_name; TMW and KCD use the CSD reference until decided"
+    if div == "unknown":  # 2026-10-10: a pool / team vertical name gave no division, so no hook was eligible; use X07
+        x7 = g("X07") if isinstance(g("X07"), dict) else {}
+        if x7.get("plan") in ("free", "paid"):
+            div = "NSD" if x7["plan"] == "free" else "CSD"
+            div_ev.append(ev("X07", "X07.plan", x7["plan"]))
+            div_rule += "; vertical_name unknown -> X07 plan class (free = NSD, paid = CSD)"
+    T.append(item("trait", "trait.division", div, div_ev, 1.0 if div != "unknown" else 0.3, div_rule,
                   detail={"vertical_name": vert, "reference": "division_nsd.md" if div == "NSD" else "division_csd.md",
                           "objective": "get a meeting (profile help framing; never 'sales')" if div == "NSD"
                           else "get a meeting (buy-lead usage / profile review framing; upsell happens in the meeting)"}))
