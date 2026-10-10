@@ -337,3 +337,11 @@ def test_named_time_booking_nudge_wins_over_no_ask():
     ctx = _ctx()
     out, row = _say(ctx, "समझ नहीं आया, कल 4 बजे आ जाओ")
     assert "book_meeting" in out.message_to_llm and "Do NOT ask" not in out.message_to_llm
+
+
+def test_overlay_keeps_frustrated_mode():
+    """review: a frustrated seller asking 'kitne leads aaye?' gets the question directive, stays frustrated, no ask."""
+    ctx = _ctx(seller_mode="frustrated")
+    out, row = _say(ctx, "kitne leads aaye?")
+    assert row.get("overlay") == "question" and "Answer it fully" in out.message_to_llm
+    assert ctx.agent_variables["seller_mode"] == "frustrated" and row["ask_ok"] is False

@@ -627,6 +627,8 @@ class ReadSellerSignal(SarvamTool):
             to = "language_switch"
         else:
             to = mode
+        if overlay and not lang_switch:
+            to = prev  # an overlay answers this turn only; a frustrated or declined seller stays in that mode
         dmode = to
         if to == "bot_question":
             n = int(_ivar(context, "bot_q_count") or 0) + 1
