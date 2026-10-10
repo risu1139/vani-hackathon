@@ -367,7 +367,8 @@ LANG_SCRIPT = {"Hindi": "deva", "Marathi": "deva", "Konkani": "deva", "Bengali":
 
 # Hindi and Marathi share Devanagari: tell them apart by common words (2026-10-10 call: a Hindi turn after a Marathi
 # start was not switched because only the script was compared)
-_HI_WORDS = set("है हैं हो हूँ हूं क्या आप नहीं मुझे मैं रहे रहा रही कौन कहाँ कहां था थी में यह वह हम तुम कैसे क्यों अभी बात "
+# words BOTH languages use ("हो" = Marathi yes / Hindi "are") are left out: a tie falls back to the model's language hint
+_HI_WORDS = set("है हैं हूँ हूं क्या आप नहीं मुझे मैं रहे रहा रही कौन कहाँ कहां था थी में यह वह हम तुम कैसे क्यों अभी बात "
                 "hai hain kya aap nahi nahin mujhe main rahe raha kaun kahan tha thi yeh hum kaise kyun abhi baat".split())
 _MR_WORDS = set("आहे आहात आहेत आहोत काय तुम्ही नाही मला मी कोण कोणती कोणत्या बोलता बोलतोय बोलते आपण होय करता कसं कशी "
                 "का तुमच्याकडे आता आम्ही ahe aahe ahat kay tumhi nahi mala mi kon kasa".split())

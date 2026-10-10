@@ -58,6 +58,10 @@ SCENARIOS = {
     "switch_bot": [("हाँ बोलिए", "hi-IN"), ("आप बॉट हो क्या? मशीन से बात हो रही है?", "hi-IN"), ("सच बताओ, आप इंसान हो?", "hi-IN")],
     "switch_language": [("हो, बोला.", "mr-IN"), ("आप हिंदी में बात करो", "hi-IN"), ("Can you speak in English please?", "en-IN"),
                         ("Okay, tell me about the leads.", "en-IN")],
+    "emotion_pleased": [("हाँ बोलिए", "hi-IN"), ("अरे वाह, ये तो बहुत बढ़िया बात है, अच्छा लगा सुनकर!", "hi-IN"),
+                        ("हाँ हाँ, और बताइए", "hi-IN")],
+    "emotion_irritated": [("हाँ", "hi-IN"), ("उफ्फ, जल्दी काम की बात करो यार, दिमाग खराब मत करो", "hi-IN"),
+                          ("ठीक है बोलो", "hi-IN")],
     "telugu_questions": [("అవును చెప్పండి", "te-IN"), ("ఎన్ని లీడ్స్ వచ్చాయి?", "te-IN"), ("ఎక్కడి నుండి వచ్చాయి?", "te-IN")],
 }
 LANG_CODE = {"TELUGU": "te-IN", "HINDI": "hi-IN", "GUJARATI": "gu-IN", "MARATHI": "mr-IN", "TAMIL": "ta-IN", "KANNADA": "kn-IN",

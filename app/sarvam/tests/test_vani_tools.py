@@ -369,3 +369,11 @@ def test_r6_hook_first_then_one_topic_per_no():
         texts.append(out.message_to_llm)
     assert all("MAIN hook" in t for t in texts[:2]) and all("ONE other topic" in t for t in texts[2:])
     assert not ctx.end_conversation
+
+
+def test_marathi_yes_is_not_hindi():
+    """2026-10-10 test call: Marathi 'हो, बोला' (yes, go on) was taken as Hindi because 'हो' is in both languages."""
+    assert vt.deva_lang("हो, बोला।", "marathi") == "Marathi"
+    ctx = _ctx(persona_language="MARATHI")
+    out, row = _say(ctx, "हो, बोला।", "marathi")
+    assert "Reply in Hindi" not in out.message_to_llm and row["to"] != "language_switch"

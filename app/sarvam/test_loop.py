@@ -31,6 +31,8 @@ EXPECT = {
     "switch_confused": "mode confused; simpler words, one idea",
     "switch_bot": "bot_question then bot_question_pressed: sidestep, then 'virtual assistant', never human",
     "switch_language": "replies follow Marathi -> Hindi -> English on the same turn",
+    "emotion_pleased": "what VANI does with a pleased seller (no 'pleased' mode yet): observe only",
+    "emotion_irritated": "irritated without a complaint -> frustrated mode: calm, short, no pitch",
 }
 
 
