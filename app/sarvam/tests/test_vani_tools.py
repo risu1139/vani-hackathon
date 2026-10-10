@@ -292,14 +292,14 @@ def test_time_or_interest_beats_question(utt, lang):
 def test_question_is_answered_without_ask(utt, lang):
     ctx = _ctx()
     out, row = _say(ctx, utt, lang)
-    assert vt.classify(utt)[0] == "question" and row["ask_ok"] is False and "Do NOT ask" in out.message_to_llm
+    assert vt.classify(utt)[0] == "question" and row.get("overlay") == "question" and row["ask_ok"] is False         and "Do NOT ask" in out.message_to_llm
 
 
 @pytest.mark.parametrize("utt,lang", [("कौन है मेरा एग्जीक्यूटिव? कौन आएगा?", "hindi"), ("executive ఎవరు వస్తారు", "telugu")])
 def test_handler_question_gets_the_handler_line(utt, lang):
     ctx = _ctx(handler_line="our IndiaMART team handles your account; the executive will introduce themselves when they call")
     out, row = _say(ctx, utt, lang)
-    assert row["to"] == "ask_handler" and "introduce themselves" in out.message_to_llm and "Do NOT ask" in out.message_to_llm
+    assert row.get("overlay") == "ask_handler" and "introduce themselves" in out.message_to_llm and "Do NOT ask" in out.message_to_llm
     out, row = _say(_ctx(), utt, lang)  # no variable: the team sentence, never empty
     assert "IndiaMART team handles your account" in out.message_to_llm
 
@@ -311,3 +311,29 @@ def test_ask_never_twice_in_a_row():
         out, row = _say(ctx, u)
         grants.append(row["ask_ok"])
     assert grants == [False, True, False, True, False, True], grants  # opening first; then VANI decides, never two turns running
+
+
+# review of the 5f build: whole-token question words, no generic name questions, overlays, booking nudge wins
+@pytest.mark.parametrize("utt", ["मैंने किसी को नहीं बोला", "किसान लोग आते हैं", "ठीक है, कबाड़ का काम है",
+                                 "আমাকে কিছু বলেননি, কিন্তু কাজ চলছে", "ਮੈਂ ਕੰਮ ਕੀਤਾ ਹੈ", "હું કામ કરું છું કેમકે ઓર્ડર છે",
+                                 "తాకే వస్తువులు ఉన్నాయి", "என் கடை திறந்திருக்கு"])
+def test_statements_are_not_questions(utt):
+    assert vt.classify(utt)[0] != "question", (utt, vt.find_cues(utt))
+
+
+@pytest.mark.parametrize("utt", ["aapka naam kya hai", "product ka naam batao", "आपका नाम क्या है?"])
+def test_generic_name_question_is_not_handler(utt):
+    assert vt.classify(utt)[0] != "ask_handler"
+
+
+def test_question_overlay_applies_at_once_and_leaves_seller_mode():
+    ctx = _ctx()
+    out, row = _say(ctx, "किस तरह की requirements हैं?")
+    assert row.get("overlay") == "question" and "Answer it fully" in out.message_to_llm
+    assert ctx.agent_variables["seller_mode"] in ("neutral", "language_switch")
+
+
+def test_named_time_booking_nudge_wins_over_no_ask():
+    ctx = _ctx()
+    out, row = _say(ctx, "समझ नहीं आया, कल 4 बजे आ जाओ")
+    assert "book_meeting" in out.message_to_llm and "Do NOT ask" not in out.message_to_llm

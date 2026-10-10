@@ -39,7 +39,7 @@ def nums(t):
 def check(call):
     tr = [m for m in call.get("transcript") or [] if m.get("role") in ("assistant", "user")]
     lang = str(call.get("language_name") or "").lower()
-    covered = lang in COVERED or not lang
+    covered = lang in COVERED  # a missing language is unknown, never covered
     log = call.get("switch_log") or []
     opted = any(r.get("to") == "opt_out" for r in log)
     booked = str((call.get("agent_variables") or {}).get("meeting_fixed")).lower() == "yes"
@@ -75,14 +75,20 @@ def check(call):
                 if n not in nums(between):
                     rep.append({"number": n, "turns": [first[n], i]})
             first.setdefault(n, i)
-    out["R3"] = {"result": "fail" if rep else ("pass" if first or covered else "unknown"), "repeats": rep}
+    # digits only: a call whose VANI turns say numbers in words is 'unknown' for R3 (no number-word table yet)
+    out["R3"] = {"result": "fail" if rep else ("pass" if first and covered else "unknown"), "repeats": rep}
 
     # R5: the agent ended the call -> an 'anything else' question answered by the seller, unless an exception
     ended = call.get("ended_by")
-    if opted or ended != "AGENT_ENDS":
-        out["R5"] = {"result": "pass", "why": "exception: " + ("opt-out" if opted else f"ended_by={ended}")}
+    hostile = any(r.get("to") == "frustrated" for r in log[-2:])
+    nudged_out = len(tr) >= 2 and tr[-1]["role"] == "assistant" and tr[-2]["role"] == "assistant"  # no seller reply at the end
+    seller_end = any(VT.classify(m.get("content") or "")[0] == "opt_out" for m in tr[-3:] if m["role"] == "user")
+    if opted or seller_end or hostile or nudged_out or ended != "AGENT_ENDS":
+        why = "opt-out" if opted or seller_end else "hostile/legal" if hostile else "nudges unanswered" if nudged_out else f"ended_by={ended}"
+        out["R5"] = {"result": "pass", "why": "exception: " + why}
     else:
-        idx = [i for i, m in enumerate(tr) if m["role"] == "assistant" and ELSE.search(m.get("content") or "")]
+        vani = [i for i, m in enumerate(tr) if m["role"] == "assistant"]
+        idx = [i for i in vani[-2:] if ELSE.search(tr[i].get("content") or "")]  # the close must be one of the last 2 VANI turns
         answered = any(any(x["role"] == "user" for x in tr[i + 1:]) for i in idx)
         out["R5"] = {"result": "pass" if answered else ("fail" if covered else "unknown"), "booked": booked,
                      "asked_anything_else_at": idx}

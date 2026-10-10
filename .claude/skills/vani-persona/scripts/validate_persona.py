@@ -320,6 +320,8 @@ STEP_KINDS = {"info", "question", "ask", "close"}
 ASK_WORDS = re.compile(r"(?<![a-z])(kal|parso|subah|shaam|baje|milein|milna|milte|meeting|tomorrow|morning|evening|o'clock)(?![a-z])|"
                        r"कल|परसों|सुबह|शाम|बजे|मिलें|मिलना|मीटिंग|उद्या|सकाळी|संध्याकाळी|वाजता|భేటీ|రేపు|ఉదయం|సాయంత్రం|"
                        r"நாளை|காலை|மாலை|ನಾಳೆ|ಬೆಳಿಗ್ಗೆ|ಸಂಜೆ|നാളെ|രാവിലെ|વાગ્યે|કાલે|সকাল|কাল|ਕੱਲ੍ਹ", re.I)
+CLOSE_WORDS = re.compile(r"anything else|aur kuch|aur koi|और कुछ|और कोई|अजून काही|आणखी काही|ఇంకేమైనా|வேறு ஏதாவது|"
+                         r"ಬೇರೆ ಏನಾದರೂ|മറ്റെന്തെങ്കിലും|બીજું કંઈ|আর কিছু|ਹੋਰ ਕੁਝ", re.I)
 QMARK = re.compile(r"[?？]|\b(kya|ki|ya)\b|या |किंवा|లేదా|அல்லது|ಅಥವಾ|અથવા|নাকি")
 
 
@@ -329,18 +331,29 @@ def check_plan_rules(persona, fails):
     steps = persona.get("call_plan") or []
     kinds = []
     seen = {}
+    vf = {v.get("id"): {n for n in _nums(v.get("say") or "") if len(n) >= 2} for v in persona.get("verified_facts") or []}
     for i, st in enumerate(steps):
         k = st.get("kind")
         if k not in STEP_KINDS:
             fails.append(f"call_plan[{i}]: kind must be one of {sorted(STEP_KINDS)} (call_rules.json)")
         kinds.append(k)
-        for fid in st.get("fact_ids") or []:
+        fids = st.get("fact_ids") or []
+        for fid in fids:
+            if fid not in vf:
+                fails.append(f"call_plan[{i}]: fact_ids {fid!r} is not a verified_facts id")
+        say_nums = {n for n in _nums(str(st.get("say") or "")) if len(n) >= 2}
+        for fid, ns in vf.items():
+            if ns and ns & say_nums and fid not in fids:
+                fails.append(f"call_plan[{i}]: says a number of verified fact {fid} ({sorted(ns & say_nums)}) but fact_ids "
+                             f"does not list it (R3 rests on the text)")
+        for fid in fids:
             if fid in seen:
                 fails.append(f"call_plan[{i}]: R3 no-repeat: fact {fid} is already said in call_plan[{seen[fid]}]")
             seen.setdefault(fid, i)
         say = str(st.get("say") or "")
-        if k == "info" and ASK_WORDS.search(say) and QMARK.search(say):
-            fails.append(f"call_plan[{i}]: kind 'info' but the text asks for a day or time: label it 'ask' (R2)")
+        closing = k == "close" and CLOSE_WORDS.search(say)
+        if k != "ask" and not closing and ASK_WORDS.search(say) and QMARK.search(say):
+            fails.append(f"call_plan[{i}]: kind {k!r} but the text asks for a day or time: label it 'ask' (R2)")
     for i in range(1, len(kinds)):
         if kinds[i] == "ask" and kinds[i - 1] == "ask":
             fails.append(f"call_plan[{i}]: R2 meeting-pace: two meeting asks in a row (steps {i - 1} and {i})")

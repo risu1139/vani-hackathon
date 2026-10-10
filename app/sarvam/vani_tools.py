@@ -121,9 +121,22 @@ DAY_WORD = re.compile(r"\b(kal|parso|aaj|tomorrow|today|monday|tuesday|wednesday
                       r"budhvar|guruvar|shukravar|shanivar)\b|कल|परसों|आज|రేపు|ఈరోజు|நாளை|இன்று|ನಾಳೆ|ಇವತ್ತು|उद्या|આજે|કાલે|আজ|কাল|നാളെ|ഇന്ന്", re.I)
 
 
+# hours said in words (STT writes "कल चार बजे"): 1-12 in hi / mr / te / ta / en, turned into digits before matching
+_HOUR_WORDS = {}
+for _i, _ws in enumerate([
+        "एक ek one ఒక ஒரு", "दो दोन do two రెండు இரண்டு", "तीन teen three మూడు மூன்று", "चार char chaar four నాలుగు நான்கு",
+        "पांच पाँच पाच paanch panch five ఐదు ஐந்து அஞ்சு", "छह छः सहा chhe che six ఆరు ஆறு", "सात saat seven ఏడు ஏழு",
+        "आठ aath eight ఎనిమిది எட்டு", "नौ नऊ nau nine తొమ్మిది ஒன்பது", "दस दहा das ten పది பத்து",
+        "ग्यारह अकरा gyarah eleven పదకొండు பதினொன்று", "बारह बारा barah twelve పన్నెండు பன்னிரண்டு"], 1):
+    for _w in _ws.split():
+        _HOUR_WORDS[_w] = str(_i)
+_HOUR_WORD_RE = re.compile(r"(?<![\wऀ-ൿ])(" + "|".join(sorted(map(re.escape, _HOUR_WORDS), key=len, reverse=True)) +
+                           r")(?=\s*(baje|bje|बजे|वाजता|గంటలకు|மணிக்கு|o'?clock|am|pm|))", re.I)
+
+
 def time_mention(text):
     """(hour or None, said_part) when the text names a clock time or a day with a part of day; else None."""
-    t = text or ""
+    t = _HOUR_WORD_RE.sub(lambda m: _HOUR_WORDS.get(m.group(1).lower(), m.group(1)), text or "")
     m = next((m for m in HOUR_MARK.finditer(t) if m.group(3)), None)
     part = "pm" if PART_PM.search(t) else "am" if PART_AM.search(t) else ""
     if m:
@@ -192,9 +205,9 @@ LEXICON = [
         "मीटिंग नहीं", "नहीं करनी मुझे", "मला नको", "रस नाही")),
     ("ask_handler", "strong", (
         # R4 (plan 5f): the seller asks who handles the account / who will come; answered with handler_line, word for word
-        "executive kaun", "executive ka naam", "mera executive", "kaun aayega", "kaun aaega", "naam batao", "naam kya hai",
-        "who is my executive", "executive name", "who will come", "account manager kaun",
-        "एग्जीक्यूटिव का", "एग्जीक्यूटिव कौन", "मेरा एग्जीक्यूटिव", "कौन आएगा", "कौन है वो", "नाम क्या है", "नाम बताओ",
+        "executive kaun", "executive ka naam", "mera executive", "kaun aayega", "kaun aaega",
+        "who is my executive", "executive name", "who will come", "account manager kaun", "account kaun dekhta",
+        "एग्जीक्यूटिव का", "एग्जीक्यूटिव कौन", "मेरा एग्जीक्यूटिव", "कौन आएगा", "अकाउंट कौन",
         "executive कौन", "कोण येणार", "एक्झिक्युटिव्ह कोण", "ఎవరు వస్తారు", "ఎగ్జిక్యూటివ్ ఎవరు", "யார் வருவாங்க",
         "ಯಾರು ಬರುತ್ತಾರೆ", "ആരാണ് വരുന്നത്", "કોણ આવશે", "কে আসবে", "ਕੌਣ ਆਵੇਗਾ")),
     ("question", "weak", (
@@ -202,7 +215,7 @@ LEXICON = [
         "kya", "kaun", "kab", "kitna", "kitni", "kitne", "kaise", "kyun", "kahan", "kaunsa", "kaun se", "kis", "kiska", "kisko",
         "what", "who", "when", "how", "why", "which", "where",
         "किस", "किसका", "किसको", "क्या", "कौन", "कब", "कितना", "कितनी", "कितने", "कैसे", "क्यों", "कहाँ", "कहां", "कौनसा", "कौन से",
-        "काय", "कोण", "कधी", "किती", "कसे", "कसं", "का?", "कुठे", "कोणत्या",
+        "काय", "कोण", "कधी", "किती", "कसे", "कसं", "कुठे", "कोणत्या",
         "ఎన్ని", "ఏది", "ఏవి", "ఏమి", "ఏంటి", "ఎవరు", "ఎప్పుడు", "ఎంత", "ఎలా", "ఎందుకు", "ఎక్కడ", "ఏ ",
         "எத்தனை", "எது", "என்ன", "யார்", "எப்போது", "எவ்வளவு", "எப்படி", "ஏன்", "எங்கே",
         "ಯಾವ", "ಏನು", "ಯಾರು", "ಯಾವಾಗ", "ಎಷ್ಟು", "ಹೇಗೆ", "ಯಾಕೆ", "ಎಲ್ಲಿ",
@@ -294,10 +307,25 @@ _NOT_WANTED = re.compile(r"(?<![a-z])(nahi chahiye|interest nahi|not interested|
                          r"इंटरेस्ट नही|जरूरत नही|નથી જોઈએ")
 
 
+_TOKEN_SPLIT = re.compile(r"[\s.,!?।॥;:'\"()\[\]\-–—/]+")
+
+
+def tokens(text):
+    """Whole tokens of an utterance in any script (split on spaces and punctuation, normalised like the cues)."""
+    return [t for t in _TOKEN_SPLIT.split(norm(text or "")) if t]
+
+
+def _token_hit(cue, toks):
+    c = tokens(cue.rstrip("*"))
+    return bool(c) and any(toks[i:i + len(c)] == c for i in range(len(toks) - len(c) + 1))
+
+
 def find_cues(text):
     """All lexicon hits in an utterance: list of (mode, strength, cue)."""
     t = norm(text)
-    return [(mode, strength, cue) for mode, strength, cue, rx in _COMPILED if rx.search(t)]
+    toks = tokens(text)
+    return [(mode, strength, cue) for mode, strength, cue, rx in _COMPILED
+            if (_token_hit(cue, toks) if mode == "question" else rx.search(t))]
 
 
 def classify(text):
@@ -461,6 +489,7 @@ def directive(mode, style_id, lang="", handler=""):
 
 TEAM_HANDLER_LINE = ("our IndiaMART team handles your account; the executive will introduce themselves when they call")
 ASK_GAP = 2  # R2 (user 2026-10-10: "let the agent decide, but do not irritate"): never two asks in a row; VANI decides when
+OVERLAY_MODES = {"question", "ask_handler"}
 NO_ASK_MODES = {"question", "ask_handler", "declined", "frustrated", "opt_out", "confused", "bot_question"}
 _CHANGE = {"neutral": "default persona style", "rushed": "brevity + callback offer", "frustrated": "apology, pitch stopped",
            "confused": "simplify: short comma phrases + check", "interested": "move to meeting day/time",
@@ -550,6 +579,9 @@ class ReadSellerSignal(SarvamTool):
         mode, strength, cue, note = classify(utt)
         if mode == "question" and time_mention(utt):
             mode, strength, cue = "interested", "strong", "time named"
+        overlay = mode if mode in OVERLAY_MODES else ""
+        if overlay:  # answered at once, this turn only; the persistent seller mode is not changed
+            mode, strength = "neutral", ""
         # language switch: dominant script differs from the last seller turn (or from the persona's start language)
         last_script = _ivar(context, "last_script") or _ivar(context, "start_script") or ""
         if not last_script:
@@ -601,8 +633,10 @@ class ReadSellerSignal(SarvamTool):
             context.set_internal_variable("bot_q_count", n)
             if n >= 2:
                 dmode = "bot_question_pressed"
+        if overlay:
+            dmode = overlay
         did, cap, text = directive(dmode, style, new_lang, _var(context, "handler_line"))
-        if lang_switch and to != "language_switch":
+        if lang_switch and dmode != "language_switch":
             text += f" Reply in {new_lang}."
         if lang_switch:
             reason += f"; script {last_script}->{script}" + (f" (set {lang_set})" if lang_set else "")
@@ -616,13 +650,16 @@ class ReadSellerSignal(SarvamTool):
         if to != "opt_out":
             last_ok = int(_ivar(context, "ask_ok_turn") or 0)
             # the seller's raw signal decides (a smoothed mode can lag one turn)
-            allow = mode not in NO_ASK_MODES and (mode == "interested" or bool(tm) or turn - last_ok >= ASK_GAP)
+            raw = overlay or mode
+            allow = bool(tm) or (raw not in NO_ASK_MODES and (raw == "interested" or turn - last_ok >= ASK_GAP))
             if allow:
                 context.set_internal_variable("ask_ok_turn", turn)
                 text += " You may ask for the meeting in this reply if it fits; you decide."
             else:
                 text += " Do NOT ask for the meeting in this reply."
             row["ask_ok"] = allow
+            if overlay:
+                row["overlay"] = overlay
 
         _setvar(context, "seller_mode", to)
         _setvar(context, "persona_directive", text)

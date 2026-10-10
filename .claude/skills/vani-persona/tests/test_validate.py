@@ -241,6 +241,23 @@ def test_plan_rules_accept_good_plan():
     plan = _plan(("26 requirements aayi hain", "info", ["peers.md#E08"]), ("Kis tarah ki leads chahiye?", "question", []),
                  ("Executive aapko live dikhayenge. Kal subah milein?", "ask", []), ("Satara se 36 piece ki requirement hai", "info", ["candidate_leads.md#E12"]),
                  ("Aur kuch madad kar sakti hoon?", "close", []))
+    vf = [{"id": "peers.md#E08", "say": "26 buyer requirements"}, {"id": "candidate_leads.md#E12", "say": "Satara se 36 piece"}]
     fails = []
-    VP.check_plan_rules({"call_plan": plan}, fails)
+    VP.check_plan_rules({"call_plan": plan, "verified_facts": vf}, fails)
     assert fails == [], fails
+
+
+def test_plan_rules_fact_ids_rest_on_the_text():
+    """review: fact_ids must be verified_facts ids, and a step saying a fact's number must list it (R3 cannot be dodged)."""
+    import validate_persona as VP
+    vf = [{"id": "peers.md#E08", "say": "26 buyer requirements aayi hain"}]
+    plan = _plan(("26 requirements aayi hain", "info", []), ("Phir se 26 requirements", "info", []))
+    fails = []
+    VP.check_plan_rules({"call_plan": plan, "verified_facts": vf}, fails)
+    assert any("does not list it" in f for f in fails), fails
+    fails = []
+    VP.check_plan_rules({"call_plan": _plan(("x", "info", ["made.up#X"])), "verified_facts": vf}, fails)
+    assert any("not a verified_facts id" in f for f in fails), fails
+    fails = []
+    VP.check_plan_rules({"call_plan": _plan(("Kal subah milein?", "question", [])), "verified_facts": vf}, fails)
+    assert any("label it 'ask'" in f for f in fails), fails  # an ask labelled 'question' is caught too
