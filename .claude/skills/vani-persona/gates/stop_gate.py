@@ -44,7 +44,8 @@ def failures(run):
     out = []
     if sha(p04) != fin.get("sha04") or sha(p02) != fin.get("sha02"):
         out.append(f"04_persona.json / 02_review.json changed after finalize. Run {fix} finalize again (never edit them by hand)")
-    r = subprocess.run([sys.executable, os.path.join(SKILL, "scripts", "validate_persona.py"), "--folder", turn["folder"],
+    pyf = [] if os.name == "nt" else ["-E", "-s"]  # ignore PYTHON* env and the user site dir (planted .pth files)
+    r = subprocess.run([sys.executable] + pyf + [os.path.join(SKILL, "scripts", "validate_persona.py"), "--folder", turn["folder"],
                         "--run", run], capture_output=True, text=True, encoding="utf-8", timeout=150)
     if r.returncode != 0:
         out += [ln[2:] for ln in r.stdout.splitlines() if ln.startswith("- ")] or [r.stdout[-500:] or r.stderr[-500:]]
