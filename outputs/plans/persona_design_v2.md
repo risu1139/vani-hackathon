@@ -127,7 +127,7 @@ The selected persona card now carries a voice gender (female by default) and an 
 | emp.frustrated | extra empathy for a frustrated seller | GUESS |
 | emp.rushed | extra empathy for a rushed seller | GUESS |
 
-**Known limit (decision pending with the persona session's user):** the voice draw is no longer a start value, so a male voice is almost never tried and the voice scoreboard cannot learn the voice question. Options: accept it for the demo, or keep a small exploration share (for example inside the 15% holdout).
+**Known limit (decided by the persona session's user for the demo):** the voice question cannot be learned while every card is female (F) and the start rules only point to F. Male outcomes come only from agent decisions with seller evidence. Voice stays deterministic, with no exploration share. The voice scoreboard still counts every call, but it will hold almost no male results.
 
 **Learning report:** `loop2_update.py --report` now also shows the meeting rate by start rule, next to the rate by reason type.
 
