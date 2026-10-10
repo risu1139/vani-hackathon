@@ -34,7 +34,7 @@ from sarvam_conv_ai_sdk import (SarvamOnStartTool, SarvamOnStartToolContext, Sar
 from sarvam_conv_ai_sdk.tool import SarvamToolLanguageName, SpeechSettings, TextToSpeechConfig
 
 LOG_ROWS = 25
-LEXICON_VERSION = "lex-v2-20261010"
+LEXICON_VERSION = "lex-v3-20261010"
 PACE_RANGE = (0.85, 1.25)
 PITCH_RANGE = (-0.3, 0.3)
 
@@ -131,6 +131,9 @@ def _cue_re(cue):
 # ---------------------------------------------------------------- lexicon (mode, strength, cues)
 LEXICON = [
     ("opt_out", "strong", (
+        # v3: "no / do not want" in regional languages = decline -> close politely (phone test 2026-10-10)
+        "ಬೇಡ", "ಬೇಡಾ", "వద్దు", "వద్దండి", "வேண்டாம்", "വേണ്ട", "नको", "লাগবে না", "দরকার নেই", "નથી જોઈતું", "ਨਹੀਂ ਚਾਹੀਦਾ",
+        "beda beda", "vaddu", "vendam", "venda",
         "call mat", "phone mat", "call na kare*", "phone na kare*", "number hata*", "number delete", "number block",
         "list se hata*", "dnd", "do not call", "don't call", "dont call", "stop calling", "unsubscribe",
         "कॉल मत", "फोन मत", "call मत", "नंबर हटा", "नंबर डिलीट", "नंबर ब्लॉक", "लिस्ट से हटा",
@@ -139,6 +142,9 @@ LEXICON = [
         "फोन करू नका", "कॉल करू नका", "ফোন করবেন না", "কল করবেন না", "కాల్ చేయకండి", "ఫోన్ చేయకండి", "నంబర్ తీసేయ",
         "கால் பண்ணாதீங்க", "போன் பண்ணாதீங்க", "ಕಾಲ್ ಮಾಡಬೇಡಿ", "ಫೋನ್ ಮಾಡಬೇಡಿ", "വിളിക്കരുത്", "വിളിക്കണ്ട")),
     ("frustrated", "strong", (
+        # v3: complaints about the leads (phone test 2026-10-10)
+        "बेकार", "bekaar", "bekar", "क्वालिटी खराब", "quality kharab", "बहुत खराब", "బాగాలేదు", "బాగోలేవు", "క్వాలిటీ బాగాలేదు",
+        "நல்லா இல்ல", "ಚೆನ್ನಾಗಿಲ್ಲ", "നല്ലതല്ല", "খারাপ", "ખરાબ",
         "kitni baar", "baar baar", "pareshan", "disturb", "faltu", "bakwas", "roz phone", "roz call", "har roz",
         "roz roz", "phone rakh", "warna phone", "dimag mat", "dimag kharab", "irritate*", "band karo", "how many times",
         "कितनी बार", "बार बार", "परेशान", "डिस्टर्ब", "फालतू", "बकवास", "रोज फोन", "रोज कॉल", "हर रोज", "रोज रोज",
@@ -185,6 +191,8 @@ LEXICON = [
         "புரியல", "புரியவில்லை", "மறுபடியும் சொல்", "என்ன சொன்னீங்க", "ಅರ್ಥ ಆಗಲಿಲ್ಲ", "ಮತ್ತೆ ಹೇಳಿ",
         "മനസ്സിലായില്ല", "വീണ്ടും പറയ", "artham kaledu", "puriyala")),
     ("confused", "weak", (
+        # v3: "do not know" (phone test 2026-10-10)
+        "ಗೊತ್ತಿಲ್ಲ", "తెలియదు", "தெரியல", "അറിയില്ല", "पता नहीं", "pata nahi", "माहीत नाही", "জানি না", "ખબર નથી",
         "kya bol rahe", "kya bola", "phir se bata*", "kaise boli*",
         "क्या बोल रहे", "क्या बोला", "फिर से बता", "कैसे बोलि")),
     ("interested", "strong", (

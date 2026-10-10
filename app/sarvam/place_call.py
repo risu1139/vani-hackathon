@@ -56,7 +56,9 @@ def main():
     v = json.load(open(os.path.join(p.run, "05_sarvam_vars.json"), encoding="utf-8"))
     lang = LANG_NAME.get(str(v.get("persona_language")).upper(), "Hindi")
     since = datetime.now(timezone.utc) - timedelta(seconds=30)
-    body = {"app_config": {"app_id": APP, "app_version": p.version,
+    # 2026-10-10: agent_variables under user_config.app_overrides did NOT reach the call (the version defaults were used);
+    # also send them at app_config.agent_variables, where the Instant Outbound API takes them, and check again.
+    body = {"app_config": {"app_id": APP, "app_version": p.version, "agent_variables": v,
                            "user_config": {"app_overrides": {"initial_language_name": lang, "agent_variables": v}}},
             "phone_numbers": [p.to]}
     r = requests.post(f"https://apps.sarvam.ai/api/scheduling/v1/orgs/{ORG}/workspaces/{WS}/playground-test",

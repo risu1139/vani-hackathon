@@ -155,6 +155,9 @@ def sections(p):
                "- Ask once whether @seller_name is available or for the right number. Share no seller details. Thank and end the call.",
                "Phase 9: Escalation"]
     phases += [f"- {r}" for r in p.get("escalation_rules") or []]
+    phases += ["- the seller names a person they know at IndiaMART (e.g. their manager) -> say you will pass the request to "
+               "that team and offer a callback from them; never say you cannot",
+               "- the seller says no / does not want it -> thank them, do not push again, end the call"]
     guard = "\n".join([lines(p.get("guardrails") or []),
                        "- Never argue. Never promise leads, orders, sales or results.",
                        "- Never say AI, bot, robot, branch manager, account manager or 'personally'."])
