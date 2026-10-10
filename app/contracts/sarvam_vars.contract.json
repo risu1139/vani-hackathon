@@ -39,7 +39,8 @@
     "opt_out",
     "wrong_person",
     "dropped_early",
-    "other"
+    "other",
+    "no_response"
    ],
    "prompt": "How did the call end? meeting_booked only if the seller agreed a day and time."
   },
@@ -63,7 +64,8 @@
     "positive",
     "neutral",
     "negative",
-    "not_reached"
+    "not_reached",
+    "no_response"
    ],
    "prompt": "How did the seller react to the first reason VANI gave for the call (the hook)?"
   },

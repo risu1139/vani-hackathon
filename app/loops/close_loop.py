@@ -5,7 +5,8 @@
   3. loop2_update.py --run        -> persona and voice scoreboards (Loop 2)
   4. app/loops/loop1_propose.py   -> lexicon proposal over all reviewed runs (Loop 1; a human approves)
 
-Usage: python app/loops/close_loop.py --interaction-id <id> [--names data/agent_export_maps/<pseudo>.json]
+Usage: python app/loops/close_loop.py --interaction-id <id> [--names data/agent_export_maps/<pseudo>.json] [--test]
+       (--test for smoke / demo calls: never into the real scoreboards)
        python app/loops/close_loop.py --run data/runs/<id> [--names ...]     (06/07 already collected)
 """
 import argparse
@@ -31,6 +32,7 @@ def main():
     a.add_argument("--interaction-id")
     a.add_argument("--run")
     a.add_argument("--names")
+    a.add_argument("--test", action="store_true", help="smoke / demo call: Loop 2 writes to data/scoreboards_test only")
     p = a.parse_args()
     run = p.run
     if p.interaction_id:
@@ -44,7 +46,7 @@ def main():
     step("review", review)
     # test chats (console playground) never touch the real scoreboards
     import json
-    test = json.load(open(os.path.join(run, "06_call.json"), encoding="utf-8")).get("channel") == "playground_text"
+    test = p.test or json.load(open(os.path.join(run, "06_call.json"), encoding="utf-8")).get("channel") == "playground_text"
     boards = os.path.join(ROOT, "data", "scoreboards_test" if test else "scoreboards")
     step("loop2", [PY, os.path.join(SKILL, "loop2_update.py"), "--run", run, "--scoreboards", boards])
     step("loop1", [PY, os.path.join(ROOT, "app", "loops", "loop1_propose.py")])

@@ -122,7 +122,8 @@ def sections(p):
               "- Treat haan, ji, boliye, haan bolo, yes, speaking as confirmation that you have the right person.",
               "- If the reply is unclear, ask once more who you are speaking with. Wrong person: go to Phase 8.",
               "- If busy: go to Phase 7. If they ask you to stop calling: go to Phase 9.",
-              "Phase 2: Hook and conversation (follow these steps in order)"]
+              "Phase 2: Hook and conversation (follow these steps in order)",
+              "- If the seller agrees a day and time at ANY point, stop the steps and go to Phase 5 at once."]
     phases += [f"- Step {s.get('step')}, {s.get('goal')}: say \"{s.get('say')}\"" for s in plan]
     phases += ["- After each step, ask one simple question and listen. Let the seller talk; pick up their words.",
                "Phase 3: Ask for the meeting",
@@ -130,7 +131,8 @@ def sections(p):
                "Phase 4: Objections (answer from this list; at most twice per objection, then offer a callback)"]
     phases += [f"- If the seller says \"{o.get('objection')}\": {o.get('response')}" for o in p.get("objection_playbook") or []]
     phases += ["Phase 5: Book",
-               "- When the seller agrees a day and time, repeat it once, then call book_meeting with the slot as said.",
+               "- As soon as the seller agrees a day and time, call book_meeting in that same reply with the slot as said.",
+               "- Ask anything else (office or video, who will join) only AFTER book_meeting confirms.",
                "- Say it is booked only after book_meeting confirms. If it fails, say hamare IndiaMART executive will call to fix the time.",
                "Phase 6: Graceful close (not interested)",
                "- Thank the seller, do not push again, wish them good business, end the call.",
