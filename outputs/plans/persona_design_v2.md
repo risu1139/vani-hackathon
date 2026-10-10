@@ -112,6 +112,25 @@ For each call: the seller's path, **each field's final value group, its reason t
 | Many field values can drift from persona cards | Persona becomes hard to name | Log the selected persona and every change; keep P0 holdout for comparison |
 | Design changed several times in one day | Risk of building the wrong version | This document is the single reviewed version; code waits for approval |
 
+# 10b. Start rules (added by the persona session, 2026-10-10)
+
+The selected persona card now carries a voice gender (female by default) and an empathy line. A small set of **start rules** in `facts.py` changes those starting values. A field the agent leaves unchanged is labelled "start_persona" and must equal the card plus these rules exactly. The rule ids are recorded per field (`start_rule_ids`) so learning can report the meeting rate **by rule**.
+
+| Rule id | Effect | Evidence grade |
+|---|---|---|
+| voice.female_seller | female voice for a female seller | WEAK |
+| voice.tense | female voice on a tense call | WEAK |
+| voice.rural_hindi_belt | female voice for a rural Hindi-belt seller | GUESS |
+| lang.high_value | English start language for high-value sellers | GUESS |
+| lang.regional | regional language of the seller's state | WEAK |
+| emp.grievance | acknowledge the grievance first | WEAK |
+| emp.frustrated | extra empathy for a frustrated seller | GUESS |
+| emp.rushed | extra empathy for a rushed seller | GUESS |
+
+**Known limit (decision pending with the persona session's user):** the voice draw is no longer a start value, so a male voice is almost never tried and the voice scoreboard cannot learn the voice question. Options: accept it for the demo, or keep a small exploration share (for example inside the 15% holdout).
+
+**Learning report:** `loop2_update.py --report` now also shows the meeting rate by start rule, next to the rate by reason type.
+
 # 11. What does not change
 
 Identity rules (never "AI", "bot" or "branch manager"), the validator's banned words and gender agreement, numbers only from verified facts, the pseudonymised folder, Sarvam receiving the persona only as variables, the in-call switch, the post-call review and the human approval of library changes.

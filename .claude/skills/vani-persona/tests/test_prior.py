@@ -218,3 +218,18 @@ def test_prior_main_writes_brief_and_path(tmp_path, monkeypatch):
     assert out["persona"]["path"] == {"division": "CSD", "band": "40 L - 1.5 Cr", "aov": "mid", "zone": "West", "state": "gujarat", "catgroup": "Textiles"}
     assert out["brief"]["pace"]["level_used"] == "L1" and out["brief"]["pace"]["value_groups"]["1.05-1.25"] == {"n": 25, "rate": 0.2}
     assert len(out["persona"]["top2"]) in (1, 2) and out["hierarchy_version"] == HIER["version"]
+
+
+def test_start_rules_logged_and_reported(tmp_path):
+    persona = {"dimensions": {"voice_gender": {"value": "F", "reason_type": "start_persona", "start_rule_ids": ["voice.tense", "voice.female_seller"]},
+                              "empathy": {"value": "acknowledge", "reason_type": "start_persona", "start_rule_ids": ["emp.grievance"]},
+                              "pace": {"value": 1.0, "reason_type": "seller_evidence", "start_rule_ids": []}}}
+    rules = L.rule_records(persona)
+    assert rules == [("voice_gender", "voice.tense"), ("voice_gender", "voice.female_seller"), ("empathy", "emp.grievance")]
+    for i in range(10):
+        L.apply(str(tmp_path), FULL, "P1", "F", VFULL, i < 3, rules=rules)
+    r = L.report(str(tmp_path))["by_start_rule"]
+    assert r["voice.tense"] == {"n": 10, "rate": 0.3, "by_field": {"voice_gender": {"n": 10, "rate": 0.3}}}
+    assert r["emp.grievance"]["by_field"]["empathy"]["n"] == 10
+    # a rule recorded only when the field's reason_type is start_persona
+    assert L.rule_records({"dimensions": {"pace": {"reason_type": "hierarchy", "start_rule_ids": ["x"]}}}) == []

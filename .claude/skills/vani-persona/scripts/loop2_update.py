@@ -14,6 +14,7 @@ Scoreboards written (data/scoreboards/ or data/scoreboards_test/):
   fields.json   cells[key][field][value_group] = {n, s}   (the brief reads this)
   reasons.json  cells[reason_type][field] = {n, s}  plus cells[reason_type]['_all']   (seller_evidence / hierarchy / start_persona / ...)
   hooks.json    cells[key][hook_id] = {n, s}        (per-segment hook tally, same persona keys)
+  rules.json    cells[rule_id][field] = {n, s} plus cells[rule_id]['_all']   (start rules that fixed a value: dimensions[field].start_rule_ids)
   decisions.jsonl / amendments.jsonl: one row per call (path, arm, hook, per-field group + reason_type, amendments, outcome)
 
 Usage: python3 loop2_update.py --run data/runs/<decision_id> [--scoreboards data/scoreboards] [--dry-run]
@@ -71,11 +72,20 @@ def field_records(persona, h=None):
     return out
 
 
-def apply(sbdir, path, arm, voice, vin, win, dry=False, fields=None, hook=None, h=None):
-    """Add one outcome. fields = {field: {group, reason_type}}; hook = hook id. Returns (persona_sb, voice_sb)."""
+def rule_records(persona):
+    """[(field, rule_id)] for every dimension decided by start rules (reason_type start_persona with start_rule_ids)."""
+    out = []
+    for f, d in (persona.get("dimensions") or {}).items():
+        if isinstance(d, dict) and d.get("reason_type") == "start_persona":
+            out += [(f, r) for r in (d.get("start_rule_ids") or [])]
+    return out
+
+
+def apply(sbdir, path, arm, voice, vin, win, dry=False, fields=None, hook=None, h=None, rules=None):
+    """Add one outcome. fields = {field: {group, reason_type}}; hook = hook id; rules = [(field, rule_id)]. Returns (persona_sb, voice_sb)."""
     h = h or HIER
     ps, vs = load(os.path.join(sbdir, "persona.json")), load(os.path.join(sbdir, "voice.json"))
-    fs, rs, hs = (load(os.path.join(sbdir, n)) for n in ("fields.json", "reasons.json", "hooks.json"))
+    fs, rs, hs, ru = (load(os.path.join(sbdir, n)) for n in ("fields.json", "reasons.json", "hooks.json", "rules.json"))
     pkeys = H.persona_keys(h, path)
     for k in pkeys:
         add(ps, k, arm, win)
@@ -90,9 +100,12 @@ def apply(sbdir, path, arm, voice, vin, win, dry=False, fields=None, hook=None, 
     if hook:
         for k in pkeys:
             add(hs, k, hook, win)
+    for f, rid in (rules or []):
+        add(ru, rid, f, win)
+        add(ru, rid, "_all", win)
     if not dry:
         os.makedirs(sbdir, exist_ok=True)
-        for name, sb in (("persona.json", ps), ("voice.json", vs), ("fields.json", fs), ("reasons.json", rs), ("hooks.json", hs)):
+        for name, sb in (("persona.json", ps), ("voice.json", vs), ("fields.json", fs), ("reasons.json", rs), ("hooks.json", hs), ("rules.json", ru)):
             json.dump(sb, open(os.path.join(sbdir, name), "w", encoding="utf-8"), indent=1)
     return ps, vs
 
@@ -120,7 +133,11 @@ def report(sbdir, h=None):
                 continue
             uplift.append({"cell": key, "arm": arm, "n": c["n"], "rate": rate(c), "baseline": base, "baseline_n": b["n"],
                            "baseline_rate": rate(b), "uplift_pts": round((rate(c) - rate(b)) * 100, 2)})
-    return {"by_reason_type": by_reason, "uplift_vs_holdout": uplift,
+    ru = load(os.path.join(sbdir, "rules.json"))
+    by_rule = {rid: {"n": cols.get("_all", {}).get("n", 0), "rate": rate(cols.get("_all")),
+                     "by_field": {f: {"n": c["n"], "rate": rate(c)} for f, c in sorted(cols.items()) if f != "_all"}}
+               for rid, cols in sorted(ru["cells"].items())}
+    return {"by_reason_type": by_reason, "by_start_rule": by_rule, "uplift_vs_holdout": uplift,
             "note": "rates are meetings per call in that cell; small n means no conclusion; uplift needs both arms in the same cell"}
 
 
@@ -141,6 +158,9 @@ def main():
         print("Meeting rate by reason_type")
         for rt, v in r["by_reason_type"].items():
             print(f"  {rt}: n={v['n']} rate={v['rate']}")
+        print("Meeting rate by start rule (rule fixed a value)")
+        for rid, v in r["by_start_rule"].items():
+            print(f"  {rid}: n={v['n']} rate={v['rate']}")
         print(f"Uplift vs {HIER['holdout']['arm']} (same cell): {len(r['uplift_vs_holdout'])} comparisons")
         for u in r["uplift_vs_holdout"][:30]:
             print(f"  {u['cell']} {u['arm']}: {u['rate']} (n={u['n']}) vs {u['baseline_rate']} (n={u['baseline_n']}): {u['uplift_pts']} pts")
@@ -150,7 +170,7 @@ def main():
         for line in open(p.replay, encoding="utf-8"):
             r = json.loads(line)
             apply(p.scoreboards, r["path"], r["arm"], r["voice"], r["voice_inputs"], r["meeting"], p.dry_run,
-                  fields=r.get("fields"), hook=r.get("hook"))
+                  fields=r.get("fields"), hook=r.get("hook"), rules=[tuple(x) for x in r.get("rules") or []])
             n += 1
         print(f"replayed {n} outcomes into {p.scoreboards}")
         return
@@ -163,7 +183,8 @@ def main():
     voice = ((persona.get("dimensions") or {}).get("voice_gender") or {}).get("value") or (persona.get("voice") or {}).get("gender")
     fields = field_records(persona)
     hook = (persona.get("hook") or {}).get("id")
-    apply(p.scoreboards, prior["persona"]["path"], arm, voice, prior["voice"]["inputs"], win, p.dry_run, fields=fields, hook=hook)
+    rules = rule_records(persona)
+    apply(p.scoreboards, prior["persona"]["path"], arm, voice, prior["voice"]["inputs"], win, p.dry_run, fields=fields, hook=hook, rules=rules)
     if not p.dry_run:
         os.makedirs(p.scoreboards, exist_ok=True)
         row = {"decision_id": prior["decision_id"], "arm": arm, "path": prior["persona"]["path"], "hook": hook,
@@ -172,8 +193,9 @@ def main():
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
         with open(os.path.join(p.scoreboards, "decisions.jsonl"), "a", encoding="utf-8") as f:
             f.write(json.dumps({**row, "fields": {k: {"group": v["group"], "reason_type": v["reason_type"]} for k, v in fields.items()},
-                                "voice": voice, "hierarchy_version": prior.get("hierarchy_version")}, ensure_ascii=False) + "\n")
-    print(json.dumps({"arm": arm, "voice": voice, "hook": hook, "meeting": win, "fields_counted": len(fields), "scoreboards": p.scoreboards}))
+                                "voice": voice, "hierarchy_version": prior.get("hierarchy_version"),
+                                "start_rule_ids": {f: [r for ff, r in rules if ff == f] for f in sorted({ff for ff, _ in rules})}}, ensure_ascii=False) + "\n")
+    print(json.dumps({"arm": arm, "voice": voice, "hook": hook, "meeting": win, "fields_counted": len(fields), "start_rules": len(rules), "scoreboards": p.scoreboards}))
 
 
 if __name__ == "__main__":
