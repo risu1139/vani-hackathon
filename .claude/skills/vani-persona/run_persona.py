@@ -182,6 +182,7 @@ def main():
         facts = json.load(open(os.path.join(run, "01_facts.json"), encoding="utf-8"))
         # 4. settings + CLI version
         sfile, mcp = settings(skill, ldir)
+        cfg_sha = (fsha(sfile), fsha(mcp))
         ver = subprocess.run(claude_cmd() + ["--version"], capture_output=True, text=True).stdout.strip()
         status["claude_version"] = ver
         if ver.split(" ")[0] not in CLI_TESTED:
@@ -194,7 +195,8 @@ def main():
             return
         status["selftest"] = "pass"
         # 6. the turn
-        env = dict(os.environ, VANI_RUN=run, VANI_PY=PY, VANI_SKILL=skill, VANI_REPO=ROOT, PYTHONIOENCODING="utf-8")
+        env = dict(os.environ, VANI_RUN=run, VANI_PY=PY, VANI_SKILL=skill, VANI_REPO=ROOT, PYTHONIOENCODING="utf-8",
+                   ANTHROPIC_SMALL_FAST_MODEL=MODEL, ANTHROPIC_DEFAULT_HAIKU_MODEL=MODEL)  # background tasks on the same model
         tool = os.path.join(skill, "scripts", "persona_tool.py")
         prompt = (f"Use the vani-persona skill: read {os.path.join(skill, 'SKILL.md')} first and follow its steps exactly. "
                   f"Run directory ($VANI_RUN): {run}. Seller folder: {seller}. "
@@ -217,14 +219,18 @@ def main():
             return
         used = list((j.get("modelUsage") or {}).keys())
         status["models_used"], status["cost_usd"] = used, j.get("total_cost_usd")
-        if MODEL not in used:
-            status["reason"] = f"model check: {MODEL} not in modelUsage {used}"
+        if used != [MODEL]:
+            status["reason"] = f"model check: modelUsage must name {MODEL} alone, got {used}"
             rc_launcher = 0
             return
         # 7. after the turn: trust nothing the agent wrote
+        status["stop_gate_fired"] = os.path.exists(os.path.join(run, ".stop_gate_fired"))  # evals: must be true on some runs
+        status["pre_gate_fired"] = os.path.exists(os.path.join(run, ".pre_gate_fired"))
         problems = []
         if tree_sha(skill) != skill_sha:
             problems.append("the skill copy changed during the turn")
+        if (fsha(sfile), fsha(mcp)) != cfg_sha:
+            problems.append("the settings or MCP config changed during the turn")
         if fsha(os.path.join(run, "01_facts.json")) != shas["01"] or fsha(os.path.join(run, "03_prior.json")) != shas["03"]:
             problems.append("01_facts.json or 03_prior.json changed during the turn")
         if tree_sha(seller) != shas["seller"]:
