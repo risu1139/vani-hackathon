@@ -39,7 +39,19 @@ import time
 import uuid
 
 SKILL = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.abspath(os.environ.get("VANI_REPO") or os.path.join(SKILL, "..", "..", ".."))
+def _repo_root():
+    """VANI_REPO if set; else the nearest parent of the skill that holds app/contracts (the repo, or a Daytona stage)."""
+    if os.environ.get("VANI_REPO"):
+        return os.path.abspath(os.environ["VANI_REPO"])
+    d = SKILL
+    for _ in range(6):
+        d = os.path.dirname(d)
+        if os.path.isfile(os.path.join(d, "app", "contracts", "sarvam_vars.contract.json")):
+            return d
+    return os.path.abspath(os.path.join(SKILL, "..", "..", ".."))
+
+
+ROOT = _repo_root()
 MODEL = "claude-opus-5-5"
 SELFTEST_MODEL = "claude-haiku-4-5-20251001"
 CLI_TESTED = {"2.1.292", "2.1.296"}
@@ -94,12 +106,26 @@ def agent_reap():
     and check that none is left. Returns '' or the problem. No-op without an agent user (laptop)."""
     if not AGENT:
         return ""
-    sudo("/usr/bin/pkill", "-KILL", "-u", AGENT)
+    import pwd
+    uid = pwd.getpwnam(AGENT).pw_uid
+
+    def pids():  # /proc scan: no procps needed (the sandbox image has no pgrep/pkill)
+        out = []
+        for d in os.listdir("/proc"):
+            if d.isdigit():
+                try:
+                    if os.stat(f"/proc/{d}").st_uid == uid:
+                        out.append(d)
+                except OSError:
+                    pass
+        return out
     for _ in range(20):
-        if subprocess.run(["/usr/bin/pgrep", "-u", AGENT], capture_output=True).returncode != 0:
+        if not pids():
             return ""
+        as_agent("kill -KILL -1")  # as the agent: signals every process that user owns (bash builtin)
         time.sleep(0.25)
-    return f"agent user {AGENT} still has processes after pkill"
+    left = pids()
+    return f"agent user {AGENT} still has processes after the kill: {left[:5]}" if left else ""
 
 
 def agent_wipe_home():
@@ -425,6 +451,9 @@ def main():
         elif fsha(p04) != fin.get("sha04") or fsha(os.path.join(run, "02_review.json")) != fin.get("sha02"):
             problems.append("04_persona.json / 02_review.json differ from the finalize sha (written around the tool)")
         if tree_sha(skill) == skill_sha:
+            for own in ("validation.json", "05_sarvam_vars.json", "06_sarvam_prompt.md"):  # agent-owned copies: the launcher writes its own
+                if os.path.exists(os.path.join(run, own)):
+                    os.remove(os.path.join(run, own))
             v = subprocess.run([PY] + PYF + [os.path.join(skill, "scripts", "validate_persona.py"), "--folder", seller, "--run", run],
                                capture_output=True, text=True, encoding="utf-8", errors="replace")
             status["validation"] = "pass" if v.returncode == 0 else "fail"
@@ -459,7 +488,10 @@ def main():
             for f in ("05_sarvam_vars.json", "06_sarvam_prompt.md"):
                 if os.path.exists(os.path.join(run, f)):
                     os.remove(os.path.join(run, f))
-        json.dump(status, open(os.path.join(run, "status.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        sp = os.path.join(run, "status.json")
+        if os.path.exists(sp):  # an agent-written status.json is never trusted and may be owned by the agent user
+            os.remove(sp)
+        json.dump(status, open(sp, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
         print(json.dumps({k: status.get(k) for k in ("decision_id", "status", "reason", "validation", "agent_seconds", "cost_usd")},
                          ensure_ascii=False)[:1200])
     sys.exit(rc_launcher)

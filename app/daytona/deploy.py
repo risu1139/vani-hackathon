@@ -124,20 +124,32 @@ def cmd_install():
 
 
 def cmd_checks():
-    print("1. pytest (stub CLI) on the sandbox:")
-    print(sh("cd /tmp/vani_stage/skill && (python3.11 -m pytest --version >/dev/null 2>&1 || python3.11 -m pip install -q --user pytest) && "
-             "python3.11 -m pytest -q tests 2>&1 | tail -5", timeout=1500))
-    print("2. stub launch in the ROOT-OWNED mode (installed gates + settings):")
+    """1. the skill tests on the sandbox (stub CLI); 2. stub launches in the ROOT-OWNED mode (agent user, installed
+    gates and settings, reaping, isolation); 3. no agent process is left."""
+    code, out = run_async("cd /tmp/vani_stage/skill && (python3.11 -m pytest --version >/dev/null 2>&1 || "
+                          "python3.11 -m pip install -q --user pytest) && python3.11 -m pytest -q tests 2>&1 | tail -2",
+                          "checks-pytest", poll=20, limit=2200)
+    print("1. pytest on the sandbox:", out.strip().splitlines()[-1] if out.strip() else out)
     seller = "/tmp/vani_stage/stub_seller"
-    sh(f"rm -rf {seller} && mkdir -p {seller}/calls && "
-       f"echo '{{\"points\": {{\"H02\": {{\"value\": {{\"vertical_name\": \"NSD\"}}}}, \"B01\": {{\"value\": {{\"seller_state\": \"Telangana\"}}}}}}}}' > {seller}/context.json && "
-       f"printf '# INDEX\\n' > {seller}/INDEX.md && printf '# core\\n### B01 City\\nHyderabad, Telangana\\n' > {seller}/core.md")
-    sh(f"chmod -R a+rX /tmp/vani_stage")
+    sh(f"rm -rf {seller} && mkdir -p {seller}/calls && printf '%s' "
+       + shlex.quote(json.dumps({"points": {"H02": {"value": {"vertical_name": "NSD"}}, "B01": {"value": {"seller_state": "Telangana"}}}}))
+       + f" > {seller}/context.json && printf '# INDEX\n' > {seller}/INDEX.md && "
+       f"printf '# core\n### B01 City\nHyderabad, Telangana\n' > {seller}/core.md && chmod -R a+rX /tmp/vani_stage")
+    expect = {"good": "done", "bypass": "error", "forged": "error", "hang": "error"}
     for mode, extra in (("good", ""), ("bypass", ""), ("forged", ""), ("hang", "--timeout 20")):
-        code, out = sh(f"cd {WORK} && {ENV} VANI_CLAUDE=/tmp/vani_stage/skill/tests/stub_claude.py STUB_MODE={mode} "
-                       f"{PYS} -E -s {INST}/skill/run_persona.py --folder {seller} --runs {WORK}/stubruns --decision-id stub-{mode} {extra} "
-                       f"2>&1 | tail -2", timeout=600)
-        print(f"   {mode}: {out.strip()[-500:]}")
+        did = f"stub-{mode}-" + os.urandom(3).hex()
+        code, out = run_async(f"cd {WORK} && {ENV} VANI_CLAUDE=/tmp/vani_stage/skill/tests/stub_claude.py STUB_MODE={mode} "
+                              f"{PYS} -E -s {INST}/skill/run_persona.py --folder {seller} --runs {WORK}/stubruns --decision-id {did} "
+                              f"{extra} 2>&1 | tail -1", f"checks-{mode}", poll=5, limit=600)
+        try:  # the launcher's own status.json (the printed summary line is cut at 1200 chars)
+            raw = sh(f"cat {WORK}/stubruns/{did}/status.json")[1]
+            st = json.loads(raw[raw.index("{"):])
+        except (ValueError, IndexError):
+            st = {"status": "?", "reason": out[-300:]}
+        ok = st.get("status") == expect[mode]
+        print(f"2. {mode:7s} {'PASS' if ok else 'FAIL'}: status={st.get('status')} reason={str(st.get('reason'))[:160]}")
+    code, out = sh("for p in /proc/[0-9]*; do [ \"$(stat -c %U $p 2>/dev/null)\" = vaniagent ] && echo LEFT; done; echo end")
+    print("3. leftover vaniagent processes:", out.count("LEFT"))
 
 
 def cmd_seller(pseudo):

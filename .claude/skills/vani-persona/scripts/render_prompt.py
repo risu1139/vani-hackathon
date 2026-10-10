@@ -15,7 +15,19 @@ import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REF = os.path.abspath(os.path.join(HERE, "..", "references"))
-REPO = os.path.abspath(os.environ.get("VANI_REPO") or os.path.join(HERE, "..", "..", "..", ".."))  # the launcher sets VANI_REPO for its skill copy
+def _find_repo():
+    """VANI_REPO if set (the launcher sets it); else the nearest parent dir that holds app/contracts (repo or a stage)."""
+    if os.environ.get("VANI_REPO"):
+        return os.path.abspath(os.environ["VANI_REPO"])
+    d = HERE
+    for _ in range(6):
+        d = os.path.dirname(d)
+        if os.path.isfile(os.path.join(d, "app", "contracts", "sarvam_vars.contract.json")):
+            return d
+    return os.path.abspath(os.path.join(HERE, "..", "..", "..", ".."))
+
+
+REPO = _find_repo()  # the launcher sets VANI_REPO for its skill copy
 SKELETON = os.path.join(REPO, "app", "sarvam", "vani_prompt.md")
 
 LANG_NAME = {"HINDI": "Hindi", "GUJARATI": "Gujarati", "MARATHI": "Marathi", "TAMIL": "Tamil", "TELUGU": "Telugu",
