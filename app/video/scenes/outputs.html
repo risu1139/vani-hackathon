@@ -1,0 +1,79 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#fff}canvas{display:block}</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script src="lib.js"></script>
+<script>
+// Outputs we deliver (Problem 4 expected outputs). Field values and quotes are illustrative (invented seller), shapes match
+// .claude/skills/vani-persona/references/formats/persona.json, the switch log, review and scoreboards.
+const GREEN = '#1B6B5E';
+// text on a coloured fill: no white halo
+function wt(s, px, py, size, color = '#fff', align = 'center') { x.font = `bold ${Math.max(size, 48)}px Arial`; x.textAlign = align; x.textBaseline = 'middle'; x.fillStyle = color; x.fillText(s, px, py); }
+const OUT = [['🎭', 'Persona spec', RED], ['🗺️', 'Call plan + hooks', NAVY], ['📞', 'Live Sarvam agent', TEAL],
+  ['🔀', 'Switch log', ORANGE], ['✅', 'Call review', GREEN], ['📈', 'Scoreboards', PURPLE]];
+
+function card(px, py, w, h, head, col, s = 1) { scaled(px + w / 2, py + h / 2, s, () => { rr(px, py, w, h, 24, '#fff', col, 6);
+  rr(px, py, w, 90, 24, col); x.fillStyle = col; x.fillRect(px, py + 60, w, 30); wt(head, px + w / 2, py + 46, 52); }); }
+
+// 1 · six outputs
+function b1(p, lt) { title('What we deliver', seg(lt, 0, .4));
+  OUT.forEach(([e, l, col], i) => { const c = i % 3, r = Math.floor(i / 3), px = 120 + c * 580, py = 260 + r * 330, s = back((lt - .3 - i * .25) / .5);
+    scaled(px + 260, py + 135, s, () => { rr(px, py, 520, 270, 28, '#fff', col, 6); emoji(e, px + 260, py + 100, 96); txt(l, px + 260, py + 200, 52, col, 'center', true); }); }); }
+
+// 2 · persona spec: each field with its reason
+function b2(p, lt) { title('1 · Persona spec, per seller');
+  card(120, 220, 1680, 700, 'P4 Brief and busy-friendly', RED, back((lt - .1) / .5));
+  const rows = [['Pace', 'faster', '"busy hoon" on 2 past calls'], ['Words per reply', '10', 'past calls cut short'],
+    ['Language', 'Hindi', 'calls answered in Hindi'], ['Hook', 'Live buy lead', 'live order in their category']];
+  rows.forEach(([k, v, why], i) => { const y = 400 + i * 120, a = seg(lt, .6 + i * .45, 1.0 + i * .45);
+    alpha(a, () => { txt(k, 180, y, 52, INK, 'left', true); txt(v, 680, y, 52, NAVY, 'left', true); });
+    alpha(seg(lt, .9 + i * .45, 1.3 + i * .45), () => { ln(1010, y, 1070, y, GREY, 4, [8, 8]); txt(why, 1090, y, 48, ORANGE, 'left', true); }); });
+  alpha(seg(lt, 3.0, 3.5), () => txt('every field: a value + the seller data behind it', 960, 965, 48, NAVY, 'center', true)); }
+
+// 3 · call plan + hooks
+function b3(p, lt) { title('2 · Call plan and hooks');
+  card(120, 220, 900, 720, 'Call plan', NAVY, back((lt - .1) / .5));
+  ['1  Opening', '2  Main hook', '3  Ask for meeting', '4  Objection replies', '5  Close'].forEach((s, i) =>
+    alpha(seg(lt, .5 + i * .3, .9 + i * .3), () => txt(s, 180, 380 + i * 110, 52, INK, 'left', true)));
+  const H = [['🔥', 'Live buy lead', RED, 'main'], ['📊', 'Category demand', ORANGE, 'backup']];
+  H.forEach(([e, l, col, k], i) => { const y = 400 + i * 220, s = back((lt - 2.0 - i * .4) / .5);
+    scaled(1430, y, s, () => { rr(1090, y - 75, 700, 150, 30, '#fff', col, 6); emoji(e, 1170, y, 64); txt(l, 1230, y - 22, 52, col, 'left', true); txt(k, 1230, y + 38, 48, INK, 'left'); }); }); }
+
+// 4 · live agent + switch log
+function b4(p, lt) { title('3 · Live agent and switch log');
+  const head = ['Turn', 'Seller says', 'Mode', 'VANI does'], X = [150, 360, 960, 1300];
+  alpha(seg(lt, .1, .5), () => { rr(120, 230, 1680, 90, 20, NAVY); head.forEach((h, i) => wt(h, X[i], 275, 48, '#fff', 'left')); });
+  const R = [['3', '"abhi busy hoon"', 'rushed', 'one line + callback', ORANGE], ['5', '"samajh nahi aaya"', 'confused', 'one simple idea', PURPLE],
+    ['7', 'switches to Marathi', 'language', 'replies in Marathi', TEAL], ['9', '"kab aayenge?"', 'interested', 'books the meeting', GREEN]];
+  R.forEach(([t, s, m, d, col], i) => { const y = 400 + i * 130, a = seg(lt, .6 + i * .55, 1.0 + i * .55);
+    alpha(a, () => { rr(120, y - 55, 1680, 110, 20, i % 2 ? '#fff' : '#f4f6fa'); txt(t, X[0] + 30, y, 52, INK, 'center', true); txt(s, X[1], y, 48, INK, 'left');
+      rr(X[2] - 10, y - 38, 280, 76, 38, col); wt(m, X[2] + 130, y, 48); txt(d, X[3], y, 48, col, 'left', true); }); });
+  alpha(seg(lt, 3.2, 3.7), () => txt('same turn, every time it is logged', 960, 960, 48, NAVY, 'center', true)); }
+
+// 5 · post-call review
+function b5(p, lt) { title('4 · Review after every call');
+  const C = ['Never claims to be human', 'Only verified numbers', 'No price on the call', 'Stops when asked', 'Persona fit', 'Hook landed'];
+  C.forEach((c, i) => { const col = i < 4 ? RED : TEAL, y = 280 + i * 110, a = seg(lt, .3 + i * .35, .7 + i * .35);
+    alpha(a, () => { txt(c, 300, y, 52, INK, 'left', true); x.beginPath(); x.arc(220, y, 34, 0, 6.3); x.fillStyle = TEAL; x.fill();
+      x.strokeStyle = '#fff'; x.lineWidth = 8; x.lineCap = 'round'; x.beginPath(); x.moveTo(205, y); x.lineTo(216, y + 12); x.lineTo(237, y - 12); x.stroke(); }); });
+  alpha(seg(lt, 2.6, 3.1), () => { rr(1180, 330, 600, 420, 30, '#fff', NAVY, 6); txt('Claude reviews', 1480, 420, 52, NAVY, 'center', true);
+    txt('7 fatal checks', 1480, 530, 52, RED, 'center', true); txt('13 quality checks', 1480, 620, 52, TEAL, 'center', true); }); }
+
+// 6 · learning scoreboards
+function b6(p, lt) { title('5 · Scoreboards that learn');
+  const segs = ['Free · small', 'Paid · mid', 'Large · 5 Cr+'], arms = [['P2', RED], ['P4', ORANGE], ['P6', GREEN]];
+  segs.forEach((sname, r) => { const y = 330 + r * 210;
+    alpha(seg(lt, .1 + r * .3, .5 + r * .3), () => txt(sname, 520, y, 52, INK, 'right', true));
+    arms.forEach(([a, col], k) => { const base = [[.6, .3, .2], [.3, .6, .35], [.2, .3, .7]][r][k], h = 150 * base * seg(lt, .6 + r * .3, 2.4 + r * .3), bx = 620 + k * 200;
+      rr(bx, y + 70 - h, 140, h, 14, col); alpha(seg(lt, .6, 1.0), () => txt(a, bx + 70, y + 110, 48, col, 'center', true)); }); });
+  alpha(seg(lt, 2.6, 3.1), () => { chip(1260, 420, 560, 'outcome per call', NAVY, '📞'); chip(1260, 580, 560, 'by seller segment', PURPLE, '🧩'); chip(1260, 740, 560, '15% control', ORANGE, '⚖️'); }); }
+
+timeline([
+  { n: 1, base: 4.5, draw: b1, title: 'What we deliver', vo: 'Here is what we deliver for every seller.', sound: 'six soft pops', move: 'six output cards pop in' },
+  { n: 2, base: 4.5, draw: b2, title: 'Persona spec', vo: "A persona spec: every field has a value, and the seller's own data behind it.", sound: 'a click per row', move: 'rows appear, each with its reason' },
+  { n: 3, base: 4.5, draw: b3, title: 'Call plan + hooks', vo: 'A call plan, with a main reason to meet and a backup.', sound: 'steps ticking', move: 'plan steps, then two hook cards' },
+  { n: 4, base: 4.5, draw: b4, title: 'Switch log', vo: 'The live Sarvam agent, and a log of every switch it made, on the same turn.', sound: 'a beat per row', move: 'switch-log rows slide in' },
+  { n: 5, base: 4.0, draw: b5, title: 'Call review', vo: 'After every call, Claude checks compliance and whether the persona fit.', sound: 'ticks', move: 'checklist ticks, review card' },
+  { n: 6, base: 4.0, draw: b6, title: 'Scoreboards', vo: 'And scoreboards that learn which persona works for which sellers.', sound: 'bars rising', move: 'bars grow per segment' },
+]);
+window.renderFrame(0);
+</script></body></html>

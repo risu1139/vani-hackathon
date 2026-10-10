@@ -1,0 +1,98 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#fff}canvas{display:block}</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script src="lib.js"></script>
+<script>
+// Success metrics (after the demo). Source: outputs/plans/success-metrics-data.md (persona session run data, 2026-10-10;
+// outputs/midcall_tests). All numbers on screen are measured.
+const GREEN = '#1B6B5E', P = { P0: GREY, P1: NAVY, P2: RED, P3: TEAL, P4: ORANGE, P5: PURPLE, P6: GREEN };
+const CRIT = [['🎯', 'Fit to the seller'], ['⚡', 'Right switch, right turn'], ['🎭', 'Distinct personas'], ['🗣️', '2+ languages'], ['📞', 'Past-call evidence']];
+
+function tick(cx, cy, r, s = 1, col = TEAL) { scaled(cx, cy, s, () => { x.beginPath(); x.arc(cx, cy, r, 0, 6.3); x.fillStyle = col; x.fill();
+  x.strokeStyle = '#fff'; x.lineWidth = r * .22; x.lineCap = 'round'; x.beginPath(); x.moveTo(cx - r * .45, cy); x.lineTo(cx - r * .1, cy + r * .35); x.lineTo(cx + r * .5, cy - r * .35); x.stroke(); }); }
+function big(s, px, py, size, col) { x.font = `bold ${size}px Arial`; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillStyle = col; x.fillText(s, px, py); }
+function tag(s, px, py, col = PURPLE, a = 1) { alpha(a, () => { x.font = 'bold 48px Arial'; const w = x.measureText(s).width + 60; rr(px - w / 2, py - 40, w, 80, 40, '#fff', col, 4, [14, 10]); txt(s, px, py, 48, col, 'center', true); }); }
+
+// 1 · the five things we measure
+function b1(p, lt) { title('How we measure success', seg(lt, 0, .4));
+  CRIT.forEach(([e, l], i) => chip(470, 250 + i * 150, 980, `${i + 1}   ${l}`, NAVY, e, back((lt - .3 - i * .3) / .5))); }
+
+// 2 · fit: 9 of 9 validated, every field has a reason
+function b2(p, lt) { title('1 · Fit to the seller');
+  for (let i = 0; i < 9; i++) { const cx = 220 + (i % 3) * 190, cy = 330 + Math.floor(i / 3) * 190;
+    scaled(cx, cy, back((lt - .2 - i * .12) / .4), () => { rr(cx - 75, cy - 75, 150, 150, 24, '#fff', RED, 5); txt('P', cx, cy, 56, RED, 'center', true); });
+    tick(cx + 58, cy - 58, 30, back((lt - 1.4 - i * .1) / .4)); }
+  alpha(seg(lt, 2.2, 2.7), () => txt('9 of 9 validated', 410, 880, 56, TEAL, 'center', true));
+  // reasons bar: 33 seller evidence, 57 persona card
+  const q = seg(lt, 1.6, 3.2), W = 900, X0 = 900, Y0 = 470;
+  alpha(seg(lt, 1.4, 1.8), () => { txt('Reason behind each field', X0 + W / 2, Y0 - 110, 52, NAVY, 'center', true);
+    rr(X0, Y0 - 40, W, 80, 40, '#eef2f8'); rr(X0, Y0 - 40, W * 33 / 90 * q, 80, 40, RED); rr(X0 + W * 33 / 90, Y0 - 40, W * 57 / 90 * q, 80, 0, GREY);
+    alpha(seg(lt, 2.6, 3.0), () => { txt('33 seller data', X0, Y0 + 110, 48, RED, 'left', true); txt('57 persona default', X0 + W, Y0 + 110, 48, INK, 'right', true); }); });
+  alpha(seg(lt, 3.4, 4.0), () => txt('every field quotes a reason', X0 + W / 2, 780, 52, NAVY, 'center', true)); }
+
+// 3 · switches on the same turn
+function b3(p, lt) { title('2 · Right switch, right turn');
+  const turns = [['busy', ORANGE], ['confused', PURPLE], ['angry', RED], ['Marathi → Hindi', NAVY]];
+  ln(140, 520, 1780, 520, GREY, 6, null, seg(lt, 0, .8));
+  turns.forEach(([l, col], i) => { const cx = 330 + i * 420, s = back((lt - .6 - i * .45) / .4);
+    scaled(cx, 520, s, () => { x.beginPath(); x.arc(cx, 520, 34, 0, 6.3); x.fillStyle = col; x.fill(); });
+    alpha(s, () => txt(l, cx, 420, 50, col, 'center', true));
+    tick(cx, 630, 40, back((lt - .9 - i * .45) / .4)); });
+  alpha(seg(lt, 2.7, 3.1), () => txt('same turn: every scripted switch', 960, 760, 56, TEAL, 'center', true));
+  alpha(seg(lt, 3.3, 3.7), () => { big((0.9 * seg(lt, 3.3, 4.0)).toFixed(1) + ' ms', 600, 880, 90, NAVY); txt('to decide', 600, 960, 48, INK); });
+  alpha(seg(lt, 4.0, 4.5), () => { big('0.92 s', 1320, 880, 90, NAVY); txt('agent reply per turn', 1320, 960, 48, INK); }); }
+
+// 4 · distinct personas: 8 sellers → 6 personas
+function b4(p, lt) { title('3 · Distinct personas');
+  const S = [['A', 'P2'], ['B', 'P0'], ['C', 'P6'], ['D', 'P1'], ['E', 'P4'], ['F', 'P3'], ['G', 'P4'], ['H', 'P3']];
+  const slot = { P0: 0, P1: 1, P2: 2, P3: 3, P4: 4, P6: 5 };
+  S.forEach(([s, pid], i) => { const sx = 260, sy = 250 + i * 92, px = 1300, py = 280 + slot[pid] * 115, q = seg(lt, 1.2 + i * .15, 2.0 + i * .15);
+    alpha(seg(lt, .1 + i * .08, .5 + i * .08), () => { rr(sx - 140, sy - 40, 280, 80, 40, '#fff', NAVY, 4); txt('Seller ' + s, sx, sy, 48, NAVY, 'center', true); });
+    alpha(q, () => ln(sx + 145, sy, px - 80, py, P[pid], 5, null, q)); });
+  Object.entries(slot).forEach(([pid, k]) => { const py = 280 + k * 115, s = back((lt - .8 - k * .1) / .4);
+    scaled(1300, py, s, () => { x.beginPath(); x.arc(1300, py, 50, 0, 6.3); x.fillStyle = P[pid]; x.fill(); x.fillStyle = '#fff'; x.font = 'bold 48px Arial'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(pid, 1300, py + 2); }); });
+  alpha(seg(lt, 3.0, 3.5), () => { big('8 → 6', 1640, 480, 110, RED); txt('sellers → personas', 1640, 580, 48, INK, 'center', true); txt('4 languages', 1640, 680, 52, TEAL, 'center', true); }); }
+
+// 5 · languages
+function b5(p, lt) { title('4 · Natural voice, many languages');
+  const L = [['Marathi', 12, TEAL], ['Hindi', 3, NAVY], ['English', 2, RED], ['Telugu', 2, PURPLE]];
+  L.forEach(([l, n, col], i) => { const y = 300 + i * 140, q = seg(lt, .4 + i * .3, 1.4 + i * .3);
+    alpha(seg(lt, .1 + i * .3, .5 + i * .3), () => txt(l, 520, y, 56, col, 'right', true));
+    rr(560, y - 35, 900 * n / 12 * q, 70, 35, col); alpha(q, () => txt(n + ' calls', 580 + 900 * n / 12 * q, y, 48, INK, 'left', true)); });
+  alpha(seg(lt, 2.4, 2.9), () => chip(560, 880, 820, 'switch mid-call: + Gujarati', ORANGE, '🔀')); }
+
+// 6 · past-call evidence
+function b6(p, lt) { title('5 · Backed by past calls');
+  alpha(seg(lt, .1, .6), () => { big(Math.round(12354 * seg(lt, .1, 1.6)).toLocaleString('en-IN'), 520, 420, 120, NAVY); txt('past calls measured', 520, 530, 52, INK, 'center', true); });
+  alpha(seg(lt, 1.6, 2.1), () => { big(String(Math.round(19 * seg(lt, 1.6, 2.8))), 1400, 420, 120, RED); txt('decisions quote a', 1400, 530, 52, INK, 'center', true); txt("seller's own past call", 1400, 600, 52, INK, 'center', true); });
+  alpha(seg(lt, 3.0, 3.5), () => chip(330, 820, 1260, '"saw no enquiries" → open with demand', TEAL, '💬')); }
+
+// 7 · the gap we target (measured on 11,834 transcribed calls)
+function b7(p, lt) { title('The gap we target');
+  const bars = [['Not rushed', 26, TEAL], ['Rushed', 14, ORANGE]]; // scale keeps labels on screen
+  bars.forEach(([l, v, col], i) => { const y = 380 + i * 220, s = 850 / 30, q = seg(lt, .3 + i * .5, 1.3 + i * .5);
+    alpha(seg(lt, .1 + i * .5, .5 + i * .5), () => txt(l, 560, y, 56, INK, 'right', true));
+    rr(600, y - 45, v * s * q, 90, 45, col); alpha(q, () => txt(Math.round(v * q) + '% meetings', 630 + v * s * q, y, 52, col, 'left', true)); });
+  alpha(seg(lt, 2.4, 3.0), () => chip(470, 860, 980, 'rushed sellers now get P4: brief', ORANGE, '⏱️')); }
+
+// 8 · learning grows the evidence (shape only, no numbers)
+function b8(p, lt) { title('It gets better with every call');
+  const X0 = 300, Y0 = 820, W = 1300, H = 500, q = seg(lt, .6, 3.4);
+  ln(X0, Y0, X0 + W, Y0, INK, 5); ln(X0, Y0, X0, Y0 - H, INK, 5);
+  alpha(seg(lt, .2, .6), () => { txt('calls', X0 + W, Y0 + 60, 48, INK, 'right'); txt('decisions from learned data', X0 + 20, Y0 - H - 40, 48, INK, 'left', true); });
+  x.save(); x.strokeStyle = TEAL; x.lineWidth = 8; x.beginPath(); for (let k = 0; k <= 60 * q; k++) { const t = k / 60, px = X0 + W * t, py = Y0 - H * .85 * (1 - Math.exp(-3.2 * t)); k ? x.lineTo(px, py) : x.moveTo(px, py); } x.stroke(); x.restore();
+  alpha(seg(lt, .4, .8), () => { x.beginPath(); x.arc(X0, Y0, 16, 0, 6.3); x.fillStyle = RED; x.fill(); txt('today: 0', X0 + 40, Y0 - 50, 48, RED, 'left', true); });
+ }
+
+timeline([
+  { n: 1, base: 4.5, draw: b1, title: 'How we measure success', vo: 'How do we know it works? We measure five things.', sound: 'five soft clicks', move: 'five criteria chips pop in' },
+  { n: 2, base: 4.5, draw: b2, title: 'Fit', vo: 'Fit: all nine personas passed the validator, and every field quotes its reason.', sound: 'ticks', move: '9 cards get ticks; reason bar fills' },
+  { n: 3, base: 5.0, draw: b3, title: 'Switches', vo: 'Switches: every scripted switch landed on the same turn, decided in under a millisecond, with a reply in under a second.', sound: 'a tick per switch', move: 'cues on a timeline, ticks below' },
+  { n: 4, base: 4.5, draw: b4, title: 'Distinct personas', vo: 'Distinct: eight sellers got six different personas, in four languages.', sound: 'lines drawing', move: 'sellers connect to persona dots' },
+  { n: 5, base: 4.0, draw: b5, title: 'Languages', vo: 'Natural voice in Marathi, Hindi, English and Telugu, with live switching.', sound: 'bars sliding', move: 'language bars grow' },
+  { n: 6, base: 4.5, draw: b6, title: 'Past calls', vo: "Evidence: built on twelve thousand past calls, and each persona quotes the seller's own history.", sound: 'counter ticking', move: 'counters run up' },
+  { n: 7, base: 4.5, draw: b7, title: 'The gap we target', vo: 'The biggest gap is rushed sellers: twenty-six percent meetings drop to fourteen. Now they get a brief persona.', sound: 'rising tone', move: 'two bars, then the P4 chip' },
+  { n: 8, base: 4.0, draw: b8, title: 'Learning curve', vo: 'And it gets better with every call.', sound: 'soft swell', move: 'learning curve draws from zero' },
+]);
+window.renderFrame(0);
+</script></body></html>
