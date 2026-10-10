@@ -37,7 +37,7 @@ def test_plain_yes_stays_neutral():
 
 def test_phone_call_2026_10_10_lines():
     """lex-v3: the real phone test. The fatal miss was a Kannada 'no, no' that VANI pushed past."""
-    assert T.classify("ಬೇಡ ಬೇಡ ಗೊತ್ತಿಲ್ಲ.")[0] == "opt_out"
+    assert T.classify("ಬೇಡ ಬೇಡ ಗೊತ್ತಿಲ್ಲ.")[0] == "declined"  # 2026-10-10 user rule: "no" is answered, the call is not ended
     assert T.classify("लीड्स की क्वालिटी बहुत ही बेकार आती है इसलिए मैं कंज्यूम नहीं कर रहा था।")[0] == "frustrated"
     assert T.classify("అది బై రేట్ సరిగ్గా రావట్లేదు, క్వాలిటీ బాగాలేదు. అందుకని నేను వాడట్లేదు.")[0] == "frustrated"
     assert T.classify("ಚಂಗಾ, ಗೊತ್ತಿಲ್ಲ")[0] == "confused"

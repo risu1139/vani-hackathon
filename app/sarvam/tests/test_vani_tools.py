@@ -66,7 +66,7 @@ def test_interest_strict_bare_fillers():
 
 
 def test_not_wanted_blocks_interest():
-    assert vt.classify("kitne ka bhi ho, nahi chahiye")[0] == "neutral"
+    assert vt.classify("kitne ka bhi ho, nahi chahiye")[0] == "declined"  # not interest, and not an end-call request
 
 
 def test_strong_beats_weak_across_modes():
@@ -262,3 +262,14 @@ def test_hindi_after_marathi_start_switches():
     assert "Hindi" in out.message_to_llm and "Marathi->" not in row["reason"]
     out, row = _say(ctx, "हाँ बताइए क्या बात है")
     assert "Reply in Hindi" not in out.message_to_llm or row["to"] == "language_switch"  # already Hindi: no second switch
+
+
+@pytest.mark.parametrize("utt,mode,ends", [
+    ("नहीं, नहीं करनी मुझे मीटिंग तुमसे।", "declined", False), ("not interested", "declined", False),
+    ("mujhe baat nahi karni", "declined", False), ("ಬೇಡ ಬೇಡ", "declined", False),
+    ("call mat karo mujhe", "opt_out", True), ("कॉल काट दो", "opt_out", True), ("please cut the call", "opt_out", True)])
+def test_only_explicit_requests_end_the_call(utt, mode, ends):
+    """User rule 2026-10-10: 'not interested' / 'nahi baat karni' never ends the call; only an explicit request does."""
+    ctx = _ctx()
+    out, row = _say(ctx, utt)
+    assert row["to"] == mode and bool(ctx.end_conversation) is ends

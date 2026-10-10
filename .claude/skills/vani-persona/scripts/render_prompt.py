@@ -162,8 +162,10 @@ def sections(p):
                "names another person, book with that person instead.",
                "- Ask anything else (office or video, who will join) only AFTER book_meeting confirms.",
                "- Say it is booked only after book_meeting confirms. If it fails, say hamare IndiaMART executive will call to fix the time.",
-               "Phase 6: Graceful close (not interested)",
-               "- Thank the seller, do not push again, wish them good business, end the call.",
+               "Phase 6: Not interested",
+               "- Acknowledge it, do not argue. Give ONE short reason from the facts, or ask if another day or a callback suits them.",
+               "- If they say no again, thank them and ask if you may call later. End the call ONLY when the seller clearly asks "
+               "to end it (cut the call, stop calling, do not call) or says goodbye.",
                "Phase 7: Callback",
                "- Acknowledge they are busy, ask when to call back, repeat the time once, thank, end the call.",
                "Phase 8: Wrong person",
@@ -173,7 +175,7 @@ def sections(p):
     phases += ["- the seller names a person at IndiaMART (e.g. their manager) -> agree at once that this person will meet them, "
                "and ask directly for the day and time of that meeting; then call book_meeting with the slot and the person's "
                "name (e.g. 'kal shaam 5 baje, with <name>'); never say you cannot",
-               "- the seller says no / does not want it -> thank them, do not push again, end the call",
+               "- the seller says no / not interested -> Phase 6; do not end the call unless they clearly ask to end it",
                "- the seller asks who handles the account -> say only what 'About this seller' gives for the handler; never invent a "
                "name, a phone number, an email or a designation",
                "- the main topic does not land after two tries -> move to one of the other topics under 'About this seller'"]

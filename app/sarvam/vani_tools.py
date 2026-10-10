@@ -173,9 +173,9 @@ def _cue_re(cue):
 # ---------------------------------------------------------------- lexicon (mode, strength, cues)
 LEXICON = [
     ("opt_out", "strong", (
-        # v3: "no / do not want" in regional languages = decline -> close politely (phone test 2026-10-10)
-        "ಬೇಡ", "ಬೇಡಾ", "వద్దు", "వద్దండి", "வேண்டாம்", "വേണ്ട", "नको", "লাগবে না", "দরকার নেই", "નથી જોઈતું", "ਨਹੀਂ ਚਾਹੀਦਾ",
-        "beda beda", "vaddu", "vendam", "venda",
+        # ONLY an explicit request to end the call or stop calling ends it (user rule 2026-10-10); "not interested" does not
+        "cut the call", "call cut", "call kaat*", "phone kaat*", "call disconnect", "phone disconnect", "call rakh do",
+        "कॉल काट", "फोन काट", "कॉल कट", "फ़ोन काट",
         "call mat", "phone mat", "call na kare*", "phone na kare*", "number hata*", "number delete", "number block",
         "list se hata*", "dnd", "do not call", "don't call", "dont call", "stop calling", "unsubscribe",
         "कॉल मत", "फोन मत", "call मत", "नंबर हटा", "नंबर डिलीट", "नंबर ब्लॉक", "लिस्ट से हटा",
@@ -183,6 +183,13 @@ LEXICON = [
         # Marathi, Bengali, Telugu, Tamil, Kannada, Malayalam (v2, 2026-10-10)
         "फोन करू नका", "कॉल करू नका", "ফোন করবেন না", "কল করবেন না", "కాల్ చేయకండి", "ఫోన్ చేయకండి", "నంబర్ తీసేయ",
         "கால் பண்ணாதீங்க", "போன் பண்ணாதீங்க", "ಕಾಲ್ ಮಾಡಬೇಡಿ", "ಫೋನ್ ಮಾಡಬೇಡಿ", "വിളിക്കരുത്", "വിളിക്കണ്ട")),
+    ("declined", "strong", (
+        # "no / not interested / do not want to talk": answer it, never end the call (user rule 2026-10-10)
+        "ಬೇಡ", "ಬೇಡಾ", "వద్దు", "వద్దండి", "வேண்டாம்", "വേണ്ട", "नको", "লাগবে না", "দরকার নেই", "નથી જોઈતું", "ਨਹੀਂ ਚਾਹੀਦਾ",
+        "beda beda", "vaddu", "vendam", "venda",
+        "not interested", "no interest", "interest nahi", "interested nahi", "nahi chahiye", "baat nahi karni", "baat nahi karna",
+        "nahi karni meeting", "meeting nahi", "नहीं चाहिए", "इंटरेस्ट नहीं", "इंटरेस्टेड नहीं", "बात नहीं करनी", "बात नहीं करना",
+        "मीटिंग नहीं", "नहीं करनी मुझे", "मला नको", "रस नाही")),
     ("frustrated", "strong", (
         # v3: complaints about the leads (phone test 2026-10-10)
         "बेकार", "bekaar", "bekar", "क्वालिटी खराब", "quality kharab", "बहुत खराब", "బాగాలేదు", "బాగోలేవు", "క్వాలిటీ బాగాలేదు",
@@ -258,7 +265,7 @@ LEXICON = [
         "કેવી રીતે")),
 ]
 _COMPILED = [(mode, strength, cue, _cue_re(cue)) for mode, strength, cues in LEXICON for cue in cues]
-PRIORITY = ["opt_out", "frustrated", "bot_question", "rushed", "confused", "interested"]
+PRIORITY = ["opt_out", "frustrated", "declined", "bot_question", "rushed", "confused", "interested"]
 ALWAYS_NOW = {"opt_out", "frustrated", "bot_question"}
 _LATER = re.compile(r"(?<![a-z])(baad|kal|shaam|later|tomorrow|evening|tarvata|appuram|amele|pinne|nantar)(?![a-z])|"
                     r"बाद|कल|शाम|પછી|કાલે|नंतर|পরে|తర్వాత|రేపు|அப்புறம்|நாளை|ಆಮೇಲೆ|ನಾಳೆ|പിന്നെ|നാളെ")
@@ -357,7 +364,7 @@ def script_of(text):
 # ---------------------------------------------------------------- directives (per mode x persona style)
 STYLE_WPT = {"P0": 20, "P1": 18, "P2": 15, "P3": 14, "P4": 10, "P5": 16, "P6": 20, "COMPOSED": 18}
 MODE_CAP = {"neutral": 20, "rushed": 12, "frustrated": 18, "confused": 20, "interested": 20, "bot_question": 20,
-            "opt_out": 15, "language_switch": 20}
+            "opt_out": 15, "declined": 20, "language_switch": 20}
 _D = {  # mode -> style -> (word cap, text); "*" = any style without its own variant. {cap} is filled in.
     "rushed": {
         "*": (12, "Seller is busy. ONE short sentence, max {cap} words: the value in a few words, then ask when to call back."),
@@ -398,6 +405,10 @@ _D = {  # mode -> style -> (word cap, text); "*" = any style without its own var
     "opt_out": {
         "*": (15, "Seller does not want calls. Apologise, confirm they will not be called again, thank them, end the call. No pitch. Max {cap} words."),
     },
+    "declined": {
+        "*": (20, "Seller is not interested now. Do NOT end the call. Acknowledge briefly, then ONE reason from the facts or "
+                  "ask if another day suits them. End only if they clearly ask to end the call. Max {cap} words."),
+    },
     "language_switch": {
         "*": (20, "Seller switched to {lang}. Reply in {lang} from now on, same persona and rules. Max {cap} words."),
     },
@@ -421,7 +432,7 @@ def directive(mode, style_id, lang=""):
 _CHANGE = {"neutral": "default persona style", "rushed": "brevity + callback offer", "frustrated": "apology, pitch stopped",
            "confused": "simplify: short comma phrases + check", "interested": "move to meeting day/time",
            "bot_question": "identity sidestep", "bot_question_pressed": "virtual-assistant line + human callback",
-           "opt_out": "apology + end call", "language_switch": "reply language"}
+           "opt_out": "apology + end call", "declined": "acknowledge, keep the line open", "language_switch": "reply language"}
 
 OPT_OUT_LINE = {
     "Hindi": "माफ़ कीजिए, अब आपको हमारी तरफ से कॉल नहीं आएगा। धन्यवाद।",
