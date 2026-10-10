@@ -41,10 +41,10 @@ def env_key(name):
     raise SystemExit(f"{name} missing in .env")
 
 
-def tts(text, speaker, key):
+def tts(text, speaker, key, pace=1.0):
     r = requests.post("https://api.sarvam.ai/text-to-speech", timeout=60, headers={"api-subscription-key": key},
                       json={"text": text, "target_language_code": "en-IN", "model": "bulbul:v3", "speaker": speaker,
-                            "speech_sample_rate": SR})
+                            "speech_sample_rate": SR, "pace": pace})
     if r.status_code != 200:
         raise SystemExit(f"TTS {r.status_code}: {r.text[:300]}")
     return base64.b64decode(r.json()["audios"][0])
@@ -53,7 +53,8 @@ def tts(text, speaker, key):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("scene")
-    ap.add_argument("--speaker", default="aditya")
+    ap.add_argument("--speaker", default="shubh")
+    ap.add_argument("--pace", type=float, default=0.85)
     ap.add_argument("--only", default="")
     a = ap.parse_args()
     only = {int(i) for i in a.only.split(",") if i}
@@ -64,7 +65,7 @@ def main():
     for n, line in enumerate(LINES[a.scene], 1):
         path = os.path.join(out, f"beat{n:02d}.wav")
         if not os.path.exists(path) or n in only:
-            open(path, "wb").write(tts(line, a.speaker, key))
+            open(path, "wb").write(tts(line, a.speaker, key, a.pace))
         with wave.open(path) as w:
             lengths[n] = round(w.getnframes() / w.getframerate(), 2)
         print(n, lengths[n], line)

@@ -1,0 +1,6 @@
+Professional flat vector illustration for a corporate tech explainer video, landscape 3:2, pure white background, clean modern style, generous whitespace, soft subtle shadows, no people, no logos of real companies.
+Three parts left to right, connected by flowing dotted data streams with small glowing dots:
+LEFT: a neat vertical stack of five rounded white data cards with orange outlines and simple line icons: a factory (label "Business"), a box ("Catalogue"), a flame ("Buy leads"), crossed swords ("Competitors"), a phone ("Past calls"). Small heading above the stack: "Seller data".
+CENTER: a translucent rounded glass container with a dashed navy outline, heading "Daytona sandbox". Inside it, a large warm-orange (#D97757) radial starburst emblem made of twelve rounded petals, the label "Claude Code" under it, and a small purple pill badge with a scroll icon labelled "skill".
+RIGHT: an elegant persona profile card with a red (#C00000) title "Persona" and four rows with small teal slider bars: "Voice", "Pace", "Language", "Hook".
+Palette only: navy #002060, red #C00000, teal #2EA896, orange #E08A00, purple #5B3E96, light grey. All text crisp, correctly spelled, large and legible. Leave the top 15% and the bottom 12% of the image empty white.

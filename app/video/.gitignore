@@ -5,3 +5,4 @@ build/
 *.wav
 *.mp3
 *.png
+!assets/**/*.png

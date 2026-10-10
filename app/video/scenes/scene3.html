@@ -1,0 +1,122 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><style>html,body{margin:0;background:#fff}canvas{display:block}</style></head>
+<body><canvas id="c" width="1920" height="1080"></canvas>
+<script src="lib.js"></script>
+<script>
+// Scene 3: from data to persona. Sources: .claude/skills/vani-persona (SKILL.md, gates/, scripts/facts.py, prior.py,
+// references/persona_library.json). Seller values shown are illustrative, not a real seller.
+const DATA = [['🏭', 'Business'], ['📦', 'Catalogue'], ['🔥', 'Buy leads'], ['⚔️', 'Competitors'], ['📞', 'Past calls']];
+const PERSONAS = [['P0', 'Default', GREY], ['P1', 'Numbers|first', NAVY], ['P2', 'Warm|local', RED], ['P3', 'Patient|guide', TEAL],
+  ['P4', 'Brief', ORANGE], ['P5', 'Problem|solver', PURPLE], ['P6', 'Senior|advisor', '#1B6B5E']];
+
+function personaCard(px, py, w, h, s = 1, fill = 1) { scaled(px + w / 2, py + h / 2, s, () => {
+  rr(px, py, w, h, 22, '#fff', RED, 6); txt('Persona', px + w / 2, py + 60, 56, RED, 'center', true);
+  [['Voice', .7], ['Pace', .45], ['Language', .8], ['Hook', .6]].forEach(([k, v], i) => { const y = py + 150 + i * 80;
+    txt(k, px + 40, y, 48, INK, 'left'); rr(px + 300, y - 10, w - 340, 20, 10, '#eef2f8'); rr(px + 300, y - 10, (w - 340) * v * fill, 20, 10, TEAL); }); }); }
+
+// 1 · data → Claude Code + skill (Daytona) → persona  (5 s). Generated illustration (assets/gen/s3_b1_v1.png, openai/gpt-image-2),
+// revealed left to right (data, then sandbox, then persona) with a slow zoom.
+const IMG1 = new Image(); IMG1.src = '../assets/gen/s3_b1_v1.png';
+const _ready = window.READY; window.READY = Promise.all([_ready, new Promise(r => { IMG1.onload = r; IMG1.onerror = r; })]);
+function b1(p, lt) { title('From data to persona', seg(lt, 0, .4));
+  if (!IMG1.naturalWidth) return b1_drawn(p, lt);
+  const h = 840, w = h * IMG1.naturalWidth / IMG1.naturalHeight, z = 1 + .04 * p, X0 = 960 - w * z / 2, Y0 = 160 + (h - h * z) / 2;
+  const reveal = seg(lt, .2, 3.2);
+  x.save(); x.beginPath(); x.rect(X0, 150, w * z * reveal, h + 20); x.clip(); x.globalCompositeOperation = 'multiply'; x.drawImage(IMG1, X0, Y0, w * z, h * z); x.restore(); }
+function b1_drawn(p, lt) { title('From data to persona', seg(lt, 0, .4));
+  DATA.forEach(([e, l], i) => chip(90, 300 + i * 120, 420, l, ORANGE, e, back((lt - .1 - i * .12) / .4)));
+  scaled(960, 560, back((lt - .7) / .5), () => { rr(690, 290, 540, 560, 30, '#f7f9fc', NAVY, 5, [18, 12]); txt('Daytona sandbox', 960, 340, 48, NAVY, 'center', true);
+    spark(960, 520, 150, lt * .6); txt('Claude Code', 960, 690, 52, INK, 'center', true);
+    rr(835, 745, 250, 80, 40, '#fff', PURPLE, 5); emoji('📜', 885, 785, 46); txt('skill', 990, 785, 48, PURPLE, 'center', true); });
+  for (let k = 0; k < 6; k++) { const q = ((lt - 1.4 - k * .25) / 1.1); if (q > 0 && q < 1) { x.fillStyle = ORANGE; x.beginPath(); x.arc(lerp(520, 760, q), lerp(300 + (k % 5) * 120, 540, q), 12, 0, 6.3); x.fill(); } }
+  for (let k = 0; k < 5; k++) { const q = ((lt - 2.4 - k * .25) / 1.0); if (q > 0 && q < 1) { x.fillStyle = TEAL; x.beginPath(); x.arc(lerp(1160, 1370, q), lerp(540, 520 + (k % 3) * 60, q), 12, 0, 6.3); x.fill(); } }
+  personaCard(1360, 320, 470, 480, back((lt - 2.2) / .5), seg(lt, 2.8, 4.6)); }
+
+// 2 · traits: facts that stay
+function b2(p, lt) { title('Traits: facts that stay');
+  [['🏭', 'Manufacturer'], ['₹', '1.5 – 5 Cr'], ['🗣️', 'Marathi'], ['🏷️', 'Free seller']].forEach(([e, l], i) => { const s = back((lt - .2 - i * .35) / .5), cx = 270 + i * 460;
+    scaled(cx, 540, s, () => { rr(cx - 200, 400, 400, 280, 24, NAVY); emoji(e, cx, 490, 90); x.fillStyle = '#fff'; x.font = 'bold 50px Arial'; x.textAlign = 'center'; x.fillText(l, cx, 610); }); });
+  alpha(seg(lt, 2, 2.6), () => txt('stable for months', 960, 800, 56, NAVY, 'center', true)); }
+
+// 3 · states: facts that change
+function b3(p, lt) { title('States: facts that change');
+  [['⏱️', 'busy'], ['📉', 'enquiries falling'], ['💳', 'credits lapsed']].forEach(([e, l], i) => { const s = back((lt - .2 - i * .35) / .5), cy = 330 + i * 170, fade = 1 - .3 * seg(lt, 2.4 + i * .2, 3.6);
+    scaled(760, cy, s, () => alpha(fade, () => chip(420, cy, 680, l, ORANGE, e))); });
+  alpha(seg(lt, 2.2, 2.8), () => { emoji('⏳', 1450, 500, 120); txt('they fade', 1450, 640, 56, ORANGE, 'center', true); }); }
+
+// 4 · persona library
+function libCard(i, px, py, s = 1, hi = 0) { const [id, name, col] = PERSONAS[i]; scaled(px + 110, py + 140, s, () => {
+  rr(px, py, 220, 280, 20, '#fff', hi ? RED : col, hi ? 9 : 5); x.beginPath(); x.arc(px + 110, py + 80, 48, 0, 6.3); x.fillStyle = col; x.fill();
+  x.fillStyle = '#fff'; x.font = 'bold 48px Arial'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(id, px + 110, py + 82);
+  const words = name.split('|'); words.forEach((w, k) => txt(w, px + 110, py + 170 + k * 55, 48, INK, 'center', true)); }); }
+function b4(p, lt) { title('Persona library');
+  PERSONAS.forEach((_, i) => libCard(i, 95 + i * 250, 330, back((lt - .2 - i * .18) / .5)));
+  alpha(seg(lt, 2.2, 2.8), () => txt('from real call data + our experience', 960, 760, 56, NAVY, 'center', true)); }
+
+// 5 · match the seller profile to the library: top 2
+function b5(p, lt) { title('Match: the two best fits');
+  scaled(260, 520, seg(lt, 0, .5), () => { rr(90, 330, 340, 380, 22, '#fff', NAVY, 6); emoji('🏪', 260, 420, 80); txt('Seller', 260, 510, 52, NAVY, 'center', true);
+    ['Marathi', 'Free', 'busy'].forEach((t, k) => txt(t, 260, 580 + k * 50, 48, k === 2 ? ORANGE : INK, 'center')); });
+  arrow(450, 520, 640, 520, NAVY, 7, seg(lt, .6, 1.2));
+  PERSONAS.forEach((_, i) => { const top = i === 2 || i === 4, rise = top ? seg(lt, 1.6, 2.4) : 0;
+    alpha(top ? 1 : 1 - .65 * seg(lt, 1.6, 2.4), () => libCard(i, 670 + (i % 4) * 300 - (i >= 4 ? -150 : 0), (i < 4 ? 250 : 560) - 40 * rise, 0.82 + .12 * rise, top && rise > .5)); });
+  alpha(seg(lt, 2.6, 3.2), () => txt('Top 2', 1700, 960, 60, RED, 'center', true)); }
+
+// 6 · the agent tunes each field with exact data, quoted
+function b6(p, lt) { title('The agent tunes it');
+  rr(560, 260, 800, 620, 26, '#fff', RED, 7); txt('Warm local helper', 960, 330, 56, RED, 'center', true);
+  const rows = [['Pace', .5, .3, '"busy" on 2 calls'], ['Language', .5, .85, 'Marathi region'], ['Words', .7, .35, 'short past calls'], ['Hook', .3, .8, 'catalogue score 32']];
+  rows.forEach(([k, a, b, cite], i) => { const y = 440 + i * 110, q = seg(lt, .6 + i * .5, 1.3 + i * .5);
+    txt(k, 610, y, 50, INK, 'left', true); rr(870, y - 12, 440, 24, 12, '#eef2f8'); rr(870, y - 12, 440 * lerp(a, b, q), 24, 12, TEAL);
+    alpha(seg(lt, 1.0 + i * .5, 1.5 + i * .5), () => { ln(1312, y, 1420, y, GREY, 4, [8, 8]); txt(cite, 1440, y, 48, ORANGE, 'left', true); }); });
+  alpha(seg(lt, 3.6, 4.2), () => txt('every change quotes the data', 960, 950, 52, NAVY, 'center', true)); }
+
+// 7 · gates: no step can be skipped (Claude Code hooks in the skill)
+const STEPS = ['Read', 'Select', 'Probe', 'Decide', 'Hooks', 'Text', 'Finalize'];
+function b7(p, lt) { title('Stop hook: no step skipped');
+  const X = i => 190 + i * 255, Y = 560, G = X(6) - 125;
+  STEPS.forEach((s, i) => { if (i < 6) ln(X(i), Y, X(i + 1), Y, GREY, 6); });
+  STEPS.forEach((s, i) => { const done = i < 3 || lt > 4.0;
+    x.beginPath(); x.arc(X(i), Y, 60, 0, 6.3); x.fillStyle = done ? TEAL : '#fff'; x.fill(); x.strokeStyle = TEAL; x.lineWidth = 6; x.stroke();
+    x.fillStyle = done ? '#fff' : TEAL; x.font = 'bold 50px Arial'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.fillText(String(i + 1), X(i), Y + 2);
+    txt(s, X(i), Y + 110, 48, INK, 'center', true); });
+  // the stop hook guards Finalize: a red gate in front of step 7
+  const g = back((lt - .3) / .5);
+  scaled(G, Y, g, () => { x.fillStyle = RED; x.fillRect(G - 12, Y - 120, 24, 200); });
+  alpha(g, () => txt('✋ Stop hook', G, Y - 190, 56, RED, 'center', true));
+  // the agent tries to jump from Probe to Finalize and is stopped at the gate
+  const jump = seg(lt, 1.0, 1.8), ret = seg(lt, 2.4, 3.0);
+  if (lt > 1.0 && lt < 3.2) { const q = jump * (1 - ret), ax = lerp(X(2), G - 60, q), ay = Y - 90 - Math.sin(Math.PI * q) * 160;
+    x.save(); x.strokeStyle = RED; x.lineWidth = 5; x.setLineDash([12, 10]); x.beginPath(); x.moveTo(X(2), Y - 70); x.quadraticCurveTo((X(2) + G) / 2, Y - 400, G - 40, Y - 110); x.stroke(); x.restore();
+    spark(ax, ay, 70, lt * 2); }
+  alpha(seg(lt, 3.4, 4.0), () => txt('cannot skip any important step', 960, 860, 56, NAVY, 'center', true)); }
+
+// 8 · output: persona + call plan
+function b8(p, lt) { title('Out: persona + call plan');
+  personaCard(240, 280, 620, 560, back((lt - .1) / .5), 1);
+  scaled(1360, 560, back((lt - .6) / .5), () => { rr(1060, 280, 620, 560, 22, '#fff', NAVY, 6); txt('Call plan', 1370, 345, 56, NAVY, 'center', true);
+    ['1  Opening', '2  Hook', '3  Ask for meeting', '4  Close'].forEach((s, i) => alpha(seg(lt, 1.0 + i * .3, 1.4 + i * .3), () => txt(s, 1110, 450 + i * 95, 50, INK, 'left', true))); });
+  alpha(seg(lt, 2.6, 3.0), () => { emoji('✅', 870, 940, 70); txt('validated', 1030, 940, 52, TEAL, 'center', true); }); }
+
+// 9 · many hooks, not one
+function b9(p, lt) { title('Hooks: reasons to meet');
+  const H = [['🔥', 'Live buy lead'], ['📦', 'Catalogue gap'], ['💳', 'Unused credits'], ['📊', 'Category demand']];
+  H.forEach(([e, l], i) => { const y = 300 + i * 150, s = back((lt - .2 - i * .3) / .5), miss = i === 0 ? seg(lt, 2.4, 2.9) : 0, next = i === 1 ? seg(lt, 3.0, 3.4) : 0;
+    scaled(860, y, s, () => alpha(1 - .5 * miss, () => chip(500, y, 720, `${i + 1}  ${l}`, next ? TEAL : (i === 0 ? RED : ORANGE), e)));
+    if (i === 0) alpha(miss, () => txt('✗ did not land', 1450, y, 52, RED, 'left', true));
+    if (i === 1) alpha(next, () => txt('→ next one', 1450, y, 52, TEAL, 'left', true)); });
+  alpha(seg(lt, 3.6, 4.2), () => txt('VANI always has the next reason', 960, 930, 52, NAVY, 'center', true)); }
+
+timeline([
+  { n: 1, base: 5.0, draw: b1, title: 'Data → Claude Code + skill → persona', vo: 'Inside a secure Daytona sandbox, Claude Code runs our skill. Data goes in. A persona comes out.', sound: 'a soft whoosh as dots stream', move: 'chips → sandbox → persona card fills' },
+  { n: 2, base: 3.5, draw: b2, title: 'Traits', vo: 'First, traits: facts that stay. Business type, size, language.', sound: 'three solid thuds', move: 'navy blocks drop in' },
+  { n: 3, base: 4.0, draw: b3, title: 'States', vo: 'Then states: facts that change. Busy. Enquiries falling. Credits lapsed.', sound: 'light ticks', move: 'orange chips pop in, then fade a little' },
+  { n: 4, base: 4.0, draw: b4, title: 'Persona library', vo: 'We start from a persona library, built from real call data and our experience.', sound: 'cards dealt', move: '7 cards deal in' },
+  { n: 5, base: 4.0, draw: b5, title: 'Match: top 2', vo: 'The seller is matched to the library. The two best fits come up.', sound: 'a rising pair of notes', move: 'two cards lift, others dim' },
+  { n: 6, base: 4.5, draw: b6, title: 'The agent tunes it', vo: "Then the agent tunes each field to this seller's exact data, and quotes it.", sound: 'a click per slider', move: 'sliders move; a quote attaches to each' },
+  { n: 7, base: 5.0, draw: b7, title: 'Stop hook: no step skipped', vo: 'What makes our skill different: a Claude Code stop hook. The agent cannot skip any important step.', sound: 'a hard stop on the block', move: 'a jump from Probe to Finalize hits the stop hook and returns' },
+  { n: 8, base: 3.5, draw: b8, title: 'Persona + call plan', vo: 'Out come two things: the persona, and the call plan.', sound: 'two soft pops, then a chime', move: 'two documents slide in, ✅' },
+  { n: 9, base: 4.5, draw: b9, title: 'Hooks: reasons to meet', vo: 'And not one hook, but every strong reason to meet. If one does not land, VANI has the next.', sound: 'a buzz on the miss, a lift on the next', move: 'hook 1 dims ✗, hook 2 lights' },
+]);
+window.renderFrame(0);
+</script></body></html>

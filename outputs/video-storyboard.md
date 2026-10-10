@@ -78,7 +78,25 @@ Style: 3Blue1Brown-like (dark background, serif type, colour-coded ideas, shapes
 
 ## Scenes 1–2 build status (2026-10-10)
 
-- Voice: Sarvam Bulbul v3, speaker **aditya** (male, deep), en-IN; chosen by user from varun/aditya/kabir/rahul samples. Lines spelled for speech ("Vaani", "sixty-two", "G S T").
+- Voice: Sarvam Bulbul v3, speaker **shubh**, pace 0.85, en-IN (user: normal warm male, not deep; aditya rejected as too bassy). Scenes 1–2 now 44 s. Lines spelled for speech ("Vaani", "sixty-two", "G S T").
 - Shortened lines (user OK): 3 "But today, Vaani speaks to every seller the same way, for the whole call." · 8 "Business. Catalogue. Buy leads. Competitors. Past calls." · 11 "Names become tokens. Phone, GST and PAN stay inside IndiaMART."
 - Output: `app/video/build/scene12/scene12_voice.mp4` (51.5 s, voice only, no music yet). Beats timed to each voice line; Whisper check: every beat's first word within 0.1 s of its animation (beat 8: 0.35 s).
 - Pipeline: `app/video/voice.py` (TTS per beat) → `app/video/mix.py` (beat lengths + voice track) → `app/video/render.mjs --durs=…` → ffmpeg mux.
+
+## Scene 3: From data to persona — STORYBOARD SHEET (awaiting 👍/👎)
+
+Sheet: `app/video/storyboard/scene3.png` · scene file `app/video/scenes/scene3.html` · ~38 s before voice timing. Seller values illustrative.
+
+| # | Beat | Voice-over |
+|---|---|---|
+| 1 | Data → Claude Code + skill (Daytona sandbox) → persona (5 s); generated image `app/video/assets/gen/s3_b1_v1.png` (openai/gpt-image-2) | Inside a secure Daytona sandbox, Claude Code runs our skill. Data goes in. A persona comes out. |
+| 2 | Traits: Manufacturer · 1.5–5 Cr · Marathi · Free seller | First, traits: facts that stay. Business type, size, language. |
+| 3 | States: busy · enquiries falling · credits lapsed (fade) | Then states: facts that change. Busy. Enquiries falling. Credits lapsed. |
+| 4 | Persona library: 7 cards | We start from a persona library, built from real call data and our experience. |
+| 5 | Match: top 2 lift | The seller is matched to the library. The two best fits come up. |
+| 6 | Agent tunes fields, each with a quote | Then the agent tunes each field to this seller's exact data, and quotes it. |
+| 7 | Stop hook: 7 steps (Read, Select, Probe, Decide, Hooks, Text, Finalize); a skip is stopped by the stop hook | What makes our skill different: a Claude Code stop hook. The agent cannot skip any important step. |
+| 8 | Out: persona + call plan, validated | Out come two things: the persona, and the call plan. |
+| 9 | Hooks: reasons to meet; if one misses, the next | And not one hook, but every strong reason to meet. If one does not land, VANI has the next. |
+
+Code truth: gates = Claude Code hooks in the skill (`gates/pre_gate.py` blocks hand-writing the persona, `log_read.py` logs every read, `stop_gate.py` refuses to stop until finalize + validator pass); library = `references/persona_library.json` (7 personas, PS07 evidence graded); top-2 = `scripts/prior.py` (Thompson draw); every eligible hook reaches VANI via `scripts/seller_block.py`.
