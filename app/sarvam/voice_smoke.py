@@ -41,6 +41,25 @@ LINES = {
     "od-IN": ["ହଁ, କୁହନ୍ତୁ।", "ଫୋନରେ ହିଁ କୁହନ୍ତୁ, ମିଟିଂ କାହିଁକି?", "ଠିକ ଅଛି, କାଲି ସନ୍ଧ୍ୟା ପାଞ୍ଚଟାରେ ଆସନ୍ତୁ।"],
     "en-IN": ["Yes, tell me.", "Tell me on the phone, why a meeting?", "Okay, come tomorrow evening at five."],
 }
+# Plan 5f test loop: ~1 minute scripted sellers, one fix each (lines are (text, language code)); checked afterwards by
+# verify_call.py (variables first) and app/loops/rule_checks.py
+SCENARIOS = {
+    "questions": [("हाँ बोलिए", "hi-IN"), ("किस तरह की requirements हैं?", "hi-IN"), ("और किस इलाके से आई हैं?", "hi-IN"),
+                  ("अच्छा, ठीक है।", "hi-IN")],                      # R1 answer-first, R2 no ask after a question
+    "handler": [("हाँ बोलिए", "hi-IN"), ("मेरा एग्जीक्यूटिव कौन है?", "hi-IN"), ("नाम बताओ उसका, कौन आएगा?", "hi-IN")],  # R4
+    "decline_then_book": [("नहीं चाहिए, नहीं चाहिए।", "hi-IN"), ("अच्छा, कैसी requirement है?", "hi-IN"),
+                          ("ठीक है, कल शाम चार बजे आ जाइए।", "hi-IN"), ("नहीं, बस इतना ही, धन्यवाद।", "hi-IN")],  # declined, booking, R5
+    "explicit_end": [("हाँ बोलिए", "hi-IN"), ("मुझे कॉल मत करो, फोन काट दो।", "hi-IN")],  # only an explicit request ends it
+    # mid-call switch scenarios (read_seller_signal modes); expected mode in app/sarvam/test_loop.py EXPECT
+    "switch_rushed": [("हाँ बोलिए", "hi-IN"), ("अभी बहुत बिज़ी हूँ, जल्दी बोलो", "hi-IN"), ("बाद में कॉल करना, शाम को", "hi-IN")],
+    "switch_frustrated": [("हाँ", "hi-IN"), ("लीड्स की क्वालिटी बहुत बेकार है, बार बार फोन करते हो", "hi-IN"),
+                          ("तो क्या करोगे इसका?", "hi-IN")],
+    "switch_confused": [("हाँ", "hi-IN"), ("समझ नहीं आया, क्या बोल रहे हो?", "hi-IN"), ("अच्छा, फिर से बताओ", "hi-IN")],
+    "switch_bot": [("हाँ बोलिए", "hi-IN"), ("आप बॉट हो क्या? मशीन से बात हो रही है?", "hi-IN"), ("सच बताओ, आप इंसान हो?", "hi-IN")],
+    "switch_language": [("हो, बोला.", "mr-IN"), ("आप हिंदी में बात करो", "hi-IN"), ("Can you speak in English please?", "en-IN"),
+                        ("Okay, tell me about the leads.", "en-IN")],
+    "telugu_questions": [("అవును చెప్పండి", "te-IN"), ("ఎన్ని లీడ్స్ వచ్చాయి?", "te-IN"), ("ఎక్కడి నుండి వచ్చాయి?", "te-IN")],
+}
 LANG_CODE = {"TELUGU": "te-IN", "HINDI": "hi-IN", "GUJARATI": "gu-IN", "MARATHI": "mr-IN", "TAMIL": "ta-IN", "KANNADA": "kn-IN",
              "MALAYALAM": "ml-IN", "BENGALI": "bn-IN", "PUNJABI": "pa-IN", "ODIA": "od-IN", "ENGLISH": "en-IN"}
 
@@ -106,16 +125,17 @@ def main():
     a.add_argument("--run", required=True)
     a.add_argument("--lang", default="auto", help="auto = from persona_language in 05_sarvam_vars.json")
     a.add_argument("--version", type=int, default=TEMPLATE_VERSION)
+    a.add_argument("--scenario", default="", help=f"one of {sorted(SCENARIOS)} (plan 5f test loop)")
     a.add_argument("--switch-to", default="", help="e.g. hi-IN: turn 1 in the persona language, turns 2-3 in this one "
                                                      "(checks the mid-call language switch)")
     p = a.parse_args()
     avars = json.load(open(os.path.join(p.run, "05_sarvam_vars.json"), encoding="utf-8"))
     if p.lang == "auto":
         p.lang = LANG_CODE.get(str(avars.get("persona_language")).upper(), "hi-IN")
-    plan = [(LINES[p.lang][0], p.lang)] + [(x, p.switch_to or p.lang) for x in LINES[p.switch_to or p.lang][1:]]
+    plan = SCENARIOS[p.scenario] if p.scenario else         [(LINES[p.lang][0], p.lang)] + [(x, p.switch_to or p.lang) for x in LINES[p.switch_to or p.lang][1:]]
     audio = [tts(x, lg) for x, lg in plan]
     iid, heard = asyncio.run(call(avars, audio, p.version))
-    json.dump({"interaction_id": iid, "heard": heard, "seller_lines": [lg for _, lg in plan]}, open(os.path.join(p.run, "voice_smoke.json"), "w", encoding="utf-8"),
+    json.dump({"interaction_id": iid, "heard": heard, "scenario": p.scenario, "seller_lines": [lg for _, lg in plan]}, open(os.path.join(p.run, "voice_smoke.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
     names = [avars.get("seller_name"), avars.get("company_name")]
     for h in heard:

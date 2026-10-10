@@ -54,6 +54,8 @@ def load_names(path):
             out[tok] = SUFFIX.sub("", longest).strip() or longest
         else:
             out[tok] = longest
+    if "spoken" in m:  # export maps from a6b5ba5 on: the safe spoken first name, never a company word; {} = say no name
+        out["{SELLER_NAME}"] = (m["spoken"] or {}).get("{SELLER_NAME}", "")
     return out
 
 
@@ -72,7 +74,7 @@ def handler_line(facts, names):
 def fill(text, names):
     for k, v in (names or {}).items():
         text = text.replace(k, v)
-    return text
+    return re.sub(r"[ 	]{2,}", " ", text) if names and not (names or {}).get("{SELLER_NAME}", "x") else text
 
 
 def seller_city(run):

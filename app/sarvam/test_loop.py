@@ -26,6 +26,11 @@ EXPECT = {
     "decline_then_book": "the call stays open after 'nahi chahiye'; meeting booked; 'anything else' before the end (R5 pass)",
     "explicit_end": "the call ends politely after the explicit request (opt_out)",
     "telugu_questions": "Telugu questions answered, no ask after them (R2 pass)",
+    "switch_rushed": "mode rushed on turn 2; short reply, callback offered; no pitch",
+    "switch_frustrated": "mode frustrated on turn 2; apology first, pitch stopped; stays frustrated through the question",
+    "switch_confused": "mode confused; simpler words, one idea",
+    "switch_bot": "bot_question then bot_question_pressed: sidestep, then 'virtual assistant', never human",
+    "switch_language": "replies follow Marathi -> Hindi -> English on the same turn",
 }
 
 
@@ -38,10 +43,15 @@ def main():
     a = argparse.ArgumentParser()
     a.add_argument("--run", required=True)
     a.add_argument("--scenarios", default=",".join(SCENARIOS))
+    a.add_argument("--check-only", default="", help="scenario=interaction_id: check an earlier call, place no new call")
     p = a.parse_args()
     summary = []
-    for sc in p.scenarios.split(","):
-        rc, out = run([PY, "app/sarvam/voice_smoke.py", "--run", p.run, "--scenario", sc])
+    todo = [p.check_only.split("=", 1)[0]] if p.check_only else p.scenarios.split(",")
+    for sc in todo:
+        if p.check_only:
+            out = "INTERACTION " + p.check_only.split("=", 1)[1]
+        else:
+            rc, out = run([PY, "app/sarvam/voice_smoke.py", "--run", p.run, "--scenario", sc])
         iid = next((ln.split()[-1] for ln in out.splitlines() if ln.startswith("INTERACTION")), None)
         row = {"scenario": sc, "expect": EXPECT.get(sc), "interaction": iid}
         if not iid or iid == "None":
@@ -62,7 +72,8 @@ def main():
         rdir = os.path.join(ROOT, line.split(" -> ")[1].split()[0]) if line else ""
         if rdir and os.path.exists(os.path.join(rdir, "06_call.json")):
             rc, rout = run([PY, "app/loops/rule_checks.py", "--run", rdir])
-            row["rules"] = json.loads(rout.strip().splitlines()[-1]) if rc == 0 else rout[-200:]
+            rp = os.path.join(rdir, "08_rules.json")  # read the file: stdout carries library warnings too
+            row["rules"] = {k: v["result"] for k, v in json.load(open(rp, encoding="utf-8"))["rules"].items()}                 if rc == 0 and os.path.exists(rp) else rout[-200:]
             call = json.load(open(os.path.join(rdir, "06_call.json"), encoding="utf-8"))
             row["ended_by"] = call.get("ended_by")
             row["meeting_fixed"] = (call.get("agent_variables") or {}).get("meeting_fixed")
@@ -72,7 +83,10 @@ def main():
         print(json.dumps({k: row.get(k) for k in ("scenario", "interaction", "variables_ok", "rules", "ended_by", "meeting_fixed", "modes")},
                          ensure_ascii=False), flush=True)
     os.makedirs(os.path.join(ROOT, "data", "test_loop"), exist_ok=True)
-    json.dump(summary, open(os.path.join(ROOT, "data", "test_loop", "summary.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    path = os.path.join(ROOT, "data", "test_loop", "summary.json")
+    old = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else []
+    keep = [r for r in old if r.get("scenario") not in {x["scenario"] for x in summary}]
+    json.dump(keep + summary, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 
 if __name__ == "__main__":
