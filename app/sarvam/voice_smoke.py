@@ -62,6 +62,8 @@ SCENARIOS = {
                         ("हाँ हाँ, और बताइए", "hi-IN")],
     "emotion_irritated": [("हाँ", "hi-IN"), ("उफ्फ, जल्दी काम की बात करो यार, दिमाग खराब मत करो", "hi-IN"),
                           ("ठीक है बोलो", "hi-IN")],
+    "ask_more": [("हाँ बोलिए", "hi-IN"), ("बाय लीड्स के अलावा क्या दोगे हमें?", "hi-IN"), ("और क्या है इसके अलावा?", "hi-IN"),
+                 ("चलो ठीक है, कॉल रखो।", "hi-IN")],                   # R7: next topic each time, never 'no other info'
     "telugu_questions": [("అవును చెప్పండి", "te-IN"), ("ఎన్ని లీడ్స్ వచ్చాయి?", "te-IN"), ("ఎక్కడి నుండి వచ్చాయి?", "te-IN")],
 }
 LANG_CODE = {"TELUGU": "te-IN", "HINDI": "hi-IN", "GUJARATI": "gu-IN", "MARATHI": "mr-IN", "TAMIL": "ta-IN", "KANNADA": "kn-IN",
