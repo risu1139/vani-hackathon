@@ -63,8 +63,9 @@ def test_export_replaces_names_and_glid(tmp_path):
     for bad in (GLID, "Quentaro", "Velmani", "Ishvani", "Zorbax", "zorbax", "Draventi", "Koshal", "Plemora", "Hexwin",
                 "plemora-steel-works", "812345678", "Brontal"):
         assert bad.lower() not in t.lower(), bad
-    for tok in ("{SELLER_NAME}", "{COMPANY}", "{EXEC_NAME}", "{COMPETITOR_1}", "{COMPETITOR_2}", "{BUYER_COMPANY}"):
+    for tok in ("{SELLER_NAME}", "{COMPANY}", "{SALES_EXEC}", "{COMPETITOR_1}", "{COMPETITOR_2}", "{BUYER_COMPANY}"):
         assert tok in t, tok
+    assert "{TELE_EXEC}" not in t and "{EXEC_NAME}" not in t          # same person for sales and tele: one role token
     ctx = json.load(open(os.path.join(out, "context.json"), encoding="utf-8"))
     assert ctx["glid"] == pseudo and ctx["points"]["A01"]["value"] == pseudo
     assert ctx["points"]["H02"]["value"]["assignedto"] == 42
@@ -124,3 +125,24 @@ def test_export_strips_sources_and_all_md():
     out = X.strip_sources(ctx)
     assert not (set(out) & X.SOURCE_KEYS)
     assert out["points"]["A01"] == {"value": 5, "as_of_unsafe": True}
+
+
+def test_role_tokens_for_different_handlers(tmp_path):
+    folder = make_context(tmp_path)
+    ctx = json.load(open(folder / "context.json", encoding="utf-8"))
+    ctx["points"]["H02"]["value"]["teleassignedto_name"] = "Pardesi Mehrun"
+    ctx["points"]["H03"] = {"value": {"employee_name": "Orlanda Pyke"}, "source": "test"}
+    (folder / "context.json").write_text(json.dumps(ctx), encoding="utf-8")
+    (folder / "INDEX.md").write_text((folder / "INDEX.md").read_text(encoding="utf-8")
+                                     + "- Tele: Pardesi Mehrun; sales: Draventi Koshal; also Orlanda Pyke met the seller\n", encoding="utf-8")
+    pseudo, out, hits = E.export(GLID, str(tmp_path / "contexts"), str(tmp_path / "export"), str(tmp_path / "maps"), key=KEY)
+    assert hits == {}
+    t = all_text(out)
+    for bad in ("Draventi", "Koshal", "Pardesi", "Mehrun", "Orlanda", "Pyke"):
+        assert bad.lower() not in t.lower(), bad
+    h02 = json.load(open(os.path.join(out, "context.json"), encoding="utf-8"))["points"]["H02"]["value"]
+    assert h02["assignedto_name"] == "{SALES_EXEC}" and h02["teleassignedto_name"] == "{TELE_EXEC}"
+    assert "{EXEC_NAME}" in t                                           # other staff keep the generic token
+    m = json.load(open(tmp_path / "maps" / f"{pseudo}.json", encoding="utf-8"))["tokens"]
+    assert "Draventi Koshal" in m["{SALES_EXEC}"] and "Pardesi Mehrun" in m["{TELE_EXEC}"] and "Orlanda Pyke" in m["{EXEC_NAME}"]
+    assert not set(m["{SALES_EXEC}"]) & set(m["{TELE_EXEC}"])

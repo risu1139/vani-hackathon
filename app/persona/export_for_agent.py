@@ -5,7 +5,7 @@ Copies data/contexts/<glid>/ to data/agent_export/<pseudo>/, where
 In every .md file and context.json:
   - the GLID becomes the pseudo id;
   - seller / contact first and last names become {SELLER_NAME}; the company name becomes {COMPANY};
-  - competitor companies become {COMPETITOR_1..n} (their GLIDs {COMPETITOR_n_ID}); executive / staff names become {EXEC_NAME};
+  - competitor companies become {COMPETITOR_1..n} (their GLIDs {COMPETITOR_n_ID}); the seller's sales handler becomes {SALES_EXEC} and the tele handler {TELE_EXEC} (the same token when it is the same person); other staff names become {EXEC_NAME};
   - the seller's catalogue URLs / alias become {COMPANY_URL}; enquiry buyer companies become {BUYER_COMPANY}.
 The token -> value map goes to data/agent_export_maps/<pseudo>.json (never inside the export). compile_vars fills the
 tokens back on-prem, for Sarvam only.
@@ -98,6 +98,7 @@ def _person_parts(v):
 def collect_names(ctx):
     """{token: [original strings]} from a context.json dict. Competitors keep their own numbered token."""
     seller, company, execs, urls, buyers = set(), set(), set(), set(), set()
+    sales, tele = set(), set()                                  # the seller's handlers: role tokens {SALES_EXEC}, {TELE_EXEC}
     competitors, comp_ids = [], {}
 
     def fn(k, v):
@@ -111,10 +112,12 @@ def collect_names(ctx):
         elif COMPANY_KEYS.match(k):
             company.add(v.strip())
         elif EXEC_KEYS.match(k):
+            kl = k.lower()
+            bucket = tele if kl.endswith("teleassignedto_name") else sales if kl.endswith("assignedto_name") else execs
             full = " ".join(_person_parts(v))
             if full:
-                execs.add(full)
-            execs.update(_person_parts(v))
+                bucket.add(full)
+            bucket.update(_person_parts(v))
         elif URL_KEYS.match(k):
             urls.add(v.strip().strip("/"))
         elif k == "buyer_company":
@@ -139,7 +142,13 @@ def collect_names(ctx):
         first = re.split(r"[\s\-_.,&]+", core)[0] if core else ""
         if len(first) >= 5 and first.lower() not in GENERIC_WORDS and first != core:
             company.add(first)
-    out = {"{SELLER_NAME}": sorted(seller), "{COMPANY}": sorted(company), "{EXEC_NAME}": sorted(execs - seller),
+    sales -= seller
+    tele -= seller
+    if tele and tele <= sales:                                  # the same person handles sales and tele: one token, {SALES_EXEC}
+        tele = set()
+    tele -= sales                                               # a name part shared by both roles maps to {SALES_EXEC}
+    out = {"{SELLER_NAME}": sorted(seller), "{COMPANY}": sorted(company), "{SALES_EXEC}": sorted(sales), "{TELE_EXEC}": sorted(tele),
+           "{EXEC_NAME}": sorted(execs - seller - sales - tele),
            "{COMPANY_URL}": sorted(u for u in urls if len(u) >= 4), "{BUYER_COMPANY}": sorted(b for b in buyers if len(b) >= MIN_LEN)}
     for i, n in enumerate(competitors, 1):
         out[f"{{COMPETITOR_{i}}}"] = [n] + ([COMPANY_SUFFIX.sub("", n).strip()] if len(COMPANY_SUFFIX.sub("", n).strip()) >= 4
