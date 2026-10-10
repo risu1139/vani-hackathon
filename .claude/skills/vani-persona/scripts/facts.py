@@ -357,13 +357,14 @@ def build(ctx, today):
 
 
 def pick(rules):
-    """First matching rule wins (the list order IS the priority). Returns {value, rule, evidence, priority, matched}."""
+    """First matching rule wins (the list order IS the priority).
+    Returns {id, value, rule, grade, evidence, priority, matched} (priority and matched are rule ids)."""
     matched = [r for r in rules if r[0]]
     if not matched:
         return None
-    _, value, rule, evidence = matched[0]
-    return {"value": value, "rule": rule, "evidence": evidence, "priority": [r[2] for r in rules],
-            "matched": [r[2] for r in matched]}
+    _, value, rule, evidence, rid, grade = matched[0]
+    return {"id": rid, "value": value, "rule": rule, "grade": grade, "evidence": evidence, "priority": [r[4] for r in rules],
+            "matched": [r[4] for r in matched]}
 
 
 LANG_NAME = {"hi": "HINDI", "gu": "GUJARATI", "mr": "MARATHI", "ta": "TAMIL", "kn": "KANNADA", "ml": "MALAYALAM", "te": "TELUGU",
@@ -383,25 +384,33 @@ def start_rules(T, S, G):
     tense = grievance or (mood.get("frustrated") or 0) >= 0.5
     rural_hb = bool(det("trait.city_tier").get("rural_proxy") and det("trait.city_tier").get("hindi_belt"))
     # Fixed priority (first match wins; never dict order). Every match is recorded so the persona's reason can cite it.
+    # (match, value, rule text, evidence ids, rule id, evidence grade) - the grade says how strong the rule's own basis is
     voice_rules = [
-        (val("trait.seller_gender") == "F", "F", "seller is female (recorded or name guess): female voice", ["trait.seller_gender"]),
-        (tense, "F", "tense seller (frustrated on calls or open grievance): female voice", ["state.call_mood", "state.open_grievance"]),
-        (rural_hb, "F", "rural Hindi-belt seller: female voice", ["trait.city_tier"]),
+        (val("trait.seller_gender") == "F", "F", "seller is female (recorded or name guess): female voice", ["trait.seller_gender"],
+         "voice.female_seller", "WEAK"),
+        (tense, "F", "tense seller (frustrated on calls or open grievance): female voice", ["state.call_mood", "state.open_grievance"],
+         "voice.tense", "WEAK"),
+        (rural_hb, "F", "rural Hindi-belt seller: female voice", ["trait.city_tier"], "voice.rural_hindi_belt", "GUESS"),
     ]
     voice = pick(voice_rules)
     lang = val("trait.language") or {}
     code = (lang.get("regional") if isinstance(lang, dict) else None) or "hi"
     language = pick([
-        (bool(val("trait.high_value")), "ENGLISH", "high-value seller (5 Cr+ or high AOV): English with light Hindi", ["trait.high_value"]),
-        (True, LANG_NAME.get(code, "HINDI"), f"regional language of the seller's state ({code})", ["trait.language"]),
+        (bool(val("trait.high_value")), "ENGLISH", "high-value seller (5 Cr+ or high AOV): English with light Hindi", ["trait.high_value"],
+         "lang.high_value", "GUESS"),
+        (True, LANG_NAME.get(code, "HINDI"), f"regional language of the seller's state ({code})", ["trait.language"],
+         "lang.regional", "WEAK"),
     ])
     adds = []
     if grievance:
-        adds.append({"text": "acknowledge the open complaint first, in one sentence", "rule": "state.open_grievance = yes"})
+        adds.append({"id": "emp.grievance", "grade": "WEAK", "text": "acknowledge the open complaint first, in one sentence",
+                     "rule": "state.open_grievance = yes"})
     if (mood.get("frustrated") or 0) >= 0.5:
-        adds.append({"text": "apologise briefly for the earlier calls", "rule": "state.call_mood.frustrated >= 0.5"})
+        adds.append({"id": "emp.frustrated", "grade": "GUESS", "text": "apologise briefly for the earlier calls",
+                     "rule": "state.call_mood.frustrated >= 0.5"})
     if (mood.get("rushed") or 0) >= 0.5 or any(g["id"] == "guard.call_fatigue" and g["value"] for g in G):
-        adds.append({"text": "respect their time: keep it short, offer a callback", "rule": "rushed mood or call fatigue"})
+        adds.append({"id": "emp.rushed", "grade": "GUESS", "text": "respect their time: keep it short, offer a callback",
+                     "rule": "rushed mood or call fatigue"})
     return {"voice_gender": voice, "language_start": language, "empathy_add": adds}
 
 

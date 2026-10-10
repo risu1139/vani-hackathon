@@ -249,6 +249,16 @@ def start_value(field, card, facts_doc):
     return card.get(field)
 
 
+def start_rule_ids(field, facts_doc):
+    """The ids of the state rules that shaped this field's start value (for learning: loop2 reports by rule)."""
+    r = (facts_doc or {}).get("start_rules") or {}
+    if field in ("voice_gender", "language_start"):
+        return [r[field]["id"]] if r.get(field) and r[field].get("id") else []
+    if field == "empathy":
+        return [a.get("id") for a in r.get("empathy_add") or [] if a.get("id")]
+    return []
+
+
 def card_of(persona_id):
     lib = json.load(open(os.path.join(REF, "persona_library.json"), encoding="utf-8"))
     return next((c for c in lib.get("personas", []) if c.get("id") == persona_id), None)
@@ -555,7 +565,8 @@ def assemble(run, h, rows):
             continue
         dims[fld] = {"value": d["value"], "reason_type": d["type"], "reason": d["reason"], "cites": d["cites"],
                      "answers": d["answers"], "searched": d["searched"], "hierarchy": d["hierarchy"],
-                     "confidence": d["confidence"], "evidence": GRADE[d["type"]]}
+                     "confidence": d["confidence"], "evidence": GRADE[d["type"]],
+                     "start_rule_ids": start_rule_ids(fld, f) if d["type"] == "start_persona" else []}
     if "voice_gender" in dims:
         dims["voice_id"] = {"value": dims["voice_gender"]["value"], "reason_type": "derived",
                             "reason": "follows voice_gender through the voice catalogue (compile_vars)", "cites": [],

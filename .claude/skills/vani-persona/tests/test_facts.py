@@ -194,3 +194,11 @@ def test_start_rules_priority_is_fixed_and_recorded():
     out, _ = run({"C02": {"annual_turnover": "5 - 25 Cr"}, "B01": {"seller_state": "Telangana"}})
     lg = out["start_rules"]["language_start"]
     assert lg["value"] == "ENGLISH" and len(lg["matched"]) == 2  # high value beats the regional rule
+
+
+def test_start_rules_have_ids_and_grades():
+    out, _ = run({"A07": {"glusr_usr_gender": "Female"}, "I01": {"cmplnts_cnt": 2, "closed_cmplnts": 1}})
+    r = out["start_rules"]
+    assert r["voice_gender"]["id"] == "voice.female_seller" and r["voice_gender"]["grade"] in ("WEAK", "GUESS")
+    assert r["voice_gender"]["matched"] == ["voice.female_seller", "voice.tense"]
+    assert all(a["id"] and a["grade"] for a in r["empathy_add"])
