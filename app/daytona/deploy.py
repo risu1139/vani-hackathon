@@ -20,6 +20,7 @@ Usage: python app/daytona/deploy.py <command> [args]
 """
 import io
 import json
+import re
 import shlex
 import os
 import sys
@@ -154,10 +155,46 @@ def cmd_checks():
     print("3. leftover vaniagent processes:", out.count("LEFT"))
 
 
+LEAK_PHONE = re.compile(r"(?<![\w{])(?:\+?91[\s-]?)?[6-9]\d{4}[\s-]?\d{5}(?![\w}])")
+PERSON_TOKENS = {"{SELLER_NAME}", "{SALES_EXEC}", "{TELE_EXEC}", "{EXEC_NAME}"}
+LEAK_EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}")
+
+
+def leak_scan(src, pseudo):
+    """Plan 5d: before any upload, the pseudonymised folder must hold no person name from the laptop's token map, no
+    phone number and no email. Fails closed: a missing or unreadable map refuses the upload. Returns the hits."""
+    mp = os.path.join(ROOT, "data", "agent_export_maps", f"{pseudo}.json")
+    try:
+        m = json.load(open(mp, encoding="utf-8"))
+        # person names only (seller, handler, staff); company names may be in the export (user decision 2026-10-10)
+        names = {v.strip().lower() for t, vs in (m.get("tokens") or m).items() if t in PERSON_TOKENS
+                 for v in (vs if isinstance(vs, list) else [vs]) if isinstance(v, str) and len(v.strip()) >= 4}
+    except (OSError, ValueError, AttributeError) as e:
+        sys.exit(f"REFUSED upload: token map {mp} missing or unreadable ({e})")
+    hits = []
+    for dp, _, fs in os.walk(src):
+        for fn in fs:
+            p = os.path.join(dp, fn)
+            try:
+                text = open(p, encoding="utf-8", errors="replace").read()
+            except OSError:
+                continue
+            low = text.lower()
+            rel = os.path.relpath(p, src)
+            hits += [f"{rel}: person name ({len(n)} chars)" for n in names
+                     if re.search(r"(?<![a-z])" + re.escape(n) + r"(?![a-z])", low)]
+            hits += [f"{rel}: phone number" for _ in LEAK_PHONE.finditer(text)][:1]
+            hits += [f"{rel}: email" for _ in LEAK_EMAIL.finditer(text)][:1]
+    return hits
+
+
 def cmd_seller(pseudo):
     src = os.path.join(ROOT, "data", "agent_export", pseudo)
     if not os.path.isdir(src):
         sys.exit(f"no export folder {src}")
+    hits = leak_scan(src, pseudo)
+    if hits:  # the names themselves are never printed
+        sys.exit("REFUSED upload: leak scan found\n" + "\n".join(sorted(set(hits))[:20]))
     upload_bytes(tar_of([(src, pseudo)]), f"/dev/shm/{pseudo}.tgz")
     # ONE seller at a time (peer review MUST 2): the staging dir is emptied first, mode 700, owned by daytona
     print(sh(f"umask 077 && mkdir -p /dev/shm/vani/sellers && chmod 700 /dev/shm/vani /dev/shm/vani/sellers && "

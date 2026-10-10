@@ -69,7 +69,7 @@ def build_prompt(run, pairs):
         "but the true mode is different), na (no tool row). Then judge persona fit per dimension with evidence, whether "
         "the hook landed, and QA (fatal = banned word, unverified number, claim to be human, pushing after an opt-out, "
         "naming a buyer).\n"
-        "Tokens such as {SELLER_NAME}, {COMPANY} and {EXEC_NAME} are names we removed for privacy before this review; "
+        "Tokens such as {SELLER_NAME}, {COMPANY}, {SALES_EXEC}, {TELE_EXEC}, {EXEC_NAME}, {AGENT_NAME} and {COMPETITOR_n} are names we removed for privacy before this review; "
         "on the call the real name was spoken. Never report a token as an unfilled placeholder.\n"
         f"Answer with ONE JSON object only, in this shape: {json.dumps(SCHEMA)}\n\nDATA:\n" + scrub(body, pairs))
 
